@@ -1,5 +1,5 @@
 {
-    "name": "barcoms/barcoms",
+    "name": "pfoms/pfoms",
     "description": "Barbados Customs Overtime Payroll",
     "keywords": ["Your keyword", "Another keyword"],
     "license": "MIT",
@@ -14,7 +14,7 @@
     "autoload": {
        "psr-4": {
             "Controllers\\": "Controller/",
-            "" : "../barcoms/"
+            "" : "../pfoms/"
         }
     }
 }

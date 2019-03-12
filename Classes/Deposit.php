@@ -1,30 +1,34 @@
 <?php
-
-namespace BarcomModel;
-
 /*
   Developed by Kitji Studios
-  Development Team: Shayne Marshall, Frederick Masterton Chandler
-  Property of Barbados Customs and Excise Department 2017
+  Development Team: Shayne Marshall, Frederick Masterton Chandler, Kamar Durant
+  Property of Barbados Royal Barbados Police Force
   Consultation and Analysis by Data Processing Department
-  October 2017
+  2019
  */
+namespace BarcomModel;
+
 
 class Deposit {
 
+    //Employee class properties map directly to employee table
     public $TransId;
-    public $ASYCUDA;
+    public $ProformaNumber;
+    public $InvoiceNumber;
+    public $ReceiptNumber;
+    public $TranType;
     public $CompanyName;
     public $CompanyId;
-    public $CompanyBalance;
-    public $DepositAmount;
-    public $RefundAmount;
-    public $ASYCUDADate;
+    public $EventId;
     public $PreviousBalance;
     public $CurrentBalance;
+    public $CompanyBalance;
+    public $DepositAmount;
     public $Comments;
     public $RecEntered;
     public $ReEnteredBy;
+    //Employee class properties map directly to employee table
+    
     public $auditok;
 
     //Method used to calculate current balance

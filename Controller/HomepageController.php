@@ -10,6 +10,7 @@ class Homepage extends LoggedInController {
     private $menu;
     private $datamanager;
     private $companymenu;
+    private $eventmenu;
     private $employeemenu;
     private $adminmenu;
 
@@ -45,6 +46,7 @@ class Homepage extends LoggedInController {
         $CreateUser = $ManageTravel = $ManageOT = $ManageOther = array('Administrator', 'Super User', 'Manager');
         //CRUD Company Module Permissions
         $CreateCompany = $ViewCompany = $EditCompany = $DeleteCompany = array('Manager', 'Administrator', 'Super User');
+        $CreateEvent= $ViewEvent = $EditEvent = $DeleteEvent = array('Manager', 'Administrator', 'Super User');
         //CRUD Company Module Permissions
         //CRU Employee Module Permissions
         $CreateEmployee = $ViewEmployee = $EditEmployee = array('Human Resource Clerk', 'Manager', 'Administrator', 'Super User');
@@ -89,14 +91,19 @@ class Homepage extends LoggedInController {
                                             </ul>
                                         </li>
                                         <li class="dropdown more-dropdown-sub ">
+                                            <a href="javascript:;"> Event Manager </a>
+                                            <ul class="dropdown-menu">
+                                                { eventmenu }
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown more-dropdown-sub ">
                                             <a href="javascript:;"> Employee Manager </a>
                                             <ul class="dropdown-menu">
                                                 { employeemenu }
                                             </ul>
                                         </li>
                                         <li class="dropdown">
-                                            <a href="/adminconsole"> Admin Console </a>
-                                          
+                                            <a href="/adminconsole"> Admin Console </a>                                          
                                         </li>
                                     </ul>
                                 </li>';
@@ -104,7 +111,17 @@ class Homepage extends LoggedInController {
             $this->datamanager = $datamanager;
         }
 
-        if (in_array($role, $CreateCompany)) {
+        if (in_array($role, $CreateEvent)) {
+            $createitem = '<li><a href="/event/create">Create Event</a></li>';
+            $this->eventmenu = $this->eventmenu . $createitem;
+        }
+    
+        if (in_array($role, $EditEvent)) {
+            $edititem = '<li><a href="/event/edit">View/Edit/Delete Event Details</a></li>';
+            $this->eventmenu = $this->eventmenu . $edititem;
+        }
+        
+         if (in_array($role, $CreateCompany)) {
             $createitem = '<li><a href="/company/create">Create Company</a></li>';
             $this->companymenu = $this->companymenu . $createitem;
         }
@@ -113,6 +130,7 @@ class Homepage extends LoggedInController {
             $edititem = '<li><a href="/company/edit">View/Edit/Delete Company Details</a></li>';
             $this->companymenu = $this->companymenu . $edititem;
         }
+
 
         if (in_array($role, $CreateEmployee)) {
             $createitem = '<li><a href="/employee/create">Create Employee</a></li>';
@@ -184,6 +202,7 @@ class Homepage extends LoggedInController {
         $template->replace('datamanager', $this->datamanager);
         $template->replace('companymenu', $this->companymenu);
         $template->replace('employeemenu', $this->employeemenu);
+            $template->replace('eventmenu', $this->eventmenu);
         $template->replace('adminmenu', $this->adminmenu);
         $template->replace('menu', $this->menu);
         $template->replace('page_content', $content);

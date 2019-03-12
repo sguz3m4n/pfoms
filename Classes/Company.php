@@ -1,14 +1,12 @@
 <?php
-
-namespace BarcomModel;
-
 /*
   Developed by Kitji Studios
-  Development Team: Shayne Marshall, Frederick Masterton Chandler
-  Property of Barbados Customs and Excise Department 2017
+  Development Team: Shayne Marshall, Frederick Masterton Chandler, Kamar Durant
+  Property of Barbados Royal Barbados Police Force
   Consultation and Analysis by Data Processing Department
-  October 2017
+  2019
  */
+namespace BarcomModel;
 
 class Company {
 
@@ -16,45 +14,40 @@ class Company {
         
     }
 
-    //Company class properties
+    //Company class properties map directly to company table
     public $CompanyId;
+    public $CaipoId;
+    public $TIN;
     public $CompanyName;
     public $AddressLine1;
     public $AddressLine2;
     public $AddressLine3;
-    public $AddressLine4;
-    public $CompanyAddress;
     public $Parish;
     public $PostalCode;
-    public $AgentName;
-    public $AgentAddress;
-    public $ActiveCompanies;
-    public $ZeroBalance;
     public $ContactName;
-    //public $Title;
     public $PhoneNumber;
+    public $BankAccountNumber;
     public $FaxNumber;
     public $Email;
-    public $ReferredBy;
     public $Notes;
-    public $ShipName;
     public $CompStatus;
     public $RecEntered;
     public $RecEnteredBy;
     public $RecModified;
     public $RecModifiedBy;
     public $DelFlg;
+    //Company class properties map directly to company table
+
     public $auditok;
+    public $ActiveCompanies;
+    public $ZeroBalance;
+    public $CompanyAddress;
 
     //Create Company Method
     function CreateCompany($username) {
         $conn = conn();
-        $sql = "INSERT INTO `company` (`CompanyId`, `CompanyName`, `AddressLine1`, `AddressLine2`, `AddressLine3`, `Parish`, 
-`PostalCode`, `AgentName`, `AgentAddress`, `ContactName`, `PhoneNumber`, `FaxNumber`, `Email`, `ReferredBy`, 
-        `Notes`, `ShipName`, `CompStatus`, `RecEntered`, `RecEnteredBy`, `RecModified`, `RecModifiedBy`, `DelFlg`) VALUES 
-        ('$this->CompanyId', '$this->CompanyName', '$this->AddressLine1', '$this->AddressLine2', '$this->AddressLine3', '$this->Parish',
-         '$this->PostalCode', '$this->AgentName', '$this->AgentAddress', '$this->ContactName', '$this->PhoneNumber', '$this->FaxNumber', '$this->Email', '$this->ReferredBy', '$this->Notes', 
-        '$this->ShipName', '$this->CompStatus', NOW(), '$username', NULL, NULL, '$this->DelFlg') ";
+        $sql = "INSERT INTO `company`(`CompanyId`, `CaipoId`, `TIN`, `CompanyName`, `AddressLine1`, `AddressLine2`, `AddressLine3`, `Parish`, `PostalCode`, `ContactName`, `PhoneNumber`, `FaxNumber`, `Email`, `Notes`, `CompStatus`, `RecEntered`, `RecEnteredBy`, `RecModified`, `RecModifiedBy`, `DelFlg`) VALUES "
+                . "(`$this->CompanyId`, `$this->CaipoId`, `$this->TIN`, `$this->CompanyName`, `$this->AddressLine1`, `$this->AddressLine2`, `$this->AddressLine3`, `$this->Parish`, `$this->PostalCode`, `$this->ContactName`, `$this->PhoneNumber`, `$this->FaxNumber`, `$this->Email`, `$this->Notes`, `$this->CompStatus`, `$this->RecEntered`, `$this->RecEnteredBy`, `$this->RecModified`, `$this->RecModifiedBy`, `$this->DelFlg`)";
 
         if ($conn->exec($sql)) {
             $this->auditok = 1;
@@ -67,11 +60,14 @@ class Company {
     //Update Company Method
     function EditCompany($compid) {
         $conn = conn();
-        $sql = "UPDATE company SET CompanyName='$this->CompanyName',AddressLine1='$this->AddressLine1',
-                AddressLine2='$this->AddressLine2',AddressLine3='$this->AddressLine3',AddressLine4='$this->AddressLine4',
-                Parish='$this->Parish',PostalCode='$this->PostalCode',ContactName='$this->ContactName',AgentName='$this->AgentName',
-                PhoneNumber='$this->PhoneNumber',FaxNumber='$this->FaxNumber',Email='$this->Email',ReferredBy='$this->ReferredBy',Notes='$this->Notes',ShipName='$this->ShipName',RecModified=NOW(),RecModifiedBy='$this->RecModifiedBy'"
-                . "WHERE companyid='$compid' AND DelFlg='N'";
+        $sql="UPDATE `company` SET `CompanyId`='$this->CompanyId',`CaipoId`='$this->CaipoId',`TIN`='$this->TIN',"
+                . "`CompanyName`=''$this->CompanyName,`AddressLine1`='$this->AddressLine1',`AddressLine2`='$this->AddressLine2',"
+                . "`AddressLine3`='$this->AddressLine3',`Parish`='$this->Parish',`PostalCode`='$this->PostalCode',"
+                . "`ContactName`='$this->ContactName',`PhoneNumber`='$this->PhoneNumber',`FaxNumber`='$this->FaxNumber',"
+                . "`Email`='$this->Email',`Notes`='$this->Notes',`CompStatus`='$this->CompStatus',"
+                . "`RecEntered`='$this->RecEntered',`RecEnteredBy`='$this->RecEnteredBy',`RecModified`='$this->RecModified',"
+                . "`RecModifiedBy`='$this->RecModifiedBy',`DelFlg`='$this->DelFlg' "
+                . "WHERE `CompanyId`='$compid' AND DelFlg='N'";
         //$conn = conn();
         if ($conn->exec($sql)) {
             $this->auditok = 1;
@@ -101,9 +97,9 @@ class Company {
         $stmt->execute();
         $result = $stmt->fetchAll();
         if (empty($result)) {
-            return 1;
+            return 0;
         }
-        return 0;
+        return 1;
         $conn = NULL;
     }
 
@@ -153,15 +149,15 @@ class Company {
 
         $conn = NULL;
     }
-    
-    function GetCompanyId($compname){
+
+    function GetCompanyId($compname) {
         $conn = conn();
         $sql = "SELECT companyId FROM company WHERE CompanyName='$compname'";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch();
         if (empty($result)) {
-            return 1;
+            return 0;
         }
         return $result['companyId'];
         $conn = NULL;

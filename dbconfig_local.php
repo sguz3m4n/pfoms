@@ -1,10 +1,11 @@
 <?php
  function conn() {
   $servername = "localhost";
-  $username = "root";
+  $username = "pfoms";
   $password = "P@ssw0rd";
-  $dbname = "barcoms";
+  $dbname = "pfoms";
   $port=3306;
+  // Create conn
   // Create connection
   try {
   $conn = new \PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $password);
@@ -21,15 +22,15 @@
     //$host = "localhost";
     //$user = "root";
     //$password = "P@ssw0rd";
-    //$datbase = "barcoms";
+    //$datbase = "pfoms";
     //mysql_connect($host, $user, $password);
     //mysql_select_db($datbase);
     $servername = "localhost";
     $username = "root";
     $password = "P@ssw0rd";
-    $dbname = "barcoms";
+    $dbname = "pfoms";
     //$password = "P@ssw0rd";
-    //$dbname = "barcoms";
+    //$dbname = "pfoms";
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
     // Check connection

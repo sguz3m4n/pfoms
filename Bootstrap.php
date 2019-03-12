@@ -23,7 +23,7 @@ if ($environment !== 'production') {
 $whoops->register();
 */
 //Set theme
-$_SESSION['theme'] = null;
+$_SESSION['theme'] = '';
 if(!isset($_SESSION['theme'])){
     $date = DateTime::createFromFormat('Y-m-d', date('Y-m-d'));
     $year = $date->format("Y");

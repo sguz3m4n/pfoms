@@ -47,7 +47,7 @@ class Company {
     function CreateCompany($username) {
         $conn = conn();
         $sql = "INSERT INTO `company`(`CompanyId`, `CaipoId`, `TIN`, `CompanyName`, `AddressLine1`, `AddressLine2`, `AddressLine3`, `Parish`, `PostalCode`, `ContactName`, `PhoneNumber`, `FaxNumber`, `Email`, `Notes`, `CompStatus`, `RecEntered`, `RecEnteredBy`, `RecModified`, `RecModifiedBy`, `DelFlg`) VALUES "
-                . "(`$this->CompanyId`, `$this->CaipoId`, `$this->TIN`, `$this->CompanyName`, `$this->AddressLine1`, `$this->AddressLine2`, `$this->AddressLine3`, `$this->Parish`, `$this->PostalCode`, `$this->ContactName`, `$this->PhoneNumber`, `$this->FaxNumber`, `$this->Email`, `$this->Notes`, `$this->CompStatus`, `$this->RecEntered`, `$this->RecEnteredBy`, `$this->RecModified`, `$this->RecModifiedBy`, `$this->DelFlg`)";
+                . "(`$this->CompanyId`, `$this->CaipoId`, `$this->TIN`, `$this->CompanyName`, `$this->AddressLine1`, `$this->AddressLine2`, `$this->AddressLine3`, `$this->Parish`, `$this->PostalCode`, `$this->ContactName`, `$this->PhoneNumber`, `$this->FaxNumber`, `$this->Email`, `$this->Notes`, `$this->CompStatus`, `$username`, `$this->RecEnteredBy`, `$this->RecModified`, `$this->RecModifiedBy`, `$this->DelFlg`)";
 
         if ($conn->exec($sql)) {
             $this->auditok = 1;

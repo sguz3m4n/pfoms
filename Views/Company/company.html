@@ -74,6 +74,7 @@
                                             <div class="number">
                                                 <span data-value="2" id="submittercompany" style="font-size: xx-large"  data-counter="counterup" class="glyphicon glyphicon-signal"> { actv_comp }</span>
                                             </div>
+                                            <br>
                                             <div class="desc"> Active Companies </div>
                                         </div>
                                     </div>
@@ -87,6 +88,7 @@
                                             <div class="number">
                                                 <span data-value="2" id="submittercompany" style="font-size: xx-large"  data-counter="counterup" class="glyphicon glyphicon-signal"> { zerobal_comp }</span>
                                             </div>
+                                            <br>
                                             <div class="desc"> Zero Balances  </div>
                                         </div>
                                     </div>
@@ -116,6 +118,16 @@
                                                     <div class="col-xs-6">
                                                         <label>Company Name</label>
                                                         <input type="text" class="form-control" name="CompanyName" placeholder="" autocomplete="off" required value="{ CompanyName }"  />  
+                                                    </div>
+                                                </div> 
+                                                  <div class="row center-block panel-body">
+                                                    <div class="col-xs-4 ">
+                                                        <label>Caipo ID</label>
+                                                        <input type="text" class="form-control" name="CaipoId" placeholder="**********" autocomplete="off" required value="{ CaipoId }"  />
+                                                    </div>
+                                                    <div class="col-xs-4">
+                                                        <label>Company TIN</label>
+                                                        <input type="text" class="form-control" name="TIN" placeholder="" autocomplete="off" required value="{ TIN }"  />  
                                                     </div>
                                                 </div> 
                                                 <div class="row center-block panel-body">
@@ -150,14 +162,7 @@
                                                         <label>Contact Name</label>
                                                         <input type="text" class="form-control" name="ContactName" placeholder="" autocomplete="off"  value="{ ContactName }" >
                                                     </div>
-                                                    <div class="col-xs-4">
-                                                        <label>Agent Name</label>
-                                                        <input type="text" class="form-control" name="AgentName" placeholder="" value="{ AgentName }" >
-                                                    </div>
-                                                    <div class="col-xs-6">
-                                                        <label>Agent Address</label>
-                                                        <textarea name="AgentAddress" id="AgentAddress" rows="4" cols="4" class="form-control" ></textarea>
-                                                    </div>
+
                                                     <div class="col-xs-4" style="font-size: large">
                                                         { val_CompanyName } 
                                                     </div>
@@ -176,12 +181,6 @@
                                                     </div>
                                                     <div class="col-xs-8">
                                                         <div class="col-xs-7">
-                                                            <label>Referred By</label>
-                                                            <input type="text" class="form-control" name="ReferredBy" placeholder="" value="{ ReferredBy }" >
-
-                                                            <label>Ship Name</label>
-                                                            <input type="text" class="form-control" name="ShipName" placeholder="" value="{ ShipName }" >  
-
                                                             <label>Notes</label>
                                                             <textarea name="Notes" id="Notes" rows="4" cols="12" class="form-control" ></textarea> 
                                                         </div>

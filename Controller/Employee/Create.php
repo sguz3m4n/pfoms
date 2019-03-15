@@ -2,10 +2,10 @@
 
 /*
   Developed by Kitji Studios
-  Development Team: Shayne Marshall, Frederick Masterton Chandler
-  Property of Barbados Customs and Excise Department 2017
+  Development Team: Shayne Marshall, Frederick Masterton Chandler, Kamar Durant
+  Property of Barbados Royal Barbados  Force
   Consultation and Analysis by Data Processing Department
-  October 2017
+  2019
  */
 
 namespace Controllers;
@@ -28,13 +28,13 @@ class EmployeeCreateController extends PermissionController {
     }
 
     private $Natregno = "";
-    private $NatRegIsValid;
-    private $NISNoIsValid = "";
-    private $NatRegIsUnique = "";
-    private $Title = "";
+    private $TIN = "";
+    private $NISNo = "";
+    private $ForceNumber = "";
+    private $Lastname = "";
     private $FirstName = "";
     private $Initial = "";
-    private $Lastname = "";
+    private $Title = "";
     private $AddressLine1 = "";
     private $AddressLine2 = "";
     private $AddressLine3 = "";
@@ -44,20 +44,26 @@ class EmployeeCreateController extends PermissionController {
     private $HomePhone = "";
     private $CellNo = "";
     private $Ext = "";
-    private $FaxNum = "";
-    private $Email = "";
     private $RoleName = "";
-    private $RateCode = "";
-    private $NISNo = "";
-    private $Notes = "";
+    private $PostType = "";
+    private $DateOfBirth;
+    private $Age = null;
     private $Gender = "";
+    private $PayRate;
+    private $RateCode = "";
+    private $Notes = "";
+    private $Email = "";
+    private $EmpStatus;
+    private $NatRegIsValid;
+    private $NISNoIsValid = "";
+    private $NatRegIsUnique = "";
 
     //Validation Engine will execute any validation on the fields in the interface
     function ValidationEngine($elements) {
         $empinst = new \BarcomModel\Employee();
         foreach ($elements as $value) {
             if ($value == "Natregno") {
-                if ((strlen($this->Natregno) < 10) || (strlen($this->Natregno) > 10))  {
+                if ((strlen($this->Natregno) < 10) || (strlen($this->Natregno) > 10)) {
                     $natregerr = "National Reg No is invalid length";
                     $_SESSION['$natregwrapper'] = '<span style="color:red" >' . " * " . $natregerr . '</span>';
                     $this->NatRegIsValid = 0;
@@ -101,13 +107,14 @@ class EmployeeCreateController extends PermissionController {
             $empinst = new \BarcomModel\Employee();
             $audinst = new \BarcomModel\Audit();
             //ternary operator example
-            (isset($_POST['Natregno']) ? $this->Natregno = $varid = $empinst->Natregno = $_POST['Natregno'] : $this->Natregno = $varid = $empinst->Natregno = "");
-
-            $this->Title = $empinst->Title = $_POST['Title'];
+            (isset($_POST['Natregno']) ? $this->Natregno = $empid = $empinst->Natregno = $_POST['Natregno'] : $this->Natregno = $empid = $empinst->Natregno = "");
+            $this->TIN = $TIN = $empinst->TIN = $_POST['TIN'];
+            $this->NISNo = $NISNo = $empinst->NISNo = $_POST['NISNo'];
+            $this->ForceNumber = $ForceNumber = $empinst->ForceNumber = $_POST['ForceNumber'];
             $this->Lastname = $empinst->LastName = $_POST['LastName'];
-            $this->Initial = $empinst->Initial = $_POST['Initial'];
             $this->FirstName = $empinst->FirstName = $_POST['FirstName'];
-            $name = $empinst->FirstName . " " . $empinst->LastName;
+            $this->Initial = $empinst->Initial = $_POST['Initial'];
+            $this->Title = $empinst->Title = $_POST['Title'];
             $this->AddressLine1 = $empinst->AddressLine1 = $_POST['AddressLine1'];
             $this->AddressLine2 = $empinst->AddressLine2 = $_POST['AddressLine2'];
             $this->AddressLine3 = $empinst->AddressLine3 = $_POST['AddressLine3'];
@@ -117,20 +124,19 @@ class EmployeeCreateController extends PermissionController {
             $this->HomePhone = $empinst->HomePhone = $_POST['HomePhone'];
             $this->CellNo = $empinst->CellNo = $_POST['CellNo'];
             $this->Ext = $empinst->Ext = $_POST['Ext'];
-            $this->FaxNum = $empinst->FaxNum = $_POST['FaxNum'];
-            $this->Email = $empinst->Email = $_POST['Email'];
             $this->RoleName = $empinst->RoleName = $_POST['RoleName'];
+            $this->PostType = $empinst->PostType = $_POST['PostType'];
+            $this->DateOfBirth = $birthDate = $empinst->DateOfBirth = $_POST['DateOfBirth'];
+            $this->Age = $empinst->Age = $age = (date('Y') - date('Y', strtotime($birthDate)));
+            ($_POST['Gender'] = "Male" ? $this->Gender = $empinst->Gender = "M" : $this->Gender = $empinst->Gender = "F" );
+            $this->PayRate = $empinst->PayRate = $_POST['PayRate'];
             $this->RateCode = $empinst->RateCode = $_POST['RateCode'];
-            $this->NISNo = $empinst->NISNo = $_POST['NISNo'];
             $this->Notes = $empinst->Notes = $_POST['Notes'];
+            $this->Email = $empinst->Email = $_POST['Email'];
+
+            $name = $empinst->FirstName . " " . $empinst->LastName;
             $empinst->EmpStatus = 'Active';
             $empinst->DelFlg = 'N';
-            //$birthDate = $empinst->DateOfBirth = $_POST['DOB'];
-            ($_POST['Gender'] = "Male" ? $this->Gender = $empinst->Gender = "M" : $this->Gender = $empinst->Gender = "F" );
-            //$this->Gender = $empinst->Gender = $_POST['Gender'];
-            $birthDate = $empinst->DateOfBirth = $_POST['DateOfBirth'];
-            $empinst->Age = $age = (date('Y') - date('Y', strtotime($birthDate)));
-            $empinst->Age = $age;
 
             //Send elements to be validated
             $validateme = ["Natregno", "NISNo"];
@@ -144,11 +150,11 @@ class EmployeeCreateController extends PermissionController {
                 //if validation succeeds then log audit record to database
                 if ($empinst->auditok == 1) {
                     $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');
-                    $TranDesc = 'Create New Employee for ' . $varid . " Name " . $name;
+                    $TranDesc = 'Create New Employee for ' . $empid . " Name " . $name;
                     $User = $username;
                     $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
                     $token = '<br><br><span class="label label-success">Employee Name</span> ' . '<span class="label label-info"> ' . $name . '</span><br><br><br>' .
-                            '<span class="label label-success">Employee Id</span> ' . '<span class="label label-info">' . $varid . '</span><br>';
+                            '<span class="label label-success">Employee Id</span> ' . '<span class="label label-info">' . $empid . '</span><br>';
                     $token1 = 'Record Successfully Created';
                     header("Location:" . "/success?result=$token&header=$token1&args=");
                 }
@@ -159,30 +165,32 @@ class EmployeeCreateController extends PermissionController {
                 $parishes = $model->GetParishes();
                 $template = new MasterTemplate();
                 $template->load("Views/Employee/employee.html");
-                $template->replace("roles", $roles);
-                $template->replace("parishes", $parishes);
-                $template->replace("username", $username);
-                $template->replace("title", " Create New Customs Employee");
                 $template->replace("Natregno", $this->Natregno);
-                $template->replace("val_Natregno", $_SESSION['$natregwrapper']);
+                $template->replace("Natregno", $this->TIN);
                 $template->replace("NISNo", $this->NISNo);
-                $template->replace("val_NISNo", $_SESSION['$nisnowrapper']);
-                $template->replace("val_Unique", $_SESSION['$natregunqwrapper']);
-                $template->replace("Title", $this->Title);
+                $template->replace("Natregno", $this->ForceNumber);
+                $template->replace("LastName", $this->Lastname);
                 $template->replace("FirstName", $this->FirstName);
                 $template->replace("Initial", $this->Initial);
-                $template->replace("LastName", $this->Lastname);
+                $template->replace("Title", $this->Title);
                 $template->replace("AddressLine1", $this->AddressLine1);
                 $template->replace("AddressLine2", $this->AddressLine2);
                 $template->replace("AddressLine3", $this->AddressLine3);
                 $template->replace("Parish", $this->Parish);
                 $template->replace("PostalCode", $this->PostalCode);
                 $template->replace("WorkPhone", $this->WorkPhone);
-                $template->replace("Ext", $this->Ext);
-                $template->replace("FaxNum", $this->FaxNum);
                 $template->replace("HomePhone", $this->HomePhone);
                 $template->replace("CellNo", $this->CellNo);
+                $template->replace("Ext", $this->Ext);
                 $template->replace("Email", $this->Email);
+
+                $template->replace("title", " Create New Customs Employee");
+                $template->replace("val_Natregno", $_SESSION['$natregwrapper']);
+                $template->replace("val_NISNo", $_SESSION['$nisnowrapper']);
+                $template->replace("val_Unique", $_SESSION['$natregunqwrapper']);
+                $template->replace("roles", $roles);
+                $template->replace("parishes", $parishes);
+                $template->replace("username", $username);
                 $template->publish();
                 //if validation fails do postback with values already entered 
             }
@@ -199,23 +207,26 @@ class EmployeeCreateController extends PermissionController {
             $template->replace("username", $username);
             $template->replace("activeemployees", $actives);
             $template->replace("title", " Create New Customs Employee");
+
             $template->replace("Natregno", "");
-            $template->replace("DOB", "");
+            $template->replace("TIN", "");
             $template->replace("NISNo", "");
-            $template->replace("Title", "");
+            $template->replace("ForceNumber", "");
+            $template->replace("LastName", "");
             $template->replace("FirstName", "");
             $template->replace("Initial", "");
-            $template->replace("LastName", "");
+            $template->replace("Title", "");
             $template->replace("AddressLine1", "");
             $template->replace("AddressLine2", "");
             $template->replace("AddressLine3", "");
             $template->replace("PostalCode", "");
             $template->replace("WorkPhone", "");
-            $template->replace("Ext", "");
-            $template->replace("FaxNum", "");
             $template->replace("HomePhone", "");
             $template->replace("CellNo", "");
+            $template->replace("Ext", "");
+            $template->replace("DateOfBirth", "");
             $template->replace("Email", "");
+
             $template->replace("val_Natregno", "");
             $template->replace("val_DOB", "");
             $template->replace("val_NISNo", "");

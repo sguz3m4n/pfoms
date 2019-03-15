@@ -2,10 +2,10 @@
 
 /*
   Developed by Kitji Studios
-  Development Team: Shayne Marshall, Frederick Masterton Chandler
-  Property of Barbados Customs and Excise Department 2017
+  Development Team: Shayne Marshall, Frederick Masterton Chandler, Kamar Durant
+  Property of Barbados Royal Barbados  Force
   Consultation and Analysis by Data Processing Department
-  October 2017
+  2019
  */
 
 namespace Controllers;
@@ -62,12 +62,14 @@ class EmployeeEditController extends PermissionController {
             //Check to see if the record already exists
             //If it does execute update
             if ($empinst->IfExists($Natregno) === 0) {
-                $this->Natregno = $varid = $empinst->Natregno = $_POST['Natregno'];
-                $empinst->Title = $_POST['Title'];
+                $this->Natregno = $empid = $empinst->Natregno = $_POST['Natregno'];
+                $empinst->TIN = $_POST['TIN'];
+                $this->NISNo = $empinst->NISNo = $_POST['NISNo'];
+                $empinst->ForceNumber = $_POST['ForceNumber'];
+                $empinst->LastName = $_POST['LastName'];
                 $empinst->FirstName = $_POST['FirstName'];
                 $empinst->Initial = $_POST['Initial'];
-                $empinst->LastName = $_POST['LastName'];
-                $name = $empinst->FirstName . " " . $empinst->LastName;
+                $empinst->Title = $_POST['Title'];
                 $empinst->AddressLine1 = $_POST['AddressLine1'];
                 $empinst->AddressLine2 = $_POST['AddressLine2'];
                 $empinst->AddressLine3 = $_POST['AddressLine3'];
@@ -77,18 +79,17 @@ class EmployeeEditController extends PermissionController {
                 $empinst->HomePhone = $_POST['HomePhone'];
                 $empinst->CellNo = $_POST['CellNo'];
                 $empinst->Ext = $_POST['Ext'];
-                $empinst->FaxNum = $_POST['FaxNum'];
-                $empinst->Email = $_POST['Email'];
                 $empinst->RoleName = $_POST['RoleName'];
-                $empinst->RateCode = $_POST['RateCode'];
-                $this->NISNo = $empinst->NISNo = $_POST['NISNo'];
-                $empinst->Notes = $_POST['Notes'];
                 $birthDate = $empinst->DateOfBirth = $_POST['DateOfBirth'];
                 $empinst->Age = $age = (date('Y') - date('Y', strtotime($birthDate)));
                 ($_POST['Gender'] = "Male" ? $empinst->Gender = "M" : $empinst->Gender = "F" );
-                //$empinst->Gender = $_POST['Gender'];
-                $empinst->RecModifiedBy = $username;
+                $empinst->RateCode = $_POST['RateCode'];
+                $empinst->Notes = $_POST['Notes'];
+                $empinst->Email = $_POST['Email'];
 
+                $empinst->RecModifiedBy = $username;
+                $name = $empinst->FirstName . " " . $empinst->LastName;
+                
                 //Send elements to be validated
                 $validateme = ["NISNo"];
                 $this->ValidationEngine($validateme);
@@ -99,7 +100,7 @@ class EmployeeEditController extends PermissionController {
 
                     if ($empinst->auditok == 1) {
                         $tranid = $audinst->TranId = $audinst->GenerateTimestamp('UEMP');
-                        $TranDesc = 'Update Employee ' . $varid . " Name " . $name;
+                        $TranDesc = 'Update Employee ' . $empid . " Name " . $name;
                         $User = $username;
                         $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
                         $token = '<br><br><span class="label label-success">Employee Name</span> ' . '<span class="label label-info"> ' . $name . '</span><br><br><br>' .

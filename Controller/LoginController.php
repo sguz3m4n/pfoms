@@ -1,5 +1,11 @@
 <?php
-
+/*
+  Developed by Kitji Studios
+  Development Team: Shayne Marshall, Frederick Masterton Chandler, Kamar Durant
+  Property of Barbados Royal Barbados  Force
+  Consultation and Analysis by Data Processing Department
+  2019
+ */
 namespace Controllers;
 
 require __DIR__ . "/base_template.php";

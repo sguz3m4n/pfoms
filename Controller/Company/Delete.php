@@ -1,11 +1,10 @@
 <?php
-
 /*
   Developed by Kitji Studios
-  Development Team: Shayne Marshall, Frederick Masterton Chandler
-  Property of Barbados Customs and Excise Department 2017
+  Development Team: Shayne Marshall, Frederick Masterton Chandler, Kamar Durant
+  Property of Barbados Royal Barbados  Force
   Consultation and Analysis by Data Processing Department
-  October 2017
+  2019
  */
 
 namespace Controllers;
@@ -31,7 +30,7 @@ class CompanyDeactivateController extends PermissionController {
             $CompanyId = $_POST['CompanyId'];
             //Check to see if the record already exists            
             //If it does execute delete
-            if ($compinst->IfExists($CompanyId) === 0) {
+            if ($compinst->IfExists($CompanyId) === 1) {
                 //Get Id from browser interface
                 $varid = $CompanyId;
                 $compname = $_POST['CompanyName'];

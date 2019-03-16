@@ -1,5 +1,11 @@
 <?php
-
+/*
+  Developed by Kitji Studios
+  Development Team: Shayne Marshall, Frederick Masterton Chandler, Kamar Durant
+  Property of Barbados Royal Barbados  Force
+  Consultation and Analysis by Data Processing Department
+  2019
+ */
 namespace Controllers;
 
 require __DIR__ . "/base_template.php";
@@ -90,19 +96,19 @@ class Homepage extends LoggedInController {
                                                 { companymenu }
                                             </ul>
                                         </li>
+                                         <li class="dropdown more-dropdown-sub ">
+                                            <a href="javascript:;"> Employee Manager </a>
+                                            <ul class="dropdown-menu">
+                                                { employeemenu }
+                                            </ul>
+                                        </li>
                                         <li class="dropdown more-dropdown-sub ">
                                             <a href="javascript:;"> Event Manager </a>
                                             <ul class="dropdown-menu">
                                                 { eventmenu }
                                             </ul>
                                         </li>
-                                        <li class="dropdown more-dropdown-sub ">
-                                            <a href="javascript:;"> Employee Manager </a>
-                                            <ul class="dropdown-menu">
-                                                { employeemenu }
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown">
+                                                                               <li class="dropdown">
                                             <a href="/adminconsole"> Admin Console </a>                                          
                                         </li>
                                     </ul>

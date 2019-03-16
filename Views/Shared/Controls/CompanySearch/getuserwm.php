@@ -13,22 +13,20 @@ $compinst = new BarcomModel\Company();
 
 foreach ($result as $value) {
     $compinst->CompanyId = $value['CompanyId'];
+    $compinst->CaipoId = $value['CaipoId'];
+    $compinst->TIN = $value['TIN'];
     $compinst->CompanyName = $value['CompanyName'];
     $compinst->AddressLine1 = $value['AddressLine1'];
     $compinst->AddressLine2 = $value['AddressLine2'];
     $compinst->AddressLine3 = $value['AddressLine3'];
-    $compinst->AddressLine4 = $value['AddressLine4'];
     $compinst->Parish = $value['Parish'];
     $compinst->PostalCode = $value['PostalCode'];
-    $compinst->AgentName = $value['AgentName'];
-    $compinst->AgentAddress = $value['AgentAddress'];
     $compinst->ContactName = $value['ContactName'];
     $compinst->PhoneNumber = $value['PhoneNumber'];
     $compinst->FaxNumber = $value['FaxNumber'];
     $compinst->Email = $value['Email'];
-    $compinst->ReferredBy = $value['ReferredBy'];
     $compinst->Notes = $value['Notes'];
-    $compinst->ShipName = $value['ShipName'];
+
     $compinst->CompStatus = $value['CompStatus'];
     $compinst->RecEntered = $value['RecEntered'];
     $compinst->RecEnteredBy = $value['RecEnteredBy'];
@@ -57,7 +55,7 @@ $parishes = $model->GetParishes();
             </h3>  
         </center>
         <ul style="list-style: none">
-            <li><label>Agent:</label><?php echo $compinst->AgentName; ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Contact: </label><?php echo $compinst->ContactName; ?></li> 
+            <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Contact: </label><?php echo $compinst->ContactName; ?></li> 
             <li><span class="glyphicon glyphicon-send"></span> <label>Address </label><?php echo $compinst->CompanyAddress; ?></li>                        
             <li><span class="glyphicon glyphicon-phone"></span><label>Phone </label><?php echo $compinst->PhoneNumber; ?></li> 
             <li><span class="glyphicon glyphicon-print"></span><label>Fax </label><?php echo $compinst->FaxNumber; ?></li>            
@@ -94,6 +92,11 @@ $parishes = $model->GetParishes();
                             <input type="text" class="form-control" name="CompanyName" value="<?php echo $compinst->CompanyName; ?>"  >
                         </div>
                         <div class="col-xs-3">
+                            <label>Caipo ID</label>
+                            <input type="text" class="form-control" name="CaipoId" value="<?php echo $compinst->CaipoId; ?>"  >
+
+                            <label>Company TIN</label>
+                            <input type="text" class="form-control" name="TIN" value="<?php echo $compinst->TIN; ?>"  >
                             <input type="hidden" name="CompanyId" value="<?php echo $compinst->CompanyId; ?>">
                         </div>
                     </div>
@@ -131,12 +134,9 @@ $parishes = $model->GetParishes();
                             <label>Contact Name</label>
                             <input type="text" class="form-control" name="ContactName" value="<?php echo $compinst->ContactName; ?>" > 
 
-                            <label>Agent Name</label>
-                            <input type="text" class="form-control" name="AgentName" value="<?php echo $compinst->AgentName; ?>"   >
                         </div>
                         <div class="col-xs-8"> 
-                            <label>Agent Address</label>                         
-                            <textarea class="form-control" rows="4" columns="5" name="AgentAddress" type="text" id="AgentAddress"><?php echo $compinst->AgentAddress; ?></textarea>   
+
                         </div>                        
                     </div>
                     <div class="row center-block panel-body">
@@ -151,14 +151,6 @@ $parishes = $model->GetParishes();
                         <div class="col-xs-6">
                             <label>Email</label>
                             <input type="text" class="form-control" name="Email" value="<?php echo $compinst->Email; ?>" placeholder="example@domain"  >  
-                        </div>
-                        <div class="col-xs-6">
-                            <label>Referred By</label>
-                            <input type="text" class="form-control" name="ReferredBy" value="<?php echo $compinst->ReferredBy; ?>"   >
-                        </div>
-                        <div class="col-xs-6">
-                            <label>Ship Name</label>
-                            <input type="text" class="form-control" name="ShipName" value="<?php echo $compinst->ShipName; ?>"   > 
                         </div>
                         <div class="col-xs-8">
                             <label for="Notes">Notes</label>

@@ -1,4 +1,5 @@
 <?php
+
 /*
   Developed by Kitji Studios
   Development Team: Shayne Marshall, Frederick Masterton Chandler, Kamar Durant
@@ -6,6 +7,7 @@
   Consultation and Analysis by Data Processing Department
   2019
  */
+
 namespace BarcomModel;
 
 class Employee {
@@ -34,7 +36,6 @@ class Employee {
     public $Age;
     public $Gender;
     public $RateCode;
-    public $PayRate;
     public $Notes;
     public $Email;
     public $EmpStatus;
@@ -45,7 +46,7 @@ class Employee {
     public $DelFlg;
     //Employee class properties map directly to employee table
 
-
+    public $PayRate;
     public $auditok;
     public $activepersons;
     public $BankAccountNumber;
@@ -54,8 +55,8 @@ class Employee {
     //Create Employee Method
     function CreateEmployee($username) {
         $conn = conn();
-        $sql = "INSERT INTO `employee`(`Natregno`, `TIN`, `NISNo`, `ForceNumber`, `LastName`, `FirstName`, `Initial`, `Title`, `AddressLine1`, `AddressLine2`, `AddressLine3`, `Parish`, `PostalCode`, `WorkPhone`, `HomePhone`, `CellNo`, `Ext`, `RoleName`, `PostType`, `DateOfBirth`, `Age`, `Gender`, `PayRate`, `RateCode`, `Notes`, `Email`, `EmpStatus`, `RecEntered`, `RecEnteredBy`, `RecModified`, `RecModifiedBy`, `DelFlg`) VALUES "
-                . "(`$this->Natregno`, `$this->TIN`, `$this->NISNo`, `$this->ForceNumber`, `$this->LastName`, `$this->FirstName`, `$this->Initial`, `$this->Title`, `$this->AddressLine1`, `$this->AddressLine2`, `$this->AddressLine3`, `$this->Parish`, `$this->PostalCode`, `$this->WorkPhone`, `$this->HomePhone`, `$this->CellNo`, `$this->Ext`, `$this->RoleName`, `$this->PostType`, `$this->DateOfBirth`, `$this->Age`, `$this->Gender`, `$this->PayRate`, `$this->RateCode`, `$this->Notes`, `$this->Email`, `$this->EmpStatus`, `$this->RecEntered`, `$this->RecEnteredBy`, `$this->RecModified`, `$this->RecModifiedBy`, `$this->DelFlg`)";
+        $sql = "INSERT INTO `employee`(`Natregno`, `TIN`, `NISNo`, `ForceNumber`, `LastName`, `FirstName`, `Initial`, `Title`, `AddressLine1`, `AddressLine2`, `AddressLine3`, `Parish`, `PostalCode`, `WorkPhone`, `HomePhone`, `CellNo`, `Ext`, `RoleName`, `PostType`, `DateOfBirth`, `Age`, `Gender`, `RateCode`, `Notes`, `Email`, `EmpStatus`, `RecEntered`, `RecEnteredBy`, `RecModified`, `RecModifiedBy`, `DelFlg`) VALUES "
+                . "('$this->Natregno', '$this->TIN', '$this->NISNo', '$this->ForceNumber', '$this->LastName', '$this->FirstName', '$this->Initial', '$this->Title', '$this->AddressLine1', '$this->AddressLine2', '$this->AddressLine3', '$this->Parish', '$this->PostalCode', '$this->WorkPhone', '$this->HomePhone', '$this->CellNo', '$this->Ext', '$this->RoleName', '$this->PostType', '$this->DateOfBirth', '$this->Age', '$this->Gender', '$this->RateCode', '$this->Notes', '$this->Email', '$this->EmpStatus', NOW(), '$username', NULL, '$this->RecModifiedBy', '$this->DelFlg')";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {
@@ -67,18 +68,17 @@ class Employee {
     //Update Employee Method
     function EditEmployee($natregno) {
         $conn = conn();
-      
-        $sql="UPDATE `employee` SET `Natregno`=`$this->Natregno`,`TIN`=`$this->TIN`,`NISNo`=`$this->NISNo`,"
-                . "`ForceNumber`=`$this->ForceNumber`,`LastName`=`$this->LastName`,`FirstName`=`$this->FirstName`,"
-                . "`Initial`=`$this->Initial`,`Title`=`$this->Title`,`AddressLine1`=`$this->AddressLine1`,"
-                . "`AddressLine2`=`$this->AddressLine2`,`AddressLine3`=`$this->AddressLine3`,`Parish`=`$this->Parish`,"
-                . "`PostalCode`=`$this->PostalCode`,`WorkPhone`=`$this->WorkPhone`,`HomePhone`=`$this->HomePhone`,"
-                . "`CellNo`=`$this->CellNo`,`Ext`=`$this->Ext`,`RoleName`=`$this->RoleName`,"
-                . "`PostType`=`$this->PostType`,`DateOfBirth`=`$this->DateOfBirth`,`Age`=`$this->Age`,"
-                . "`Gender`=`$this->Gender`,`PayRate`=`$this->PayRate`,`RateCode`=`$this->RateCode`,"
-                . "`Notes`=`$this->Notes`,`Email`=`$this->Email`,`EmpStatus`=`$this->EmpStatus`,"
-                . "`RecEntered`=`$this->RecEntered`,`RecEnteredBy`=`$this->RecEnteredBy`,`RecModified`=`$this->RecModified`,"
-                . "`RecModifiedBy`=`$this->RecModifiedBy`,`DelFlg`=`$this->DelFlg` "
+
+        $sql = "UPDATE `employee` SET `Natregno`='$this->Natregno',`TIN`='$this->TIN',`NISNo`='$this->NISNo',"
+                . "`ForceNumber`='$this->ForceNumber',`LastName`='$this->LastName',`FirstName`='$this->FirstName',"
+                . "`Initial`='$this->Initial',`Title`='$this->Title',`AddressLine1`='$this->AddressLine1',"
+                . "`AddressLine2`='$this->AddressLine2',`AddressLine3`='$this->AddressLine3',`Parish`='$this->Parish',"
+                . "`PostalCode`='$this->PostalCode',`WorkPhone`='$this->WorkPhone',`HomePhone`='$this->HomePhone',"
+                . "`CellNo`='$this->CellNo',`Ext`='$this->Ext',`RoleName`='$this->RoleName',"
+                . "`PostType`='$this->PostType',`DateOfBirth`='$this->DateOfBirth',`Age`='$this->Age',"
+                . "`Gender`='$this->Gender',`RateCode`='$this->RateCode',"
+                . "`Notes`='$this->Notes',`Email`='$this->Email',`EmpStatus`='$this->EmpStatus',"
+                . "`RecModified`=NOW(),`RecModifiedBy`='$this->RecModifiedBy'"
                 . "WHERE Natregno='$natregno' AND DelFlg='N'";
 
         if ($conn->exec($sql)) {
@@ -107,10 +107,10 @@ class Employee {
         $stmt = $conn->prepare("SELECT * FROM employee WHERE Natregno='$natregno';");
         $stmt->execute();
         $result = $stmt->fetchAll();
-        if (empty($result)) {
-            return 0;
+        if (($result)) {
+            return 1;
         }
-        return 1;
+        return 0;
         $conn = NULL;
     }
 

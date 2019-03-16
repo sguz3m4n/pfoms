@@ -15,6 +15,8 @@ $empinst = new BarcomModel\Employee();
 //while ($row = mysqli_fetch_array($result)) 
 foreach ($result as $value) {
     $empinst->Natregno = $value['Natregno'];
+    $empinst->TIN = $value['TIN'];
+    $empinst->ForceNumber = $value['ForceNumber'];
     $empinst->Title = $value['Title'];
     $empinst->FirstName = $value['FirstName'];
     $empinst->Initial = $value['Initial'];
@@ -22,14 +24,12 @@ foreach ($result as $value) {
     $empinst->AddressLine1 = $value['AddressLine1'];
     $empinst->AddressLine2 = $value['AddressLine2'];
     $empinst->AddressLine3 = $value['AddressLine3'];
-    $empinst->AddressLine4 = $value['AddressLine4'];
     $empinst->Parish = $value['Parish'];
     $empinst->PostalCode = $value['PostalCode'];
     $empinst->WorkPhone = $value['WorkPhone'];
     $empinst->HomePhone = $value['HomePhone'];
     $empinst->CellNo = $value['CellNo'];
     $empinst->Ext = $value['Ext'];
-    $empinst->FaxNum = $value['FaxNum'];
     $empinst->Email = $value['Email'];
     $empinst->RoleName = $value['RoleName'];
     $empinst->RateCode = $value['RateCode'];
@@ -111,6 +111,10 @@ $parishes = $model->GetParishes();
                         <div class="col-xs-4">
                             <label>NIS Number</label>
                             <input class="form-control" type="text" value="<?php echo $empinst->NISNo; ?>" name="NISNo" placeholder="******"  >    
+                            <label>Employee TIN</label>
+                            <input class="form-control" type="text" value="<?php echo $empinst->TIN; ?>" name="TIN" placeholder="******"  >   
+                            <label>Force Number</label>
+                            <input class="form-control" type="text" value="<?php echo $empinst->ForceNumber; ?>" name="ForceNumber" placeholder="******"  >   
                         </div>
                         <div class="col-xs-4">
                             <label>Date of Birth</label>
@@ -190,8 +194,6 @@ $parishes = $model->GetParishes();
                             <input class="form-control" type="text" value="<?php echo $empinst->WorkPhone; ?>" name="WorkPhone" placeholder="888-8888" />   
                             <label>Ext</label>
                             <input class="form-control" type="text" value="<?php echo $empinst->Ext; ?>" name="Ext"  />  
-                            <label>Fax</label>
-                            <input class="form-control" type="text" value="<?php echo $empinst->FaxNum; ?>" name="FaxNum" placeholder="888-8888" /> 
                         </div>
                         <div class="col-xs-4">
                             <label>Home Phone</label>

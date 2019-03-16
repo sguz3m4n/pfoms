@@ -30,7 +30,7 @@ class CompanyDeactivateController extends PermissionController {
             $CompanyId = $_POST['CompanyId'];
             //Check to see if the record already exists            
             //If it does execute delete
-            if ($compinst->IfExists($CompanyId) === 0) {
+            if ($compinst->IfExists($CompanyId) === 1) {
                 //Get Id from browser interface
                 $varid = $CompanyId;
                 $compname = $_POST['CompanyName'];

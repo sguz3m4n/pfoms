@@ -56,7 +56,7 @@ class EmployeeCreateController extends PermissionController {
     private $EmpStatus;
     private $NatRegIsValid;
     private $NISNoIsValid = "";
-    private $NatRegIsUnique = "";
+    private $NatRegExists = "";
 
     //Validation Engine will execute any validation on the fields in the interface
     function ValidationEngine($elements) {
@@ -76,9 +76,9 @@ class EmployeeCreateController extends PermissionController {
                 if ($empinst->IfExists($this->Natregno) === 0) {
                     $natregunqerr = "This National Registration currently exists";
                     $_SESSION['$natregunqwrapper'] = '<span style="color:red" >' . " * " . $natregunqerr . '</span>';
-                    $this->NatRegIsUnique = 0;
+                    $this->NatRegExists = 0;
                 } else {
-                    $this->NatRegIsUnique = 1;
+                    $this->NatRegExists = 1;
                     $_SESSION['$natregunqwrapper'] = NULL;
                 }
             }
@@ -125,11 +125,11 @@ class EmployeeCreateController extends PermissionController {
             $this->CellNo = $empinst->CellNo = $_POST['CellNo'];
             $this->Ext = $empinst->Ext = $_POST['Ext'];
             $this->RoleName = $empinst->RoleName = $_POST['RoleName'];
-            $this->PostType = $empinst->PostType = $_POST['PostType'];
+            //$this->PostType = $empinst->PostType = $_POST['PostType'];
             $this->DateOfBirth = $birthDate = $empinst->DateOfBirth = $_POST['DateOfBirth'];
             $this->Age = $empinst->Age = $age = (date('Y') - date('Y', strtotime($birthDate)));
             ($_POST['Gender'] = "Male" ? $this->Gender = $empinst->Gender = "M" : $this->Gender = $empinst->Gender = "F" );
-            $this->PayRate = $empinst->PayRate = $_POST['PayRate'];
+            // $this->PayRate = $empinst->PayRate = $_POST['PayRate'];
             $this->RateCode = $empinst->RateCode = $_POST['RateCode'];
             $this->Notes = $empinst->Notes = $_POST['Notes'];
             $this->Email = $empinst->Email = $_POST['Email'];
@@ -143,10 +143,10 @@ class EmployeeCreateController extends PermissionController {
             $this->ValidationEngine($validateme);
 
             //if validation succeeds then commit info to database
-            if (($this->NatRegIsValid) && ($this->NISNoIsValid) && ($this->NatRegIsUnique)) {
-                //if ($empinst->IfExists($empinst->Natregno) === 1) {
+            if (($this->NatRegIsValid) && ($this->NISNoIsValid) && (!$this->NatRegExists)) {
+                // if ($empinst->IfExists($empinst->Natregno) === 0) {
                 $empinst->CreateEmployee($username);
-                //}
+                // }
                 //if validation succeeds then log audit record to database
                 if ($empinst->auditok == 1) {
                     $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');
@@ -166,9 +166,9 @@ class EmployeeCreateController extends PermissionController {
                 $template = new MasterTemplate();
                 $template->load("Views/Employee/employee.html");
                 $template->replace("Natregno", $this->Natregno);
-                $template->replace("Natregno", $this->TIN);
+                $template->replace("TIN", $this->TIN);
                 $template->replace("NISNo", $this->NISNo);
-                $template->replace("Natregno", $this->ForceNumber);
+                $template->replace("ForceNumber", $this->ForceNumber);
                 $template->replace("LastName", $this->Lastname);
                 $template->replace("FirstName", $this->FirstName);
                 $template->replace("Initial", $this->Initial);

@@ -61,7 +61,7 @@ class CompanyEditController extends PermissionController {
 
             //Check to see if the record already exists            
             //If it does execute update
-            if ($compinst->IfExists($CompanyId) === 0) {
+            if ($compinst->IfExists($CompanyId) === 1) {
                 $this->CompanyId = $compid = $compinst->CompanyId = $_POST['CompanyId'];
                 $this->CaipoId = $caipoid = $compinst->CaipoId = $_POST['CaipoId'];
                 $this->TIN = $tin = $compinst->TIN = $_POST['TIN'];

@@ -13,8 +13,8 @@ $compinst = new BarcomModel\Company();
 
 foreach ($result as $value) {
     $compinst->CompanyId = $value['CompanyId'];
-      $compinst->CaipoId = $value['CaipoId'];
-        $compinst->TIN = $value['TIN'];
+    $compinst->CaipoId = $value['CaipoId'];
+    $compinst->TIN = $value['TIN'];
     $compinst->CompanyName = $value['CompanyName'];
     $compinst->AddressLine1 = $value['AddressLine1'];
     $compinst->AddressLine2 = $value['AddressLine2'];
@@ -26,7 +26,7 @@ foreach ($result as $value) {
     $compinst->FaxNumber = $value['FaxNumber'];
     $compinst->Email = $value['Email'];
     $compinst->Notes = $value['Notes'];
-    
+
     $compinst->CompStatus = $value['CompStatus'];
     $compinst->RecEntered = $value['RecEntered'];
     $compinst->RecEnteredBy = $value['RecEnteredBy'];
@@ -92,6 +92,11 @@ $parishes = $model->GetParishes();
                             <input type="text" class="form-control" name="CompanyName" value="<?php echo $compinst->CompanyName; ?>"  >
                         </div>
                         <div class="col-xs-3">
+                            <label>Caipo ID</label>
+                            <input type="text" class="form-control" name="CaipoId" value="<?php echo $compinst->CaipoId; ?>"  >
+
+                            <label>Company TIN</label>
+                            <input type="text" class="form-control" name="TIN" value="<?php echo $compinst->TIN; ?>"  >
                             <input type="hidden" name="CompanyId" value="<?php echo $compinst->CompanyId; ?>">
                         </div>
                     </div>
@@ -131,7 +136,7 @@ $parishes = $model->GetParishes();
 
                         </div>
                         <div class="col-xs-8"> 
-                          
+
                         </div>                        
                     </div>
                     <div class="row center-block panel-body">

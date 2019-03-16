@@ -90,7 +90,7 @@ class CompanyCreateController extends PermissionController {
 
 //if validation succeeds then commit info to database
             if ($this->CompanyIdIsValid) {
-                if ($compinst->IfExists($compinst->CompanyId) === 1) {
+                if ($compinst->IfExists($compinst->CompanyId) === 0) {
                     $compinst->CreateCompany($username);
                 }
 

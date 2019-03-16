@@ -61,7 +61,7 @@ class EmployeeEditController extends PermissionController {
 
             //Check to see if the record already exists
             //If it does execute update
-            if ($empinst->IfExists($Natregno) === 0) {
+            if ($empinst->IfExists($Natregno) === 1) {
                 $this->Natregno = $empid = $empinst->Natregno = $_POST['Natregno'];
                 $empinst->TIN = $_POST['TIN'];
                 $this->NISNo = $empinst->NISNo = $_POST['NISNo'];

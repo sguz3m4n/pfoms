@@ -96,19 +96,19 @@ class Homepage extends LoggedInController {
                                                 { companymenu }
                                             </ul>
                                         </li>
+                                         <li class="dropdown more-dropdown-sub ">
+                                            <a href="javascript:;"> Employee Manager </a>
+                                            <ul class="dropdown-menu">
+                                                { employeemenu }
+                                            </ul>
+                                        </li>
                                         <li class="dropdown more-dropdown-sub ">
                                             <a href="javascript:;"> Event Manager </a>
                                             <ul class="dropdown-menu">
                                                 { eventmenu }
                                             </ul>
                                         </li>
-                                        <li class="dropdown more-dropdown-sub ">
-                                            <a href="javascript:;"> Employee Manager </a>
-                                            <ul class="dropdown-menu">
-                                                { employeemenu }
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown">
+                                                                               <li class="dropdown">
                                             <a href="/adminconsole"> Admin Console </a>                                          
                                         </li>
                                     </ul>

@@ -10,9 +10,9 @@
 
 namespace Controllers;
 
-require 'Classes/Company.php';
 require 'Classes/Audit.php';
 require 'Controller/base_template.php';
+require 'Classes/Employee.php';
 
 class EmployeeDeactivateController extends PermissionController {
 
@@ -30,7 +30,7 @@ class EmployeeDeactivateController extends PermissionController {
             $EmpId = $_POST['Natid'];
             //Check to see if the record already exists            
             //If it does execute delete
-            if ($empinst->IfExists($EmpId) === 0) {
+            if ($empinst->IfExists($EmpId) === 1) {
                 //Get Id from browser interface
                 $varid = $EmpId;
                 $EmpName = $_POST['Name'];

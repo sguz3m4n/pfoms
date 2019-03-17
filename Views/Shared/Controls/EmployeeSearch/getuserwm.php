@@ -19,7 +19,7 @@ foreach ($result as $value) {
     $empinst->ForceNumber = $value['ForceNumber'];
     $empinst->Title = $value['Title'];
     $empinst->FirstName = $value['FirstName'];
-    $empinst->Initial = $value['Initial'];
+    $empinst->MiddleName = $value['MiddleName'];
     $empinst->LastName = $value['LastName'];
     $empinst->AddressLine1 = $value['AddressLine1'];
     $empinst->AddressLine2 = $value['AddressLine2'];
@@ -43,7 +43,7 @@ foreach ($result as $value) {
     }
     $empinst->DateOfBirth = $value['DateOfBirth'];
     $EmployeeAddress = $empinst->AddressLine1 . '<br>' . $empinst->AddressLine2 . '<br>' . $empinst->AddressLine3 . '<br>' . $empinst->Parish;
-    $Name = $empinst->FirstName . " " . $empinst->Initial . " " . $empinst->LastName;
+    $Name = $empinst->FirstName . " " . $empinst->MiddleName . " " . $empinst->LastName;
     $birthDate = $empinst->DateOfBirth = $value['DateOfBirth'];
     $empinst->Age = $age = (date('Y') - date('Y', strtotime($birthDate)));
     $empinst->Age = $age;
@@ -151,8 +151,8 @@ $parishes = $model->GetParishes();
                                 <input class="form-control" type="text" value="<?php echo $empinst->FirstName; ?>" id="FirstName" name="FirstName">
                               </div>
                           <div class="col-xs-2">
-                                <label for="Initial">Initial</label>
-                                <input class="form-control" id="Initial" type="text" value="<?php echo $empinst->Initial; ?>" name="Initial">
+                                <label for="MiddleName">Middle Name</label>
+                                <input class="form-control" id="MiddleName" type="text" value="<?php echo $empinst->MiddleName; ?>" name="MiddleName">
                               </div>
                         <div class="col-xs-3">
                             <label for="LastName">Last Name</label>

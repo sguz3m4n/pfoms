@@ -33,7 +33,7 @@ class EmployeeCreateController extends PermissionController {
     private $ForceNumber = "";
     private $Lastname = "";
     private $FirstName = "";
-    private $Initial = "";
+    private $MiddleName = "";
     private $Title = "";
     private $AddressLine1 = "";
     private $AddressLine2 = "";
@@ -113,7 +113,7 @@ class EmployeeCreateController extends PermissionController {
             $this->ForceNumber = $ForceNumber = $empinst->ForceNumber = $_POST['ForceNumber'];
             $this->Lastname = $empinst->LastName = $_POST['LastName'];
             $this->FirstName = $empinst->FirstName = $_POST['FirstName'];
-            $this->Initial = $empinst->Initial = $_POST['Initial'];
+            $this->MiddleName = $empinst->MiddleName = $_POST['MiddleName'];
             $this->Title = $empinst->Title = $_POST['Title'];
             $this->AddressLine1 = $empinst->AddressLine1 = $_POST['AddressLine1'];
             $this->AddressLine2 = $empinst->AddressLine2 = $_POST['AddressLine2'];
@@ -171,7 +171,7 @@ class EmployeeCreateController extends PermissionController {
                 $template->replace("ForceNumber", $this->ForceNumber);
                 $template->replace("LastName", $this->Lastname);
                 $template->replace("FirstName", $this->FirstName);
-                $template->replace("Initial", $this->Initial);
+                $template->replace("MiddleName", $this->MiddleName);
                 $template->replace("Title", $this->Title);
                 $template->replace("AddressLine1", $this->AddressLine1);
                 $template->replace("AddressLine2", $this->AddressLine2);
@@ -214,7 +214,7 @@ class EmployeeCreateController extends PermissionController {
             $template->replace("ForceNumber", "");
             $template->replace("LastName", "");
             $template->replace("FirstName", "");
-            $template->replace("Initial", "");
+            $template->replace("MiddleName", "");
             $template->replace("Title", "");
             $template->replace("AddressLine1", "");
             $template->replace("AddressLine2", "");
@@ -232,7 +232,7 @@ class EmployeeCreateController extends PermissionController {
             $template->replace("val_NISNo", "");
             $template->replace("val_Title", "");
             $template->replace("val_FirstName", "");
-            $template->replace("val_Initial", "");
+            $template->replace("val_MiddleName", "");
             $template->replace("val_LastName", "");
             $template->replace("val_AddressLine1", "");
             $template->replace("val_AddressLine2", "");

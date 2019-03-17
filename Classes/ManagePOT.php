@@ -46,16 +46,6 @@ class ManagePOT {
         $conn = NULL;
     }
 
-    //Edit Overtime Payment Rate
-    function GetHoliday($HolidCode) {
-        $result = "";
-        $conn = conn();
-        $stmt = $conn->prepare("SELECT * FROM `specialdates` WHERE `HolidayCode`='$HolidCode'");
-        $stmt->execute();
-        $result_array = $stmt->fetchAll();
-        return $result_array;
-        $conn = NULL;
-    }
 
     //Check to see if rate currently exists
     function IfExists($ratecode) {
@@ -75,12 +65,12 @@ class ManagePOT {
     function GetRateCode() {
         $result = "";
         $conn = conn();
-        $stmt = $conn->prepare("SELECT `RateCode` FROM `paymentrates`;");
+        $stmt = $conn->prepare("SELECT paymentrates.RateCode,employeeroles.RoleName FROM `employeeroles` employeeroles,`paymentrates` paymentrates WHERE employeeroles.RoleCode=paymentrates.RateCode ");
         $stmt->execute();
         $result_array = $stmt->fetchAll();
         foreach ($result_array as $value) {
-            $test = $value['RateCode'];
-            $result .= "<option id='$test' >" . $value['RateCode'] . "</option>";
+            $item = $value['RateCode'];
+            $result .= "<option id='$item' >" . $value['RoleName'] . "</option>";
         }
         return $result;
         $conn = NULL;

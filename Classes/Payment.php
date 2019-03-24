@@ -31,7 +31,6 @@ class Payment {
     public $CompanyId;
     public $CompanyName;
     public $CompanyAddress;
-    public $AgentName;
     public $ContactName;
     public $PhoneNumber;
     public $FaxNumber;
@@ -73,7 +72,7 @@ class Payment {
     function GetFilteredPRN($compid) {
         $result = "";
         $conn = conn();
-        $stmt = $conn->prepare("SELECT prnmanage.PRNumber,prntran.RequestorID FROM `prnmanage` as prnmanage, prntransaction as prntran WHERE prnmanage.TranId=prntran.TranId and prnmanage.status='Active' and prntran.CompanyId='$compid';");
+        //$stmt = $conn->prepare("SELECT prnmanage.PRNumber,prntran.RequestorID FROM `prnmanage` as prnmanage, prntransaction as prntran WHERE prnmanage.TranId=prntran.TranId and prnmanage.status='Active' and prntran.CompanyId='$compid';");
         $stmt->execute();
         $result_array = $stmt->fetchAll();
         $result = "<option id=' ' >" . " " . "</option>";

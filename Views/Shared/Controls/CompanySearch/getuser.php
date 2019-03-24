@@ -89,7 +89,7 @@ $conn = NULL;
         <div id="demo" class="collapse">
 
             <ul style="list-style: none">
-                <li><i class="fa fa-user" style="font-size: 20px"></i><?php echo $payinst->AgentName; ?></li> 
+                <li><i class="fa fa-user" style="font-size: 20px"></i><?php echo $payinst->ContactName; ?></li> 
                 <li><i class="fa fa-mobile-phone" style="font-size: 20px"></i><?php echo $payinst->PhoneNumber; ?></li> 
                 <li><i class="fa fa-fax" style="font-size: 20px"></i><?php echo $payinst->FaxNumber; ?></li>
                 <li><i class="fa fa-user" style="font-size: 20px"></i><?php echo $payinst->ContactName; ?></li>

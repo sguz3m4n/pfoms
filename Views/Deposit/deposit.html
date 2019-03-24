@@ -52,7 +52,32 @@
             }
         </style>
         <script type="text/javascript">
+            var accountcount = 0;
+            var accountarr = [];
+            var Total = 0;
+
             $(document).ready(function () {
+
+                var addcontainer = document.getElementById("addcontrols");
+                var addofficer = document.createElement("a");
+                //addofficer.style.display = "none";
+                addofficer.innerHTML = "Add account  ";
+                addofficer.setAttribute("id", "addofficer");
+                addofficer.setAttribute("class", "btn btn-default white");
+                addofficer.setAttribute("data-toggle", "modal");
+                addofficer.setAttribute("data-target", "#myModal");
+                var i = document.createElement("i");
+                i.setAttribute("class", "glyphicon glyphicon-plus");
+
+                addofficer.appendChild(i);
+                addcontainer.appendChild(addofficer);
+//Send the populated array to the controller
+                $("#paymentform").submit(function () {
+                    TogglePRNControl();
+                    var key = this.id.toString().trim();
+                    //PopulatePanelInfo(key);
+                    $("#paylist").val(JSON.stringify(accountarr));
+                });
                 document.getElementById("searchcomp").focus();
                 $('.search-boxcomp input[type="text"]').on("keyup input", function () {
                     /* Get input value on change */
@@ -116,9 +141,114 @@
                     $(this).parent(".result").empty();
                     //alert('test');
                 });
+
+                $(document).on("click", "#AddAccount", function () {
+
+                    var acctrec = new Array();
+                    var pillcontainer = document.getElementById('pillcontainer');
+                    var pillwrapper = document.getElementById('pillwrapper');
+
+                    //create instance of list elements
+                    var pill = document.createElement("li");
+
+                    var removeicon = document.createElement("span");
+                    removeicon.setAttribute("class", "glyphicon glyphicon-minus");
+                    pill.setAttribute("id", $("#AccountId").val());
+
+                    //dynamically create functions
+                    var pillanchor = document.createElement("a");
+                    //pillanchor.innerHTML = document.getElementById("DepositAmount").value;
+                    pillanchor.setAttribute("id", "preaccount" + accountcount++);
+                    pillanchor.setAttribute("data-depositamount", document.getElementById("DepositAmount").value);
+                    pillanchor.appendChild(document.createTextNode(document.getElementById("RoleName").value + "  $" + document.getElementById("DepositAmount").value));
+
+                    pillanchor.appendChild(removeicon);
+
+                    var depositvalue = document.getElementById("DepositAmount").value;
+                    acctrec.push(document.getElementById("RoleName").value);
+                    acctrec.push(document.getElementById("DepositAmount").value);
+
+                    accountarr.push(acctrec);
+
+                    pill.appendChild(pillanchor);
+                    pillwrapper.appendChild(pill);
+                    pillcontainer.appendChild(pillwrapper);
+
+                    $(".pillwrapper li").on("click", function () {
+                        //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
+                        //var key = this.id.toString().trim();
+                        //PopulatePanelInfo(key);
+                    });
+
+                    // $(".pillwrapper li").on("dblclick", function (event) 
+
+
+                    CalculateTotal(Number(depositvalue));
+
+                });
+                $(document).on("dblclick", ".pillwrapper li", function (event) {
+                    //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
+                    var key = this.id.toString().trim();
+                    var attribute = event.target.attributes.getNamedItem('data-depositamount').value;
+                    var elem = document.getElementById(this.id.toString());
+                    elem.parentNode.removeChild(elem);
+                    RemoveInfo(key);
+                    CalculateTotal(Number(attribute) * -1);
+                });
             }
 
             );
+            function CalculateTotal(value)
+            {
+                var subtotal = value;
+                Total = subtotal + Total;
+                $("#receipttotal").text(Total.toFixed(2));
+            }
+
+            /*function PopulatePanelInfo(key)
+             {
+             var RoleName = document.getElementById("RoleName");
+             var DepositAmount = document.getElementById("DepositAmount");
+             for (i = 0; i < accountarr.length; i++) {
+             
+             if (accountarr[i][1] === key)
+             {
+             RoleName.value = accountarr[i][0].toString();
+             DepositAmount.value = accountarr[i][1].toString();
+             }
+             }
+             
+             // ToggleControl();
+             
+             }*/
+
+            function RemoveInfo(key) {
+                var indextoremove;
+                for (i = 0; i < accountarr.length; i++) {
+
+                    if (accountarr[i][1] === key)
+                    {
+                        indextoremove = i;
+                    }
+                }
+                accountarr.splice(indextoremove, 1);
+            }
+
+            function UpdateInfo(key) {
+
+                for (i = 0; i < accountarr.length; i++) {
+
+                    if (accountarr[i][1] === key)
+                    {
+                        var RoleName = document.getElementById("RoleName");
+                        var DepositAmount = document.getElementById("DepositAmount");
+                        accountarr[i][0] = RoleName.value;
+                        accountarr[i][1] = DepositAmount.value;
+
+                        // ToggleControl();
+                    }
+                }
+            }
         </script>
         <script>
             function ShowSummary() {
@@ -208,18 +338,18 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-12">
-                                     <div class="dashboard-stat dashboard-stat-v2 purple" >
-                                         <div class="visual">
-                                             <i class="fa fa-comments"></i>
-                                         </div>
-                                         <div class="details">
-                                             <div class="number">
-                                                 <span class="glyphicon glyphicon-usd"></span><span data-value="2" id="receipttotal" style="font-size: xx-large"  data-counter="counterup"></span>
-                                             </div>
-                                             <div class="desc"> Receipt Total </div>
-                                         </div>
-                                     </div>
-                                 </div>
+                                    <div class="dashboard-stat dashboard-stat-v2 purple" >
+                                        <div class="visual">
+                                            <i class="fa fa-comments"></i>
+                                        </div>
+                                        <div class="details">
+                                            <div class="number">
+                                                <span class="glyphicon glyphicon-usd"></span><span  id="receipttotal" style="font-size: xx-large" ></span>
+                                            </div>
+                                            <div class="desc"> Receipt Total </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-xs-12">
                                     <div class="dashboard-stat dashboard-stat-v2 blue">
                                         <div class="visual">
@@ -247,51 +377,87 @@
                                     </div>
                                 </div>
                                 <div class="portlet-body form">
-                                    <form  method="post"> 
+                                    <form  method="post">
                                         <div class="container-fluid">
-                                            <div class="row center-block">                                                
-                                                <?php
-                                                include 'Views/Shared/Controls/CompanySearch/search-form.php';
-                                                ?>  
-                                            </div> 
-                                            <div class="row center-block"> 
-                                                <div class="col-md-3" >
-
+                                            <div class="row center-block">  
+                                                <div class="col-md-4">
+                                                    <?php
+                                                    include 'Views/Shared/Controls/CompanySearch/search-form.php';
+                                                    ?>     
                                                 </div>
+                                                <div class="col-md-4">
+                                                    <center id="addcontrols">                                                                                                                           
+
+                                                    </center>
+                                                    <div class="pillwrapper" id="pillcontainer">
+                                                        <ul class="nav nav-pills nav-stacked" id="pillwrapper" >                                   
+                                                        </ul>   
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="row center-block">                                               
+                                                        <br>
+                                                        <div id='container' >   
+                                                            <span class="glyphicon glyphicon-"></span> <label><strong>Pro Forma #</strong></label>
+                                                            <input type="text" class="form-control" id="ProformaNumber" name="ProformaNumber" autocomplete="off" required value="{ ProformaNumber }" placeholder="********">
+                                                            <span class="glyphicon glyphicon-"></span> <label><strong>Invoice #</strong></label>
+                                                            <input type="text" class="form-control" id="InvoiceNumber" name="InvoiceNumber" autocomplete="off" required value="{ InvoiceNumber }" placeholder="R********">
+                                                            <span class="glyphicon glyphicon-"></span> <label><strong>Receipt #</strong></label>
+                                                            <input type="text" class="form-control" id="ASYCUDANum" name="ASYCUDANum" autocomplete="off" required value="{ ASYCUDANum }" placeholder="R********">
+                                                            <span class="glyphicon glyphicon-comment"></span><label><strong>Comments</strong></label>
+                                                            <textarea  class="form-control" id="Comments" name="Comments" rows="4" cols="50"></textarea>
+                                                        </div> 
+                                                    </div>    
+                                                </div>
+                                            </div>
+                                            <center id="submitcontrol">   
+
+                                            </center>
+                                        </div>
+
+                                    </form>
+                                </div>
+
+                                <!-- The Modal -->
+                                <div class="modal" id="myModal">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+
+                                            <!-- Modal Header -->
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Select Pre Account</h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+
+                                            <!-- Modal body -->
+                                            <div class="modal-body">
                                                 <div class="col-md-6">
-                                                    <span class="glyphicon glyphicon-"></span> <label><strong>Pro Forma #</strong></label>
-                                                    <input type="text" class="form-control" id="ProformaNumber" name="ProformaNumber" autocomplete="off" required value="{ ProformaNumber }" placeholder="********">
-                                                    <span class="glyphicon glyphicon-"></span> <label><strong>Invoice #</strong></label>
-                                                    <input type="text" class="form-control" id="InvoiceNumber;" name="InvoiceNumber;" autocomplete="off" required value="{ InvoiceNumber; }" placeholder="R********">
-                                                    <span class="glyphicon glyphicon-"></span> <label><strong>Receipt #</strong></label>
-                                                    <input type="text" class="form-control" id="ASYCUDANum" name="ASYCUDANum" autocomplete="off" required value="{ ASYCUDANum }" placeholder="R********">
+                                                    <label><strong>Pre Deposit Account</strong></label>
+                                                    <select name="RoleName" class="form-control" id="RoleName" >
+                                                        <option></option>
+                                                        { accounts }
+                                                    </select>
                                                     <span class="glyphicon glyphicon-usd"></span><label><strong>Deposit Amount</strong></label>
-                                                    <input type="text"  class="form-control" id="Deposit" name="Deposit" autocomplete="off" required value="{ Deposit }" placeholder="0.00">  
-                                                    <span class="glyphicon glyphicon-comment"></span><label><strong>Comments</strong></label>
-                                                    <textarea  class="form-control" id="Comments" name="Comments" rows="4" cols="50"></textarea>
+                                                    <input type="text"  class="form-control" id="DepositAmount" name="DepositAmount" autocomplete="off" required value="{ Deposit }" placeholder="0.00">  
+
                                                     { val_Deposit } <br>
                                                     { val_AsycudaNum }<br>
                                                     { val_CompId }
                                                 </div>
-                                                <div class="col-md-3" >
-                                                    <div accesskey="">
-                                                        <label>
-                                                            <i></i>Add Pre Account
-                                                        </label>
-                                                    </div>
-                                                </div>
                                             </div>
+                                            <!-- Modal footer -->
+                                            <div class="modal-footer">
+                                                <!-- <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>-->
+                                                <button type="button" class="btn btn-info" id="AddAccount" data-enter="modal">Add Account</button>
+                                            </div>
+
                                         </div>
-                                        <center>
-                                            <button type="submit" name="btn-create" class="btn btn-default blue">Make Deposit</button>    
-                                        </center> 
-                                        <br>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>              
+                </div>                   
             </div>
 
         </div> 

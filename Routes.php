@@ -1,5 +1,4 @@
 <?php
-
 return [
     [['GET', 'POST'], '/adminconsole', ['Controllers\ConsoleController', 'display']],
     [['GET', 'POST'], '/report/{name}/{format}', ['Controllers\ReportController', 'display']],
@@ -28,16 +27,13 @@ return [
     [['GET', 'POST'], '/tablepymt', ['Controllers\PaymentTableController', 'display']],
     [['GET', 'POST'], '/success', ['Controllers\SuccessController', 'display']],
     [['GET'], '/unlockpymt', ['Controllers\PaymentUnlockController', 'display']],
-
     [['GET', 'POST'], '/tableprn', ['Controllers\PRNTableController', 'display']],
     [['GET'], '/unlockprn', ['Controllers\PRNUnlockController', 'display']],
     [['GET', 'POST'], '/editprn', ['Controllers\EditPRNController', 'display']],
-
     [['GET', 'POST'], '/createdeposit', ['Controllers\MakeDepositController', 'display']],
     [['GET', 'POST'], '/createrefund', ['Controllers\MakeRefundController', 'display']],
     [['GET', 'POST'], '/disburseprn', ['Controllers\DisburseController', 'display']],
     [['GET', 'POST'], '/employee', ['Controllers\EmployeeController', 'display']],
-
     [['GET', 'POST'], '/report/{name:POTEmployeeSummary|POTPaymentByEntityCombined|POTPaymentByEntityIndividual|POTPayslips}', ['Controllers\PaymentsReportController', 'display']],
     [['GET', 'POST'], '/report/{name:POTEntityDetails|POTEntitySummary|PrnEntity|RefundEntity|PotEmployeeDetails|POTPRNByEntity|POTRefundByEntity|CompanyListing|EmployeeListing|ReceiptsByEntityCombined|ReceiptsByEntityIndividual}', ['Controllers\ManagersReportController', 'display']],
     ['GET', '/index.php', ['Controllers\Homepage', 'display']],

@@ -15,6 +15,7 @@ class Event {
     
     public $EventId;
     public $EventName;
+     public $EventCost;
     public $CompanyId;
     public $CompanyName;
     public $ContactName;
@@ -28,15 +29,21 @@ class Event {
     public $RecModifiedBy;
     public $Status;
     public $DelFlg;
+   
             
+ function GenerateTimestamp($schema) {
+        $varschema = $schema;
+        $vardatestamp = date("ymdGis", time());
 
+        return $varschema . $vardatestamp;
+    }
   
-    function CreateEvent($EventId, $EventName, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDate, $Comments, $RecEntered, $RecEnteredBy,$DelFlg) {
+    function CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDate, $Comments, $RecEntered, $RecEnteredBy,$DelFlg) {
 
         $conn = conn();
-        $sql = "INSERT INTO `event` (`EventId`, `EventName`, `CompanyId`, `CompanyName`, `ContactName`, 
+        $sql = "INSERT INTO `event` (`EventId`, `EventName`,`EventCost`, `CompanyId`, `CompanyName`, `ContactName`, 
     `ContactEmail`,`ContactNumber`, `EventDate`, `Comments`, `RecEntered`, `RecEnteredBy`, `Status`, `DelFlg`)
-            VALUES ('$EventId', '$EventName', '$CompanyId', '$CompanyName', '$ContactName',"
+            VALUES ('$EventId', '$EventName', '$EventCost', '$CompanyId', '$CompanyName', '$ContactName',"
                 . "'$ContactEmail','$ContactNumber', '$EventDate', '$Comments', NOW(), '$RecEnteredBy','Active','N')";
 
         if ($conn->exec($sql)) {
@@ -50,7 +57,7 @@ class Event {
     function  getEvent($EventId){
          $result = "";
         $conn = conn();
-        $stmt = $conn->prepare("SELECT `EventId`, `EventName`, `CompanyId`, `CompanyName`, `ContactName`, `ContactEmail`, `ContactNumber`, "
+        $stmt = $conn->prepare("SELECT `EventId`, `EventName`, `EventCost`,`CompanyId`, `CompanyName`, `ContactName`, `ContactEmail`, `ContactNumber`, "
                 . "`EventDate`, `Comments`, `RecEntered`, `RecEnteredBy`, `RecModified`, `RecModifiedBy`, `Status`,"
                 . " `DelFlg` FROM `event` WHERE EventId = '$EventId' and DelFlg ='N';");
         $stmt->execute();
@@ -78,7 +85,7 @@ class Event {
     
         $sql = "UPDATE `event` SET `EventName`=" . $this->EventName . ",`ContactName`="
                 . $this->ContactName . ",`ContactEmail`=" . $this->ContactEmail . ", `ContactNumber`='"
-                . $this->ContactNumber . "', `EventDate`=" . $this->EventDate
+                . $this->ContactNumber . "', `EventDate`=" . $this->EventDate . "', `EventCost`=" . $this->EventCost
                 . ", `Comments`='" . $this->Comments . "',`RecEntered`="
                 . $this->RecEntered . ", `RecEnteredBy`=" . $this->RecEnteredBy
                 . ", `RecModified`=" . $this->RecModified . ",`RecModifiedBy`=" . $this->RecModifiedBy 

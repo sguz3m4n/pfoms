@@ -62,14 +62,14 @@
                     if (inputVal.length) {
                         if (isalpha.test(inputVal))
                         {
-                            $.get("Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
+                            $.get("/Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
                                 // Display the returned data in browser
                                 resultDropdown.html(data);
                             });
                         } else
                         if (isnum.test(inputVal))
                         {
-                            $.get("Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "companyid", {term: inputVal}).done(function (data) {
+                            $.get("/Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "companyid", {term: inputVal}).done(function (data) {
                                 // Display the returned data in browser
                                 resultDropdown.html(data);
                             });
@@ -112,7 +112,7 @@
                                         }
                                 };
                         //Open the payment form
-                                xmlhttp.open("GET", "Views/Shared/Controls/CompanySearch/getuserwf.php?q=" + $test, true);
+                                xmlhttp.open("GET", "/Views/Shared/Controls/CompanySearch/getuserwf.php?q=" + $test, true);
                                 xmlhttp.send();
                         }
                     $(this).parent(".result").empty();
@@ -147,7 +147,7 @@
                                 $("#passnum").hide();
                                         }
                                 };
-                                xmlhttp.open("GET", "Views/Shared/Controls/EmployeeSearch/getuser-sub.php?q[]=" + $test + "&InspectionDateStart[]=" + $("#InspectionDateStart").val(), true);
+                                xmlhttp.open("GET", "/Views/Shared/Controls/EmployeeSearch/getuser-sub.php?q[]=" + $test + "&InspectionDateStart[]=" + $("#InspectionDateStart").val(), true);
                                 xmlhttp.send();
                         }
                     $(this).parent(".result").empty();
@@ -294,14 +294,14 @@
                         {
                             if (isalpha.test(inputVal))
                             {
-                                $.get("Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
+                                $.get("/Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
                                     // Display the returned data in browser
                                     resultDropdown.html(data);
                                 });
                             } else
                             if (isnum.test(inputVal))
                             {
-                                $.get("Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "natregno", {term: inputVal}).done(function (data) {
+                                $.get("/Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "natregno", {term: inputVal}).done(function (data) {
                                     // Display the returned data in browser
                                     resultDropdown.html(data);
                                 });

@@ -85,13 +85,13 @@ $parishes = $model->GetParishes();
 <center>
     <div class="row">
         <!-- Trigger the modal with a button -->
-        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" name="btn-edit">Edit Employee</button>
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" name="btn-edit">Edit Officer</button>
     </div>  
 </center>
 <form action="/employee/deactivate" method="post">
     <input type="hidden" name="Natid" value="<?php echo $empinst->Natregno; ?>">
     <input type="hidden" name="Name" value="<?php echo $Name; ?>">
-    <button type="submit" class="btn btn-danger btn-default pull-right col-xs-3" name="btn-delete"><strong>Delete Employee</strong></button>
+    <button type="submit" class="btn btn-danger btn-default pull-right col-xs-3" name="btn-delete"><strong>Delete Officer/strong></button>
 </form>
 <!-- Modal --> 
 <form method="post">
@@ -102,7 +102,7 @@ $parishes = $model->GetParishes();
                 <div class="modal-content">
                 <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Employee Details</h4>
+                            <h4 class="modal-title">Officer Details</h4>
                 </div>
                 <div class="modal-body">
                     <center><span class="label label-info">National Registration Number <?php echo $empinst->Natregno; ?></span></center>
@@ -111,7 +111,7 @@ $parishes = $model->GetParishes();
                         <div class="col-xs-4">
                             <label>NIS Number</label>
                             <input class="form-control" type="text" value="<?php echo $empinst->NISNo; ?>" name="NISNo" placeholder="******"  >    
-                            <label>Employee TIN</label>
+                            <label>Officer TIN</label>
                             <input class="form-control" type="text" value="<?php echo $empinst->TIN; ?>" name="TIN" placeholder="******"  >   
                             <label>Force Number</label>
                             <input class="form-control" type="text" value="<?php echo $empinst->ForceNumber; ?>" name="ForceNumber" placeholder="******"  >   
@@ -211,7 +211,7 @@ $parishes = $model->GetParishes();
                     </div>
                           <div class="modal-footer">
                         <center>
-                            <button type="submit" class="btn btn-default blue" name="btn-update"><strong>Update Employee</strong></button>
+                            <button type="submit" class="btn btn-default blue" name="btn-update"><strong>Update Officer</strong></button>
                         </center>
                               </div>                      
                         </div>

@@ -1,4 +1,5 @@
 <?php
+
 /*
   Developed by Kitji Studios
   Development Team: Shayne Marshall, Frederick Masterton Chandler, Kamar Durant
@@ -6,8 +7,8 @@
   Consultation and Analysis by Data Processing Department
   2019
  */
-namespace BarcomModel;
 
+namespace BarcomModel;
 
 class Deposit {
 
@@ -28,13 +29,41 @@ class Deposit {
     public $RecEntered;
     public $ReEnteredBy;
     //Employee class properties map directly to employee table
-    
+
     public $auditok;
+
+    function GetPreAccounts() {
+        $result = "";
+        $conn = conn();
+        $stmt = $conn->prepare("SELECT AccountName,AccountId FROM account ORDER BY AccountName ASC;");
+        $stmt->execute();
+        $result_array = $stmt->fetchAll();
+        foreach ($result_array as $value) {
+            $accountcode = $value['AccountId'];
+            $result .= "<option id='$accountcode' >" . $value['AccountName'] . "</option>";
+        }
+        return $result;
+        $conn = NULL;
+    }
 
     //Method used to calculate current balance
     function CurrentBalance($depamount, $prevamount) {
         $total = $prevamount + $depamount;
         return $total;
+    }
+
+    function GetPreAccountList() {
+        $result = "";
+        $conn = conn();
+        $stmt = $conn->prepare("SELECT rolename,ratecode FROM employeeroles ORDER BY rolename ASC;");
+        $stmt->execute();
+        $result_array = $stmt->fetchAll();
+        foreach ($result_array as $value) {
+            $accountcode = $value['ratecode'];
+            $result .= "<option id='$accountcode' >" . $value['rolename'] . "</option>";
+        }
+        return $result;
+        $conn = NULL;
     }
 
     function RefundBalance($refamount, $curamount) {

@@ -202,14 +202,20 @@ class MakeDepositController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
+            $model = new \BarcomModel\Deposit();
+            $preaccounts = $model->GetPreAccounts();
             $template = new MasterTemplate();
+  
             $template->load("Views/Deposit/deposit.html");
+            $template->replace("accounts", $preaccounts);
             $template->replace("title", " Create New Company Deposit");
             $template->replace("val_Deposit", "");
             $template->replace("val_AsycudaNum", "");
             $template->replace("val_CompId", "");
             $template->replace("Deposit", "");
             $template->replace("ASYCUDANum", "");
+            $template->replace("ProformaNumber", "");
+            $template->replace("InvoiceNumber", "");
             $template->publish();
         }
     }

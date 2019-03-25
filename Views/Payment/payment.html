@@ -62,14 +62,14 @@
                     if (inputVal.length) {
                         if (isalpha.test(inputVal))
                         {
-                            $.get("Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
+                            $.get("/Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
                                 // Display the returned data in browser
                                 resultDropdown.html(data);
                             });
                         } else
                         if (isnum.test(inputVal))
                         {
-                            $.get("Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "companyid", {term: inputVal}).done(function (data) {
+                            $.get("/Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "companyid", {term: inputVal}).done(function (data) {
                                 // Display the returned data in browser
                                 resultDropdown.html(data);
                             });
@@ -112,7 +112,7 @@
                                         }
                                 };
                         //Open the payment form
-                                xmlhttp.open("GET", "Views/Shared/Controls/CompanySearch/getuserwf.php?q=" + $test, true);
+                                xmlhttp.open("GET", "/Views/Shared/Controls/CompanySearch/getuserwf.php?q=" + $test, true);
                                 xmlhttp.send();
                         }
                     $(this).parent(".result").empty();
@@ -147,7 +147,7 @@
                                 $("#passnum").hide();
                                         }
                                 };
-                                xmlhttp.open("GET", "Views/Shared/Controls/EmployeeSearch/getuser-sub.php?q[]=" + $test + "&InspectionDateStart[]=" + $("#InspectionDateStart").val(), true);
+                                xmlhttp.open("GET", "/Views/Shared/Controls/EmployeeSearch/getuser-sub.php?q[]=" + $test + "&InspectionDateStart[]=" + $("#InspectionDateStart").val(), true);
                                 xmlhttp.send();
                         }
                     $(this).parent(".result").empty();
@@ -244,7 +244,9 @@
 
                     $(".pillwrapper li").on("dblclick", function () {
                         //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
+
                         var key = this.id.toString().trim();
+                     
                         var elem = document.getElementById(this.id.toString());
                         elem.parentNode.removeChild(elem);
                         RemoveInfo(key);
@@ -292,14 +294,14 @@
                         {
                             if (isalpha.test(inputVal))
                             {
-                                $.get("Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
+                                $.get("/Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
                                     // Display the returned data in browser
                                     resultDropdown.html(data);
                                 });
                             } else
                             if (isnum.test(inputVal))
                             {
-                                $.get("Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "natregno", {term: inputVal}).done(function (data) {
+                                $.get("/Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "natregno", {term: inputVal}).done(function (data) {
                                     // Display the returned data in browser
                                     resultDropdown.html(data);
                                 });
@@ -354,8 +356,7 @@
                 $("#submitterrates").text($("#PayRate").val());
             }
 
-            function RemoveInfo(key)
-            {
+            function RemoveInfo(key) {
                 var indextoremove;
                 for (i = 0; i < offcrarr.length; i++) {
 
@@ -365,7 +366,6 @@
                     }
                 }
                 offcrarr.splice(indextoremove, 1);
-
             }
 
             function UpdateInfo(key) {

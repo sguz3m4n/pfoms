@@ -20,7 +20,6 @@ if (!empty($result)) {
         $payinst->CompanyName = $value['CompanyName'];
         $payinst->FaxNumber = $value['FaxNumber'];
         $payinst->ContactName = $value['ContactName'];
-        $payinst->AgentName = $value['AgentName'];
         $payinst->PhoneNumber = $value['PhoneNumber'];
         $payinst->Email = $value['Email'];
         //compinst->CompanyAddress = AddressBuilder();
@@ -43,7 +42,6 @@ if (!empty($result)) {
         $payinst->CompanyName = $value['CompanyName'];
         $payinst->FaxNumber = $value['FaxNumber'];
         $payinst->ContactName = $value['ContactName'];
-        $payinst->AgentName = $value['AgentName'];
         $payinst->PhoneNumber = $value['PhoneNumber'];
         $payinst->Email = $value['Email'];
 
@@ -58,7 +56,7 @@ if (!empty($result)) {
 
 if ($t == 'DEP') {
     $sqldepsmry = 'SELECT * FROM (
-    SELECT * FROM deposittransaction WHERE CompanyId = (SELECT CompanyId FROM company WHERE CompanyName = "' . $q . '" ) AND TranType="' . $t . '" ORDER BY TranDate DESC LIMIT 10
+    SELECT * FROM deposittransaction WHERE CompanyId = (SELECT CompanyId FROM company WHERE CompanyName = "' . $q . '" ) AND TranType="' . $t . '" 
 ) sub
 ORDER BY CompanyId ASC';
     $stmt2 = $conn->prepare($sqldepsmry);
@@ -67,7 +65,7 @@ ORDER BY CompanyId ASC';
 } else
 if ($t == 'REF') {
     $sqldepsmry = 'SELECT * FROM (
-    SELECT * FROM refundtransaction WHERE CompanyId = (SELECT CompanyId FROM company WHERE CompanyName = "' . $q . '" ) AND TranType="' . $t . '" ORDER BY TranDate DESC LIMIT 10
+    SELECT * FROM refundtransaction WHERE CompanyId = (SELECT CompanyId FROM company WHERE CompanyName = "' . $q . '" ) AND TranType="' . $t . '" 
 ) sub
 ORDER BY CompanyId ASC';
     $stmt2 = $conn->prepare($sqldepsmry);
@@ -91,7 +89,7 @@ $conn = NULL;
         <div id="demo" class="collapse">
 
             <ul style="list-style: none">
-                <li><i class="fa fa-user" style="font-size: 20px"></i><?php echo $payinst->AgentName; ?></li> 
+                <li><i class="fa fa-user" style="font-size: 20px"></i><?php echo $payinst->ContactName; ?></li> 
                 <li><i class="fa fa-mobile-phone" style="font-size: 20px"></i><?php echo $payinst->PhoneNumber; ?></li> 
                 <li><i class="fa fa-fax" style="font-size: 20px"></i><?php echo $payinst->FaxNumber; ?></li>
                 <li><i class="fa fa-user" style="font-size: 20px"></i><?php echo $payinst->ContactName; ?></li>

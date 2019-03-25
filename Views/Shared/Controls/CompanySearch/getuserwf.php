@@ -46,7 +46,6 @@ if (!empty($result)) {
         $compinst->CompanyName = $value['CompanyName'];
         $compinst->FaxNumber = $value['FaxNumber'];
         $compinst->ContactName = $value['ContactName'];
-        $compinst->AgentName = $value['AgentName'];
         $compinst->PhoneNumber = $value['PhoneNumber'];
         $compinst->Email = $value['Email'];
 

@@ -1,4 +1,5 @@
 <?php
+
 /*
   Developed by Kitji Studios
   Development Team: Shayne Marshall, Frederick Masterton Chandler, Kamar Durant
@@ -6,6 +7,7 @@
   Consultation and Analysis by Data Processing Department
   2019
  */
+
 namespace Controllers;
 
 require __DIR__ . "/base_template.php";
@@ -34,25 +36,25 @@ class Homepage extends LoggedInController {
         }
         //Redirect to user specific homepage
         $roleMap = [
-            'Officer' =>'/officer',
-            'Payment Clerk' =>'/createpayment',
-            'Receipt Clerk' =>'/createdeposit',
-            'Reconciliation Clerk' =>'/reports',
-            'Human Resource Clerk' =>'/employee/create',
-            ''=>'/login'
+            'Officer' => '/officer',
+            'Payment Clerk' => '/createpayment',
+            'Receipt Clerk' => '/createdeposit',
+            'Reconciliation Clerk' => '/reports',
+            'Human Resource Clerk' => '/employee/create',
+            '' => '/login'
         ];
-        
-        if (isset($roleMap[$role])){
+
+        if (isset($roleMap[$role])) {
             $destination = $roleMap[$role];
-           // flush();
-            header('Location:'.$destination);
-            die();    
+            // flush();
+            header('Location:' . $destination);
+            die();
         }
         //Admin Permission Module Permissions
         $CreateUser = $ManageTravel = $ManageOT = $ManageOther = array('Administrator', 'Super User', 'Manager');
         //CRUD Company Module Permissions
         $CreateCompany = $ViewCompany = $EditCompany = $DeleteCompany = array('Manager', 'Administrator', 'Super User');
-        $CreateEvent= $ViewEvent = $EditEvent = $DeleteEvent = array('Manager', 'Administrator', 'Super User');
+        $CreateEvent = $ViewEvent = $EditEvent = $DeleteEvent = array('Manager', 'Administrator', 'Super User');
         //CRUD Company Module Permissions
         //CRU Employee Module Permissions
         $CreateEmployee = $ViewEmployee = $EditEmployee = array('Human Resource Clerk', 'Manager', 'Administrator', 'Super User');
@@ -97,7 +99,7 @@ class Homepage extends LoggedInController {
                                             </ul>
                                         </li>
                                          <li class="dropdown more-dropdown-sub ">
-                                            <a href="javascript:;"> Employee Manager </a>
+                                            <a href="javascript:;"> Officer Manager </a>
                                             <ul class="dropdown-menu">
                                                 { employeemenu }
                                             </ul>
@@ -118,20 +120,20 @@ class Homepage extends LoggedInController {
         }
 
         if (in_array($role, $CreateEvent)) {
-            $createitem = '<li><a href="/event/create">Create Event</a></li>';
+            $createitem = '<li><a href="/companyevent/create">Create Event</a></li>';
             $this->eventmenu = $this->eventmenu . $createitem;
         }
-    
+
         if (in_array($role, $EditEvent)) {
             $edititem = '<li><a href="/event/edit">View/Edit/Delete Event Details</a></li>';
             $this->eventmenu = $this->eventmenu . $edititem;
         }
-        
-         if (in_array($role, $CreateCompany)) {
+
+        if (in_array($role, $CreateCompany)) {
             $createitem = '<li><a href="/company/create">Create Company</a></li>';
             $this->companymenu = $this->companymenu . $createitem;
         }
-    
+
         if (in_array($role, $EditCompany)) {
             $edititem = '<li><a href="/company/edit">View/Edit/Delete Company Details</a></li>';
             $this->companymenu = $this->companymenu . $edititem;
@@ -139,12 +141,12 @@ class Homepage extends LoggedInController {
 
 
         if (in_array($role, $CreateEmployee)) {
-            $createitem = '<li><a href="/employee/create">Create Employee</a></li>';
+            $createitem = '<li><a href="/employee/create">Create Officer</a></li>';
             $this->employeemenu = $this->employeemenu . $createitem;
         }
 
         if (in_array($role, $EditEmployee)) {
-            $edititem = '<li><a href="/employee/edit">View/Edit/Delete Employee Details</a></li>';
+            $edititem = '<li><a href="/employee/edit">View/Edit/Delete Officer Details</a></li>';
             $this->employeemenu = $this->employeemenu . $edititem;
         }
 
@@ -208,7 +210,7 @@ class Homepage extends LoggedInController {
         $template->replace('datamanager', $this->datamanager);
         $template->replace('companymenu', $this->companymenu);
         $template->replace('employeemenu', $this->employeemenu);
-            $template->replace('eventmenu', $this->eventmenu);
+        $template->replace('eventmenu', $this->eventmenu);
         $template->replace('adminmenu', $this->adminmenu);
         $template->replace('menu', $this->menu);
         $template->replace('page_content', $content);

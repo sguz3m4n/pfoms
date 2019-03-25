@@ -62,7 +62,7 @@ class ComposerStaticInitd5788c8bf88afcdf6801485eebf213a5
     );
 
     public static $fallbackDirsPsr4 = array (
-        0 => __DIR__ . '/../..' . '/../barcoms',
+        0 => __DIR__ . '/../..' . '/../pfoms',
     );
 
     public static $prefixesPsr0 = array (
@@ -98,9 +98,8 @@ class ComposerStaticInitd5788c8bf88afcdf6801485eebf213a5
         'Controllers\\MakeDepositController' => __DIR__ . '/../..' . '/Controller/Deposit/Create.php',
         'Controllers\\MakePaymentController' => __DIR__ . '/../..' . '/Controller/Payment/Create.php',
         'Controllers\\MakeRefundController' => __DIR__ . '/../..' . '/Controller/Refund/Create.php',
-        'Controllers\\ManageOtherController' => __DIR__ . '/../..' . '/Controller/Admin/ManageOther.php',
+        'Controllers\\MakeRefund_1Controller' => __DIR__ . '/../..' . '/Controller/Event/Create.php',
         'Controllers\\ManagePOTController' => __DIR__ . '/../..' . '/Controller/Admin/ManagePOT.php',
-        'Controllers\\ManageTravelController' => __DIR__ . '/../..' . '/Controller/Admin/ManageTravel.php',
         'Controllers\\ManagersReportController' => __DIR__ . '/../..' . '/Controller/Reports/ReportController.php',
         'Controllers\\MasterTemplate' => __DIR__ . '/../..' . '/Controller/base_template.php',
         'Controllers\\OfficerPaymentController' => __DIR__ . '/../..' . '/Controller/Payment/Create.php',

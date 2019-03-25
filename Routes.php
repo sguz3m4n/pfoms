@@ -1,5 +1,4 @@
 <?php
-
 return [
     [['GET', 'POST'], '/adminconsole', ['Controllers\ConsoleController', 'display']],
     [['GET', 'POST'], '/report/{name}/{format}', ['Controllers\ReportController', 'display']],

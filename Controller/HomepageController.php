@@ -120,7 +120,7 @@ class Homepage extends LoggedInController {
         }
 
         if (in_array($role, $CreateEvent)) {
-            $createitem = '<li><a href="/companyevent/create">Create Event</a></li>';
+            $createitem = '<li><a href="/event/create">Create Event</a></li>';
             $this->eventmenu = $this->eventmenu . $createitem;
         }
 

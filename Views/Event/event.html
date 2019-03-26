@@ -57,6 +57,7 @@
 
                 var accountcount = 0;
                 var accountarr = [];
+                var acctid;
                 var Total = 0;
 
                 var addcontainer = document.getElementById("addcontrols");
@@ -74,65 +75,58 @@
                 addcontainer.appendChild(addofficer);
 //Send the populated array to the controller
                 $("#paymentform").submit(function () {
-                    //TogglePRNControl();
-                    //var key = this.id.toString().trim();
-                    //PopulatePanelInfo(key);
                     $("#paylist").val(JSON.stringify(accountarr));
                 });
 
                 $(document).on("click", "#AddAccount", function () {
 
-                    var acctrec = new Array();
+                    var acctrec = [];
                     var pillcontainer = document.getElementById('pillcontainer');
                     var pillwrapper = document.getElementById('pillwrapper');
 
                     //create instance of list elements
                     var pill = document.createElement("li");
+                    pill.setAttribute("id", "preaccount" + accountcount);
 
                     var removeicon = document.createElement("span");
                     removeicon.setAttribute("class", "glyphicon glyphicon-minus");
-                    pill.setAttribute("id", $("#AccountId").val());
 
                     //dynamically create functions
                     var pillanchor = document.createElement("a");
-                    //pillanchor.innerHTML = document.getElementById("DepositAmount").value;
-                    pillanchor.setAttribute("id", "preaccount" + accountcount++);
                     pillanchor.setAttribute("data-depositamount", document.getElementById("DepositAmount").value);
                     pillanchor.appendChild(document.createTextNode(document.getElementById("RoleName").value + "  $" + document.getElementById("DepositAmount").value));
 
                     pillanchor.appendChild(removeicon);
 
-                    var depositvalue = document.getElementById("DepositAmount").value;
-                    acctrec.push(document.getElementById("RoleName").value);
-                    acctrec.push(document.getElementById("DepositAmount").value);
-
-                    accountarr.push(acctrec);
-
                     pill.appendChild(pillanchor);
                     pillwrapper.appendChild(pill);
                     pillcontainer.appendChild(pillwrapper);
 
-                    $(".pillwrapper li").on("click", function () {
-                        //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
-                        //var key = this.id.toString().trim();
-                        //PopulatePanelInfo(key);
-                    });
+                    var depositvalue = document.getElementById("DepositAmount").value;
 
-                    // $(".pillwrapper li").on("dblclick", function (event) 
-
-
+                    acctrec.push("preaccount" + accountcount);
+                    acctrec.push(acctid);
+                    acctrec.push(document.getElementById("RoleName").value);
+                    acctrec.push(document.getElementById("DepositAmount").value);
+                    accountarr.push(acctrec);
+                    //alert(acctrec[3]);
                     CalculateTotal(Number(depositvalue));
-
+                    accountcount++;
                 });
-
+                $("#RoleName").click(function () {
+                    acctid = $(this).children(":selected").attr("id");
+                });
                 $(document).on("dblclick", ".pillwrapper li", function (event) {
-                    //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
-                    var key = this.id.toString().trim();
-                    var attribute = event.target.attributes.getNamedItem('data-depositamount').value;
+
+                    var key = this.id.toString();
+                    //alert(key);
+                    var depositamount = event.target.attributes.getNamedItem('data-depositamount').value;
                     var elem = document.getElementById(this.id.toString());
+                    //alert(elem);
                     elem.parentNode.removeChild(elem);
                     RemoveInfo(key);
-                    CalculateTotal(Number(attribute) * -1);
+                    CalculateTotal(Number(depositamount) * -1);
+
                 });
 
                 $('.search-boxcomp input[type="text"]').on("keyup input", function () {
@@ -203,28 +197,20 @@
                 function RemoveInfo(key) {
                     var indextoremove;
                     for (i = 0; i < accountarr.length; i++) {
-
-                        if (accountarr[i][1] === key)
+                       // alert(accountarr[i][0]);
+                       // alert(key);
+                        if (accountarr[i][0] === key)
                         {
+
                             indextoremove = i;
                         }
                     }
                     accountarr.splice(indextoremove, 1);
-                }
-                function UpdateInfo(key) {
-
-                    for (i = 0; i < accountarr.length; i++) {
-
-                        if (accountarr[i][1] === key)
-                        {
-                            var RoleName = document.getElementById("RoleName");
-                            var DepositAmount = document.getElementById("DepositAmount");
-                            accountarr[i][0] = RoleName.value;
-                            accountarr[i][1] = DepositAmount.value;
-
-                            // ToggleControl();
-                        }
+                    for (x = 0; x < accountarr.length; x++) {
+                     
+                            alert(accountarr[x][0]+accountarr[x][1]);
                     }
+                    //alert(accountarr);
                 }
             });
 
@@ -442,6 +428,7 @@
                                                     <div class="col-md-6">
                                                         <label><strong>Pre Deposit Account</strong></label>
                                                         <select name="RoleName" class="form-control" id="RoleName" >
+                                                            <option>Select Preaccount</option>
                                                             { accounts }
                                                         </select>
                                                         <span class="glyphicon glyphicon-usd"></span><label><strong>Deposit Amount</strong></label>

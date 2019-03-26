@@ -99,6 +99,9 @@ $conn = NULL;
             <div class="form-group" id="company" > 
                 <input type="hidden" class="form-control" id="CompName" name="CompName" value="<?php echo $payinst->CompanyName; ?>" >
                 <input type="hidden" class="form-control" id="CompId" name="CompId" value="<?php echo $payinst->CompanyId; ?>" >
+                <input type="hidden" class="form-control" id="ContactName" name="ContactName" value="<?php echo $payinst->ContactName; ?>" >
+                <input type="hidden" class="form-control" id="PhoneNumber" name="PhoneNumber" value="<?php echo $payinst->PhoneNumber; ?>" >
+                <input type="hidden" class="form-control" id="Email" name="Email" value="<?php echo $payinst->Email; ?>" >
                 <input type="hidden" class="form-control" id="PreviousBalance"  name="PreviousBalance" value="<?php echo number_format($payinst->PreviousBalance, 2, '.', ''); ?>">
                 <input type="hidden" class="form-control" id="CompanyBalance"  name="CompanyBalance" value="<?php echo number_format($payinst->CompanyBalance, 2, '.', ''); ?>">
             </div>

@@ -13,6 +13,7 @@ namespace Controllers;
 require 'Classes/Event.php';
 require 'Classes/Company.php';
 require 'Classes/Audit.php';
+require 'Classes/PreAccount.php';
 require 'Controller/base_template.php';
 /*
   static $EventId = "";
@@ -44,20 +45,21 @@ class EventCreateController extends PermissionController {
     private $Comments = "";
     private $RecEntered = "";
     private $RecEnteredBy = "";
-    
+    private $MyPaymentsRecords;
 
     function show($params) {
         $username = $_SESSION["login_user"];
-       
-       
-        
+
+
+
         if (isset($_POST['btn-create'])) {
-            
-             $eventinst = new \BarcomModel\Event();
+
+            $eventinst = new \BarcomModel\Event();
             $companyinst = new \BarcomModel\Company();
+            $preaccount = new \BarcomModel\PreAccount();
             $audinst = new \BarcomModel\Audit();
-        
-            
+            $this->MyPaymentsRecords = $pymntrecs = json_decode($_POST['paylist'], TRUE);
+
             //(isset($_POST['CompId']) ? $this->CompId = $varid = $refinst->CompanyId = $_POST['CompId'] : $this->CompId = $varid = $refinst->CompanyId = "");
 
             $eventinst->EventName = $EventName = $_POST["EventName"];
@@ -75,19 +77,25 @@ class EventCreateController extends PermissionController {
             $eventinst->RecEnteredBy = $RecEnteredBy = $username;
 
             $eventinst->CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDate, $Comments, $RecEntered, $RecEnteredBy, $DelFlg);
-//
+            $tranid = $preaccount->GenerateTimestamp("PRE");
+            foreach ($pymntrecs as $value) {
+                $preaccount->AccountId = $accountid = $value[1];
+                $preaccount->AccountName = $accountname = $value[2];
+                $preaccount->TranAmt = $tramamt = $value[3];
+                $preaccount->EventId = $eventid = $EventId;
+                $preaccount->CreatePreAccountTransaction($tranid, $accountid, $accountname, $tramamt, $eventid);
+            }
 // //if validation succeeds then log audit record to database
-                if ($eventinst->auditok == 1) {
-                    $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');
-                    $TranDesc = 'Created new Event Name: ' . $EventName. ' Event ID: '. $EventId;
-                    $User = $username;
-                    $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
-                    $token = '<br><br><span class="label label-success">Event Name</span> ' . '<span class="label label-info"> ' . $EventName . '</span><br><br><br>' .
-                            '<span class="label label-success">Event Id</span> ' . '<span class="label label-info">' . $EventId . '</span><br>';
-                    $token1 = 'Record Successfully Created';
-                    header("Location:" . "/success?result=$token&header=$token1&args=");
-                }
-
+            if ($eventinst->auditok == 1) {
+                $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');
+                $TranDesc = 'Created new Event Name: ' . $EventName . ' Event ID: ' . $EventId;
+                $User = $username;
+                $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
+                $token = '<br><br><span class="label label-success">Event Name</span> ' . '<span class="label label-info"> ' . $EventName . '</span><br><br><br>' .
+                        '<span class="label label-success">Event Id</span> ' . '<span class="label label-info">' . $EventId . '</span><br>';
+                $token1 = 'Record Successfully Created';
+                header("Location:" . "/success?result=$token&header=$token1&args=");
+            }
         } else
         if (isset($_GET)) {
             $model = new \BarcomModel\Event();
@@ -104,7 +112,7 @@ class EventCreateController extends PermissionController {
             $template->replace("ContactEmail", "");
             $template->replace("EventDate", "");
             $template->replace("EventCost", "");
-            $template->replace( "EventId", $EventId);
+            $template->replace("EventId", $EventId);
 
             $template->publish();
         }

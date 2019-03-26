@@ -1,58 +1,37 @@
 <?php
 
 namespace BarcomModel;
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
 
+require 'Classes/Account.php';
 /*
   Developed by Kitji Studios
-  Development Team: Shayne Marshall, Frederick Masterton Chandler
-  Property of Barbados Customs and Excise Department 2017
+  Development Team: Shayne Marshall, Frederick Masterton Chandler, Kamar Durant
+  Property of Barbados Royal Barbados Police Force
   Consultation and Analysis by Data Processing Department
-  October 2017
+  2019
  */
 
-class PreReqNum {
+class PreAccount extends Account {
 
-    public function __construct() {
-        ;
-    }
 
-    public $prnlist = array();
-    public $RequestCount;
-    public $RequestorId;
-    public $RequestorName;
-    //public $CompanyName;
-    public $CompanyId;
-    public $BillFormNum;
-    public $PRN;
-    public $auditok;
-    public $prnmanok;
+    public $TranId;
+    public $AccountName;
+    public $TranAmt;
+    public $EventId;
 
-    function GeneratePRN($RequestCount) {
-        $inst = new PreReqNum();
-        $rootnum = $inst->GenerateTimestamp();
-        //$prnlist = array();
-        for ($i = 0; $i < $RequestCount; $i ++) {
-            $prnlist[$i] = $rootnum . $i;
-            //echo $prnlist[$i].'\n';
-        }
-        $_SESSION['prnlist'] = $prnlist;
-        return $prnlist;
-    }
+    function GenerateTimestamp($schema) {
+        $varschema = $schema;
+        $vardatestamp = date("ymdGis", time());
 
-    function GenerateTimestamp() {
-        $varschema = 'PRN';
-        $vardatestamp = date("ymdGis");
-        $vartimestamp = 'world';
         return $varschema . $vardatestamp;
     }
 
-    function CreatePRNTransaction($tranid, $BillRef, $user) {
+    function CreatePreAccountTransaction($tranid, $accountid, $accountname, $tramamt, $eventid) {
         $conn = conn();
-        $sql = "INSERT INTO `prntransaction`(`TranId`, `BillFormNum`, `RequestorID`, `RequestorName`, `CompanyId`, `PRNCount`, `EnterBy`, `EnterDate`) 
-        VALUES ('$tranid','$BillRef','$this->RequestorId','$this->RequestorName','$this->CompanyId','$this->RequestCount','$user',NOW())";
+        /* $sql = "INSERT INTO `prntransaction`(`TranId`, `BillFormNum`, `RequestorID`, `RequestorName`, `CompanyId`, `PRNCount`, `EnterBy`, `EnterDate`) 
+          VALUES ('$tranid','$BillRef','$this->RequestorId','$this->RequestorName','$this->CompanyId','$this->RequestCount','$user',NOW())"; */
+        $sql = "  INSERT INTO `preaccounttransactions`(`AccountId`, `AccountName`, `TranId`, `TranAmt`, `EventId`) "
+                . "VALUES ('$accountid','$accountname','$tranid','$tramamt','$eventid')";
         $stmt = $conn->prepare($sql);
         $status = $stmt->execute();
         if ($status) {
@@ -77,7 +56,7 @@ class PreReqNum {
         }
         $conn = NULL;
     }
-    
+
     function ListPRNTransactions() {
         $conn = conn();
         $sql = "SELECT * FROM `prnmanage` WHERE  `RequestorID`, `RequestorName`, `CompanyId` `EnterBy`, `EnterDate`) 
@@ -92,7 +71,7 @@ class PreReqNum {
         }
         $conn = NULL;
     }
-    
+
     function GetPRNDetails() {
         $conn = conn();
         $sql = "SELECT * FROM `prntransaction` WHERE  `RequestorID`, `RequestorName`, `CompanyId` `EnterBy`, `EnterDate`) 
@@ -102,8 +81,7 @@ class PreReqNum {
         //$result = $stmt->fetchAll();
         $conn = NULL;
     }
-    
-    
+
     function UpdatePRNTransaction($companyId, $tranid, $UpdateCount, $user) {
         $conn = conn();
         $sql = "UPDATE `prntransaction` SET `CompanyId`='$companyId',`PRNCount`='$UpdateCount',`EnterBy`='$user',`EnterDate`=NOW() WHERE `TranId`='$tranid'";
@@ -116,7 +94,7 @@ class PreReqNum {
         }
         $conn = NULL;
     }
-    
+
     function UpdatePRNManager($tranid, $PRNumber, $user) {
         $conn = conn();
         $sql = "UPDATE `prnmanage` SET `TranId`='$tranid', `EnterBy`='$user', `EnterDate`=NOW(), "
@@ -132,11 +110,11 @@ class PreReqNum {
         }
         $conn = NULL;
     }
-    
+
     function ChangePRNStatus($rn) {
         $conn = conn();
         $sql = "UPDATE `prnmanage` SET `Status`='Active'"
-                ." WHERE PRNumber ='".$rn."'";
+                . " WHERE PRNumber ='" . $rn . "'";
         if ($conn->exec($sql)) {
             return true;
         } else {
@@ -144,27 +122,26 @@ class PreReqNum {
         }
         $conn = NULL;
     }
-    
-        function GetFilteredPRN(array $args) {
+
+    function GetFilteredPRN(array $args) {
         $conn = conn();
         $sql = "SELECT * FROM prntransaction as A JOIN company as B ON A.CompanyId = B.CompanyId "
-        . "JOIN prnmanage as C ON A.TranId = C.TranId WHERE ";
+                . "JOIN prnmanage as C ON A.TranId = C.TranId WHERE ";
         $argCount = count($args);
-        $sql = $sql.implode(" AND ", $args);
-        
+        $sql = $sql . implode(" AND ", $args);
+
         if ($stmt = $conn->prepare($sql)) {
             // Attempt to execute the prepared statement
             if ($stmt->execute()) {
                 $result = $stmt->fetchAll();
                 // Check number of rows in the result set
                 if (!empty($result)) {
-                   return $result;
+                    return $result;
                 }
             } else {
-            return array();
+                return array();
             }
         }
     }
 
-    
 }

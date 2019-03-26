@@ -162,8 +162,8 @@
                     $(this).parents(".search-boxcomp").find('input[type="text"]').val($(this).text());
                     $test = document.getElementById('searchcomp').value;
                     $type = 'REF';
-                   
-                    
+
+
                     if ($test == "") {
                                 document.getElementById("txtHintcomp").innerHTML = "";
                                 return;
@@ -181,7 +181,7 @@
                                 $("#submittercompany").text($("#CompId").val());
                                 $("#submitterprevbalance").text($("#PreviousBalance").val());
                                 $("#submitterbalance").text($("#CompanyBalance").val());
-                                              }
+                                        }
                                 };
                                 xmlhttp.open("GET", "/Views/Shared/Controls/CompanySearch/getuser.php?q=" + $test + "&t=" + $type, true);
                                 xmlhttp.send();
@@ -199,8 +199,8 @@
                 function RemoveInfo(key) {
                     var indextoremove;
                     for (i = 0; i < accountarr.length; i++) {
-                       // alert(accountarr[i][0]);
-                       // alert(key);
+                        // alert(accountarr[i][0]);
+                        // alert(key);
                         if (accountarr[i][0] === key)
                         {
 
@@ -209,8 +209,8 @@
                     }
                     accountarr.splice(indextoremove, 1);
                     for (x = 0; x < accountarr.length; x++) {
-                     
-                            alert(accountarr[x][0]+accountarr[x][1]);
+
+                        alert(accountarr[x][0] + accountarr[x][1]);
                     }
                     //alert(accountarr);
                 }
@@ -350,7 +350,7 @@
                         </div>
                         <div class="col-md-9">
                             <div class="page-content-col-8">
-                                 <div class="panel panel-info" >
+                                <div class="panel panel-info" >
                                     <div class="panel-heading">
                                         <center>
                                             <h3><label id="lblEventRef" class="label label-info">{ EventId }</label>&nbsp;&nbsp; &nbsp;<label id="lblEventFormNum" style="display:none" class="label label-info" ></label></h3>
@@ -401,7 +401,7 @@
                                                                 $("#datepicker").datepicker({dateFormat: 'yy-mm-dd'});
                                                             });
                                                         </script>
-
+                                                        <div><input id="paylist" name="paylist" class="form-control" type="hidden" ></div>
                                                         <i class="glyphicon glyphicon-usd"></i><label> Event Cost</label>
                                                         <input type="text"  class="form-control" id="EventCost" name="EventCost" autocomplete="off" required value="{ EventCost }" placeholder="This is coming from Proforma">  
 
@@ -412,11 +412,11 @@
 
                                                     </div> 
                                                 </div>
-                                                 <div class="col-md-3" >
-                                                        
-                                                        <input type="hidden" class="form-control" id="EventId" name="EventId" value="{ EventId }" >
+                                                <div class="col-md-3" >
 
-                                                    </div>
+                                                    <input type="hidden" class="form-control" id="EventId" name="EventId" value="{ EventId }" >
+
+                                                </div>
                                             </div>  
                                             <br>
                                             <center>

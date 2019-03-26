@@ -32,19 +32,7 @@ class Deposit {
 
     public $auditok;
 
-    function GetPreAccounts() {
-        $result = "";
-        $conn = conn();
-        $stmt = $conn->prepare("SELECT AccountName,AccountId FROM account ORDER BY AccountName ASC;");
-        $stmt->execute();
-        $result_array = $stmt->fetchAll();
-        foreach ($result_array as $value) {
-            $accountcode = $value['AccountId'];
-            $result .= "<option id='$accountcode' >" . $value['AccountName'] . "</option>";
-        }
-        return $result;
-        $conn = NULL;
-    }
+ 
 
     //Method used to calculate current balance
     function CurrentBalance($depamount, $prevamount) {

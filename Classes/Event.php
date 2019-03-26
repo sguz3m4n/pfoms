@@ -12,10 +12,9 @@ namespace BarcomModel;
 
 class Event {
 
-    
     public $EventId;
     public $EventName;
-     public $EventCost;
+    public $EventCost;
     public $CompanyId;
     public $CompanyName;
     public $ContactName;
@@ -29,16 +28,29 @@ class Event {
     public $RecModifiedBy;
     public $Status;
     public $DelFlg;
-   
-            
- function GenerateTimestamp($schema) {
+
+    function GetPreAccounts() {
+        $result = "";
+        $conn = conn();
+        $stmt = $conn->prepare("SELECT AccountName,AccountId FROM account ORDER BY AccountName ASC;");
+        $stmt->execute();
+        $result_array = $stmt->fetchAll();
+        foreach ($result_array as $value) {
+            $accountcode = $value['AccountId'];
+            $result .= "<option id='$accountcode' >" . $value['AccountName'] . "</option>";
+        }
+        return $result;
+        $conn = NULL;
+    }
+
+    function GenerateTimestamp($schema) {
         $varschema = $schema;
         $vardatestamp = date("ymdGis", time());
 
         return $varschema . $vardatestamp;
     }
-  
-    function CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDate, $Comments, $RecEntered, $RecEnteredBy,$DelFlg) {
+
+    function CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDate, $Comments, $RecEntered, $RecEnteredBy, $DelFlg) {
 
         $conn = conn();
         $sql = "INSERT INTO `event` (`EventId`, `EventName`,`EventCost`, `CompanyId`, `CompanyName`, `ContactName`, 
@@ -51,52 +63,45 @@ class Event {
         } else {
             $this->auditok = 0;
         }
-        
     }
-    
-    function  getEvent($EventId){
-         $result = "";
+
+    function getEvent($EventId) {
+        $result = "";
         $conn = conn();
         $stmt = $conn->prepare("SELECT `EventId`, `EventName`, `EventCost`,`CompanyId`, `CompanyName`, `ContactName`, `ContactEmail`, `ContactNumber`, "
                 . "`EventDate`, `Comments`, `RecEntered`, `RecEnteredBy`, `RecModified`, `RecModifiedBy`, `Status`,"
                 . " `DelFlg` FROM `event` WHERE EventId = '$EventId' and DelFlg ='N';");
         $stmt->execute();
-       $result = $stmt->fetchAll();
-     
+        $result = $stmt->fetchAll();
+
         return $result;
-        
-        
     }
-    
-    function  RemoveEvent($EventId){
-       $conn = conn();
+
+    function RemoveEvent($EventId) {
+        $conn = conn();
         $sql = "UPDATE event SET DelFlg='Y' WHERE EventId='$EventId'";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {
             $this->auditok = 0;
         }
-       
-        
     }
-            
-     function UpdateEvent($EventId) {
+
+    function UpdateEvent($EventId) {
         $conn = conn();
-    
+
         $sql = "UPDATE `event` SET `EventName`=" . $this->EventName . ",`ContactName`="
                 . $this->ContactName . ",`ContactEmail`=" . $this->ContactEmail . ", `ContactNumber`='"
                 . $this->ContactNumber . "', `EventDate`=" . $this->EventDate . "', `EventCost`=" . $this->EventCost
                 . ", `Comments`='" . $this->Comments . "',`RecEntered`="
                 . $this->RecEntered . ", `RecEnteredBy`=" . $this->RecEnteredBy
-                . ", `RecModified`=" . $this->RecModified . ",`RecModifiedBy`=" . $this->RecModifiedBy 
+                . ", `RecModified`=" . $this->RecModified . ",`RecModifiedBy`=" . $this->RecModifiedBy
                 . " WHERE EventId ='" . $EventId . "'";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {
             $this->auditok = 0;
         }
-       
     }
 
-    
 }

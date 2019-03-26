@@ -10,37 +10,43 @@ $sql = 'SELECT * FROM event WHERE CompanyName = "' . $q . '" AND DelFlg="N" AND 
 $result = $conn->prepare($sql);
 $result->execute();
 $eventinst = new BarcomModel\Event();
+echo "<table boder='1'>";
 
+// foreach($row = mysqli_fetch_assoc($result)){
+//     
+// }
+ echo "</table>";
 foreach ($result as $value) {
     $eventinst->EventName = $value["EventName"];
             $eventinst->EventDate = $value["EventDate"];
             $eventinst->EventCost = $value["EventCost"];
             $eventinst->Comments = $value["Comments"];
-            $eventinst->EventId = $value["EventId"];
-            $eventinst->CompanyId = $value["CompId"];
-            $eventinst->CompanyName = $value["CompName"];
-            $eventinst->ContactName = $value["ContactName"];
-            $eventinst->ContactNumber = $value["PhoneNumber"];
-            $eventinst->ContactEmail = $value["Email"];
-   $eventinst->RecEntered = $value['RecEntered'];
-    $eventinst->RecEnteredBy = $value['RecEnteredBy'];
-    $eventinst->RecModified = $value['RecModified'];
-    $eventinst->RecModifiedBy = $value['RecModifiedBy'];
-    $eventinst->Status = $value['Status'];
-    $eventinst->DelFlg = $value['DelFlg'];
+//            $eventinst->EventId = $value["EventId"];
+//            $eventinst->CompanyId = $value["CompId"];
+//            $eventinst->CompanyName = $value["CompName"];
+//            $eventinst->ContactName = $value["ContactName"];
+//            $eventinst->ContactNumber = $value["PhoneNumber"];
+//            $eventinst->ContactEmail = $value["Email"];
+//   $eventinst->RecEntered = $value['RecEntered'];
+//    $eventinst->RecEnteredBy = $value['RecEnteredBy'];
+//    $eventinst->RecModified = $value['RecModified'];
+//    $eventinst->RecModifiedBy = $value['RecModifiedBy'];
+//    $eventinst->Status = $value['Status'];
+//    $eventinst->DelFlg = $value['DelFlg'];
     //$compinst->CompanyAddress = '<br>' . $compinst->AddressLine1 . '<br>' . $compinst->AddressLine2 . '<br>' . $compinst->AddressLine3 . '<br>' . $compinst->Parish;
 }
 
 $conn = NULL;
 
-function AddressBuilder() {
-    $Address = 'make address builder function';
-    return;
-}
+//function AddressBuilder() {
+//    $Address = 'make address builder function';
+//    return;
+//}
 
-$model = new \BarcomModel\Event();
+//$model = new \BarcomModel\Event();
 //$parishes = $model->GetParishes();
 ?>  
+<!--
 <div class="panel panel-info">
     <div class="panel-heading">
         <center>
@@ -60,7 +66,7 @@ $model = new \BarcomModel\Event();
 </div>
 <center>
     <div class="row">
-        <!-- Trigger the modal with a button -->
+         Trigger the modal with a button 
         <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Edit Company</button>
     </div> 
 </center> 
@@ -69,11 +75,11 @@ $model = new \BarcomModel\Event();
     <input type="hidden" name="CompanyName" value="<?php echo $compinst->CompanyName; ?>">
     <button type="submit" class="btn btn-danger btn-default pull-right col-xs-3" name="btn-delete"><strong>Delete Company</strong></button> 
 </form>
-<!-- Modal --> 
+ Modal  
 <form method="post">
     <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-lg">
-                <!-- Modal content-->
+                 Modal content
                 <div class="modal-content">
                 <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -110,7 +116,7 @@ $model = new \BarcomModel\Event();
                         </div>
                     </div>
                     <div class="row center-block panel-body">
-<!--                        <div class="col-xs-6">
+                        <div class="col-xs-6">
                             <label>Parish</label>
                             <select name="Parish" class="form-control">
                                 <option><?php echo $compinst->Parish; ?></option>
@@ -118,7 +124,7 @@ $model = new \BarcomModel\Event();
                                 echo $parishes;
                                 ?>
                             </select>
-                        </div>-->
+                        </div>
                         <div class="col-xs-6">
                             <label>Postal Code</label>
                             <input type="text" class="form-control" name="PostalCode" value="<?php echo $compinst->PostalCode; ?>"   />
@@ -163,7 +169,7 @@ $model = new \BarcomModel\Event();
     </div>  
 </form>
 
- 
+ -->
 
 
 

@@ -57,7 +57,6 @@ class EventCreateController extends PermissionController {
             $companyinst = new \BarcomModel\Company();
             $audinst = new \BarcomModel\Audit();
         
-            
             //(isset($_POST['CompId']) ? $this->CompId = $varid = $refinst->CompanyId = $_POST['CompId'] : $this->CompId = $varid = $refinst->CompanyId = "");
 
             $eventinst->EventName = $EventName = $_POST["EventName"];

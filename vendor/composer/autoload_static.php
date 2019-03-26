@@ -93,6 +93,7 @@ class ComposerStaticInitd5788c8bf88afcdf6801485eebf213a5
         'Controllers\\EmployeeEditController' => __DIR__ . '/../..' . '/Controller/Employee/Edit.php',
         'Controllers\\Error' => __DIR__ . '/../..' . '/Controller/ErrorController.php',
         'Controllers\\EventCreateController' => __DIR__ . '/../..' . '/Controller/Event/Create.php',
+        'Controllers\\EventEditController' => __DIR__ . '/../..' . '/Controller/Event/Edit.php',
         'Controllers\\Homepage' => __DIR__ . '/../..' . '/Controller/HomepageController.php',
         'Controllers\\LoggedInController' => __DIR__ . '/../..' . '/Controller/base_template.php',
         'Controllers\\Login' => __DIR__ . '/../..' . '/Controller/LoginController.php',

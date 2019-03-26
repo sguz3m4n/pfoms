@@ -42,27 +42,57 @@ class EventCreateController extends PermissionController {
     private $EventDate = "";
     private $EventCost = "";
     private $Comments = "";
+    private $RecEntered = "";
+    private $RecEnteredBy = "";
+    
 
     function show($params) {
         $username = $_SESSION["login_user"];
-
+       
+       
+        
         if (isset($_POST['btn-create'])) {
-            $eventinst = new \BarcomModel\Event();
-            $eventinst = new \BarcomModel\Company();
+            
+             $eventinst = new \BarcomModel\Event();
+            $companyinst = new \BarcomModel\Company();
             $audinst = new \BarcomModel\Audit();
-
+        
+            
             //(isset($_POST['CompId']) ? $this->CompId = $varid = $refinst->CompanyId = $_POST['CompId'] : $this->CompId = $varid = $refinst->CompanyId = "");
+
             $eventinst->EventName = $EventName = $_POST["EventName"];
             $eventinst->EventDate = $EventDate = $_POST["EventDate"];
             $eventinst->EventCost = $EventCost = $_POST["EventCost"];
             $eventinst->Comments = $Comments = $_POST["Comments"];
-            $eventinst->EventId = $eventinst->GenerateTimestamp("EVNT");
+            $eventinst->EventId = $EventId = $_POST["EventId"];
+            $eventinst->CompanyId = $CompanyId = $_POST["CompId"];
+            $eventinst->CompanyName = $CompanyName = $_POST["CompName"];
+            $eventinst->ContactName = $ContactName = $_POST["ContactName"];
+            $eventinst->ContactNumber = $ContactNumber = $_POST["PhoneNumber"];
+            $eventinst->ContactEmail = $ContactEmail = $_POST["Email"];
             $eventinst->DelFlg = $DelFlg = "N";
-            $eventinst->CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDate, $Comments, NOW(), $RecEnteredBy, $DelFlg);
+            $eventinst->RecEntered = $RecEntered = "";
+            $eventinst->RecEnteredBy = $RecEnteredBy = $username;
+
+            $eventinst->CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDate, $Comments, $RecEntered, $RecEnteredBy, $DelFlg);
+//
+// //if validation succeeds then log audit record to database
+                if ($eventinst->auditok == 1) {
+                    $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');
+                    $TranDesc = 'Created new Event Name: ' . $EventName. ' Event ID: '. $EventId;
+                    $User = $username;
+                    $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
+                    $token = '<br><br><span class="label label-success">Event Name</span> ' . '<span class="label label-info"> ' . $EventName . '</span><br><br><br>' .
+                            '<span class="label label-success">Event Id</span> ' . '<span class="label label-info">' . $EventId . '</span><br>';
+                    $token1 = 'Record Successfully Created';
+                    header("Location:" . "/success?result=$token&header=$token1&args=");
+                }
+
         } else
         if (isset($_GET)) {
             $model = new \BarcomModel\Event();
             $preaccounts = $model->GetPreAccounts();
+            $EventId = $model->GenerateTimestamp("EVNT");
             $template = new MasterTemplate();
             $template->load("Views/Event/event.html");
             $template->replace("accounts", $preaccounts);
@@ -74,7 +104,8 @@ class EventCreateController extends PermissionController {
             $template->replace("ContactEmail", "");
             $template->replace("EventDate", "");
             $template->replace("EventCost", "");
-    
+            $template->replace( "EventId", $EventId);
+
             $template->publish();
         }
     }

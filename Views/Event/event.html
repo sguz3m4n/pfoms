@@ -168,6 +168,8 @@
                     $(this).parents(".search-boxcomp").find('input[type="text"]').val($(this).text());
                     $test = document.getElementById('searchcomp').value;
                     $type = 'REF';
+                   
+                    
                     if ($test == "") {
                                 document.getElementById("txtHintcomp").innerHTML = "";
                                 return;
@@ -185,7 +187,7 @@
                                 $("#submittercompany").text($("#CompId").val());
                                 $("#submitterprevbalance").text($("#PreviousBalance").val());
                                 $("#submitterbalance").text($("#CompanyBalance").val());
-                                        }
+                                              }
                                 };
                                 xmlhttp.open("GET", "/Views/Shared/Controls/CompanySearch/getuser.php?q=" + $test + "&t=" + $type, true);
                                 xmlhttp.send();
@@ -290,7 +292,7 @@
                                     </a>      
                                 </li>
                                 <li>
-                                    <a class="text-uppercase" onclick="ShowSummary()"><i class="glyphicon glyphicon-eye-open" style="font-size: 20px"></i> Refund Summary</a>
+                                    <a class="text-uppercase" href="/event/edit"><i class="glyphicon glyphicon-eye-open"></i>View &nbsp; <i class="glyphicon glyphicon-pencil"></i>Edit Event</a>
                                 </li>
                             </ul>
                         </div>                      
@@ -362,6 +364,13 @@
                         </div>
                         <div class="col-md-9">
                             <div class="page-content-col-8">
+                                 <div class="panel panel-info" >
+                                    <div class="panel-heading">
+                                        <center>
+                                            <h3><label id="lblEventRef" class="label label-info">{ EventId }</label>&nbsp;&nbsp; &nbsp;<label id="lblEventFormNum" style="display:none" class="label label-info" ></label></h3>
+                                        </center>
+                                    </div>
+                                </div>
                                 <div class="portlet box blue">
                                     <div class="portlet-title">
                                         <div class="caption"><em class="fa fa-group"></em><h4>Create Event</h4></div>
@@ -408,7 +417,7 @@
                                                         </script>
 
                                                         <i class="glyphicon glyphicon-usd"></i><label> Event Cost</label>
-                                                        <input type="text"  class="form-control" id="EventCost" name="EventCost" autocomplete="off" required value="{ EventDate }" placeholder="This is coming from Proforma">  
+                                                        <input type="text"  class="form-control" id="EventCost" name="EventCost" autocomplete="off" required value="{ EventCost }" placeholder="This is coming from Proforma">  
 
                                                         <i class="glyphicon glyphicon-comment"></i><label> Comments</label>
                                                         <textarea  class="form-control" id="Comments" name="Comments" rows="4" cols="50"></textarea>
@@ -417,6 +426,11 @@
 
                                                     </div> 
                                                 </div>
+                                                 <div class="col-md-3" >
+                                                        
+                                                        <input type="hidden" class="form-control" id="EventId" name="EventId" value="{ EventId }" >
+
+                                                    </div>
                                             </div>  
                                             <br>
                                             <center>

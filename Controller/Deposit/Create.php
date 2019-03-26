@@ -33,6 +33,7 @@ class MakeDepositController extends PermissionController {
     private $DepAmountIsValid = "";
     private $CompId = "";
     private $CompIdIsValid = "";
+    private $MyPreAccountRecords = "";
 
     //Validation Engine will execute any validation on the fields in the interface
     function ValidationEngine($elements) {
@@ -76,6 +77,7 @@ class MakeDepositController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-create'])) {
+            $this->MyPreAccountRecords = $pymntrecs = json_decode($_POST['paylist'], TRUE);
             //variables for data input 
             $depinst = new \BarcomModel\Deposit();
             $audinst = new \BarcomModel\Audit();
@@ -202,12 +204,8 @@ class MakeDepositController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Deposit();
-            $preaccounts = $model->GetPreAccounts();
             $template = new MasterTemplate();
-  
             $template->load("Views/Deposit/deposit.html");
-            $template->replace("accounts", $preaccounts);
             $template->replace("title", " Create New Company Deposit");
             $template->replace("val_Deposit", "");
             $template->replace("val_AsycudaNum", "");

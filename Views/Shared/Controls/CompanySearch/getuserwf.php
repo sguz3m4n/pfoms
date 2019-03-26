@@ -24,7 +24,7 @@ if (!empty($result)) {
         $compinst->CompanyName = $value['CompanyName'];
         $compinst->FaxNumber = $value['FaxNumber'];
         $compinst->ContactName = $value['ContactName'];
-        $compinst->AgentName = $value['AgentName'];
+        //$compinst->AgentName = $value['AgentName'];
         $compinst->PhoneNumber = $value['PhoneNumber'];
         $compinst->Email = $value['Email'];
         $compinst->AddressLine1 = $value['AddressLine1'];
@@ -81,7 +81,7 @@ $filteredPRN = $compinst->GetFilteredPRN($compid)
                 <input type="hidden" class="form-control" id="CompanyBalance"  name="CompanyBalance" value="<?php echo $compinst->CompanyBalance; ?>">
                 <input type="hidden" class="form-control" id="BillRef"  name="BillRef" value="<?php echo $BillRefNo; ?>"> 
                 <ul style="list-style: none">
-                    <li><label>Agent:</label><?php echo $compinst->AgentName; ?></li> 
+                   <!-- <li><label>Agent:</label><?php echo $compinst->AgentName; ?></li> -->
                     <li><span class="glyphicon glyphicon-phone"></span><label>Phone: </label><?php echo $compinst->PhoneNumber; ?></li> 
                     <li><span class="glyphicon glyphicon-print"></span><label>Fax: </label><?php echo $compinst->FaxNumber; ?></li>
                     <li><span class="glyphicon glyphicon-user"></span><label>Contact: </label><?php echo $compinst->ContactName; ?></li>

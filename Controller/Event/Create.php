@@ -42,8 +42,8 @@ class EventCreateController extends PermissionController {
     private $EventDate = "";
     private $EventCost = "";
     private $Comments = "";
-    
-                function show($params) {
+
+    function show($params) {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-create'])) {
@@ -55,22 +55,26 @@ class EventCreateController extends PermissionController {
             $eventinst->EventName = $EventName = $_POST["EventName"];
             $eventinst->EventDate = $EventDate = $_POST["EventDate"];
             $eventinst->EventCost = $EventCost = $_POST["EventCost"];
-             $eventinst->Comments = $Comments = $_POST["Comments"];
+            $eventinst->Comments = $Comments = $_POST["Comments"];
             $eventinst->EventId = $eventinst->GenerateTimestamp("EVNT");
             $eventinst->DelFlg = $DelFlg = "N";
             $eventinst->CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDate, $Comments, NOW(), $RecEnteredBy, $DelFlg);
         } else
         if (isset($_GET)) {
+            $model = new \BarcomModel\Event();
+            $preaccounts = $model->GetPreAccounts();
             $template = new MasterTemplate();
             $template->load("Views/Event/event.html");
+            $template->replace("accounts", $preaccounts);
             $template->replace("EventName", "");
+            $template->replace("Deposit", "");
             $template->replace("CompanyName", "");
             $template->replace("ContactName", "");
             $template->replace("ContactNumber", "");
             $template->replace("ContactEmail", "");
             $template->replace("EventDate", "");
             $template->replace("EventCost", "");
-
+    
             $template->publish();
         }
     }

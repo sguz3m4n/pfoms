@@ -73,13 +73,14 @@ class Payment {
         $result = "";
         $conn = conn();
         //$stmt = $conn->prepare("SELECT prnmanage.PRNumber,prntran.RequestorID FROM `prnmanage` as prnmanage, prntransaction as prntran WHERE prnmanage.TranId=prntran.TranId and prnmanage.status='Active' and prntran.CompanyId='$compid';");
-        $stmt->execute();
-        $result_array = $stmt->fetchAll();
+        //$stmt->execute();
+        //$result_array = $stmt->fetchAll();
         $result = "<option id=' ' >" . " " . "</option>";
-        foreach ($result_array as $value) {
-            $PRNNo = $value['PRNumber'];
-            $result .= "<option id='$PRNNo' >" . $value['PRNumber'] . "</option>";
-        }
+       /* foreach ($result_array as $value) {
+            //$PRNNo = $value['PRNumber'];
+            //$result .= "<option id='$PRNNo' >" . $value['PRNumber'] . "</option>";
+            $result .= "<option id='Receipt' >"Rece"</option>";
+        }*/
         return $result;
         $conn = NULL;
     }
@@ -287,7 +288,7 @@ class PayScale {
     }
 
     function IsHoliday($date) {
-        $conn = conn();
+       /* $conn = conn();
         $sql = "SELECT * FROM specialdates dates WHERE dates.HolidayDate='$date';";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -300,7 +301,7 @@ class PayScale {
                     return 1;
                 }
             }
-        }
+        }*/
         return 0;
     }
 

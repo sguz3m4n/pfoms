@@ -88,7 +88,7 @@ switch ($routeInfo[0]) {
         $class = new \Controllers\Error;
         $class->show("Error 405: You can only use $allowedMethods with this URL");
         break;
-    case FastRoute\Dispatcher::FOUND:     
+    case FastRoute\Dispatcher::FOUND: 
         $className = $routeInfo[1][0];
         $method = $routeInfo[1][1];
         $vars = $routeInfo[2];

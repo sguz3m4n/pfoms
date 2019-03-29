@@ -5,11 +5,82 @@
         { head }
         <script type="text/javascript">
             $(document).ready(function (e) {
+                var accountcount = 0;
+                var accountarr = [];
+                var acctid;
+                //Send the populated array to the controller
+                $("#employee").submit(function () {
+                     for (x = 0; x < accountarr.length; x++) {
+                     
+                     alert(accountarr[x][0] + accountarr[x][1]);
+                     }
+                    $("#accountlist").val(JSON.stringify(accountarr));
+                });
+                $(document).on("click", "#AddAccount", function () {
+                    //alert("hello");
+                    var acctrec = [];
+                    var pillcontainer = document.getElementById('pillcontainer');
+                    var pillwrapper = document.getElementById('pillwrapper');
 
-                /*var test = 1;
-                 $('#employee').submit(function () {
-                 alert("hello");
-                 });*/
+                    //create instance of list elements
+                    var pill = document.createElement("li");
+                    pill.setAttribute("id", "preaccount" + accountcount);
+
+                    var removeicon = document.createElement("span");
+                    removeicon.setAttribute("class", "glyphicon glyphicon-minus");
+
+                    //dynamically create functions
+                    var pillanchor = document.createElement("a");
+                    pillanchor.setAttribute("data-accountnumber", document.getElementById("AccountNumber").value);
+                    pillanchor.setAttribute("style", "bold");
+                    pillanchor.appendChild(document.createTextNode(document.getElementById("BankName").value + " Acct- " + document.getElementById("AccountNumber").value));
+
+                    pillanchor.appendChild(removeicon);
+
+                    pill.appendChild(pillanchor);
+                    pillwrapper.appendChild(pill);
+                    pillcontainer.appendChild(pillwrapper);
+
+                    //var depositvalue = document.getElementById("AccountNumber").value;
+
+                    acctrec.push("preaccount" + accountcount);
+                    acctrec.push(acctid);
+                    acctrec.push(document.getElementById("BankName").value);
+                    acctrec.push(document.getElementById("AccountNumber").value);
+                    accountarr.push(acctrec);
+                    //alert(acctrec[3]);
+                    //CalculateTotal(Number(depositvalue));
+                    accountcount++;
+                });
+                $("#BankName").click(function () {
+                    acctid = $(this).children(":selected").attr("id");
+                });
+                $(document).on("dblclick", ".pillwrapper li", function (event) {
+
+                    var key = this.id.toString();
+                    var elem = document.getElementById(this.id.toString());
+                    elem.parentNode.removeChild(elem);
+                    RemoveInfo(key);
+
+                });
+                function RemoveInfo(key) {
+                    var indextoremove;
+                    for (i = 0; i < accountarr.length; i++) {
+                        // alert(accountarr[i][0]);
+                        // alert(key);
+                        if (accountarr[i][0] === key)
+                        {
+
+                            indextoremove = i;
+                        }
+                    }
+                    accountarr.splice(indextoremove, 1);
+                    /* for (x = 0; x < accountarr.length; x++) {
+                     
+                     alert(accountarr[x][0] + accountarr[x][1]);
+                     }*/
+                    //alert(accountarr);
+                }
 
             });
         </script>
@@ -118,7 +189,7 @@
                                         </div>
                                     </div>
                                     <div class="portlet-body form">
-                                        <form id="employee" name="employee" method="post" >
+                                        <form id="employee" name="employee" method="post" action=""  >
                                             <div class="form-group">
                                                 <div class="row center-block panel-body">
                                                     <div class="col-xs-4">
@@ -228,6 +299,12 @@
                                                         <input type="text" class="form-control" name="Email" placeholder="example@domain" autocomplete="off" value="{ Email }"  />
                                                     </div>
                                                     <div class="col-xs-4" style="font-size: large">
+                                                        <a id="addofficer" class="btn btn-default green" data-toggle="modal" data-target="#myModal">Add bank account  <i class="glyphicon glyphicon-plus"></i>
+                                                        </a>
+                                                        <div class="pillwrapper" id="pillcontainer">
+                                                            <ul class="nav nav-pills nav-stacked" id="pillwrapper" >                                   
+                                                            </ul>   
+                                                        </div>
                                                         { val_Natregno }  <br> 
                                                         { val_NISNo }  <br>
                                                         { val_Unique }
@@ -239,7 +316,7 @@
                                                         <textarea name="Notes" id="Notes" rows="4" cols="4" class="form-control" placeholder="Enter any notes here" ></textarea>
                                                     </div>
                                                     <div class="col-xs-6">
-
+                                                        <div><input id="accountlist" name="accountlist" class="form-control" type="hidden" ></div>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -249,6 +326,42 @@
 
                                             </div>
                                         </form>  <br>
+                                        <div class="modal" id="myModal">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Select Bank Account</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body">
+                                                        <div class="col-md-6">
+                                                            <label><strong>Pre Deposit Account</strong></label>
+                                                            <select name="BankName" class="form-control" id="BankName" >
+                                                                <option>Select Bank</option>
+                                                                <option id="NOSC">Bank of Nova Scotia</option>
+                                                                <option id="ROYC">Royal Bank of Canada</option>
+                                                                <option id="RBBL">Republic Bank Barbados Ltd</option>
+                                                                <option id="FCTZ">First Citizens Bank</option>
+                                                                <option id="FCIB">CIBC First Caribbean Bank</option>
+                                                                <option id="BPWC">BPW Cooperative Credit Union Ltd</option>
+                                                            </select>
+                                                            <span class="glyphicon glyphicon-usd"></span><label><strong>Account Number</strong></label>
+                                                            <input type="text"  class="form-control" id="AccountNumber" name="AccountNumber" autocomplete="off" required value="{ AccountNumber }" placeholder="xxxxxxxxxx">  
+
+                                                        </div>
+                                                    </div>
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+                                                        <!-- <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>-->
+                                                        <button type="button" class="btn btn-info" id="AddAccount" data-enter="modal">Add Account</button>
+                                                    </div>                                            
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

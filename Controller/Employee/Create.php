@@ -12,6 +12,7 @@ namespace Controllers;
 
 require 'Classes/Employee.php';
 require 'Classes/Audit.php';
+require 'Classes/BankAccount.php';
 require 'Controller/base_template.php';
 
 static $natregerr = "";
@@ -57,6 +58,7 @@ class EmployeeCreateController extends PermissionController {
     private $NatRegIsValid;
     private $NISNoIsValid = "";
     private $NatRegExists = "";
+    private $MyPaymentsRecords;
 
     //Validation Engine will execute any validation on the fields in the interface
     function ValidationEngine($elements) {
@@ -106,8 +108,10 @@ class EmployeeCreateController extends PermissionController {
             //variables for data input 
             $empinst = new \BarcomModel\Employee();
             $audinst = new \BarcomModel\Audit();
+            $bankaccount=new \BarcomModel\BankAccount();
             //ternary operator example
             (isset($_POST['Natregno']) ? $this->Natregno = $empid = $empinst->Natregno = $_POST['Natregno'] : $this->Natregno = $empid = $empinst->Natregno = "");
+            $this->MyPaymentsRecords = $pymntrecs = json_decode($_POST['accountlist'], TRUE);
             $this->TIN = $TIN = $empinst->TIN = $_POST['TIN'];
             $this->NISNo = $NISNo = $empinst->NISNo = $_POST['NISNo'];
             $this->ForceNumber = $ForceNumber = $empinst->ForceNumber = $_POST['ForceNumber'];
@@ -146,6 +150,13 @@ class EmployeeCreateController extends PermissionController {
             if (($this->NatRegIsValid) && ($this->NISNoIsValid) && (!$this->NatRegExists)) {
                 // if ($empinst->IfExists($empinst->Natregno) === 0) {
                 $empinst->CreateEmployee($username);
+                foreach ($pymntrecs as $value) {
+                    $bankaccount->AccountNumber = $accountnumber = $value[3];
+                    $bankaccount->BankCode = $bankcode = $value[1];
+                    $bankaccount->BankName = $bankname = $value[2];
+                    $bankaccount->EntityId = $ForceNumber;
+                    $bankaccount->CreateBankAccount($accountnumber, $bankcode, $bankname, $ForceNumber, $username);
+                }
                 // }
                 //if validation succeeds then log audit record to database
                 if ($empinst->auditok == 1) {

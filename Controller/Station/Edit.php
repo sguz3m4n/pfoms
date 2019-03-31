@@ -54,11 +54,11 @@ class StationEditController extends PermissionController {
             $audinst = new \BarcomModel\Audit();
 
             //Get Id from browser interface
-            $StationId = $_POST['StationId'];
+            $EquipmentId = $_POST['StationId'];
 
             //Check to see if the record already exists            
             //If it does execute update
-            if ($compinst->IfExists($StationId) === 1) {
+            if ($compinst->IfExists($EquipmentId) === 1) {
                 $this->EquipmentId = $compid = $compinst->EquipmentId = $_POST['EquipmentId'];
                 $this->ItemName = $compinst->ItemName = $_POST['ItemName'];
                 $this->Category = $compinst->Category = $_POST['Category'];
@@ -72,7 +72,7 @@ class StationEditController extends PermissionController {
 
                 //if validation succeeds then commit info to database
                 if ($this->CompNameIsValid) {
-                    $compinst->EditStation($StationId);
+                    $compinst->EditStation($EquipmentId);
 
                     if ($compinst->auditok == 1) {
                         $tranid = $audinst->TranId = $audinst->GenerateTimestamp('UCMP');
@@ -97,7 +97,6 @@ class StationEditController extends PermissionController {
         } else
         if (isset($_GET)) {
             $model = new \BarcomModel\Station();
-            $parishes = $model->GetParishes();
             $template = new MasterTemplate();
             $template->load("Views/Station/station_edit.html");
             $template->replace("title", " Create New Station ");

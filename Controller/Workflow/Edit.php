@@ -52,7 +52,6 @@ class WorkflowEditController extends PermissionController {
                 $this->WorkflowId = $compid = $compinst->WorkflowId = $_POST['WorkflowId'];
                 
                 $this->ItemName = $compname = $compinst->ItemName = $_POST['ItemName'];
-                $this->Type = $compinst->Type = $_POST['Type'];
                 $this->Category = $compinst->Category = $_POST['Category'];
                 $this->UnitCost = $compinst->UnitCost = $_POST['UnitCost'];
                 $this->UnitMeasurement = $compinst->UnitMeasurement = $_POST['UnitMeasurement'];

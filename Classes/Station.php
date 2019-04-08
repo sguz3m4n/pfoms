@@ -13,11 +13,8 @@ namespace BarcomModel;
 class Station {
 
    
-    public $EquipmentId;
-    public $ItemName;
-    public $Category;
-    public $UnitCost;
-    public $UnitMeasurement;
+    public $StationId;
+    public $StationName;
     public $RecEntered;
     public $RecEnteredBy;
     public $RecModified;
@@ -26,11 +23,11 @@ class Station {
             
 
   
-    function CreateEquipment($EquipmentId, $ItemName, $Category,$UnitCost, $UnitMeasurement,$RecEntered, $RecEnteredBy,$DelFlg) {
+    function CreateEquipment($StationId, $StationName, $RecEnteredBy) {
 
         $conn = conn();
-        $sql = "INSERT INTO `equipment` (`EquipmentId`, `ItemName`, `Category`, `UnitCost`, `UnitMeasurement`, `RecEntered`, `RecEnteredBy`,`DelFlg`)
-            VALUES ('$EquipmentId', '$ItemName', '$Category','$UnitCost','$UnitMeasurement', NOW(), '$RecEnteredBy','N')";
+        $sql = "INSERT INTO `station` (`StationId`, `StationName`, `RecEntered`, `RecEnteredBy`,`DelFlg`)
+            VALUES ('$StationId', '$StationName', NOW(), '$RecEnteredBy','N')";
 
         if ($conn->exec($sql)) {
             $this->auditok = 1;
@@ -40,12 +37,12 @@ class Station {
         $conn = NULL;
     }
     
-    function  getEquipment($EquipmentId){
+    function  getEquipment($StationId){
          $result = "";
         $conn = conn();
-        $stmt = $conn->prepare("SELECT `EquipmentId`, `ItemName`, `Category`, `UnitCost`, `UnitMeasurement`, `RecEntered`, `RecEnteredBy`, `RecModified`, `RecModifiedBy`, `DelFlg`"
-                . " FROM `equipment` "
-                . "WHERE EquipmentId = '$EquipmentId' "
+        $stmt = $conn->prepare("SELECT `StationId`, `StationName`, `RecEntered`, `RecEnteredBy`, `RecModified`, `RecModifiedBy`, `DelFlg`"
+                . " FROM `station` "
+                . "WHERE StationId = '$StationId' "
                 . "and DelFlg ='N';");
         $stmt->execute();
         $result = $stmt->fetchAll();
@@ -54,9 +51,9 @@ class Station {
         
     }
     
-    function  RemoveEquipment($EquipmentId){
+    function  RemoveEquipment($StationId){
        $conn = conn();
-        $sql = "UPDATE `equipment` SET DelFlg='Y' WHERE EquipmentId='$EquipmentId'";
+        $sql = "UPDATE `station` SET DelFlg='Y' WHERE StationId='$StationId'";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {
@@ -66,14 +63,13 @@ class Station {
         
     }
             
-     function UpdateEquipment($EquipmentId) {
+     function UpdateEquipment($StationId) {
         $conn = conn();
     
-        $sql = "UPDATE `equipment` SET `ItemName`=" . $this->ItemName . ",`Category`="
-                . $this->Category . ", `UnitCost`=" . $this->UnitCost . ",`UnitMeasurement`=" . $this->UnitMeasurement .", `RecEntered`=" 
+        $sql = "UPDATE `station` SET `StationName`=" . $this->StationName .", `RecEntered`=" 
                 . $this->RecEntered . ", `RecEnteredBy`=" . $this->RecEnteredBy
                 . ", `RecModified`=" . $this->RecModified . ",`RecModifiedBy`=" . $this->RecModifiedBy 
-                . " WHERE EquipmentId ='" . $EquipmentId . "'";
+                . " WHERE StationId ='" . $StationId . "'";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {

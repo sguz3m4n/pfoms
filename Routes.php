@@ -12,6 +12,8 @@ return [
     [['GET', 'POST'], '/event/edit', ['Controllers\EventEditController', 'display']],
     [['GET', 'POST'], '/event/view', ['Controllers\EventViewController', 'display']],    
     [['GET', 'POST'], '/event/deactivate', ['Controllers\EventDeactivateController', 'display']],
+    [['GET', 'POST'], '/equipment/create', ['Controllers\EquipmentCreateController', 'display']],
+    [['GET', 'POST'], '/equipment/edit', ['Controllers\EquipmentCreateController', 'display']],
     [['GET', 'POST'], '/account/create', ['Controllers\AccountCreateController', 'display']],
     [['GET', 'POST'], '/account/edit', ['Controllers\AccountEditController', 'display']],
     [['GET', 'POST'], '/station/create', ['Controllers\StationCreateController', 'display']],

@@ -18,6 +18,11 @@ class Homepage extends LoggedInController {
     private $menu;
     private $datamanager;
     private $companymenu;
+    private $equipmentmenu;
+    private $stationmenu;
+    private $accountmenu;
+    private $workflowmenu;
+    private $configmenu;
     private $eventmenu;
     private $employeemenu;
     private $adminmenu;
@@ -55,6 +60,11 @@ class Homepage extends LoggedInController {
         //CRUD Company Module Permissions
         $CreateCompany = $ViewCompany = $EditCompany = $DeleteCompany = array('Manager', 'Administrator', 'Super User');
         $CreateEvent = $ViewEvent = $EditEvent = $DeleteEvent = array('Manager', 'Administrator', 'Super User');
+        $CreateAccount = $ViewAccount = $EditAccount = $DeleteAccount = array('Manager', 'Administrator', 'Super User');
+        $CreateEquipment = $ViewEquipment = $EditEquipment = $DeleteEquipment = array('Manager', 'Administrator', 'Super User');
+        $CreateStation = $ViewStation = $EditStation = $DeleteStation = array('Manager', 'Administrator', 'Super User');
+        $CreateWorkflow = $ViewWorkflow = $EditWorkflow = $DeleteWorkflow = array('Manager', 'Administrator', 'Super User');
+        $CreateConfig = $ViewConfig = $EditConfig = $DeleteConfig = array('Manager', 'Administrator', 'Super User');
         //CRUD Company Module Permissions
         //CRU Employee Module Permissions
         $CreateEmployee = $ViewEmployee = $EditEmployee = array('Human Resource Clerk', 'Manager', 'Administrator', 'Super User');
@@ -110,6 +120,36 @@ class Homepage extends LoggedInController {
                                                 { eventmenu }
                                             </ul>
                                         </li>
+                                        <li class="dropdown more-dropdown-sub ">
+                                            <a href="javascript:;"> Equipment Manager </a>
+                                            <ul class="dropdown-menu">
+                                                { equipmentmenu }
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown more-dropdown-sub ">
+                                            <a href="javascript:;"> Account Manager </a>
+                                            <ul class="dropdown-menu">
+                                                { accountmenu }
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown more-dropdown-sub ">
+                                            <a href="javascript:;"> Config Manager </a>
+                                            <ul class="dropdown-menu">
+                                                { configmenu }
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown more-dropdown-sub ">
+                                            <a href="javascript:;"> Workflow Manager </a>
+                                            <ul class="dropdown-menu">
+                                                { workflowmenu }
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown more-dropdown-sub ">
+                                            <a href="javascript:;"> Station Manager </a>
+                                            <ul class="dropdown-menu">
+                                                { stationmenu }
+                                            </ul>
+                                        </li>
                                                                                <li class="dropdown">
                                             <a href="/adminconsole"> Admin Console </a>                                          
                                         </li>
@@ -139,6 +179,55 @@ class Homepage extends LoggedInController {
             $this->companymenu = $this->companymenu . $edititem;
         }
 
+        if (in_array($role, $CreateEquipment)) {
+            $createitem = '<li><a href="/equipment/create">Create Equipment</a></li>';
+            $this->equipmentmenu = $this->equipmentmenu . $createitem;
+        }
+
+        if (in_array($role, $EditEquipment)) {
+            $edititem = '<li><a href="/equipment/edit">View/Edit/Delete Equipment Details</a></li>';
+            $this->equipmentmenu = $this->equipmentmenu . $edititem;
+        }
+        
+        if (in_array($role, $CreateStation)) {
+            $createitem = '<li><a href="/station/create">Create Station</a></li>';
+            $this->stationmenu = $this->stationmenu . $createitem;
+        }
+
+        if (in_array($role, $EditStation)) {
+            $edititem = '<li><a href="/station/edit">View/Edit/Delete Station Details</a></li>';
+            $this->stationmenu = $this->stationmenu . $edititem;
+        }
+        
+        if (in_array($role, $CreateAccount)) {
+            $createitem = '<li><a href="/account/create">Create Account</a></li>';
+            $this->accountmenu = $this->accountmenu . $createitem;
+        }
+
+        if (in_array($role, $EditAccount)) {
+            $edititem = '<li><a href="/station/edit">View/Edit/Delete Account Details</a></li>';
+            $this->accountmenu = $this->accountmenu . $edititem;
+        }
+        
+        if (in_array($role, $CreateWorkflow)) {
+            $createitem = '<li><a href="/workflow/create">Create Workflow</a></li>';
+            $this->workflowmenu = $this->workflowmenu . $createitem;
+        }
+
+        if (in_array($role, $EditWorkflow)) {
+            $edititem = '<li><a href="/workflow/edit">View/Edit/Delete Workflow Details</a></li>';
+            $this->workflowmenu = $this->workflowmenu . $edititem;
+        }
+
+        if (in_array($role, $CreateConfig)) {
+            $createitem = '<li><a href="/config/create">Create Config</a></li>';
+            $this->configmenu = $this->configmenu . $createitem;
+        }
+
+        if (in_array($role, $EditConfig)) {
+            $edititem = '<li><a href="/config/edit">View/Edit/Delete Config Details</a></li>';
+            $this->configmenu = $this->configmenu . $edititem;
+        }
 
         if (in_array($role, $CreateEmployee)) {
             $createitem = '<li><a href="/employee/create">Create Officer</a></li>';
@@ -211,6 +300,11 @@ class Homepage extends LoggedInController {
         $template->replace('companymenu', $this->companymenu);
         $template->replace('employeemenu', $this->employeemenu);
         $template->replace('eventmenu', $this->eventmenu);
+        $template->replace('equipmentmenu', $this->equipmentmenu);
+        $template->replace('accountmenu', $this->accountmenu);
+        $template->replace('configmenu', $this->configmenu);
+        $template->replace('stationmenu', $this->stationmenu);
+        $template->replace('workflowmenu', $this->workflowmenu);
         $template->replace('adminmenu', $this->adminmenu);
         $template->replace('menu', $this->menu);
         $template->replace('page_content', $content);

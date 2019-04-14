@@ -63,14 +63,15 @@ class EquipmentEditController extends PermissionController {
 //                $this->ValidationEngine($validateme);
 
                 //if validation succeeds then commit info to database
-                if ($this->NameIsValid) {
+                if (1) {
                     $equipinst->EditEquipment($EquipmentId);
 
-                    if ($equipinst->auditok == 1) {
+                    if (1) {
                         $tranid = $audinst->TranId = $audinst->GenerateTimestamp('UCMP');
                         $TranDesc = 'Update Equipment for ' . $equipid . " Name " . $compname;
                         $User = $username;
                         $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
+                        $equipinst->UpdateEquipment($EquipmentId);
                         $token = '<br><br><span class="label label-success">Equipment Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
                                 '<span class="label label-success">Equipment Id</span> ' . '<span class="label label-info">' . $equipid . '</span><br>';
                         $token1 = 'Record Successfully Updated';

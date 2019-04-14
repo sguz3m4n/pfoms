@@ -68,17 +68,18 @@ class AccountCreateController extends PermissionController {
             //$this->ValidationEngine($validateme);
 
 //if validation succeeds then commit info to database
-            if ($this->AccountIdIsValid) {
+            if (1) {
 //                if ($compinst->IfExists($compinst->AccountId) === 0) {
 //                    $compinst->CreateAccount($username);
 //                }
 
 //if validation succeeds then log audit record to database
-                if ($compinst->auditok == 1) {
+                if (1) {
                     $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CCMP');
                     $TranDesc = 'Create New Account for ' . $compid . " Name " . $compname;
                     $User = $username;
                     $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
+                    $compinst->CreateAccount($AccountId, $Name, $Type, $RecEntered, $RecEnteredBy,$DelFlg);
                     $token = '<br><br><span class="label label-success">Account Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
                             '<span class="label label-success">Account Id</span> ' . '<span class="label label-info">' . $compid . '</span><br>';
                     $token1 = 'Record Successfully Created';

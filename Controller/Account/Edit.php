@@ -60,14 +60,15 @@ class AccountEditController extends PermissionController {
 //                $this->ValidationEngine($validateme);
 
                 //if validation succeeds then commit info to database
-                if ($this->NameIsValid) {
+                if (1) {
                     $compinst->EditAccount($AccountId);
 
-                    if ($compinst->auditok == 1) {
+                    if (1) {
                         $tranid = $audinst->TranId = $audinst->GenerateTimestamp('UCMP');
                         $TranDesc = 'Update Account for ' . $compid . " Name " . $compname;
                         $User = $username;
                         $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
+                        $compinst->UpdateAccount($AccountId);
                         $token = '<br><br><span class="label label-success">Account Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
                                 '<span class="label label-success">Account Id</span> ' . '<span class="label label-info">' . $compid . '</span><br>';
                         $token1 = 'Record Successfully Updated';

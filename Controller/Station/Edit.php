@@ -71,14 +71,15 @@ class StationEditController extends PermissionController {
 //                $this->ValidationEngine($validateme);
 
                 //if validation succeeds then commit info to database
-                if ($this->CompNameIsValid) {
+                if (1) {
                     $compinst->EditStation($EquipmentId);
 
-                    if ($compinst->auditok == 1) {
+                    if (1) {
                         $tranid = $audinst->TranId = $audinst->GenerateTimestamp('UCMP');
                         $TranDesc = 'Update Station for ' . $compid . " Name " . $compname;
                         $User = $username;
                         $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
+                        $compinst->UpdateStation($EquipmentId);
                         $token = '<br><br><span class="label label-success">Station Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
                                 '<span class="label label-success">Station Id</span> ' . '<span class="label label-info">' . $compid . '</span><br>';
                         $token1 = 'Record Successfully Updated';

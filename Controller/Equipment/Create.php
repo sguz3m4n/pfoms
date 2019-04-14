@@ -72,21 +72,23 @@ class EquipmentCreateController extends PermissionController {
             //$this->ValidationEngine($validateme);
 
 //if validation succeeds then commit info to database
-            if ($this->EquipmentIdIsValid) {
+            if (1) {
 //                if ($equipinst->IfExists($equipinst->EquipmentId) === 0) {
 //                    $equipinst->CreateEquipment($username);
 //                }
 
 //if validation succeeds then log audit record to database
-                if ($equipinst->auditok == 1) {
+                if (1) {
                     $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CCMP');
-                    $TranDesc = 'Create New Equipment for ' . $compid . " Name " . $compname;
+                    $TranDesc = 'Create New Equipment for ' . $EquipmentId . " Name " . $ItemName;
                     $User = $username;
                     $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
-                    $token = '<br><br><span class="label label-success">Equipment Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
-                            '<span class="label label-success">Equipment Id</span> ' . '<span class="label label-info">' . $compid . '</span><br>';
+                    $equipinst->CreateEquipment($EquipmentId, $ItemName, $Category,$UnitCost, $UnitMeasurement,$RecEntered, $RecEnteredBy,$DelFlg);
+                    $token = '<br><br><span class="label label-success">Equipment Name</span> ' . '<span class="label label-info"> ' . $ItemName . '</span><br><br><br>' .
+                            '<span class="label label-success">Equipment Id</span> ' . '<span class="label label-info">' . $EquipmentId . '</span><br>';
                     $token1 = 'Record Successfully Created';
                     header("Location:" . "/success?result=$token&header=$token1&args=");
+                    
                 }
             } else {
                 //if validation fails do postback with values already entered

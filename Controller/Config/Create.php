@@ -81,6 +81,7 @@ class ConfigCreateController extends PermissionController {
                     $TranDesc = 'Create New Config for ' . $compid . " Name " . $compname;
                     $User = $username;
                     $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
+                    $compinst->CreateConfig($ItemCode, $ItemName, $Value, $Comments, $RecEntered, $RecEnteredBy, $DelFlg);
                     $token = '<br><br><span class="label label-success">Config Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
                             '<span class="label label-success">Config Id</span> ' . '<span class="label label-info">' . $compid . '</span><br>';
                     $token1 = 'Record Successfully Created';

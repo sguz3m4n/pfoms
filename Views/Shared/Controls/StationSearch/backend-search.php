@@ -1,22 +1,23 @@
 <?php
 
 include '../../../../dbconfig.php';
-
-/* Attempt MySQL server connection. Assuming you are running MySQL
-  server with default setting (user 'root' with no password) */
-//$link = mysqli_connect("localhost", "root", "", "demo");
 $type = $_GET['type'];
-$table = $_GET['table'];
 $conn = conn();
 
-if (isset($_REQUEST['term']) && isset($_REQUEST['table'])) {
-    
-    $sql = "SELECT * FROM {$table} WHERE {$type} LIKE ? AND DelFlg='N'";
-    
+
+if (isset($_REQUEST['term'])) {
+    // Prepare a select statement
+    if ($type == 'name') {
+        $sql = 'SELECT * FROM station WHERE StationName LIKE ? AND DelFlg="N"';
+    } else
+    if ($type == 'stationid') {
+        $sql = 'SELECT * FROM station WHERE StationId LIKE ? AND DelFlg="N"';
+    }
+
     if ($stmt = $conn->prepare($sql)) {
         // Bind variables to the prepared statement as parameters
         // Set parameters
-        $param_term = $_REQUEST['term'] . '%';
+        $param_term = '%' . $_REQUEST['term'] . '%';
         $stmt->bindParam(1, $param_term, PDO::PARAM_STR);
 
         // Attempt to execute the prepared statement
@@ -27,7 +28,7 @@ if (isset($_REQUEST['term']) && isset($_REQUEST['table'])) {
             if (!empty($result)) {
                 // Fetch result rows as an associative array
                 foreach ($result as $value) {
-                    echo "<p><strong>" . $value["FirstName"] . " " . $value["LastName"] . "</strong></p>";
+                    echo "<p><strong>" . $value["StationName"] . "</strong></p>";
                 }
             } else {
                 echo "<p>No matches found</p>";
@@ -38,8 +39,11 @@ if (isset($_REQUEST['term']) && isset($_REQUEST['table'])) {
     }
 
     // Close statement
+
     $conn = NULL;
 }
-// Close onnection
+
+// close connection
+
 $conn = NULL;
 ?>

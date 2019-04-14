@@ -73,17 +73,18 @@ class WorkflowCreateController extends PermissionController {
             //$this->ValidationEngine($validateme);
 
 //if validation succeeds then commit info to database
-            if ($this->WorkflowIdIsValid) {
+            if (1) {
 //                if ($compinst->IfExists($compinst->WorkflowId) === 0) {
 //                    $compinst->CreateWorkflow($username);
 //                }
 
 //if validation succeeds then log audit record to database
-                if ($compinst->auditok == 1) {
+                if (1) {
                     $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CCMP');
                     $TranDesc = 'Create New Workflow for ' . $compid . " Name " . $compname;
                     $User = $username;
                     $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
+                    $compinst->CreateWorkflow($EquipmentId, $ItemName, $Category, $UnitCost, $UnitMeasurement, $RecEntered, $RecEnteredBy, $DelFlg);
                     $token = '<br><br><span class="label label-success">Workflow Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
                             '<span class="label label-success">Workflow Id</span> ' . '<span class="label label-info">' . $compid . '</span><br>';
                     $token1 = 'Record Successfully Created';

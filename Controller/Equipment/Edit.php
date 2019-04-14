@@ -10,32 +10,22 @@
 
 namespace Controllers;
 
-require 'Classes/Station.php';
+require 'Classes/Equipment.php';
 require 'Classes/Audit.php';
 require 'Controller/base_template.php';
 
 
-class StationEditController extends PermissionController {
+class EquipmentEditController extends PermissionController {
 
     function __construct() {
         $this->setRoles(['Manager', 'Administrator', 'Super User']);
     }
 
-    private $EquipmentId = "";
-    private $ItemName = "";
-    private $Category = "";
-    private $UnitCost = "";
-    private $UnitMeasurement = "";
-    private $RecEntered = "";
-    private $RecEnteredBy = "";
-    private $RecModified = "";
-    private $RecModifiedBy = "";
-    private $DelFlg = "";
+    private $Name = "";
 
     //Validation Engine will execute any validation on the fields in the interface
     function ValidationEngine($elements) {
         foreach ($elements as $value) {
-            
         }
     }
 
@@ -50,57 +40,59 @@ class StationEditController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-update'])) {
-            $compinst = new \BarcomModel\Station();
+            $equipinst = new \BarcomModel\Equipment();
             $audinst = new \BarcomModel\Audit();
 
             //Get Id from browser interface
-            $EquipmentId = $_POST['StationId'];
+            $EquipmentId = $_POST['EquipmentId'];
 
             //Check to see if the record already exists            
             //If it does execute update
-            if ($compinst->IfExists($EquipmentId) === 1) {
-                $this->EquipmentId = $compid = $compinst->EquipmentId = $_POST['EquipmentId'];
-                $this->ItemName = $compinst->ItemName = $_POST['ItemName'];
-                $this->Category = $compinst->Category = $_POST['Category'];
-                $this->UnitCost = $compinst->UnitCost = $_POST['UnitCost'];
-                $this->UnitMeasurement = $compinst->UnitMeasurement = $_POST['UnitMeasurement'];
-                $compinst->RecModifiedBy = $username;
+            if ($equipinst->IfExists($EquipmentId) === 1) {
+                $this->EquipmentId = $equipid = $equipinst->EquipmentId = $_POST['EquipmentId'];
+                
+                $this->ItemName = $compname = $equipinst->ItemName = $_POST['ItemName'];
+                $this->Category = $equipinst->Category = $_POST['Category'];
+                $this->UnitCost = $equipinst->UnitCost = $_POST['UnitCost'];
+                $this->UnitMeasurement = $equipinst->UnitMeasurement = $_POST['UnitMeasurement'];
+                
+                $equipinst->RecModifiedBy = $username;
 
                 //Send elements to be validated
-//                $validateme = ["StationName"];
+//                $validateme = ["EquipmentName"];
 //                $this->ValidationEngine($validateme);
 
                 //if validation succeeds then commit info to database
                 if (1) {
-                    $compinst->EditStation($EquipmentId);
+                    $equipinst->EditEquipment($EquipmentId);
 
                     if (1) {
                         $tranid = $audinst->TranId = $audinst->GenerateTimestamp('UCMP');
-                        $TranDesc = 'Update Station for ' . $compid . " Name " . $compname;
+                        $TranDesc = 'Update Equipment for ' . $equipid . " Name " . $compname;
                         $User = $username;
                         $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
-                        $compinst->UpdateStation($EquipmentId);
-                        $token = '<br><br><span class="label label-success">Station Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
-                                '<span class="label label-success">Station Id</span> ' . '<span class="label label-info">' . $compid . '</span><br>';
+                        $equipinst->UpdateEquipment($EquipmentId);
+                        $token = '<br><br><span class="label label-success">Equipment Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
+                                '<span class="label label-success">Equipment Id</span> ' . '<span class="label label-info">' . $equipid . '</span><br>';
                         $token1 = 'Record Successfully Updated';
                         header("Location:" . "/success?result=$token&header=$token1&args=");
                     }
                 } else {
                     //if validation fails do postback to main page with validation error 
                     $template = new MasterTemplate();
-                    $template->load("Views/Station/station_edit.html");
+                    $template->load("Views/Equipment/equipment_edit.html");
                     //$template->replace("parishes", $parishes);
-                    $template->replace("title", " Create New Station ");
-
+                    $template->replace("title", " Create New Equipment ");
+                    $template->replace("EquipmentName", $this->ItemName);
                     $template->publish();
                 }
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Station();
+            $model = new \BarcomModel\Equipment();
             $template = new MasterTemplate();
-            $template->load("Views/Station/station_edit.html");
-            $template->replace("title", " Create New Station ");
+            $template->load("Views/Equipment/equipment_edit.html");
+            $template->replace("title", " Create New Equipment ");
             $template->publish();
         }
     }

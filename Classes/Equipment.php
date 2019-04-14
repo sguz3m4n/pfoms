@@ -18,6 +18,7 @@ class Equipment {
     public $Category;
     public $UnitCost;
     public $UnitMeasurement;
+
     public $RecEntered;
     public $RecEnteredBy;
     public $RecModified;

@@ -63,14 +63,15 @@ class WorkflowEditController extends PermissionController {
 //                $this->ValidationEngine($validateme);
 
                 //if validation succeeds then commit info to database
-                if ($this->NameIsValid) {
+                if (1) {
                     $compinst->EditWorkflow($WorkflowId);
 
-                    if ($compinst->auditok == 1) {
+                    if (1) {
                         $tranid = $audinst->TranId = $audinst->GenerateTimestamp('UCMP');
                         $TranDesc = 'Update Workflow for ' . $compid . " Name " . $compname;
                         $User = $username;
                         $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
+                        $compinst->UpdateWorkflow($EquipmentId);
                         $token = '<br><br><span class="label label-success">Workflow Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
                                 '<span class="label label-success">Workflow Id</span> ' . '<span class="label label-info">' . $compid . '</span><br>';
                         $token1 = 'Record Successfully Updated';

@@ -139,7 +139,6 @@ class Homepage extends LoggedInController {
             $this->companymenu = $this->companymenu . $edititem;
         }
 
-
         if (in_array($role, $CreateEmployee)) {
             $createitem = '<li><a href="/employee/create">Create Officer</a></li>';
             $this->employeemenu = $this->employeemenu . $createitem;

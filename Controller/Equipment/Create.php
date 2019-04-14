@@ -9,22 +9,23 @@
 
 namespace Controllers;
 
-require 'Classes/Account.php';
+require 'Classes/Equipment.php';
 require 'Classes/Audit.php';
 require 'Controller/base_template.php';
 
-static $compiderr = "";
-static $compidwrapper = "";
 
-class AccountCreateController extends PermissionController {
+class EquipmentCreateController extends PermissionController {
 
     function __construct() {
         $this->setRoles(['Manager', 'Administrator', 'Super User']);
     }
 
-    private $AccountId = "";
-    private $Name = "";
-    private $Type = "";
+    private $EquipmentId = "";
+
+    public $ItemName = "";
+    public $Category = "";
+    public $UnitCost = "";
+    public $UnitMeasurement = "";
     
     private $RecEntered = "";
     private $RecEnteredBy = "";
@@ -50,66 +51,73 @@ class AccountCreateController extends PermissionController {
         if (isset($_POST['btn-create'])) {
 //variables for data input 
             $conn = conn();
-            $compinst = new \BarcomModel\Account();
+            $equipinst = new \BarcomModel\Equipment();
             $audinst = new \BarcomModel\Audit();
-            $this->AccountId = $compid = $compinst->AccountId = $_POST['AccountId'];
+            $this->EquipmentId = $compid = $equipinst->EquipmentId = $_POST['EquipmentId'];
 
-            $this->Name = $compname = $compinst->Name = $_POST['Name'];
-            $this->Type = $compinst->Type = $_POST['Type'];
-            $this->RecEntered = $compinst->RecEntered = $_POST['RecEntered'];
-            $this->RecEnteredBy = $compinst->RecEnteredBy = $_POST['RecEnteredBy'];
-            $this->RecModified = $compinst->RecModified = $_POST['RecModified'];
-            $this->RecModifiedBy = $compinst->RecModifiedBy = $_POST['RecModifiedBy'];
+            $this->ItemName = $equipinst->ItemName = $_POST['ItemName'];
+            $this->Category = $equipinst->Category = $_POST['Category'];
+            $this->UnitCost = $equipinst->UnitCost = $_POST['UnitCost'];
+            $this->UnitMeasurement = $equipinst->UnitMeasurement = $_POST['UnitMeasurement'];
+           
+            $this->RecEntered = $equipinst->RecEntered = $_POST['RecEntered'];
+            $this->RecEnteredBy = $equipinst->RecEnteredBy = $_POST['RecEnteredBy'];
+            $this->RecModified = $equipinst->RecModified = $_POST['RecModified'];
+            $this->RecModifiedBy = $equipinst->RecModifiedBy = $_POST['RecModifiedBy'];
             
-            $compinst->DelFlg = 'N';
+            $equipinst->DelFlg = 'N';
 
 //Send elements to be validated
-            //$validateme = ["AccountId"];
+            //$validateme = ["EquipmentId"];
             //$this->ValidationEngine($validateme);
 
 //if validation succeeds then commit info to database
             if (1) {
-//                if ($compinst->IfExists($compinst->AccountId) === 0) {
-//                    $compinst->CreateAccount($username);
+//                if ($equipinst->IfExists($equipinst->EquipmentId) === 0) {
+//                    $equipinst->CreateEquipment($username);
 //                }
 
 //if validation succeeds then log audit record to database
                 if (1) {
                     $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CCMP');
-                    $TranDesc = 'Create New Account for ' . $compid . " Name " . $compname;
+                    $TranDesc = 'Create New Equipment for ' . $EquipmentId . " Name " . $ItemName;
                     $User = $username;
                     $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
-                    $compinst->CreateAccount($AccountId, $Name, $Type, $RecEntered, $RecEnteredBy,$DelFlg);
-                    $token = '<br><br><span class="label label-success">Account Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
-                            '<span class="label label-success">Account Id</span> ' . '<span class="label label-info">' . $compid . '</span><br>';
+                    $equipinst->CreateEquipment($EquipmentId, $ItemName, $Category,$UnitCost, $UnitMeasurement,$RecEntered, $RecEnteredBy,$DelFlg);
+                    $token = '<br><br><span class="label label-success">Equipment Name</span> ' . '<span class="label label-info"> ' . $ItemName . '</span><br><br><br>' .
+                            '<span class="label label-success">Equipment Id</span> ' . '<span class="label label-info">' . $EquipmentId . '</span><br>';
                     $token1 = 'Record Successfully Created';
                     header("Location:" . "/success?result=$token&header=$token1&args=");
+                    
                 }
             } else {
                 //if validation fails do postback with values already entered
-                $model = new \BarcomModel\Account();
+                $model = new \BarcomModel\Equipment();
                 $template = new MasterTemplate();
-                $template->load("Views/Account/account.html");
-                $template->replace("AccountId", $this->AccountId);
+                $template->load("Views/Equipment/equipment.html");
+                $template->replace("EquipmentId", $this->EquipmentId);
                 
-
-                $template->replace("val_AccountId", $_SESSION['$compidwrapper']);
                 $template->publish();
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Account();
+            $model = new \BarcomModel\Equipment();
 
             $template = new MasterTemplate();
-            $template->load("Views/Account/account.html");
-            $template->replace("AccountId", "");
-            $template->replace("Type", "");
+            $template->load("Views/Equipment/equipment.html");
+            $template->replace("EquipmentId", "");
+            
+            $template->replace("ItemName", "");
+            $template->replace("Category", "");
+            $template->replace("UnitCost", "");
+            $template->replace("UnitMeasurement", "");
+
             $template->replace("RecEntered", "");
             $template->replace("RecEnteredBy", "");
             $template->replace("RecModified", "");
             $template->replace("RecModifiedBy", "");
             
-            $template->replace("title", " Create New Account ");
+            $template->replace("title", " Create New Equipment ");
             $template->publish();
         }
     }

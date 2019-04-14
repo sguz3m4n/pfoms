@@ -122,6 +122,7 @@ class ComposerStaticInitdbfd59ea50047003c0635f21387c380a
         'Controllers\\EmployeeEditController' => __DIR__ . '/../..' . '/Controller/Employee/Edit.php',
         'Controllers\\Error' => __DIR__ . '/../..' . '/Controller/ErrorController.php',
         'Controllers\\EventCreateController' => __DIR__ . '/../..' . '/Controller/Event/Create.php',
+        'Controllers\\EventDeactivateController' => __DIR__ . '/../..' . '/Controller/Event/Delete.php',
         'Controllers\\EventEditController' => __DIR__ . '/../..' . '/Controller/Event/Edit.php',
         'Controllers\\Homepage' => __DIR__ . '/../..' . '/Controller/HomepageController.php',
         'Controllers\\LoggedInController' => __DIR__ . '/../..' . '/Controller/base_template.php',

@@ -13,11 +13,9 @@ namespace BarcomModel;
 class WorkFlow {
 
    
-    public $EquipmentId;
-    public $ItemName;
-    public $Category;
-    public $UnitCost;
-    public $UnitMeasurement;
+    public $RoleId;
+    public $RoleName;
+        public $Comments;
     public $RecEntered;
     public $RecEnteredBy;
     public $RecModified;
@@ -26,11 +24,11 @@ class WorkFlow {
             
 
   
-    function CreateEquipment($EquipmentId, $ItemName, $Category,$UnitCost, $UnitMeasurement,$RecEntered, $RecEnteredBy,$DelFlg) {
+    function CreateRole($RoleId, $RoleName, $Comments, $RecEnteredBy) {
 
         $conn = conn();
-        $sql = "INSERT INTO `equipment` (`EquipmentId`, `ItemName`, `Category`, `UnitCost`, `UnitMeasurement`, `RecEntered`, `RecEnteredBy`,`DelFlg`)
-            VALUES ('$EquipmentId', '$ItemName', '$Category','$UnitCost','$UnitMeasurement', NOW(), '$RecEnteredBy','N')";
+        $sql = "INSERT INTO `workflow` (`RoleId`, `RoleName`, `Comments`, `RecEntered`, `RecEnteredBy`,`DelFlg`)
+            VALUES ('$RoleId', '$RoleName', '$Comments', NOW(), '$RecEnteredBy','N')";
 
         if ($conn->exec($sql)) {
             $this->auditok = 1;
@@ -40,12 +38,12 @@ class WorkFlow {
         $conn = NULL;
     }
     
-    function  getEquipment($EquipmentId){
+    function  getRole($RoleId){
          $result = "";
         $conn = conn();
-        $stmt = $conn->prepare("SELECT `EquipmentId`, `ItemName`, `Category`, `UnitCost`, `UnitMeasurement`, `RecEntered`, `RecEnteredBy`, `RecModified`, `RecModifiedBy`, `DelFlg`"
-                . " FROM `equipment` "
-                . "WHERE EquipmentId = '$EquipmentId' "
+        $stmt = $conn->prepare("SELECT `RoleId`, `RoleName`, `Comments`, `RecEntered`, `RecEnteredBy`, `RecModified`, `RecModifiedBy`, `DelFlg`"
+                . " FROM `workflow` "
+                . "WHERE RoleId = '$RoleId' "
                 . "and DelFlg ='N';");
         $stmt->execute();
         $result = $stmt->fetchAll();
@@ -54,9 +52,9 @@ class WorkFlow {
         
     }
     
-    function  RemoveEquipment($EquipmentId){
+    function  RemoveRole($RoleId){
        $conn = conn();
-        $sql = "UPDATE `equipment` SET DelFlg='Y' WHERE EquipmentId='$EquipmentId'";
+        $sql = "UPDATE `workflow` SET DelFlg='Y' WHERE RoleId='$RoleId'";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {
@@ -66,14 +64,13 @@ class WorkFlow {
         
     }
             
-     function UpdateEquipment($EquipmentId) {
+     function UpdateRole($RoleId) {
         $conn = conn();
     
-        $sql = "UPDATE `equipment` SET `ItemName`=" . $this->ItemName . ",`Category`="
-                . $this->Category . ", `UnitCost`=" . $this->UnitCost . ",`UnitMeasurement`=" . $this->UnitMeasurement .", `RecEntered`=" 
-                . $this->RecEntered . ", `RecEnteredBy`=" . $this->RecEnteredBy
-                . ", `RecModified`=" . $this->RecModified . ",`RecModifiedBy`=" . $this->RecModifiedBy 
-                . " WHERE EquipmentId ='" . $EquipmentId . "'";
+        $sql = "UPDATE `workflow` SET `RoleName`= $this->RoleName,`Comments`= $this->Comments, `RecEntered`= 
+                . $this->RecEntered, `RecEnteredBy` = $this->RecEnteredBy
+                ., `RecModified`= $this->RecModified , `RecModifiedBy`= $this->RecModifiedBy 
+                . WHERE RoleId ='" . $RoleId . "'";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {

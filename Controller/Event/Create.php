@@ -45,20 +45,41 @@ class EventCreateController extends PermissionController {
     private $Comments = "";
     private $RecEntered = "";
     private $RecEnteredBy = "";
-    private $MyPaymentsRecords;
+    private $OperationalSupport = "";
+    private $PoliceServices = "";
+    private $VATPoliceServices = "";
+    
+    
+    //private $MyPaymentsRecords;
 
     function show($params) {
         $username = $_SESSION["login_user"];
+
+        //Validation Engine will execute any validation on the fields in the interface
+//    function ValidationEngine($elements) {
+//        
+//            if ($EventDate == "") {
+//                if (strlen($this->CompanyId) < 7) {
+//                    $compiderr = "Company Id is invalid length";
+//                    $_SESSION['$compidwrapper'] = '<span style="color:red" >' . " * " . $compiderr . '</span>';
+//                    $this->CompanyIdIsValid = 0;
+//                } else {
+//                    $this->CompanyIdIsValid = 1;
+//                    $_SESSION['$compidwrapper'] = NULL;
+//                }
+//            }
+//        
+//    }
 
 
 
         if (isset($_POST['btn-create'])) {
 
             $eventinst = new \BarcomModel\Event();
-            $companyinst = new \BarcomModel\Company();
-            $preaccount = new \BarcomModel\PreAccount();
+            //$companyinst = new \BarcomModel\Company();
+            //$preaccount = new \BarcomModel\PreAccount();
             $audinst = new \BarcomModel\Audit();
-            $this->MyPaymentsRecords = $pymntrecs = json_decode($_POST['paylist'], TRUE);
+            //$this->MyPaymentsRecords = $pymntrecs = json_decode($_POST['paylist'], TRUE);
 
             //(isset($_POST['CompId']) ? $this->CompId = $varid = $refinst->CompanyId = $_POST['CompId'] : $this->CompId = $varid = $refinst->CompanyId = "");
 
@@ -67,24 +88,32 @@ class EventCreateController extends PermissionController {
             $eventinst->EventCost = $EventCost = $_POST["EventCost"];
             $eventinst->Comments = $Comments = $_POST["Comments"];
             $eventinst->EventId = $EventId = $_POST["EventId"];
+            
+            $eventinst->DelFlg = $DelFlg = "N";
+            $eventinst->RecEntered = $RecEntered = "";
+            $eventinst->RecEnteredBy = $RecEnteredBy = $username;
+            $eventinst->OperationalSupport = $OperationalSupport = $_POST["OperationalSupport"];
+            $eventinst->PoliceServices = $PoliceServices = $_POST["PoliceServices"];
+            $eventinst->VATPoliceServices = $VATPoliceServices = $_POST["VATPoliceServices"];
+
+            //all coming from Company/getuser 
             $eventinst->CompanyId = $CompanyId = $_POST["CompId"];
             $eventinst->CompanyName = $CompanyName = $_POST["CompName"];
             $eventinst->ContactName = $ContactName = $_POST["ContactName"];
             $eventinst->ContactNumber = $ContactNumber = $_POST["PhoneNumber"];
             $eventinst->ContactEmail = $ContactEmail = $_POST["Email"];
-            $eventinst->DelFlg = $DelFlg = "N";
-            $eventinst->RecEntered = $RecEntered = "";
-            $eventinst->RecEnteredBy = $RecEnteredBy = $username;
-
-            $eventinst->CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDate, $Comments, $RecEntered, $RecEnteredBy, $DelFlg);
-            $tranid = $preaccount->GenerateTimestamp("PRE");
-            foreach ($pymntrecs as $value) {
-                $preaccount->AccountId = $accountid = $value[1];
-                $preaccount->AccountName = $accountname = $value[2];
-                $preaccount->TranAmt = $tramamt = $value[3];
-                $preaccount->EventId = $eventid = $EventId;
-                $preaccount->CreatePreAccountTransaction($tranid, $accountid, $accountname, $tramamt, $eventid);
-            }
+            
+            
+                       
+            $eventinst->CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDate, $Comments, $RecEnteredBy, $OperationalSupport, $PoliceServices, $VATPoliceServices);
+//            $tranid = $preaccount->GenerateTimestamp("PRE");
+//            foreach ($pymntrecs as $value) {
+//                $preaccount->AccountId = $accountid = $value[1];
+//                $preaccount->AccountName = $accountname = $value[2];
+//                $preaccount->TranAmt = $tramamt = $value[3];
+//                $preaccount->EventId = $eventid = $EventId;
+//                $preaccount->CreatePreAccountTransaction($tranid, $accountid, $accountname, $tramamt, $eventid);
+//            }
 // //if validation succeeds then log audit record to database
             if ($eventinst->auditok == 1) {
                 $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');
@@ -99,11 +128,12 @@ class EventCreateController extends PermissionController {
         } else
         if (isset($_GET)) {
             $model = new \BarcomModel\Event();
-            $preaccounts = $model->GetPreAccounts();
+            //$preaccounts = $model->GetPreAccounts();
+            $VAT = $model->getVat();
             $EventId = $model->GenerateTimestamp("EVNT");
             $template = new MasterTemplate();
             $template->load("Views/Event/event.html");
-            $template->replace("accounts", $preaccounts);
+            //$template->replace("accounts", $preaccounts);
             $template->replace("EventName", "");
             $template->replace("Deposit", "");
             $template->replace("CompanyName", "");
@@ -113,6 +143,11 @@ class EventCreateController extends PermissionController {
             $template->replace("EventDate", "");
             $template->replace("EventCost", "");
             $template->replace("EventId", $EventId);
+            $template->replace("OperationalSupport", "0.00");
+            $template->replace("PoliceServices", "0.00");
+            $template->replace("VATPoliceServices", "0.00");
+            $template->replace("VATDBval", $VAT);
+            
 
             $template->publish();
         }

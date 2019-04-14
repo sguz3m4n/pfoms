@@ -55,79 +55,6 @@
         <script type="text/javascript">
             $(document).ready(function () {
 
-                var accountcount = 0;
-                var accountarr = [];
-                var acctid;
-                var Total = 0;
-
-                var addcontainer = document.getElementById("addcontrols");
-                var addofficer = document.createElement("a");
-                //addofficer.style.display = "none";
-                addofficer.innerHTML = "Add pre account  ";
-                addofficer.setAttribute("id", "addofficer");
-                addofficer.setAttribute("class", "btn btn-default green");
-                addofficer.setAttribute("data-toggle", "modal");
-                addofficer.setAttribute("data-target", "#myModal");
-                var i = document.createElement("i");
-                i.setAttribute("class", "glyphicon glyphicon-plus");
-
-                addofficer.appendChild(i);
-                addcontainer.appendChild(addofficer);
-//Send the populated array to the controller
-                $("#paymentform").submit(function () {
-                    $("#paylist").val(JSON.stringify(accountarr));
-                });
-
-                $(document).on("click", "#AddAccount", function () {
-
-                    var acctrec = [];
-                    var pillcontainer = document.getElementById('pillcontainer');
-                    var pillwrapper = document.getElementById('pillwrapper');
-
-                    //create instance of list elements
-                    var pill = document.createElement("li");
-                    pill.setAttribute("id", "preaccount" + accountcount);
-
-                    var removeicon = document.createElement("span");
-                    removeicon.setAttribute("class", "glyphicon glyphicon-minus");
-
-                    //dynamically create functions
-                    var pillanchor = document.createElement("a");
-                    pillanchor.setAttribute("data-depositamount", document.getElementById("DepositAmount").value);
-                    pillanchor.appendChild(document.createTextNode(document.getElementById("RoleName").value + "  $" + document.getElementById("DepositAmount").value));
-
-                    pillanchor.appendChild(removeicon);
-
-                    pill.appendChild(pillanchor);
-                    pillwrapper.appendChild(pill);
-                    pillcontainer.appendChild(pillwrapper);
-
-                    var depositvalue = document.getElementById("DepositAmount").value;
-
-                    acctrec.push("preaccount" + accountcount);
-                    acctrec.push(acctid);
-                    acctrec.push(document.getElementById("RoleName").value);
-                    acctrec.push(document.getElementById("DepositAmount").value);
-                    accountarr.push(acctrec);
-                    //alert(acctrec[3]);
-                    CalculateTotal(Number(depositvalue));
-                    accountcount++;
-                });
-                $("#RoleName").click(function () {
-                    acctid = $(this).children(":selected").attr("id");
-                });
-                $(document).on("dblclick", ".pillwrapper li", function (event) {
-
-                    var key = this.id.toString();
-                    //alert(key);
-                    var depositamount = event.target.attributes.getNamedItem('data-depositamount').value;
-                    var elem = document.getElementById(this.id.toString());
-                    //alert(elem);
-                    elem.parentNode.removeChild(elem);
-                    RemoveInfo(key);
-                    CalculateTotal(Number(depositamount) * -1);
-
-                });
 
                 $('.search-boxcomp input[type="text"]').on("keyup input", function () {
                     /* Get input value on change */
@@ -179,7 +106,7 @@
                                         if (this.readyState == 4 && this.status == 200) {
                                                 document.getElementById("txtHintcomp").innerHTML = this.responseText;
                                 $("#submittercompany").text($("#CompId").val());
-                                $("#submitterprevbalance").text($("#PreviousBalance").val());
+                                //$("#submitterprevbalance").text($("#PreviousBalance").val());
                                 $("#submitterbalance").text($("#CompanyBalance").val());
                                         }
                                 };
@@ -189,32 +116,49 @@
                     $(this).parent(".result").empty();
                     //alert('test');
                 });
-                function CalculateTotal(value)
-                {
-                    var subtotal = value;
-                    Total = subtotal + Total;
-                    $("#receipttotal").text(Total.toFixed(2));
-                }
 
-                function RemoveInfo(key) {
-                    var indextoremove;
-                    for (i = 0; i < accountarr.length; i++) {
-                        // alert(accountarr[i][0]);
-                        // alert(key);
-                        if (accountarr[i][0] === key)
-                        {
+                $("#OperationalSupport, #PoliceServices").blur(function () {
+//need to add validation that it is a number
 
-                            indextoremove = i;
-                        }
+                    var oppSupportVal = document.getElementById("OperationalSupport").value;
+                    var PoliceServices = document.getElementById("PoliceServices").value;
+
+                    var vatVal = document.getElementById("VATDBval").value;
+                    var vatCalc = (parseFloat(PoliceServices) * parseFloat(vatVal)).toFixed(2);
+                    $("#VATPoliceServices").val(vatCalc);
+                    var VATPoliceServices = document.getElementById("VATPoliceServices").value;
+                       //document.getElementById("VATPoliceServices").value = vatCalc;
+
+                    $("#receipttotal").text((parseFloat(PoliceServices) + parseFloat(VATPoliceServices) + parseFloat(oppSupportVal)).toFixed(2));
+                });
+
+                $("#EventCost").blur(function () {
+//need to add validation that it is a number
+                    var CostOfEvent = document.getElementById("EventCost").value;
+
+
+                    $("#eventcost").text(parseFloat(CostOfEvent).toFixed(2));
+                });
+
+                $("#btnCreateEvent").click(function (e) {
+//need to add validation that all fields are there 
+                        var oppSupportVal = document.getElementById("OperationalSupport").value;
+                        var PoliceServices = document.getElementById("PoliceServices").value;
+                        var EventDate = document.getElementById("datepicker").value;
+
+                    try {
+                       var oppSupportVal = document.getElementById("CompName").value;
+                    } catch (err) {
+                         e.preventDefault();
+                        alert(err.message); 
                     }
-                    accountarr.splice(indextoremove, 1);
-                    for (x = 0; x < accountarr.length; x++) {
 
-                        alert(accountarr[x][0] + accountarr[x][1]);
-                    }
-                    //alert(accountarr);
-                }
+                    
+
+                });
+
             });
+
 
         </script>
         <script>
@@ -380,22 +324,27 @@
                                                     </div>
                                                 </div>
                                                 <div class="row center-block">
+                                                    <div class="col-md-2"></div>
                                                     <div class="col-md-4" >
                                                         <br>
-                                                        <center id="addcontrols">                                                                                                                           
+                                                        <i class="glyphicon glyphicon-usd"></i><label> Police Services</label>
+                                                        <input type="text"  class="form-control" id="PoliceServices" name="PoliceServices" autocomplete="off"  value="{ PoliceServices }" placeholder="0.00">  
 
-                                                        </center>
-                                                        <div class="pillwrapper" id="pillcontainer">
-                                                            <ul class="nav nav-pills nav-stacked" id="pillwrapper" >                                   
-                                                            </ul>   
-                                                        </div>
+                                                        <i class="glyphicon glyphicon-usd"></i><label> VAT</label>
+                                                        <input type="text"  class="form-control" id="VATPoliceServices" name="VATPoliceServices" autocomplete="off"  value="{ VATPoliceServices }" placeholder="0.00" readonly>  
+
+                                                        <i class="glyphicon glyphicon-usd"></i><label> Operational Support</label>
+                                                        <input type="text"  class="form-control" id="OperationalSupport" name="OperationalSupport" autocomplete="off"  value="{ OperationalSupport }" placeholder="0.00">  
+
+
                                                     </div>
                                                     <div class="col-md-4" >
+                                                        <br>
                                                         <label>Event Name</label>
                                                         <input type="text"  class="form-control" id="EventName" name="EventName" autocomplete="off" required value="{ EventName }" placeholder="Enter company event">  
 
                                                         <label>Event Date</label>
-                                                        <input type="text" class="form-control" name="EventDate" placeholder="YYYY-MM-DD" autocomplete="off"  id="datepicker" >
+                                                        <input type="text" class="form-control" name="EventDate" placeholder="YYYY-MM-DD" autocomplete="off"  id="datepicker" required >
                                                         <script>
                                                             $(function () {
                                                                 $("#datepicker").datepicker({dateFormat: 'yy-mm-dd'});
@@ -405,59 +354,40 @@
                                                         <i class="glyphicon glyphicon-usd"></i><label> Event Cost</label>
                                                         <input type="text"  class="form-control" id="EventCost" name="EventCost" autocomplete="off" required value="{ EventCost }" placeholder="This is coming from Proforma">  
 
-                                                        <i class="glyphicon glyphicon-comment"></i><label> Comments</label>
-                                                        <textarea  class="form-control" id="Comments" name="Comments" rows="4" cols="50"></textarea>
+
                                                     </div>
                                                     <div class="col-md-4" >
 
                                                     </div> 
                                                 </div>
+                                                <div>
+
+                                                    <center>
+                                                        <br>
+                                                        <i class="glyphicon glyphicon-comment"></i><label> Comments</label>
+                                                    </center>
+                                                    <div class="col-md-4"></div>
+                                                    <div class="col-md-4">
+                                                        <textarea  class="form-control" id="Comments" name="Comments" rows="4" cols="12"></textarea>
+                                                    </div>
+                                                    <div class="col-md-4"></div>
+                                                </div>
                                                 <div class="col-md-3" >
 
                                                     <input type="hidden" class="form-control" id="EventId" name="EventId" value="{ EventId }" >
+                                                    <input type="hidden" class="form-control" id="VATDBval" name="VATDBval" value="{ VATDBval }" >
 
                                                 </div>
                                             </div>  
                                             <br>
                                             <center>
-                                                <button type="submit" name="btn-create" class="btn btn-default blue">Create Event</button>    
+                                                <button type="submit" name="btn-create" class="btn btn-default blue" id="btnCreateEvent">Create Event</button>    
                                             </center>
                                             <br>
                                         </form>   
                                     </div>
 
-                                    <!-- The Modal -->
-                                    <div class="modal" id="myModal">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
 
-                                                <!-- Modal Header -->
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Select Pre Account</h4>
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                </div>
-
-                                                <!-- Modal body -->
-                                                <div class="modal-body">
-                                                    <div class="col-md-6">
-                                                        <label><strong>Pre Deposit Account</strong></label>
-                                                        <select name="RoleName" class="form-control" id="RoleName" >
-                                                            <option>Select Preaccount</option>
-                                                            { accounts }
-                                                        </select>
-                                                        <span class="glyphicon glyphicon-usd"></span><label><strong>Deposit Amount</strong></label>
-                                                        <input type="text"  class="form-control" id="DepositAmount" name="DepositAmount" autocomplete="off" required value="{ Deposit }" placeholder="0.00">  
-
-                                                    </div>
-                                                </div>
-                                                <!-- Modal footer -->
-                                                <div class="modal-footer">
-                                                    <!-- <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>-->
-                                                    <button type="button" class="btn btn-info" id="AddAccount" data-enter="modal">Add Account</button>
-                                                </div>                                            
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

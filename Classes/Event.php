@@ -28,6 +28,9 @@ class Event {
     public $RecModifiedBy;
     public $Status;
     public $DelFlg;
+    public $OperationalSupport = "";
+    public $PoliceServices = "";
+    public $VATPoliceServices = "";
 
     function GetPreAccounts() {
         $result = "";
@@ -43,6 +46,19 @@ class Event {
         $conn = NULL;
     }
 
+    function GetVat() {
+        $result = "";
+        $conn = conn();
+        $stmt = $conn->prepare("SELECT ItemValue FROM config WHERE `ItemName` = 'VAT' and DelFlg = 'N';");
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        //    $result = "0.1750";
+       foreach ($result as $value) {
+            $ItemValue = $value['ItemValue'];
+        }
+        return $ItemValue;
+    }
+
     function GenerateTimestamp($schema) {
         $varschema = $schema;
         $vardatestamp = date("ymdGis", time());
@@ -50,13 +66,13 @@ class Event {
         return $varschema . $vardatestamp;
     }
 
-    function CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDate, $Comments, $RecEntered, $RecEnteredBy, $DelFlg) {
+    function CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDate, $Comments, $RecEnteredBy, $OperationalSupport, $PoliceServices, $VATPoliceServices) {
 
         $conn = conn();
         $sql = "INSERT INTO `event` (`EventId`, `EventName`,`EventCost`, `CompanyId`, `CompanyName`, `ContactName`, 
-    `ContactEmail`,`ContactNumber`, `EventDate`, `Comments`, `RecEntered`, `RecEnteredBy`, `Status`, `DelFlg`)
+    `ContactEmail`,`ContactNumber`, `EventDate`, `Comments`, `RecEntered`, `RecEnteredBy`, `Status`, `DelFlg`, `OperationalSupport`, `PoliceServices`, `VATPoliceServices`)
             VALUES ('$EventId', '$EventName', '$EventCost', '$CompanyId', '$CompanyName', '$ContactName',"
-                . "'$ContactEmail','$ContactNumber', '$EventDate', '$Comments', NOW(), '$RecEnteredBy','Active','N')";
+                . "'$ContactEmail','$ContactNumber', '$EventDate', '$Comments', NOW(), '$RecEnteredBy','Active','N', $OperationalSupport, $PoliceServices, $VATPoliceServices)";
 
         if ($conn->exec($sql)) {
             $this->auditok = 1;
@@ -69,7 +85,7 @@ class Event {
         $result = "";
         $conn = conn();
         $stmt = $conn->prepare("SELECT `EventId`, `EventName`, `EventCost`,`CompanyId`, `CompanyName`, `ContactName`, `ContactEmail`, `ContactNumber`, "
-                . "`EventDate`, `Comments`, `RecEntered`, `RecEnteredBy`, `RecModified`, `RecModifiedBy`, `Status`,"
+                . "`EventDate`, `Comments`, `RecEntered`, `RecEnteredBy`, `RecModified`, `RecModifiedBy`, `Status`,`OperationalSupport`, `PoliceServices`, `VATPoliceServices`,"
                 . " `DelFlg` FROM `event` WHERE EventId = '$EventId' and DelFlg ='N';");
         $stmt->execute();
         $result = $stmt->fetchAll();
@@ -89,13 +105,11 @@ class Event {
 
     function UpdateEvent($EventId) {
         $conn = conn();
-
-        $sql = "UPDATE `event` SET `EventName`=" . $this->EventName . ",`ContactName`="
-                . $this->ContactName . ",`ContactEmail`=" . $this->ContactEmail . ", `ContactNumber`='"
-                . $this->ContactNumber . "', `EventDate`=" . $this->EventDate . "', `EventCost`=" . $this->EventCost
-                . ", `Comments`='" . $this->Comments . "',`RecEntered`="
-                . $this->RecEntered . ", `RecEnteredBy`=" . $this->RecEnteredBy
-                . ", `RecModified`=" . $this->RecModified . ",`RecModifiedBy`=" . $this->RecModifiedBy
+        $sql = "UPDATE `event` SET `EventName` = '$this->EventName', "
+                . "`EventDate`= '$this->EventDate', `EventCost`= '$this->EventCost' "
+                . ", `Comments`='$this->Comments' , `RecModified`= NOW() ,`RecModifiedBy`= '$this->RecModifiedBy'"
+                . ", `OperationalSupport`= '$this->OperationalSupport',`PoliceServices`= '$this->PoliceServices' "
+                . ",`VATPoliceServices`= '$this->VATPoliceServices' "
                 . " WHERE EventId ='" . $EventId . "'";
         if ($conn->exec($sql)) {
             $this->auditok = 1;

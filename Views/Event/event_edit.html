@@ -50,7 +50,7 @@
                                 xmlhttp.onreadystatechange = function () {
                                         if (this.readyState == 4 && this.status == 200) {
                                                 document.getElementById("txtHintcomp").innerHTML = this.responseText;
-                                       $('input#EventDate').datepicker({dateFormat: 'yy-mm-dd'});
+                                           $('input#EventDate').datepicker({dateFormat: 'yy-mm-dd'});
                                         }
                                 };
                         $('input#DateOfBirth').datepicker({dateFormat: 'yy-mm-dd'});
@@ -75,38 +75,76 @@
 //                        var value = $('#menu li.selected').attr('value');
 //                        alert('Selected menu value: ' + value);
 //                    });
-                    
-                $(document).on("dblclick", ".pillwrapper li", function (event) {
-
-                    var key = $(this).attr("class");
-                    var obj = this;
-                    var EventId =  $(".modal-body #EventName").val($("."+key).find('#EventName').text());
-//                    $("."+key).find('#EventName').each(function () {
-//                        alert($(this).text());
+//                    $(document).on("dblclick", ".li a", function (event) {
+//                        
+//                        alert('test');
 //                    });
-                // alert($(".modal-body #EventName").val($("."+key).find('#EventName').text()));
-                    //var elemval = key.children("#EventName").value;
-                    //var test = obj;
-                    // alert($("a." + key.toString() + "#EventName"));
-                    //alert(EventId.val());
-                    //var test = getElementsByClassName(key.toString()).document.getElementById("EventName")[0];
-                   // alert(test.value);
-                    $(".modal-body #EventName1").val($("."+key).find('#EventName').text());
-                    $(".modal-body #EventName2").val($("."+key).find('#EventCost').text());
-                    $(".modal-body #EventName3").val($("."+key).find('#EventDate').text());
-                    //$(".modal-body #Comments").val($("."+key).find('#Comments').text());
-                    $(".modal-body #EventName").val($("."+key).find('#EventName').text());
-                    $(".modal-body #EventCost").val($("."+key).find('#EventCost').text());
-                    $(".modal-body #EventDate").val($("."+key).find('#EventDate').text());
-                    $(".modal-body #Comments").val($("."+key).find('#Comments').text());
-//                    var depositamount = event.target.attributes.getNamedItem('data-depositamount').value;
-//                    var elem = document.getElementById(this.id.toString());
-//                    //alert(elem);
-//                    elem.parentNode.removeChild(elem);
-//                    RemoveInfo(key);
-//                    CalculateTotal(Number(depositamount) * -1);
+//                    $(".eventList").on('click','li',function (){
+//    alert($(this).text());
+//});
+ $(document).on("click", ".pillwrapper li", function () {
+   
+                    var key = $(this).attr("class");
 
+
+                     $(".modal-body #EventName").val($("."+key).find('#liEventName').text());
+                      $(".modal-body #EventCost").val($("."+key).find('#liEventCost').text());
+                    $(".modal-body #EventDate").val($("."+key).find('#liEventDate').text());
+                    $(".modal-body #Comments").val($("."+key).find('#liComments').text());
+                    //$(".modal-body #Comments").val($("."+key).find('#Comments').text());
+                    $(".modal-body #OperationalSupport").val($("."+key).find('#liOperationalSupport').text());
+                    $(".modal-body #PoliceServices").val($("."+key).find('#liPoliceServices').text());
+                    $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
+                    $(".modal-body #SubmitEventId").val($("."+key).find('#liEventId').text());
+        
+        var EventId = $("."+key).find('#liEventId').text();
+        var EventName = $("."+key).find('#liEventName').text();
+            var EventCosst = $("."+key).find('#liEventCost').text();
+           
+        var EventDate = $("."+key).find('#liEventDate').text();
+        var PoliceServices = $("."+key).find('#liPoliceServices').text();
+        var VATPoliceServices = $("."+key).find('#liVATPoliceServices').text();
+        var OperationalSupport = $("."+key).find('#liOperationalSupport').text();
+
+       // $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
+        
+        document.getElementById("DetailsEventName").value = EventName;
+        document.getElementById("DetailsEventDate").value = EventDate;
+        document.getElementById("DetailsEventCost").value = EventCosst;
+        document.getElementById("DetailsPoliceServices").value = PoliceServices;
+        document.getElementById("DetailsVATPoliceServices").value = VATPoliceServices;
+        document.getElementById("DetailsOperationalSupport").value = OperationalSupport;
+        
+document.getElementById("hdnEventId").value = EventId;
+document.getElementById("hdnEventName").value = EventName;
+
+document.getElementById("SubmitEventId").value = EventId;
+
+document.getElementById("divEditEvent").style.display = "";
+document.getElementById("divEventDetails").style.display = "";
+document.getElementById("formDeleteEvent").style.display = "";
                 });
+                    
+                    //$(document).on("click", "btnDelete", function () {
+//                    $("#btnDelete").click(function (e) {
+////need to add validation that all fields are there 
+////                        var oppSupportVal = document.getElementById("OperationalSupport").value;
+////                        var PoliceServices = document.getElementById("PoliceServices").value;
+//                        var hiddenEventid = document.getElementById("hdnEventId").value;
+//                        if(hiddenEventid == ""){
+//                              e.preventDefault();
+//                        alert("Please select event to delete");
+//                        }
+//                        else{ e.preventDefault();
+//                        alert("Pdelete");}
+////
+////                    try {
+////                       var oppSupportVal = document.getElementById("CompName").value;
+////                    } catch (err) {
+//                        
+//                   });
+
+
 
             });
 
@@ -197,7 +235,7 @@
                         </div>
                         <div class="col-md-9">
                             <div class="panel panel-info">
-                                  <div class="panel-heading blue"><header>Select Company for list of events</header></div>
+                                  <div class="panel-heading blue"><header>Select Company for list of active events</header></div>
                                   <div class="panel-body"> <?php
                                     include 'Views/Shared/Controls/CompanySearch/search-form.php';
                                     ?>
@@ -207,9 +245,18 @@
                                 { val_CompanyName }      <br>   
                             </div>
                         </div>
+<!--                        <form action="/event/deactivate" method="post">
+
+            <input type="hidden" name="EventId" id="hdnEventId" value="">
+            <button type="button" class="btn btn-danger btn-default pull-right col-xs-3" name="btn-delete" id="btnDelete"><strong>Delete Event</strong></button> 
+      </form>-->
                     </div>
 
                 </div>
+
+
+
+                <form method="post">
                 <div id="myModal" class="modal fade" role="dialog">
                     <div class="modal-dialog modal-lg">
                         <!--                 Modal content-->
@@ -220,24 +267,21 @@
                                   </div>
                                   <div class="modal-body">
                                 <div class="col-md-4" >
-                                                        <br>
+                                    <br>
+                                    <input type="hidden" name="EventId" id="SubmitEventId">
+
                                     <label>Police Services</label>
-                                    <input type="text"  class="form-control" id="EventName1" name="EventName" autocomplete="off" >  
+                                    <input type="text"  class="form-control" id="PoliceServices" name="PoliceServices" autocomplete="off" >  
 
                                     <label>VAT</label>
-                                    <input type="text" class="form-control"  id="EventName2" name="EventName" autocomplete="off"  >
-                                    
+                                    <input type="text" class="form-control"  id="VATPoliceServices" name="VATPoliceServices" autocomplete="off"  >
+
                                     <label>Equipment</label>
-                                    <input type="text" class="form-control"  id="EventName3" name="EventName" autocomplete="off"  >
+                                    <input type="text" class="form-control"  id="OperationalSupport" name="OperationalSupport" autocomplete="off"  >
+
+                                  
                                     
-                                                        <center id="addcontrols">                                                                                                                           
-test
-                                                        </center>
-                                                        <div class="pillwrapper" id="pillcontainer">
-                                                            <ul class="nav nav-pills nav-stacked" id="pillwrapper" >                                   
-                                                            </ul>   
-                                                        </div>
-                                                    </div>
+                                </div>
                                 <div class="col-md-4" >
                                     <label>Event Name</label>
                                     <input type="text"  class="form-control" id="EventName" name="EventName" autocomplete="off" required >  
@@ -261,7 +305,7 @@ test
 
                             <div class="modal-footer">
                                 <center>
-                                    <button type="submit" class="btn btn-default green" name="btn-update"><strong>Update Event</strong></button> 
+                                                                         <button type="submit" class="btn btn-default green" name="btn-update"><strong>Update Event</strong></button> 
                                 </center>
                                   </div> 
                                   
@@ -270,7 +314,8 @@ test
                               </div>
                     </div> 
 
-                </div>  
+                </div> 
+                    </form>
             </div>
 
 

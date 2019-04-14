@@ -69,11 +69,11 @@ class Config {
      function UpdateConfig($ItemCode) {
         $conn = conn();
     
-        $sql = "UPDATE `config` SET `ItemCode`=" . $this->ItemCode . ",`ItemName`="
-                . $this->ItemName . ", `Value`=" . $this->Value . ",`Comments`=" . $this->Comments .", `RecEntered`=" 
-                . $this->RecEntered . ", `RecEnteredBy`=" . $this->RecEnteredBy
-                . ", `RecModified`=" . $this->RecModified . ",`RecModifiedBy`=" . $this->RecModifiedBy 
-                . " WHERE ItemCode ='" . $ItemCode . "'";
+        $sql = "UPDATE `config` SET `ItemCode`= $this->ItemCode ,`ItemName`=
+                . $this->ItemName, `Value`= $this->Value,`Comments`= $this->Comments , `RecEntered`= 
+                . $this->RecEntered, `RecEnteredBy`= $this->RecEnteredBy
+                . , `RecModified`= $this->RecModified ,`RecModifiedBy`= $this->RecModifiedBy 
+                .  WHERE ItemCode ='" . $ItemCode . "'";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {

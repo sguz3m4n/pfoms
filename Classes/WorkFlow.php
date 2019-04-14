@@ -24,7 +24,7 @@ class WorkFlow {
             
 
   
-    function CreateEquipment($RoleId, $RoleName, $Comments, $RecEnteredBy) {
+    function CreateRole($RoleId, $RoleName, $Comments, $RecEnteredBy) {
 
         $conn = conn();
         $sql = "INSERT INTO `workflow` (`RoleId`, `RoleName`, `Comments`, `RecEntered`, `RecEnteredBy`,`DelFlg`)
@@ -38,7 +38,7 @@ class WorkFlow {
         $conn = NULL;
     }
     
-    function  getEquipment($RoleId){
+    function  getRole($RoleId){
          $result = "";
         $conn = conn();
         $stmt = $conn->prepare("SELECT `RoleId`, `RoleName`, `Comments`, `RecEntered`, `RecEnteredBy`, `RecModified`, `RecModifiedBy`, `DelFlg`"
@@ -52,7 +52,7 @@ class WorkFlow {
         
     }
     
-    function  RemoveEquipment($RoleId){
+    function  RemoveRole($RoleId){
        $conn = conn();
         $sql = "UPDATE `workflow` SET DelFlg='Y' WHERE RoleId='$RoleId'";
         if ($conn->exec($sql)) {
@@ -64,13 +64,13 @@ class WorkFlow {
         
     }
             
-     function UpdateEquipment($RoleId) {
+     function UpdateRole($RoleId) {
         $conn = conn();
     
-        $sql = "UPDATE `workflow` SET `RoleName`=" . $this->RoleName . ",`Comments`=" . $this->Comments .", `RecEntered`=" 
-                . $this->RecEntered . ", `RecEnteredBy`=" . $this->RecEnteredBy
-                . ", `RecModified`=" . $this->RecModified . ",`RecModifiedBy`=" . $this->RecModifiedBy 
-                . " WHERE RoleId ='" . $RoleId . "'";
+        $sql = "UPDATE `workflow` SET `RoleName`= $this->RoleName,`Comments`= $this->Comments, `RecEntered`= 
+                . $this->RecEntered, `RecEnteredBy` = $this->RecEnteredBy
+                ., `RecModified`= $this->RecModified , `RecModifiedBy`= $this->RecModifiedBy 
+                . WHERE RoleId ='" . $RoleId . "'";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {

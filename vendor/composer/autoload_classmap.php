@@ -23,6 +23,7 @@ return array(
     'Controllers\\EmployeeEditController' => $baseDir . '/Controller/Employee/Edit.php',
     'Controllers\\Error' => $baseDir . '/Controller/ErrorController.php',
     'Controllers\\EventCreateController' => $baseDir . '/Controller/Event/Create.php',
+    'Controllers\\EventDeactivateController' => $baseDir . '/Controller/Event/Delete.php',
     'Controllers\\EventEditController' => $baseDir . '/Controller/Event/Edit.php',
     'Controllers\\Homepage' => $baseDir . '/Controller/HomepageController.php',
     'Controllers\\LoggedInController' => $baseDir . '/Controller/base_template.php',

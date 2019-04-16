@@ -27,16 +27,16 @@ class CompanyDeactivateController extends PermissionController {
             $compinst = new \BarcomModel\Company();
             $audinst = new \BarcomModel\Audit();
 
-            $CompanyId = $_POST['CompanyId'];
+            $TIN= $_POST['TIN'];
             //Check to see if the record already exists            
             //If it does execute delete
-            if ($compinst->IfExists($CompanyId) === 1) {
+            if ($compinst->IfExists($TIN) === 1) {
                 //Get Id from browser interface
-                $varid = $CompanyId;
+                $varid = $TIN;
                 $compname = $_POST['CompanyName'];
                 $compinst->RecModifiedBy = $username;
 
-                $compinst->DeleteCompany($CompanyId);
+                $compinst->DeleteCompany($TIN);
                 if ($compinst->auditok == 1) {
                     $tranid = $audinst->TranId = $audinst->GenerateTimestamp('DCMP');
                     $TranDesc = 'Delete Company for ' . $varid . " Name " . $compname;

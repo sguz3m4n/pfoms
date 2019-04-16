@@ -51,7 +51,7 @@ $parishes = $model->GetParishes();
         <center>
             <h3> 
                 <span class="label label-info"><?php echo $compinst->CompanyName; ?></span>           
-                <span class="label label-info"><?php echo $compinst->CompanyId; ?></span>                
+                <span class="label label-info"><?php echo $compinst->TIN; ?></span>                
             </h3>  
         </center>
         <ul style="list-style: none">
@@ -70,7 +70,7 @@ $parishes = $model->GetParishes();
     </div> 
 </center> 
 <form action="/company/deactivate" method="post">
-    <input type="hidden" name="CompanyId" value="<?php echo $compinst->CompanyId; ?>">
+    <input type="hidden" name="TIN" value="<?php echo $compinst->TIN; ?>">
     <input type="hidden" name="CompanyName" value="<?php echo $compinst->CompanyName; ?>">
     <button type="submit" class="btn btn-danger btn-default pull-right col-xs-3" name="btn-delete"><strong>Delete Company</strong></button> 
 </form>
@@ -85,7 +85,7 @@ $parishes = $model->GetParishes();
                             <h4 class="modal-title">Company Details</h4>
                       </div>
                       <div class="modal-body">
-                    <center> <span class="label label-info">Company Id <?php echo $compinst->CompanyId; ?></span></center>
+                    <center> <span class="label label-info">TAMIS ID<?php echo $compinst->TIN; ?></span></center>
                     <div class="row center-block panel-body">
                         <div class="col-xs-8">
                             <label>Company Name</label>
@@ -95,9 +95,9 @@ $parishes = $model->GetParishes();
                             <label>Caipo ID</label>
                             <input type="text" class="form-control" name="CaipoId" value="<?php echo $compinst->CaipoId; ?>"  >
 
-                            <label>Company TIN</label>
-                            <input type="text" class="form-control" name="TIN" value="<?php echo $compinst->TIN; ?>"  >
-                            <input type="hidden" name="CompanyId" value="<?php echo $compinst->CompanyId; ?>">
+<!--                            <label>Company TIN</label>
+                            <input type="text" class="form-control" name="TIN" value="<?php echo $compinst->TIN; ?>"  >-->
+                            <input type="hidden" name="TIN" value="<?php echo $compinst->TIN; ?>">
                         </div>
                     </div>
                     <div class="row center-block panel-body">

@@ -67,7 +67,7 @@ class Company {
                 . "`AddressLine3`='$this->AddressLine3',`Parish`='$this->Parish',`PostalCode`='$this->PostalCode',`ContactName`='$this->ContactName',"
                 . "`PhoneNumber`='$this->PhoneNumber',`FaxNumber`='$this->FaxNumber',`Email`='$this->Email',`Notes`='$this->Notes',"
                 . "`CompStatus`='$this->CompStatus',`RecModified`=NOW(),`RecModifiedBy`='$this->RecModifiedBy'"
-                . " WHERE `CompanyId`='$compid' AND DelFlg='N'";
+                . " WHERE `TIN`='$compid' AND DelFlg='N'";
         //$conn = conn();
         if ($conn->exec($sql)) {
             $this->auditok = 1;
@@ -80,7 +80,7 @@ class Company {
     //Delete Company Method
     function DeleteCompany($compid) {
         $conn = conn();
-        $sql = "UPDATE company SET DelFlg='Y' WHERE CompanyId='$compid'";
+        $sql = "UPDATE company SET DelFlg='Y' WHERE TIN='$compid'";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {
@@ -92,7 +92,7 @@ class Company {
     //Check to see if company currently exists
     function IfExists($compid) {
         $conn = conn();
-        $sql = "SELECT * FROM company WHERE CompanyId='$compid'";
+        $sql = "SELECT * FROM company WHERE TIN='$compid'";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll();

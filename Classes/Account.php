@@ -15,8 +15,7 @@ class Account {
    
     public $AccountId;
     public $Name;
-    public $Type;
-    
+    public $Type;    
     public $RecEntered;
     public $RecEnteredBy;
     public $RecModified;

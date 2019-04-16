@@ -57,14 +57,14 @@ class CompanyEditController extends PermissionController {
             $audinst = new \BarcomModel\Audit();
 
             //Get Id from browser interface
-            $CompanyId = $_POST['CompanyId'];
+            $TIN= $_POST['TIN'];
 
             //Check to see if the record already exists            
             //If it does execute update
-            if ($compinst->IfExists($CompanyId) === 1) {
-                $this->CompanyId = $compid = $compinst->CompanyId = $_POST['CompanyId'];
+            if ($compinst->IfExists($TIN) === 1) {
+                $this->TIN = $compid = $compinst->TIN = $_POST['TIN'];
                 $this->CaipoId = $caipoid = $compinst->CaipoId = $_POST['CaipoId'];
-                $this->TIN = $tin = $compinst->TIN = $_POST['TIN'];
+//                $this->TIN = $tin = $compinst->TIN = $_POST['TIN'];
                 $this->CompName = $compname = $compinst->CompanyName = $_POST['CompanyName'];
                 $compinst->AddressLine1 = $_POST['AddressLine1'];
                 $compinst->AddressLine2 = $_POST['AddressLine2'];
@@ -85,7 +85,7 @@ class CompanyEditController extends PermissionController {
 
                 //if validation succeeds then commit info to database
                 if ($this->CompNameIsValid) {
-                    $compinst->EditCompany($CompanyId);
+                    $compinst->EditCompany($TIN);
 
                     if ($compinst->auditok == 1) {
                         $tranid = $audinst->TranId = $audinst->GenerateTimestamp('UCMP');

@@ -127,7 +127,7 @@
                     var vatCalc = (parseFloat(PoliceServices) * parseFloat(vatVal)).toFixed(2);
                     $("#VATPoliceServices").val(vatCalc);
                     var VATPoliceServices = document.getElementById("VATPoliceServices").value;
-                       //document.getElementById("VATPoliceServices").value = vatCalc;
+                    //document.getElementById("VATPoliceServices").value = vatCalc;
 
                     $("#receipttotal").text((parseFloat(PoliceServices) + parseFloat(VATPoliceServices) + parseFloat(oppSupportVal)).toFixed(2));
                 });
@@ -142,18 +142,18 @@
 
                 $("#btnCreateEvent").click(function (e) {
 //need to add validation that all fields are there 
-                        var oppSupportVal = document.getElementById("OperationalSupport").value;
-                        var PoliceServices = document.getElementById("PoliceServices").value;
-                        var EventDate = document.getElementById("datepicker").value;
+                    var oppSupportVal = document.getElementById("OperationalSupport").value;
+                    var PoliceServices = document.getElementById("PoliceServices").value;
+                    var EventDate = document.getElementById("datepicker").value;
 
                     try {
-                       var oppSupportVal = document.getElementById("CompName").value;
+                        var oppSupportVal = document.getElementById("CompName").value;
                     } catch (err) {
-                         e.preventDefault();
-                        alert(err.message); 
+                        e.preventDefault();
+                        alert(err.message);
                     }
 
-                    
+
 
                 });
 
@@ -324,39 +324,51 @@
                                                     </div>
                                                 </div>
                                                 <div class="row center-block">
-                                                    <div class="col-md-2"></div>
-                                                    <div class="col-md-4" >
+                                                    <div class="col-md-4" >                                                 
+                                                        <div class="row">
+                                                            <div class="col-xs-4" style="font-size: large">
+                                                                <a id="addofficer" class="btn btn-default green" data-toggle="modal" data-target="#myModal">Police Service Resource  <i class="glyphicon glyphicon-plus"></i>
+                                                                </a>
+                                                            </div>  
+                                                        </div>
                                                         <br>
-                                                        <i class="glyphicon glyphicon-usd"></i><label> Police Services</label>
-                                                        <input type="text"  class="form-control" id="PoliceServices" name="PoliceServices" autocomplete="off"  value="{ PoliceServices }" placeholder="0.00">  
-
-                                                        <i class="glyphicon glyphicon-usd"></i><label> VAT</label>
-                                                        <input type="text"  class="form-control" id="VATPoliceServices" name="VATPoliceServices" autocomplete="off"  value="{ VATPoliceServices }" placeholder="0.00" readonly>  
-
-                                                        <i class="glyphicon glyphicon-usd"></i><label> Operational Support</label>
-                                                        <input type="text"  class="form-control" id="OperationalSupport" name="OperationalSupport" autocomplete="off"  value="{ OperationalSupport }" placeholder="0.00">  
-
-
+                                                        <div class="row">
+                                                            <div class="col-xs-4" style="font-size: large">
+                                                                <a id="addofficer" class="btn btn-default green" data-toggle="modal" data-target="#myModal2">Operational Support Resource  <i class="glyphicon glyphicon-plus"></i>
+                                                                </a>
+                                                            </div>  
+                                                        </div>
                                                     </div>
                                                     <div class="col-md-4" >
                                                         <br>
+                                                        <strong>Show Pills here</strong>
+                                                        <div class="pillwrapper" id="pillcontainer">
+                                                            <ul class="nav nav-pills nav-stacked" id="pillwrapper" >                                   
+                                                            </ul>   
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4" >
+                                                        <br>
+                                                        <label>Select Division</label>
+                                                        <select class="form-control">
+                                                            { Divisions }
+                                                        </select>
                                                         <label>Event Name</label>
                                                         <input type="text"  class="form-control" id="EventName" name="EventName" autocomplete="off" required value="{ EventName }" placeholder="Enter company event">  
 
-                                                        <label>Event Date</label>
-                                                        <input type="text" class="form-control" name="EventDate" placeholder="YYYY-MM-DD" autocomplete="off"  id="datepicker" required >
+                                                        <label>Event Start Date</label>
+                                                        <input type="text" class="form-control" name="EventDateStart" placeholder="YYYY-MM-DD" autocomplete="off"  id="datepicker" required >
+                                                        <label>Event End Date</label>
+                                                        <input type="text" class="form-control" name="EventDateEnd" placeholder="YYYY-MM-DD" autocomplete="off"  id="datepicker2" required >
                                                         <script>
                                                             $(function () {
                                                                 $("#datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+                                                                $("#datepicker2").datepicker({dateFormat: 'yy-mm-dd'});
                                                             });
                                                         </script>
                                                         <div><input id="paylist" name="paylist" class="form-control" type="hidden" ></div>
-                                                        <i class="glyphicon glyphicon-usd"></i><label> Event Cost</label>
-                                                        <input type="text"  class="form-control" id="EventCost" name="EventCost" autocomplete="off" required value="{ EventCost }" placeholder="This is coming from Proforma">  
 
-
-                                                    </div>
-                                                    <div class="col-md-4" >
+                                                        <input type="hidden"  class="form-control" id="EventCost" name="EventCost"  required value="{ EventCost }" >  
 
                                                     </div> 
                                                 </div>
@@ -384,7 +396,65 @@
                                                 <button type="submit" name="btn-create" class="btn btn-default blue" id="btnCreateEvent">Create Event</button>    
                                             </center>
                                             <br>
-                                        </form>   
+                                        </form> 
+                                        <div class="modal" id="myModal">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Select Police Service Resource</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body">                                                                                                                <label><strong>Select Officer Rank</strong></label>
+                                                        <select name="RankName" class="form-control" id="BankName" style="width:auto" >
+                                                            <option>Select Rank</option>
+                                                            { RoleRates }
+                                                        </select>
+                                                        <label><strong>Resource Count</strong></label>
+                                                        <input type="number"  class="form-control" id="ResourceCount" name="ResourceCount" min="1"  required  >     
+
+                                                    </div>
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+                                                        <label id="ResourceAmount" >0</label>
+                                                        <button type="button" class="btn btn-info" id="AddAccount" data-enter="modal">Add Resources</button>
+                                                    </div>                                            
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal" id="myModal2">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Select Operational Support Resource</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body">
+
+                                                        <label><strong>Select Equipment</strong></label>
+                                                        <select name="Equipment" class="form-control" id="Equipment" style="width:auto" >
+                                                            <option>Select Equipment</option>
+                                                            { Equipment }
+                                                        </select>
+                                                        <label><strong>Resource Count</strong></label>
+                                                        <input type="number"  class="form-control" id="OPResourceCount" name="OPResourceCount" min="1"  required  > 
+
+                                                    </div>
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+                                                        <!-- <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>-->
+                                                        <button type="button" class="btn btn-info" id="AddAccount" data-enter="modal">Add Resources</button>
+                                                    </div>                                            
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
 
@@ -398,3 +468,13 @@
         { foot }
     </body>
 </html>
+<!--  <br>
+                                                                                                             <i class="glyphicon glyphicon-usd"></i><label> Police Services</label>
+                                                                                                             <input type="text"  class="form-control" id="PoliceServices" name="PoliceServices" autocomplete="off"  value="{ PoliceServices }" placeholder="0.00">  
+                                                     
+                                                                                                             <i class="glyphicon glyphicon-usd"></i><label> VAT</label>
+                                                                                                             <input type="text"  class="form-control" id="VATPoliceServices" name="VATPoliceServices" autocomplete="off"  value="{ VATPoliceServices }" placeholder="0.00" readonly>  
+                                                     
+                                                                                                             <i class="glyphicon glyphicon-usd"></i><label> Operational Support</label>
+                                                                                                             <input type="text"  class="form-control" id="OperationalSupport" name="OperationalSupport" autocomplete="off"  value="{ OperationalSupport }" placeholder="0.00">  
+-->

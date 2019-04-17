@@ -12,8 +12,10 @@ namespace Controllers;
 
 require 'Classes/Event.php';
 require 'Classes/Company.php';
+require 'Classes/Equipment.php';
 require 'Classes/Audit.php';
 require 'Classes/PreAccount.php';
+require 'Classes/Division.php';
 require 'Controller/base_template.php';
 /*
   static $EventId = "";
@@ -48,8 +50,7 @@ class EventCreateController extends PermissionController {
     private $OperationalSupport = "";
     private $PoliceServices = "";
     private $VATPoliceServices = "";
-    
-    
+
     //private $MyPaymentsRecords;
 
     function show($params) {
@@ -80,15 +81,15 @@ class EventCreateController extends PermissionController {
             //$preaccount = new \BarcomModel\PreAccount();
             $audinst = new \BarcomModel\Audit();
             //$this->MyPaymentsRecords = $pymntrecs = json_decode($_POST['paylist'], TRUE);
-
             //(isset($_POST['CompId']) ? $this->CompId = $varid = $refinst->CompanyId = $_POST['CompId'] : $this->CompId = $varid = $refinst->CompanyId = "");
 
             $eventinst->EventName = $EventName = $_POST["EventName"];
-            $eventinst->EventDate = $EventDate = $_POST["EventDate"];
+            $eventinst->EventDateStart = $EventDateStart = $_POST["EventDateStart"];  
+            $eventinst->EventDateEnd = $EventDateEnd = $_POST["EventDateEnd"];
             $eventinst->EventCost = $EventCost = $_POST["EventCost"];
             $eventinst->Comments = $Comments = $_POST["Comments"];
             $eventinst->EventId = $EventId = $_POST["EventId"];
-            
+
             $eventinst->DelFlg = $DelFlg = "N";
             $eventinst->RecEntered = $RecEntered = "";
             $eventinst->RecEnteredBy = $RecEnteredBy = $username;
@@ -102,10 +103,10 @@ class EventCreateController extends PermissionController {
             $eventinst->ContactName = $ContactName = $_POST["ContactName"];
             $eventinst->ContactNumber = $ContactNumber = $_POST["PhoneNumber"];
             $eventinst->ContactEmail = $ContactEmail = $_POST["Email"];
-            
-            
-                       
-            $eventinst->CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDate, $Comments, $RecEnteredBy, $OperationalSupport, $PoliceServices, $VATPoliceServices);
+
+
+
+            $eventinst->CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDateStart,$EventDateEnd, $Comments, $RecEnteredBy, $OperationalSupport, $PoliceServices, $VATPoliceServices);
 //            $tranid = $preaccount->GenerateTimestamp("PRE");
 //            foreach ($pymntrecs as $value) {
 //                $preaccount->AccountId = $accountid = $value[1];
@@ -128,8 +129,14 @@ class EventCreateController extends PermissionController {
         } else
         if (isset($_GET)) {
             $model = new \BarcomModel\Event();
+            $divmodel = new \BarcomModel\Division ();
+            $equipmodel = new \BarcomModel\Equipment ();
+            $divisions = $divmodel->GetDivisions();
+            $rolerates = $model->GetRoleRates();
+            $equipment = $equipmodel->GetEquipmentItems();
             //$preaccounts = $model->GetPreAccounts();
             $VAT = $model->getVat();
+            //put prefix from division drop down id here
             $EventId = $model->GenerateTimestamp("EVNT");
             $template = new MasterTemplate();
             $template->load("Views/Event/event.html");
@@ -147,8 +154,9 @@ class EventCreateController extends PermissionController {
             $template->replace("PoliceServices", "0.00");
             $template->replace("VATPoliceServices", "0.00");
             $template->replace("VATDBval", $VAT);
-            
-
+            $template->replace("Divisions", $divisions);
+            $template->replace("RoleRates", $rolerates);
+            $template->replace("Equipment", $equipment);
             $template->publish();
         }
     }

@@ -41,7 +41,7 @@ class Equipment {
         $conn = NULL;
     }
     
-    function  getEquipment($EquipmentId){
+    function  GetEquipment($EquipmentId){
          $result = "";
         $conn = conn();
         $stmt = $conn->prepare("SELECT `EquipmentId`, `ItemName`, `Category`, `UnitCost`, `UnitMeasurement`, `RecEntered`, `RecEnteredBy`, `RecModified`, `RecModifiedBy`, `DelFlg`"
@@ -80,6 +80,22 @@ class Equipment {
         } else {
             $this->auditok = 0;
         }
+        $conn = NULL;
+    }
+    
+        function GetEquipmentItems() {
+        $result = "";
+        $conn = conn();
+        $stmt = $conn->prepare("SELECT `EquipmentId`,`ItemName`,`UnitCost`,`UnitMeasurement`,`Category` FROM `equipment` ORDER BY `Category`");
+        $stmt->execute();
+        $result_array = $stmt->fetchAll();
+        foreach ($result_array as $value) {
+            $equipid = $value['EquipmentId'];
+            $unitcost = $value['UnitCost'];
+             $category = $value['Category'];
+            $result .= "<option id='$equipid' value='$unitcost' class='$category' >" . $value['ItemName'] . "</option>";
+        }
+        return $result;
         $conn = NULL;
     }
 

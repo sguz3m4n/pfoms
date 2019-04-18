@@ -1,7 +1,7 @@
 <?php
 
 namespace BarcomModel;
-
+require 'Classes/Division.php';
 /*
   Developed by Kitji Studios
   Development Team: Shayne Marshall, Frederick Masterton Chandler, Kamar Durant
@@ -10,7 +10,7 @@ namespace BarcomModel;
   2019
  */
 
-class Station {
+class Station extends Division {
 
    
     public $StationId;
@@ -23,7 +23,7 @@ class Station {
             
 
   
-    function CreateEquipment($StationId, $StationName, $RecEnteredBy) {
+    function CreateStation($StationId, $StationName, $RecEnteredBy) {
 
         $conn = conn();
         $sql = "INSERT INTO `station` (`StationId`, `StationName`, `RecEntered`, `RecEnteredBy`,`DelFlg`)
@@ -37,7 +37,7 @@ class Station {
         $conn = NULL;
     }
     
-    function  getEquipment($StationId){
+    function  GetStation($StationId){
          $result = "";
         $conn = conn();
         $stmt = $conn->prepare("SELECT `StationId`, `StationName`, `RecEntered`, `RecEnteredBy`, `RecModified`, `RecModifiedBy`, `DelFlg`"
@@ -51,7 +51,7 @@ class Station {
         
     }
     
-    function  RemoveEquipment($StationId){
+    function  RemoveStation($StationId){
        $conn = conn();
         $sql = "UPDATE `station` SET DelFlg='Y' WHERE StationId='$StationId'";
         if ($conn->exec($sql)) {
@@ -63,7 +63,7 @@ class Station {
         
     }
             
-     function UpdateEquipment($StationId) {
+     function UpdateStation($StationId) {
         $conn = conn();
     
         $sql = "UPDATE `station` SET `StationName`=" . $this->StationName .", `RecEntered`=" 
@@ -80,3 +80,4 @@ class Station {
 
     
 }
+//SELECT division.DivisionName FROM `station` station,`division` division WHERE station.DivisionId=division.DivisionId

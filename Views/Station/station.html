@@ -17,8 +17,8 @@
                                 </span>
                             </button>
                             <a class="page-logo" id="index" href="/index.php">
-                                <img src="../assets/global/img/customs logo no back.png" alt="" height="400"/>                          
-                                <img src="../assets/global/img/OVERTIME-APP-LOGO.png" alt=""/>
+                                <img src="/assets/global/img/customs logo no back.png" alt="" height="400"/>                          
+                                <img src="/assets/global/img/OVERTIME-APP-LOGO.png" alt=""/>
                             </a>
                             <div class="topbar-actions">
                                 <div class="btn-group-img btn-group">
@@ -53,7 +53,10 @@
                                     </a>      
                                 </li>
                                 <li>
-                                    <a class="text-uppercase" href="/station/edit"><i class="glyphicon glyphicon-pencil"></i>Edit Station</a>
+                                    <a class="text-uppercase" href="/adminconsole"><i class="glyphicon glyphicon-briefcase"></i>Admin Console</a>
+                                </li>
+                                <li>
+                                    <a class="text-uppercase" href="/station/edit"> <i class="glyphicon glyphicon-pencil"></i>View/Edit/Delete Station</a>
                                 </li>
                             </ul>
                         </div>                      
@@ -75,7 +78,7 @@
                                                 <span data-value="2" id="submitterstation" style="font-size: xx-large"  data-counter="counterup" class="glyphicon glyphicon-signal"> </span>
                                             </div>
                                             <br>
-                                            <div class="desc"> Active Stations </div>
+                                            <div class="desc"> Active Divisions </div>
                                         </div>
                                     </div>
                                 </div>
@@ -89,7 +92,7 @@
                                                 <span data-value="2" id="submitterstation" style="font-size: xx-large"  data-counter="counterup" class="glyphicon glyphicon-signal"> </span>
                                             </div>
                                             <br>
-                                            <div class="desc"> Zero Balances  </div>
+                                            <div class="desc"> Active Stations  </div>
                                         </div>
                                     </div>
                                 </div>
@@ -106,51 +109,70 @@
                                         <div class="tools">
                                             <a title="" class="collapse" href="javascript:;" data-original-title=""> </a>
                                         </div>
-                                    </div>
-                                    
-                                    
-                                    
+                                    </div>                                 
+
+
                                     <div class="portlet-body form">
                                         <form method="post" >
                                             <div class="form-group">
                                                 <div class="row center-block panel-body">
-                                                    
-                                                    
-                                                    
+
+
+
                                                     <div class="col-xs-4 ">
-                                                        <label>Equipment ID</label>
-                                                        <input type="text" class="form-control" name="EquipmentId" placeholder="**********" autocomplete="off" required value="{ EquipmentId }"  />
+                                                        <label>Division ID</label>
+                                                        <input type="text" class="form-control" name="StationId" placeholder="****" autocomplete="off" required value=""  />
                                                     </div>
                                                     <div class="col-xs-6">
-                                                        <label>Item Name</label>
-                                                        <input type="text" class="form-control" name="ItemName" placeholder="" autocomplete="off" required value="{ ItemName }"  />  
+                                                        <label>Division Name</label>
+                                                        <input type="text" class="form-control" name="DivisionName" placeholder="" autocomplete="off" required value=""  />  
                                                     </div>
-                                                </div> 
-                                                <div class="row center-block panel-body">
-                                                    <div class="col-xs-4 ">
-                                                        <label>Category</label>
-                                                        <input type="text" class="form-control" name="Category" placeholder="**********" autocomplete="off" required value="{ Category }"  />
-                                                    </div>
-                                                    <div class="col-xs-4">
-                                                        <label>Unit Cost</label>
-                                                        <input type="text" class="form-control" name="UnitCost" placeholder="" autocomplete="off" required value="{ UnitCost }"  />  
-                                                    </div>
-                                                    <div class="col-xs-4">
-                                                        <label>Unit Measurement</label>
-                                                        <input type="text" class="form-control" name="UnitMeasurement" placeholder="" autocomplete="off"  value="{ UnitMeasurement }" />
-                                                    </div>
-                                                </div> 
-                                                
-                                                             
                                                 </div>
                                                 <br>
-                                                <center>
-                                                    <button type="submit" class="btn btn-default blue" name="btn-create"><strong>Create Station</strong></button>                                     
-                                                </center>
-                                                <br>
-                                                <br>
+                                                <div class="row center-block panel-body">
+                                                    <div class="col-xs-4" style="font-size: large">
+                                                        <a id="addstation" class="btn btn-default green" data-toggle="modal" data-target="#myModal">Station <i class="glyphicon glyphicon-plus"></i>
+                                                        </a>
+                                                    </div>  
+                                                </div>                                               
+
                                             </div>
-                                        </form>                                       
+                                            <br>
+                                            <center>
+                                                <button type="submit" class="btn btn-default blue" name="btn-create"><strong>Create Station</strong></button>                                     
+                                            </center>
+                                            <br>
+                                            <br>
+                                            </div>
+                                        </form> 
+                                        <div class="modal" id="myModal">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Add Station Details</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body">
+                                                        <div class="col-md-6">
+                                                            <label><strong>Station Id</strong></label>
+                                                            <input type="text"  class="form-control" id="StationId" name="StationId" autocomplete="off" required value="" placeholder="xxxx">  
+                                                            <label><strong>Station Name</strong></label>
+                                                            <input type="text"  class="form-control" id="StationName" name="StationName" autocomplete="off" required value="" placeholder="">  
+
+                                                        </div>
+                                                    </div>
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+                                                        <!-- <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>-->
+                                                        <button type="button" class="btn btn-info" id="AddAccount" data-enter="modal">Assign Station</button>
+                                                    </div>                                            
+                                                </div>
+                                            </div>
+                                        </div>
                                         <br>
                                     </div>
                                 </div>

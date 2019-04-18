@@ -10,10 +10,10 @@
                 var acctid;
                 //Send the populated array to the controller
                 $("#employee").submit(function () {
-                     for (x = 0; x < accountarr.length; x++) {
+                     /*for (x = 0; x < accountarr.length; x++) {
                      
                      alert(accountarr[x][0] + accountarr[x][1]);
-                     }
+                     }*/
                     $("#accountlist").val(JSON.stringify(accountarr));
                 });
                 $(document).on("click", "#AddAccount", function () {

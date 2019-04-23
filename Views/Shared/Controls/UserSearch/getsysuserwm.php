@@ -97,7 +97,7 @@ $conn = NULL;
                         </div>
                 <div class="modal-footer">
                     <center>
-                        <button type="submit" class="btn btn-default blue" name="btn-update"><strong>Update User Profile</strong></button>
+                        <button type="submit" class="btn btn-default blue" name="btn-update"><strong>View/Edit/Delete User Profile</strong></button>
                     </center>
                           </div> 
             </div>

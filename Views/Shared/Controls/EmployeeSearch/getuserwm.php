@@ -92,7 +92,7 @@ $parishes = $model->GetParishes();
 <form action="/employee/deactivate" method="post">
     <input type="hidden" name="Natid" value="<?php echo $empinst->Natregno; ?>">
     <input type="hidden" name="Name" value="<?php echo $Name; ?>">
-    <button type="submit" class="btn btn-danger btn-default pull-right col-xs-3" name="btn-delete"><strong>Delete Officer/strong></button>
+    <button type="submit" class="btn btn-danger btn-default pull-right col-xs-3" name="btn-delete"><strong>Delete Officer</strong></button>
 </form>
 <!-- Modal --> 
 <form method="post">

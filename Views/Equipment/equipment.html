@@ -17,8 +17,8 @@
                                 </span>
                             </button>
                             <a class="page-logo" id="index" href="/index.php">
-                                <img src="../assets/global/img/customs logo no back.png" alt="" height="400"/>                          
-                                <img src="../assets/global/img/OVERTIME-APP-LOGO.png" alt=""/>
+                                <img src="/assets/global/img/customs logo no back.png" alt="" height="400"/>                          
+                                <img src="/assets/global/img/OVERTIME-APP-LOGO.png" alt=""/>
                             </a>
                             <div class="topbar-actions">
                                 <div class="btn-group-img btn-group">
@@ -52,9 +52,13 @@
                                         <i class="icon-home"></i> Home 
                                     </a>      
                                 </li>
-                                <li>
-                                    <a class="text-uppercase" href="/equipment/edit"><i class="glyphicon glyphicon-eye-open"></i>View &nbsp; <i class="glyphicon glyphicon-pencil"></i>Edit Equipment</a>
+                                 <li>
+                                    <a class="text-uppercase" href="/adminconsole"><i class="glyphicon glyphicon-briefcase"></i>Admin Console</a>
                                 </li>
+                                 <li>
+                                    <a class="text-uppercase" href="/equipment/edit"> <i class="glyphicon glyphicon-pencil"></i>View/Edit/Delete Equipment</a>
+                                </li>
+                                
                             </ul>
                         </div>                      
                     </div>                
@@ -72,10 +76,10 @@
                                         </div>
                                         <div class="details">
                                             <div class="number">
-                                                <span data-value="2" id="submittercompany" style="font-size: xx-large"  data-counter="counterup" class="glyphicon glyphicon-signal"> { actv_comp }</span>
+                                                <span data-value="2" id="submittercompany" style="font-size: xx-large"  data-counter="counterup" class="glyphicon glyphicon-signal"> </span>
                                             </div>
                                             <br>
-                                            <div class="desc"> Active Equipment </div>
+                                            <div class="desc">Equipment Inventory </div>
                                         </div>
                                     </div>
                                 </div>
@@ -86,10 +90,10 @@
                                         </div>
                                         <div class="details">
                                             <div class="number">
-                                                <span data-value="2" id="submittercompany" style="font-size: xx-large"  data-counter="counterup" class="glyphicon glyphicon-signal"> { zerobal_comp }</span>
+                                                <span data-value="2" id="submittercompany" style="font-size: xx-large"  data-counter="counterup" class="glyphicon glyphicon-signal"> </span>
                                             </div>
                                             <br>
-                                            <div class="desc"> Zero Balances  </div>
+                                            <div class="desc"> Active Categories  </div>
                                         </div>
                                     </div>
                                 </div>
@@ -113,7 +117,7 @@
                                                 <div class="row center-block panel-body">
                                                     <div class="col-xs-4 ">
                                                         <label>Equipment ID</label>
-                                                        <input type="text" class="form-control" name="EquipmentId" placeholder="**********" autocomplete="off" required value="{ EquipmentId }"  />
+                                                        <input type="text" class="form-control" name="EquipmentId" placeholder="****" autocomplete="off" required value="{ EquipmentId }"  />
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <label>Item Name</label>

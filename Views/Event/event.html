@@ -54,7 +54,182 @@
 
         <script type="text/javascript">
             $(document).ready(function () {
+                var PreAccountTotal = 0;
+                var ResourceTotal = 0;
+                var VATPoliceServices = 0;
+                var OperationalSupportTotal = 0;
+                var accountcount = 0;
+                var accountarr = [];
+                var acctid;
 
+                $('#Division').on('change', function () {
+                    //alert($('#Division :selected').attr('id'));
+                    var inputVal = $('#Division :selected').attr('id');
+                    var timestamp = new Date();
+                    var date = timestamp.getDate().toString();
+                    var month = (timestamp.getMonth() + 1).toString();
+                    var year = timestamp.getFullYear().toString();
+                    var hours = timestamp.getHours().toString();
+                    var minutes = timestamp.getMinutes().toString();
+                    var seconds = timestamp.getSeconds().toString();
+
+                    var eventid = inputVal + year + month + date + hours + minutes + seconds;// + hours  
+                    //alert(test);
+                    $('#lblEventRef').text(eventid);
+                    $('#EventId').val(eventid);
+                });
+
+                $('#Equipment').on('change', function () {
+                    var inputVal = 0;
+                    inputVal = $('#Equipment :selected').attr('value');
+                    inputVal = parseFloat(inputVal).toFixed(2);
+                    var count = $('#OPResourceCount').val();
+                    if (count !== '')
+                    {
+                        var total = count * (inputVal);
+                        $('#EquipmentAmount').text(total.toFixed(2));
+                    } else
+                    {
+                        $('#EquipmentAmount').text(0);
+                    }
+                });
+
+                $('#OPResourceCount').on('change', function () {
+                    var count = $('#OPResourceCount').val();
+                    var inputVal = $('#Equipment :selected').attr('value');
+                    if (inputVal !== '' && count !== '')
+                    {
+                        var total = count * (inputVal);
+                        $('#EquipmentAmount').text(total.toFixed(2));
+                    } else
+                    {
+                        $('#EquipmentAmount').text(0);
+                    }
+                });
+
+                $('#AddEquipment').on('click', function () {
+                    //alert("hello");
+                    var acctrec = [];
+                    var inputVal = $('#Equipment :selected').text();
+                    var equipcount = $('#OPResourceCount').val();
+                    OperationalSupportTotal = $('#EquipmentAmount').text();
+                    var pillcontainer = document.getElementById('pillcontainer');
+                    var pillwrapper = document.getElementById('pillwrapper');
+
+                    //create instance of list elements
+                    var pill = document.createElement("li");
+                    pill.setAttribute("id", "preaccount" + accountcount);
+
+                    var removeicon = document.createElement("span");
+                    removeicon.setAttribute("class", "glyphicon glyphicon-minus");
+
+                    //dynamically create functions
+                    var pillanchor = document.createElement("a");
+                    pillanchor.setAttribute("data-preactotal", OperationalSupportTotal);
+                    pillanchor.setAttribute("style", "bold");
+                    pillanchor.appendChild(document.createTextNode("Resource- " + inputVal + " x " + equipcount + ": $" + OperationalSupportTotal));
+
+                    pillanchor.appendChild(removeicon);
+
+                    pill.appendChild(pillanchor);
+                    pillwrapper.appendChild(pill);
+                    pillcontainer.appendChild(pillwrapper);
+                    PreAccountTotal = parseFloat(PreAccountTotal) + parseFloat(OperationalSupportTotal);
+                    $("#eventcost").text(PreAccountTotal.toFixed(2));
+                    $("#preaccttotal").text(PreAccountTotal.toFixed(2));
+                    acctrec.push("preaccount" + accountcount);
+                    // acctrec.push(acctid);
+                    acctrec.push(OperationalSupportTotal);
+                    // acctrec.push(document.getElementById("AccountNumber").value);
+                    accountarr.push(acctrec);
+                    //alert(acctrec[3]);
+                    //CalculateTotal(Number(depositvalue));
+                    accountcount++;
+
+                });
+
+                $('#Rank').on('change', function () {
+                    var inputVal = 0;
+                    inputVal = $('#Rank :selected').attr('value');
+                    inputVal = parseFloat(inputVal).toFixed(2);
+                    var count = $('#ResourceCount').val();
+                    if (count !== '')
+                    {
+                        var total = count * (inputVal);
+                        $('#ResourceAmount').text(total.toFixed(2));
+                    } else
+                    {
+                        $('#ResourceAmount').text(0);
+                    }
+                    var vatVal = document.getElementById("VATDBval").value;
+                    var vatCalc = (total * parseFloat(vatVal)).toFixed(2); 
+                    //VATPoliceServices = 
+                   $("#VATPoliceServices").val(vatCalc);
+                    //var VATPoliceServices = document.getElementById("VATPoliceServices").value;
+                });
+
+                $('#ResourceCount').on('change', function () {
+                    var count = $('#ResourceCount').val();
+                    var inputVal = $('#Rank :selected').attr('value');
+                    if (inputVal !== '' && count !== '')
+                    {
+                        var total = count * (inputVal);
+                        $('#ResourceAmount').text(total.toFixed(2));
+                    } else
+                    {
+                        $('#ResourceAmount').text(0);
+                    }
+                });
+
+                $('#AddResource').on('click', function () {
+                    //alert("hello");
+                    var acctrec = [];
+                    var inputVal = $('#Rank :selected').text();
+                    var rankcount = $('#ResourceCount').val();
+                    ResourceTotal = $('#ResourceAmount').text();
+                    var pillcontainer = document.getElementById('pillcontainer');
+                    var pillwrapper = document.getElementById('pillwrapper');
+
+                    //create instance of list elements
+                    var pill = document.createElement("li");
+                    pill.setAttribute("id", "preaccount" + accountcount);
+
+                    var removeicon = document.createElement("span");
+                    removeicon.setAttribute("class", "glyphicon glyphicon-minus");
+
+                    //dynamically create functions
+                    var pillanchor = document.createElement("a");
+                    pillanchor.setAttribute("data-preactotal", ResourceTotal);
+                    pillanchor.setAttribute("style", "bold");
+                    pillanchor.appendChild(document.createTextNode("Rank- " + inputVal + " x " + rankcount + ": $" + ResourceTotal));
+
+                    pillanchor.appendChild(removeicon);
+
+                    pill.appendChild(pillanchor);
+                    pillwrapper.appendChild(pill);
+                    pillcontainer.appendChild(pillwrapper);
+                    PreAccountTotal = parseFloat(PreAccountTotal) + parseFloat(ResourceTotal);
+                    $("#eventcost").text(PreAccountTotal.toFixed(2));
+
+                    acctrec.push("preaccount" + accountcount);
+                    //acctrec.push(acctid);
+                    acctrec.push(ResourceTotal);
+                    // acctrec.push(document.getElementById("AccountNumber").value);
+                    accountarr.push(acctrec);
+                    //alert(acctrec[3]);
+                    //CalculateTotal(Number(depositvalue));
+                    accountcount++;
+
+                });
+
+                $(document).on("dblclick", ".pillwrapper li", function (event) {
+
+                    var key = this.id.toString();
+                    var elem = document.getElementById(this.id.toString());
+                    elem.parentNode.removeChild(elem);
+                    RemoveInfo(key);
+
+                });
 
                 $('.search-boxcomp input[type="text"]').on("keyup input", function () {
                     /* Get input value on change */
@@ -62,7 +237,6 @@
                     var resultDropdown = $(this).siblings(".resultcomp");
                     var isnum = /[0-9]/;
                     var isalpha = /[a-zA-Z]/;
-
                     if (inputVal.length) {
                         if (isalpha.test(inputVal))
                         {
@@ -83,14 +257,11 @@
                         resultDropdown.empty();
                     }
                 });
-
                 // Set search input value on click of result item
                 $(document).on("click", ".resultcomp p", function () {
                     $(this).parents(".search-boxcomp").find('input[type="text"]').val($(this).text());
                     $test = document.getElementById('searchcomp').value;
                     $type = 'REF';
-
-
                     if ($test == "") {
                                 document.getElementById("txtHintcomp").innerHTML = "";
                                 return;
@@ -117,49 +288,51 @@
                     //alert('test');
                 });
 
-                $("#OperationalSupport, #PoliceServices").blur(function () {
-//need to add validation that it is a number
-
-                    var oppSupportVal = document.getElementById("OperationalSupport").value;
-                    var PoliceServices = document.getElementById("PoliceServices").value;
-
-                    var vatVal = document.getElementById("VATDBval").value;
-                    var vatCalc = (parseFloat(PoliceServices) * parseFloat(vatVal)).toFixed(2);
-                    $("#VATPoliceServices").val(vatCalc);
-                    var VATPoliceServices = document.getElementById("VATPoliceServices").value;
-                       //document.getElementById("VATPoliceServices").value = vatCalc;
-
-                    $("#receipttotal").text((parseFloat(PoliceServices) + parseFloat(VATPoliceServices) + parseFloat(oppSupportVal)).toFixed(2));
-                });
-
                 $("#EventCost").blur(function () {
 //need to add validation that it is a number
                     var CostOfEvent = document.getElementById("EventCost").value;
-
-
                     $("#eventcost").text(parseFloat(CostOfEvent).toFixed(2));
                 });
 
                 $("#btnCreateEvent").click(function (e) {
 //need to add validation that all fields are there 
-                        var oppSupportVal = document.getElementById("OperationalSupport").value;
-                        var PoliceServices = document.getElementById("PoliceServices").value;
-                        var EventDate = document.getElementById("datepicker").value;
-
+                    var oppSupportVal = document.getElementById("OperationalSupport").value;
+                    var PoliceServices = document.getElementById("PoliceServices").value;
+                    var EventDate = document.getElementById("datepicker").value;
                     try {
-                       var oppSupportVal = document.getElementById("CompName").value;
+                        var oppSupportVal = document.getElementById("CompName").value;
                     } catch (err) {
-                         e.preventDefault();
-                        alert(err.message); 
+                        e.preventDefault();
+                        alert(err.message);
                     }
 
-                    
+
 
                 });
 
+                function RemoveInfo(key) {
+                    var indextoremove;
+
+                    for (i = 0; i < accountarr.length; i++) {
+                        // alert(accountarr[i][0]);
+
+                        if (accountarr[i][0] === key)
+                        {
+                            //alert(accountarr[i][1]);
+                            PreAccountTotal = PreAccountTotal - parseFloat(accountarr[i][1]);
+                            indextoremove = i;
+                        }
+                    }
+                    accountarr.splice(indextoremove, 1);
+                    $("#eventcost").text(PreAccountTotal.toFixed(2));
+                    /* for (x = 0; x < accountarr.length; x++) {
+                     
+                     alert(accountarr[x][0] + accountarr[x][1]);
+                     }*/
+                    //alert(accountarr);
+                }
+
             });
-
-
         </script>
         <script>
             function ShowSummary() {
@@ -255,9 +428,23 @@
                                         </div>
                                         <div class="details">
                                             <div class="number">
-                                                <span class="glyphicon glyphicon-usd"></span><span  id="receipttotal" style="font-size: xx-large" ></span>
+                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="policeservicestotal" style="font-size: xx-large" >1</span>
+                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="VATPoliceServices" style="font-size: xx-large" >1</span>
                                             </div>
-                                            <div class="desc"> Pre Account Total </div>
+                                            <div class="desc"> Police Services Total </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="dashboard-stat dashboard-stat-v2 yellow" >
+                                        <div class="visual">
+                                            <i class="fa fa-comments"></i>
+                                        </div>
+                                        <div class="details">
+                                            <div class="number">
+                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="opsupporttotal" style="font-size: xx-large" >1</span>
+                                            </div>
+                                            <div class="desc"> Op Support Total </div>
                                         </div>
                                     </div>
                                 </div>
@@ -297,7 +484,7 @@
                                 <div class="panel panel-info" >
                                     <div class="panel-heading">
                                         <center>
-                                            <h3><label id="lblEventRef" class="label label-info">{ EventId }</label>&nbsp;&nbsp; &nbsp;<label id="lblEventFormNum" style="display:none" class="label label-info" ></label></h3>
+                                            <h3><label id="lblEventRef" class="label label-info"></label>&nbsp;&nbsp; &nbsp;<label id="lblEventFormNum" style="display:none" class="label label-info" ></label></h3>
                                         </center>
                                     </div>
                                 </div>
@@ -324,39 +511,52 @@
                                                     </div>
                                                 </div>
                                                 <div class="row center-block">
-                                                    <div class="col-md-2"></div>
-                                                    <div class="col-md-4" >
+                                                    <div class="col-md-3" >                                                 
+                                                        <div class="row">
+                                                            <div class="col-xs-4" style="font-size: large">
+                                                                <a id="addrank" class="btn btn-default green" data-toggle="modal" data-target="#myModal">Police Services <i class="glyphicon glyphicon-plus"></i>
+                                                                </a>
+                                                            </div>  
+                                                        </div>
                                                         <br>
-                                                        <i class="glyphicon glyphicon-usd"></i><label> Police Services</label>
-                                                        <input type="text"  class="form-control" id="PoliceServices" name="PoliceServices" autocomplete="off"  value="{ PoliceServices }" placeholder="0.00">  
+                                                        <div class="row">
+                                                            <div class="col-xs-4" style="font-size: large">
+                                                                <a id="addopsupport" class="btn btn-default green" data-toggle="modal" data-target="#myModal2">Operational Support <i class="glyphicon glyphicon-plus"></i>
+                                                                </a>
+                                                            </div>  
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5" >
+                                                        <br>
 
-                                                        <i class="glyphicon glyphicon-usd"></i><label> VAT</label>
-                                                        <input type="text"  class="form-control" id="VATPoliceServices" name="VATPoliceServices" autocomplete="off"  value="{ VATPoliceServices }" placeholder="0.00" readonly>  
-
-                                                        <i class="glyphicon glyphicon-usd"></i><label> Operational Support</label>
-                                                        <input type="text"  class="form-control" id="OperationalSupport" name="OperationalSupport" autocomplete="off"  value="{ OperationalSupport }" placeholder="0.00">  
-
-
+                                                        <div class="pillwrapper" id="pillcontainer">
+                                                            <ul class="nav nav-pills nav-stacked" id="pillwrapper" >                                   
+                                                            </ul>   
+                                                        </div>
                                                     </div>
                                                     <div class="col-md-4" >
                                                         <br>
+                                                        <label>Select Division</label>
+                                                        <select class="form-control" id="Division">
+
+                                                            { Divisions }
+                                                        </select>
                                                         <label>Event Name</label>
                                                         <input type="text"  class="form-control" id="EventName" name="EventName" autocomplete="off" required value="{ EventName }" placeholder="Enter company event">  
 
-                                                        <label>Event Date</label>
-                                                        <input type="text" class="form-control" name="EventDate" placeholder="YYYY-MM-DD" autocomplete="off"  id="datepicker" required >
+                                                        <label>Event Start Date</label>
+                                                        <input type="text" class="form-control" name="EventDateStart" placeholder="YYYY-MM-DD" autocomplete="off"  id="datepicker" required >
+                                                        <label>Event End Date</label>
+                                                        <input type="text" class="form-control" name="EventDateEnd" placeholder="YYYY-MM-DD" autocomplete="off"  id="datepicker2" required >
                                                         <script>
                                                             $(function () {
                                                                 $("#datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+                                                                $("#datepicker2").datepicker({dateFormat: 'yy-mm-dd'});
                                                             });
                                                         </script>
                                                         <div><input id="paylist" name="paylist" class="form-control" type="hidden" ></div>
-                                                        <i class="glyphicon glyphicon-usd"></i><label> Event Cost</label>
-                                                        <input type="text"  class="form-control" id="EventCost" name="EventCost" autocomplete="off" required value="{ EventCost }" placeholder="This is coming from Proforma">  
 
-
-                                                    </div>
-                                                    <div class="col-md-4" >
+                                                        <input type="hidden"  class="form-control" id="EventCost" name="EventCost"  required value="{ EventCost }" >  
 
                                                     </div> 
                                                 </div>
@@ -374,7 +574,7 @@
                                                 </div>
                                                 <div class="col-md-3" >
 
-                                                    <input type="hidden" class="form-control" id="EventId" name="EventId" value="{ EventId }" >
+                                                    <input type="hidden" class="form-control" id="EventId" name="EventId"  >
                                                     <input type="hidden" class="form-control" id="VATDBval" name="VATDBval" value="{ VATDBval }" >
 
                                                 </div>
@@ -384,7 +584,66 @@
                                                 <button type="submit" name="btn-create" class="btn btn-default blue" id="btnCreateEvent">Create Event</button>    
                                             </center>
                                             <br>
-                                        </form>   
+                                        </form> 
+                                        <div class="modal" id="myModal">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Select Police Service Resource</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body">                                                                                                               
+                                                        <label><strong>Select Officer Rank</strong></label>
+                                                        <select name="Rank" class="form-control" id="Rank" style="width:auto" >
+                                                            <option>Select Rank</option>
+                                                            { RoleRates }
+                                                        </select>
+                                                        <label><strong>Resource Count</strong></label>
+                                                        <input type="number"  class="form-control" id="ResourceCount" name="ResourceCount" min="1"  required  >     
+
+                                                    </div>
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+                                                        <label id="ResourceAmount" >0</label>
+                                                        <button type="button" class="btn btn-info" id="AddResource" data-enter="modal">Add Resources</button>
+                                                    </div>                                            
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal" id="myModal2">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Select Operational Support Resource</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body">
+
+                                                        <label><strong>Select Equipment</strong></label>
+                                                        <select name="Equipment" class="form-control" id="Equipment" style="width:auto" >
+                                                            <option>Select Equipment</option>
+                                                            { Equipment }
+                                                        </select>
+                                                        <label><strong>Resource Count</strong></label>
+                                                        <input type="number"  class="form-control" id="OPResourceCount" name="OPResourceCount" min="1"  required  > 
+
+                                                    </div>
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+                                                        <label id="EquipmentAmount" >0</label>
+                                                        <button type="button" class="btn btn-info" id="AddEquipment" data-enter="modal">Add Op Support</button>
+                                                    </div>                                            
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
 
@@ -398,3 +657,13 @@
         { foot }
     </body>
 </html>
+<!--  <br>
+                                                                                                             <i class="glyphicon glyphicon-usd"></i><label> Police Services</label>
+                                                                                                             <input type="text"  class="form-control" id="PoliceServices" name="PoliceServices" autocomplete="off"  value="{ PoliceServices }" placeholder="0.00">  
+                                                     
+                                                                                                             <i class="glyphicon glyphicon-usd"></i><label> VAT</label>
+                                                                                                             <input type="text"  class="form-control" id="VATPoliceServices" name="VATPoliceServices" autocomplete="off"  value="{ VATPoliceServices }" placeholder="0.00" readonly>  
+                                                     
+                                                                                                             <i class="glyphicon glyphicon-usd"></i><label> Operational Support</label>
+                                                                                                             <input type="text"  class="form-control" id="OperationalSupport" name="OperationalSupport" autocomplete="off"  value="{ OperationalSupport }" placeholder="0.00">  
+-->

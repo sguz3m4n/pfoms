@@ -20,7 +20,8 @@ class Event {
     public $ContactName;
     public $ContactNumber;
     public $ContactEmail;
-    public $EventDate;
+    public $EventDateStart;
+        public $EventDateEnd;
     public $Comments;
     public $RecEntered;
     public $RecEnteredBy;
@@ -46,6 +47,23 @@ class Event {
         $conn = NULL;
     }
 
+//    
+    function GetRoleRates() {
+        $result = "";
+        $conn = conn();
+        $stmt = $conn->prepare("SELECT rates.RateCode,roles.rolename,rates.RateAmount FROM paymentrates rates , employeeroles roles WHERE"
+                . " rates.RateCode=roles.RateCode;");
+        $stmt->execute();
+        $result_array = $stmt->fetchAll();
+        foreach ($result_array as $value) {
+            $ratecode = $value['RateCode'];
+            $rateamount = $value['RateAmount'];
+            $result .= "<option id='$ratecode' value='$rateamount' >" . $value['rolename'] . "</option>";
+        }
+        return $result;
+        $conn = NULL;
+    }
+
     function GetVat() {
         $result = "";
         $conn = conn();
@@ -53,7 +71,7 @@ class Event {
         $stmt->execute();
         $result = $stmt->fetchAll();
         //    $result = "0.1750";
-       foreach ($result as $value) {
+        foreach ($result as $value) {
             $ItemValue = $value['ItemValue'];
         }
         return $ItemValue;
@@ -66,13 +84,13 @@ class Event {
         return $varschema . $vardatestamp;
     }
 
-    function CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDate, $Comments, $RecEnteredBy, $OperationalSupport, $PoliceServices, $VATPoliceServices) {
+    function CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDateStart,$EventDateEnd, $Comments, $RecEnteredBy, $OperationalSupport, $PoliceServices, $VATPoliceServices) {
 
         $conn = conn();
         $sql = "INSERT INTO `event` (`EventId`, `EventName`,`EventCost`, `CompanyId`, `CompanyName`, `ContactName`, 
-    `ContactEmail`,`ContactNumber`, `EventDate`, `Comments`, `RecEntered`, `RecEnteredBy`, `Status`, `DelFlg`, `OperationalSupport`, `PoliceServices`, `VATPoliceServices`)
+    `ContactEmail`,`ContactNumber`, `EventDateStart`, `EventDateEnd`, `Comments`, `RecEntered`, `RecEnteredBy`, `Status`, `DelFlg`, `OperationalSupport`, `PoliceServices`, `VATPoliceServices`)
             VALUES ('$EventId', '$EventName', '$EventCost', '$CompanyId', '$CompanyName', '$ContactName',"
-                . "'$ContactEmail','$ContactNumber', '$EventDate', '$Comments', NOW(), '$RecEnteredBy','Active','N', $OperationalSupport, $PoliceServices, $VATPoliceServices)";
+                . "'$ContactEmail','$ContactNumber', '$EventDateStart','$EventDateEnd', '$Comments', NOW(), '$RecEnteredBy','Active','N', $OperationalSupport, $PoliceServices, $VATPoliceServices)";
 
         if ($conn->exec($sql)) {
             $this->auditok = 1;
@@ -81,7 +99,7 @@ class Event {
         }
     }
 
-    function getEvent($EventId) {
+    function GetEvent($EventId) {
         $result = "";
         $conn = conn();
         $stmt = $conn->prepare("SELECT `EventId`, `EventName`, `EventCost`,`CompanyId`, `CompanyName`, `ContactName`, `ContactEmail`, `ContactNumber`, "

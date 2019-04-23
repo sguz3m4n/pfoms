@@ -15,8 +15,7 @@ class Account {
    
     public $AccountId;
     public $Name;
-    public $Type;
-    
+    public $Type;    
     public $RecEntered;
     public $RecEnteredBy;
     public $RecModified;
@@ -25,11 +24,11 @@ class Account {
             
 
   
-    function CreateAccount($AccountId, $Name, $Type, $RecEntered, $RecEnteredBy,$DelFlg) {
+    function CreateAccount($AccountId, $Name, $Type,$username) {
 
         $conn = conn();
-        $sql = "INSERT INTO `account` (`AccountId`, `Name`, `Type`, `RecEntered`, `RecEnteredBy`,`DelFlg`)
-            VALUES ('$AccountId', '$Name', '$Type', NOW(), '$RecEnteredBy','N')";
+        $sql = "INSERT INTO `account` (`AccountId`, `AccountName`, `Type`, `RecEntered`, `RecEnteredBy`,`DelFlg`)
+            VALUES ('$AccountId', '$Name', '$Type', NOW(), '$username','N')";
 
         if ($conn->exec($sql)) {
             $this->auditok = 1;

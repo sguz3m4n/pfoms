@@ -190,7 +190,7 @@ class Homepage extends LoggedInController {
             $this->menu = $this->menu . $billitem;
         }
 
-        if (in_array($role, $PRNGenerate)) {
+       /* if (in_array($role, $PRNGenerate)) {
             $prnitem = '<li>
                                     <a class="text-uppercase" href="/disburseprn">Generate PRN</a>
                                 </li> '
@@ -205,7 +205,7 @@ class Homepage extends LoggedInController {
                                 </li>'
             ;
             $this->menu = $this->menu . $prnitem;
-        }
+        }*/
         $template->replace('datamanager', $this->datamanager);
         $template->replace('companymenu', $this->companymenu);
         $template->replace('employeemenu', $this->employeemenu);

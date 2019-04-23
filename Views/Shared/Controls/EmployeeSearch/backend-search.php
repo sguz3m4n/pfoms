@@ -6,13 +6,18 @@ include '../../../../dbconfig.php';
   server with default setting (user 'root' with no password) */
 //$link = mysqli_connect("localhost", "root", "", "demo");
 $type = $_GET['type'];
-$table = $_GET['table'];
 $conn = conn();
 
-if (isset($_REQUEST['term']) && isset($_REQUEST['table'])) {
-    
-    $sql = "SELECT * FROM {$table} WHERE {$type} LIKE ? AND DelFlg='N'";
-    
+if (isset($_REQUEST['term'])) {
+    // Prepare a select statement
+    //$sql = "SELECT CONCAT_WS(' ',FirstName,LastName) FROM employee WHERE FirstName LIKE ?";
+    if ($type == 'name') {
+        $sql = "SELECT * FROM employee WHERE FirstName LIKE ? AND DelFlg='N'";
+    } else
+    if ($type == 'natregno') {
+        $sql = "SELECT * FROM employee WHERE Natregno LIKE ? AND DelFlg='N'";
+    }
+
     if ($stmt = $conn->prepare($sql)) {
         // Bind variables to the prepared statement as parameters
         // Set parameters

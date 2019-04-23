@@ -13,6 +13,7 @@ $result->execute();
 $empinst = new BarcomModel\Employee();
 //$result = mysqli_query($conn, $sql);
 //while ($row = mysqli_fetch_array($result)) 
+
 foreach ($result as $value) {
     $empinst->Natregno = $value['Natregno'];
     $empinst->TIN = $value['TIN'];

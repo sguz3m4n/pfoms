@@ -55,8 +55,12 @@
         <script type="text/javascript">
             $(document).ready(function () {
                 var PreAccountTotal = 0;
+
+                var preaccountOS = 0;
+                var preaccountPS = 0;
+                var preaccountVAT = 0;
+
                 var ResourceTotal = 0;
-                var VATPoliceServices = 0;
                 var OperationalSupportTotal = 0;
                 var accountcount = 0;
                 var accountarr = [];
@@ -74,9 +78,11 @@
                     var seconds = timestamp.getSeconds().toString();
 
                     var eventid = inputVal + year + month + date + hours + minutes + seconds;// + hours  
+                            // var divId = eventid.substring(0, 4);
                     //alert(test);
                     $('#lblEventRef').text(eventid);
-                    $('#EventId').val(eventid);
+                   // $('#EventId').val(eventid);
+                   
                 });
 
                 $('#Equipment').on('change', function () {
@@ -135,11 +141,16 @@
                     pillwrapper.appendChild(pill);
                     pillcontainer.appendChild(pillwrapper);
                     PreAccountTotal = parseFloat(PreAccountTotal) + parseFloat(OperationalSupportTotal);
+                    preaccountOS = parseFloat(preaccountOS) + parseFloat(OperationalSupportTotal);
+                    $("#opsupporttotal").text(preaccountOS.toFixed(2));
                     $("#eventcost").text(PreAccountTotal.toFixed(2));
+
                     $("#preaccttotal").text(PreAccountTotal.toFixed(2));
                     acctrec.push("preaccount" + accountcount);
                     // acctrec.push(acctid);
                     acctrec.push(OperationalSupportTotal);
+                    acctrec.push(inputVal);
+                    acctrec.push(equipcount);
                     // acctrec.push(document.getElementById("AccountNumber").value);
                     accountarr.push(acctrec);
                     //alert(acctrec[3]);
@@ -162,9 +173,9 @@
                         $('#ResourceAmount').text(0);
                     }
                     var vatVal = document.getElementById("VATDBval").value;
-                    var vatCalc = (total * parseFloat(vatVal)).toFixed(2); 
+                    var vatCalc = (total * parseFloat(vatVal)).toFixed(2);
                     //VATPoliceServices = 
-                   $("#VATPoliceServices").val(vatCalc);
+                    //$("#VATPoliceServices").val(vatCalc);
                     //var VATPoliceServices = document.getElementById("VATPoliceServices").value;
                 });
 
@@ -208,12 +219,23 @@
                     pill.appendChild(pillanchor);
                     pillwrapper.appendChild(pill);
                     pillcontainer.appendChild(pillwrapper);
-                    PreAccountTotal = parseFloat(PreAccountTotal) + parseFloat(ResourceTotal);
-                    $("#eventcost").text(PreAccountTotal.toFixed(2));
 
+                    preaccountPS = parseFloat(preaccountPS) + parseFloat(ResourceTotal);
+
+                    $("#policeservicestotal").text(preaccountPS.toFixed(2));
+
+                    var vatVal = document.getElementById("VATDBval").value;
+                    var vatCalc = (parseFloat(ResourceTotal) * parseFloat(vatVal)).toFixed(2);
+                    preaccountVAT = parseFloat(preaccountVAT) + parseFloat(vatCalc);
+                    PreAccountTotal = parseFloat(PreAccountTotal) + parseFloat(ResourceTotal) + parseFloat(preaccountVAT);
+                    $("#eventcost").text(PreAccountTotal.toFixed(2));
+                    $("#VATPoliceServices").text(preaccountVAT.toFixed(2));
                     acctrec.push("preaccount" + accountcount);
                     //acctrec.push(acctid);
                     acctrec.push(ResourceTotal);
+                     acctrec.push(inputVal);
+                     acctrec.push(rankcount);
+                     acctrec.push(rankcount);
                     // acctrec.push(document.getElementById("AccountNumber").value);
                     accountarr.push(acctrec);
                     //alert(acctrec[3]);
@@ -226,8 +248,16 @@
 
                     var key = this.id.toString();
                     var elem = document.getElementById(this.id.toString());
+
+                    var preAccountValToDelete = 'OS';
+                    var accountType = elem.innerText;
+                    accountType = accountType.substring(0, 4);
+                    if (accountType == 'Rank')
+                    {
+                        preAccountValToDelete = 'PS'
+                    }
                     elem.parentNode.removeChild(elem);
-                    RemoveInfo(key);
+                    RemoveInfo(key, preAccountValToDelete);
 
                 });
 
@@ -288,29 +318,44 @@
                     //alert('test');
                 });
 
-                $("#EventCost").blur(function () {
-//need to add validation that it is a number
-                    var CostOfEvent = document.getElementById("EventCost").value;
-                    $("#eventcost").text(parseFloat(CostOfEvent).toFixed(2));
-                });
+//                $("#EventCost").blur(function () {
+////need to add validation that it is a number
+//                    var CostOfEvent = document.getElementById("EventCost").value;
+//                    $("#eventcost").text(parseFloat(CostOfEvent).toFixed(2));
+//                });
 
                 $("#btnCreateEvent").click(function (e) {
 //need to add validation that all fields are there 
-                    var oppSupportVal = document.getElementById("OperationalSupport").value;
-                    var PoliceServices = document.getElementById("PoliceServices").value;
-                    var EventDate = document.getElementById("datepicker").value;
-                    try {
-                        var oppSupportVal = document.getElementById("CompName").value;
-                    } catch (err) {
-                        e.preventDefault();
-                        alert(err.message);
-                    }
+                    $("#hdnEventCost").val(PreAccountTotal.toFixed(2));
+                    $("#hdnOperationalSupport").val(preaccountOS.toFixed(2));
+                    $("#hdnPoliceServices").val(preaccountPS.toFixed(2));
+                    $("#hdnVATPoliceServices").val(preaccountVAT.toFixed(2));
+ 
+ var divid = document.getElementById("lblEventRef").innerHTML;
+//  var compname = document.getElementById('searchcomp').value;
+//             $('#hdnCompanyName').val(compname);       
+ // var divid = document.getElementById("EventId").value;
+ $('#hdnDivisionId').val(divid.substring(0, 4));
+// $('#lblEventRef').text(eventid);
+                   $('#EventId').val(divid);
+ // var subaccounts = document.getElementById("pillwrapper")
+                                          //for (i = 0; i < accountarr.length; i++) {
+                           $('#hdnAsset').val(JSON.stringify(accountarr));
+
+                                          //}
+//                    var EventDate = document.getElementById("datepicker").value;
+//                    try {
+//                        var oppSupportVal = document.getElementById("CompName").value;
+//                    } catch (err) {
+    //                    e.preventDefault();
+                        //alert(test);
+//                    }
 
 
 
                 });
 
-                function RemoveInfo(key) {
+                function RemoveInfo(key, accountToDelete) {
                     var indextoremove;
 
                     for (i = 0; i < accountarr.length; i++) {
@@ -319,17 +364,35 @@
                         if (accountarr[i][0] === key)
                         {
                             //alert(accountarr[i][1]);
-                            PreAccountTotal = PreAccountTotal - parseFloat(accountarr[i][1]);
+
+                            if (accountToDelete == "OS")
+                            {
+                                preaccountOS = preaccountOS - parseFloat(accountarr[i][1]);
+                                $("#opsupporttotal").text(preaccountOS.toFixed(2));
+                                PreAccountTotal = PreAccountTotal - parseFloat(accountarr[i][1]);
+                            } else
+                            {
+                                preaccountPS = preaccountPS - parseFloat(accountarr[i][1]);
+                                var vatVal = document.getElementById("VATDBval").value;
+
+                                preaccountVAT = preaccountVAT - (parseFloat(accountarr[i][1]) * parseFloat(vatVal)).toFixed(2);
+                                $("#policeservicestotal").text(preaccountPS.toFixed(2));
+                                $("#VATPoliceServices").text(preaccountVAT.toFixed(2));
+                                PreAccountTotal = PreAccountTotal - parseFloat(accountarr[i][1]) - (parseFloat(accountarr[i][1]) * parseFloat(vatVal)).toFixed(2);
+                            }
+
                             indextoremove = i;
+
                         }
                     }
                     accountarr.splice(indextoremove, 1);
                     $("#eventcost").text(PreAccountTotal.toFixed(2));
+
                     /* for (x = 0; x < accountarr.length; x++) {
                      
                      alert(accountarr[x][0] + accountarr[x][1]);
                      }*/
-                    //alert(accountarr);
+                    //alert(            accountarr);
                 }
 
             });
@@ -428,8 +491,8 @@
                                         </div>
                                         <div class="details">
                                             <div class="number">
-                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="policeservicestotal" style="font-size: xx-large" >1</span>
-                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="VATPoliceServices" style="font-size: xx-large" >1</span>
+                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="policeservicestotal" style="font-size: xx-large" >0</span>
+                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="VATPoliceServices" style="font-size: xx-large" >0</span>
                                             </div>
                                             <div class="desc"> Police Services Total </div>
                                         </div>
@@ -442,7 +505,7 @@
                                         </div>
                                         <div class="details">
                                             <div class="number">
-                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="opsupporttotal" style="font-size: xx-large" >1</span>
+                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="opsupporttotal" style="font-size: xx-large" >0</span>
                                             </div>
                                             <div class="desc"> Op Support Total </div>
                                         </div>
@@ -484,7 +547,7 @@
                                 <div class="panel panel-info" >
                                     <div class="panel-heading">
                                         <center>
-                                            <h3><label id="lblEventRef" class="label label-info"></label>&nbsp;&nbsp; &nbsp;<label id="lblEventFormNum" style="display:none" class="label label-info" ></label></h3>
+                                            <h3><label id="lblEventRef" class="label label-info">{ lblEventRef }</label>&nbsp;&nbsp; &nbsp;<label id="lblEventFormNum" style="display:none" class="label label-info" ></label></h3>
                                         </center>
                                     </div>
                                 </div>
@@ -530,7 +593,7 @@
                                                         <br>
 
                                                         <div class="pillwrapper" id="pillcontainer">
-                                                            <ul class="nav nav-pills nav-stacked" id="pillwrapper" >                                   
+                                                            <ul class="nav nav-pills nav-stacked" id="pillwrapper">                                   
                                                             </ul>   
                                                         </div>
                                                     </div>
@@ -551,12 +614,13 @@
                                                         <script>
                                                             $(function () {
                                                                 $("#datepicker").datepicker({dateFormat: 'yy-mm-dd'});
-                                                                $("#datepicker2").datepicker({dateFormat: 'yy-mm-dd'});
+                                                                $("#datepicker2").datepicker({
+                                                                    dateFormat: 'yy-mm-dd            '});
                                                             });
                                                         </script>
                                                         <div><input id="paylist" name="paylist" class="form-control" type="hidden" ></div>
 
-                                                        <input type="hidden"  class="form-control" id="EventCost" name="EventCost"  required value="{ EventCost }" >  
+                                                        <!--                                                        <input type="hidden"  class="form-control" id="EventCost" name="EventCost"  required value="{ EventCost }" >  -->
 
                                                     </div> 
                                                 </div>
@@ -575,6 +639,12 @@
                                                 <div class="col-md-3" >
 
                                                     <input type="hidden" class="form-control" id="EventId" name="EventId"  >
+                                                   <input type="hidden" class="form-control" id="hdnDivisionId" name="hdnDivisionId"  >
+                                                    <input type="hidden" class="form-control" id="hdnEventCost" name="hdnEventCost"  >
+                                                    <input type="hidden" class="form-control" id="hdnOperationalSupport" name="hdnOperationalSupport"  >
+                                                    <input type="hidden" class="form-control" id="hdnPoliceServices" name="hdnPoliceServices"  >
+                                                    <input type="hidden" class="form-control" id="hdnVATPoliceServices" name="hdnVATPoliceServices"  >
+                                                   <input type="hidden" class="form-control" id="hdnAsset" name="hdnAsset" value="" >
                                                     <input type="hidden" class="form-control" id="VATDBval" name="VATDBval" value="{ VATDBval }" >
 
                                                 </div>
@@ -603,7 +673,7 @@
                                                             { RoleRates }
                                                         </select>
                                                         <label><strong>Resource Count</strong></label>
-                                                        <input type="number"  class="form-control" id="ResourceCount" name="ResourceCount" min="1"  required  >     
+                                                        <input type="number"  class="form-control" id="ResourceCount" name="ResourceCount" min="1" value="1" required  >     
 
                                                     </div>
                                                     <!-- Modal footer -->
@@ -633,7 +703,7 @@
                                                             { Equipment }
                                                         </select>
                                                         <label><strong>Resource Count</strong></label>
-                                                        <input type="number"  class="form-control" id="OPResourceCount" name="OPResourceCount" min="1"  required  > 
+                                                        <input type="number"  class="form-control" id="OPResourceCount" name="OPResourceCount" min="1" value="1" required  > 
 
                                                     </div>
                                                     <!-- Modal footer -->
@@ -661,9 +731,9 @@
                                                                                                              <i class="glyphicon glyphicon-usd"></i><label> Police Services</label>
                                                                                                              <input type="text"  class="form-control" id="PoliceServices" name="PoliceServices" autocomplete="off"  value="{ PoliceServices }" placeholder="0.00">  
                                                      
-                                                                                                             <i class="glyphicon glyphicon-usd"></i><label> VAT</label>
+                                                                                          <i class="glyphicon glyphicon-usd"></i><label> VAT</label>
                                                                                                              <input type="text"  class="form-control" id="VATPoliceServices" name="VATPoliceServices" autocomplete="off"  value="{ VATPoliceServices }" placeholder="0.00" readonly>  
                                                      
-                                                                                                             <i class="glyphicon glyphicon-usd"></i><label> Operational Support</label>
+                                                                                          <i class="glyphicon glyphicon-usd"></i><label> Operational Support</label>
                                                                                                              <input type="text"  class="form-control" id="OperationalSupport" name="OperationalSupport" autocomplete="off"  value="{ OperationalSupport }" placeholder="0.00">  
 -->

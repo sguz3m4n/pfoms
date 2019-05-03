@@ -20,6 +20,7 @@ class Event {
     public $ContactName;
     public $ContactNumber;
     public $ContactEmail;
+    public $Division;
     public $EventDateStart;
         public $EventDateEnd;
     public $Comments;
@@ -33,6 +34,25 @@ class Event {
     public $PoliceServices = "";
     public $VATPoliceServices = "";
 
+    
+    public $AssetName = "";
+    public $Quantity = "";
+    public $Value = "";
+ 
+    function CreateEventPreAccount($EventId, $AssetName, $Quantity, $Value, $CompanyName) {
+
+        $conn = conn();
+        $sql = "INSERT INTO `eventpreaccount` (`EventId`, `AssetName`, `Quantity`, `Value`,`CompanyName`,`DelFlag`)
+            VALUES ('$EventId', '$AssetName', '$Quantity', '$Value','$CompanyName','N')";
+
+        if ($conn->exec($sql)) {
+            $this->auditok = 1;
+        } else {
+            $this->auditok = 0;
+        }
+    }
+    
+    
     function GetPreAccounts() {
         $result = "";
         $conn = conn();
@@ -84,13 +104,15 @@ class Event {
         return $varschema . $vardatestamp;
     }
 
-    function CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDateStart,$EventDateEnd, $Comments, $RecEnteredBy, $OperationalSupport, $PoliceServices, $VATPoliceServices) {
+    function CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDateStart,$EventDateEnd, $Comments, $RecEnteredBy, $OperationalSupport, $PoliceServices, $VATPoliceServices, $Division) {
 
         $conn = conn();
         $sql = "INSERT INTO `event` (`EventId`, `EventName`,`EventCost`, `CompanyId`, `CompanyName`, `ContactName`, 
-    `ContactEmail`,`ContactNumber`, `EventDateStart`, `EventDateEnd`, `Comments`, `RecEntered`, `RecEnteredBy`, `Status`, `DelFlg`, `OperationalSupport`, `PoliceServices`, `VATPoliceServices`)
+    `ContactEmail`,`ContactNumber`, `EventDateStart`, `EventDateEnd`, `Comments`, `RecEntered`, `RecEnteredBy`, 
+    `Status`, `DelFlg`, `OperationalSupport`, `PoliceServices`, `VATPoliceServices`, `Division`)
             VALUES ('$EventId', '$EventName', '$EventCost', '$CompanyId', '$CompanyName', '$ContactName',"
-                . "'$ContactEmail','$ContactNumber', '$EventDateStart','$EventDateEnd', '$Comments', NOW(), '$RecEnteredBy','Active','N', $OperationalSupport, $PoliceServices, $VATPoliceServices)";
+                . "'$ContactEmail','$ContactNumber', '$EventDateStart','$EventDateEnd', '$Comments', NOW(), '$RecEnteredBy',"
+                . "'Active','N', $OperationalSupport, $PoliceServices, $VATPoliceServices, '$Division')";
 
         if ($conn->exec($sql)) {
             $this->auditok = 1;

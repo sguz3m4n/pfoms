@@ -44,7 +44,9 @@ class EventCreateController extends PermissionController {
     private $ContactName = "";
     private $ContactNumber = "";
     private $ContactEmail = "";
-    private $EventDate = "";
+    private $Division = "";
+    private $EventDateStart = "";
+    private $EventDateEnd = "";
     private $EventCost = "";
     private $Comments = "";
     private $RecEntered = "";
@@ -53,6 +55,13 @@ class EventCreateController extends PermissionController {
     private $PoliceServices = "";
     private $VATPoliceServices = "";
 
+    private $Assets = "";
+    private $AssetName = "";
+    private $Quantity = "";
+    private $Value = "";
+    
+    private $assetsbreakdown;
+    private $arrbreakdown;
 //private $MyPaymentsRecords;
 
     function show($params) {
@@ -88,16 +97,17 @@ class EventCreateController extends PermissionController {
             $eventinst->EventName = $EventName = $_POST["EventName"];
             $eventinst->EventDateStart = $EventDateStart = $_POST["EventDateStart"];
             $eventinst->EventDateEnd = $EventDateEnd = $_POST["EventDateEnd"];
-            $eventinst->EventCost = $EventCost = $_POST["EventCost"];
+            $eventinst->EventCost = $EventCost = $_POST["hdnEventCost"];
             $eventinst->Comments = $Comments = $_POST["Comments"];
             $eventinst->EventId = $EventId = $_POST["EventId"];
+            $eventinst->Division = $Division = $_POST["hdnDivisionId"];
 
             $eventinst->DelFlg = $DelFlg = "N";
             $eventinst->RecEntered = $RecEntered = "";
             $eventinst->RecEnteredBy = $RecEnteredBy = $username;
-            $eventinst->OperationalSupport = $OperationalSupport = $_POST["OperationalSupport"];
-            $eventinst->PoliceServices = $PoliceServices = $_POST["PoliceServices"];
-            $eventinst->VATPoliceServices = $VATPoliceServices = $_POST["VATPoliceServices"];
+            $eventinst->OperationalSupport = $OperationalSupport = $_POST["hdnOperationalSupport"];
+            $eventinst->PoliceServices = $PoliceServices = $_POST["hdnPoliceServices"];
+            $eventinst->VATPoliceServices = $VATPoliceServices = $_POST["hdnVATPoliceServices"];
 
 //all coming from Company/getuser 
             $eventinst->CompanyId = $CompanyId = $_POST["CompId"];
@@ -105,10 +115,35 @@ class EventCreateController extends PermissionController {
             $eventinst->ContactName = $ContactName = $_POST["ContactName"];
             $eventinst->ContactNumber = $ContactNumber = $_POST["PhoneNumber"];
             $eventinst->ContactEmail = $ContactEmail = $_POST["Email"];
+  $eventinst->Assets = $Assets = ($_POST["hdnAsset"]);
 
+         $assetsbreakdown = explode("],",$Assets);
 
+  foreach($assetsbreakdown as $abd)
+  {
+      //$abd.replace("[","");
+     // $abd.replace("]","");
+       $arrbreakdown = explode(",",$abd);
+          $AssetName =  str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[2])));
+                 $Value = str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[1])));
+                $Quantity = str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[3])));
+                 //$Quantity = str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[3])));
+               
+               $eventinst->CreateEventPreAccount($EventId, $AssetName, $Quantity, $Value, $CompanyName);
+    
+  }
+  
+ $eventinst->CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDateStart, $EventDateEnd, $Comments, $RecEnteredBy, $OperationalSupport, $PoliceServices, $VATPoliceServices, $Division);
+//
+// foreach ($Assets as $asset)
+//  {
+//                $eventinst->AssetName = $AssetName = $asset[2];
+//                $eventinst->Value = $Value = $asset[1];
+//                $eventinst->Quantity = $Quantity = $asset[3];
+//               // $eventinst->CreateEventPreAccount($EventId, $AssetName, $Quantity, $Value);
+//    
+//  }
 
-            $eventinst->CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDateStart, $EventDateEnd, $Comments, $RecEnteredBy, $OperationalSupport, $PoliceServices, $VATPoliceServices);
 //            $tranid = $preaccount->GenerateTimestamp("PRE");
 //            foreach ($pymntrecs as $value) {
 //                $preaccount->AccountId = $accountid = $value[1];
@@ -133,7 +168,7 @@ class EventCreateController extends PermissionController {
             //$EventId='UNASSIGNED';
            /* $division = $_GET['division'];
             if ($division != NULL) {
-                $EventId = $model->GenerateTimestamp($division);
+            
             }*/
 
 
@@ -146,7 +181,7 @@ class EventCreateController extends PermissionController {
 //$preaccounts = $model->GetPreAccounts();
             $VAT = $model->getVat();
 //put prefix from division drop down id here
-
+ $EventId = $model->GenerateTimestamp('BDIV');
             $template = new MasterTemplate();
             $template->load("Views/Event/event.html");
 //$template->replace("accounts", $preaccounts);
@@ -158,7 +193,7 @@ class EventCreateController extends PermissionController {
             $template->replace("ContactEmail", "");
             $template->replace("EventDate", "");
             $template->replace("EventCost", "");
-            //$template->replace("EventId", $EventId);
+            $template->replace("lblEventRef", $EventId);
             $template->replace("OperationalSupport", "0.00");
             $template->replace("PoliceServices", "0.00");
             $template->replace("VATPoliceServices", "0.00");

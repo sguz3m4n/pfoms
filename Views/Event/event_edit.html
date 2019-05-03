@@ -2,6 +2,7 @@
 <html>
     <head>
         { head }
+       
         <script type="text/javascript">
             $(document).ready(function () {
                 $('.search-boxcomp input[type="text"]').on("keyup input", function () {
@@ -87,43 +88,68 @@
                     var key = $(this).attr("class");
 
 
-                     $(".modal-body #EventName").val($("."+key).find('#liEventName').text());
-                      $(".modal-body #EventCost").val($("."+key).find('#liEventCost').text());
-                    $(".modal-body #EventDate").val($("."+key).find('#liEventDate').text());
-                    $(".modal-body #Comments").val($("."+key).find('#liComments').text());
-                    //$(".modal-body #Comments").val($("."+key).find('#Comments').text());
-                    $(".modal-body #OperationalSupport").val($("."+key).find('#liOperationalSupport').text());
-                    $(".modal-body #PoliceServices").val($("."+key).find('#liPoliceServices').text());
-                    $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
-                    $(".modal-body #SubmitEventId").val($("."+key).find('#liEventId').text());
-        
+//                     $(".modal-body #EventName").val($("."+key).find('#liEventName').text());
+//                      $(".modal-body #EventCost").val($("."+key).find('#liEventCost').text());
+//                    $(".modal-body #EventDate").val($("."+key).find('#liEventDateStart').text());
+//        $(".modal-body #EventDate").val($("."+key).find('#liEventDate').text());            
+//        $(".modal-body #Comments").val($("."+key).find('#liComments').text());
+//                    //$(".modal-body #Comments").val($("."+key).find('#Comments').text());
+//                    $(".modal-body #OperationalSupport").val($("."+key).find('#liOperationalSupport').text());
+//                    $(".modal-body #PoliceServices").val($("."+key).find('#liPoliceServices').text());
+//                    $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
+//                    $(".modal-body #SubmitEventId").val($("."+key).find('#liEventId').text());
+//        
         var EventId = $("."+key).find('#liEventId').text();
         var EventName = $("."+key).find('#liEventName').text();
-            var EventCosst = $("."+key).find('#liEventCost').text();
+            var EventCost = $("."+key).find('#liEventCost').text();
            
-        var EventDate = $("."+key).find('#liEventDate').text();
+        var EventDateStart = $("."+key).find('#liEventDateStart').text();
+        var EventDateEnd = $("."+key).find('#liEventDateEnd').text();
+        
         var PoliceServices = $("."+key).find('#liPoliceServices').text();
         var VATPoliceServices = $("."+key).find('#liVATPoliceServices').text();
         var OperationalSupport = $("."+key).find('#liOperationalSupport').text();
 
        // $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
-        
-        document.getElementById("DetailsEventName").value = EventName;
-        document.getElementById("DetailsEventDate").value = EventDate;
-        document.getElementById("DetailsEventCost").value = EventCosst;
-        document.getElementById("DetailsPoliceServices").value = PoliceServices;
-        document.getElementById("DetailsVATPoliceServices").value = VATPoliceServices;
-        document.getElementById("DetailsOperationalSupport").value = OperationalSupport;
+        if (EventDateEnd !== "")
+        {
+           document.getElementById("DetailsEventDateEnd").innerHTML = EventDateEnd; 
+        }
+        document.getElementById("DetailsEventName").innerHTML = EventName;
+        document.getElementById("DetailsEventDateStart").innerHTML = EventDateStart;
+        document.getElementById("DetailsEventCost").innerHTML = "$" + EventCost;
+        document.getElementById("DetailsPoliceServices").innerHTML = "$" + PoliceServices;
+        document.getElementById("DetailsVATPoliceServices").innerHTML = "$" + VATPoliceServices;
+        document.getElementById("DetailsOperationalSupport").innerHTML =  "$" + OperationalSupport;
         
 document.getElementById("hdnEventId").value = EventId;
 document.getElementById("hdnEventName").value = EventName;
 
-document.getElementById("SubmitEventId").value = EventId;
+//document.getElementById("SubmitEventId").value = EventId;
 
-document.getElementById("divEditEvent").style.display = "";
+//document.getElementById("divEditEvent").style.display = "";
 document.getElementById("divEventDetails").style.display = "";
 document.getElementById("formDeleteEvent").style.display = "";
                 });
+                
+//                var acc = document.getElementsByClassName("accordion");
+//var i;
+//
+//for (i = 0; i < acc.length; i++) {
+//  acc[i].addEventListener("click", function() {
+//    /* Toggle between adding and removing the "active" class,
+//    to highlight the button that controls the panel */
+//    this.classList.toggle("active");
+//
+//    /* Toggle between hiding and showing the active panel */
+//    var panel = this.nextElementSibling;
+//    if (panel.style.display === "block") {
+//      panel.style.display = "none";
+//    } else {
+//      panel.style.display = "block";
+//    }
+//  });
+//}
                     
                     //$(document).on("click", "btnDelete", function () {
 //                    $("#btnDelete").click(function (e) {
@@ -256,10 +282,10 @@ document.getElementById("formDeleteEvent").style.display = "";
 
 
 
-                <form method="post">
+<!--                <form method="post">
                 <div id="myModal" class="modal fade" role="dialog">
                     <div class="modal-dialog modal-lg">
-                        <!--                 Modal content-->
+                                         Modal content
                             <div class="modal-content">
                             <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -315,7 +341,7 @@ document.getElementById("formDeleteEvent").style.display = "";
                     </div> 
 
                 </div> 
-                    </form>
+                    </form>-->
             </div>
 
 

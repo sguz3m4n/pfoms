@@ -42,6 +42,7 @@ class EventEditController extends PermissionController {
 
         $username = $_SESSION["login_user"];
 
+        
         if (isset($_POST['btn-update'])) {
             $eventinst = new \BarcomModel\Event();
             $audinst = new \BarcomModel\Audit();

@@ -3,9 +3,9 @@
         <div class="col-xs-12">
             <span class="glyphicon glyphicon-search"></span>
             <span class="glyphicon glyphicon-user"></span>
-            <input type="text" class="form-control" autocomplete="off" placeholder="Search Item name or Equipment Id..." id="searchemp" >
+            <input type="text" class="form-control" autocomplete="off" placeholder="Search Equipment name or Equipment number..." id="searchemp" >
             <div class="resultemp" id="txtHintemp">
-                <span class="glyphicon glyphicon-list"></span> <b style="color: #0033ff">Equipment info will be listed here...</b>
+                <span class="glyphicon glyphicon-list"></span> <b style="color: #0033ff">Officer info will be listed here...</b>
             </div>
         </div> 
 </div>

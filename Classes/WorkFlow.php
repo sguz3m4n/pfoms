@@ -12,19 +12,11 @@ namespace BarcomModel;
 
 class WorkFlow {
 
-   
-<<<<<<< HEAD
+
     public $RoleId;
     public $RoleName;
-        public $Comments;
-=======
-    public $EquipmentId;
-    public $ItemName;
-    public $Category;
-    public $UnitCost;
-    public $UnitMeasurement;
+    public $Comments;
 
->>>>>>> 15af23f... Fix routes
     public $RecEntered;
     public $RecEnteredBy;
     public $RecModified;

@@ -19,18 +19,15 @@ class StationCreateController extends PermissionController {
     function __construct() {
         $this->setRoles(['Manager', 'Administrator', 'Super User']);
     }
-
-    private $EquipmentId = "";
-    private $ItemName = "";
-    private $Category = "";
-    private $UnitCost = "";
-    private $UnitMeasurement = "";
-    private $RecEntered = "";
-    private $RecEnteredBy = "";
-    private $RecModified = "";
-    private $RecModifiedBy = "";
-    private $DelFlg = "";
-
+    
+    public $StationId;
+    public $StationName;
+    public $RecEntered;
+    public $RecEnteredBy;
+    public $RecModified;
+    public $RecModifiedBy;
+    public $DelFlg;
+    
 //Validation Engine will execute any validation on the fields in the interface
     function ValidationEngine($elements) {
         foreach ($elements as $value) {
@@ -51,12 +48,9 @@ class StationCreateController extends PermissionController {
             $conn = conn();
             $compinst = new \BarcomModel\Station();
             $audinst = new \BarcomModel\Audit();
-            $this->EquipmentId = $compid = $compinst->EquipmentId = $_POST['EquipmentId'];
-            $this->ItemName = $compinst->ItemName = $_POST['ItemName'];
-            $this->Category = $compinst->Category = $_POST['Category'];
-            $this->UnitCost = $compinst->UnitCost = $_POST['UnitCost'];
-            $this->UnitMeasurement = $compinst->UnitMeasurement = $_POST['UnitMeasurement'];
-            
+            $this->StationId = $StationId = $compinst->StationId = $_POST['StationId'];
+            $this->StationName = $compinst->StationName = $StationName =  $_POST['StationName'];
+                        
             $compinst->DelFlg = 'N';
 
 //Send elements to be validated
@@ -72,12 +66,12 @@ class StationCreateController extends PermissionController {
 //if validation succeeds then log audit record to database
                 if (1) {
                     $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CCMP');
-                    $TranDesc = 'Create New Station for ' . $compid . " Name " . $compname;
+                    $TranDesc = 'Create New Station for ' . $StationId . " Name " . $StationName;
                     $User = $username;
                     $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
-                    $compinst->CreateEquipment($EquipmentId, $ItemName, $Category, $UnitCost, $UnitMeasurement, $RecEntered, $RecEnteredBy, $DelFlg);
-                    $token = '<br><br><span class="label label-success">Station Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
-                            '<span class="label label-success">Station Id</span> ' . '<span class="label label-info">' . $compid . '</span><br>';
+                    $compinst->CreateStation($StationId, $StationName, $username);
+                    $token = '<br><br><span class="label label-success">Station Name</span> ' . '<span class="label label-info"> ' . $StationName . '</span><br><br><br>' .
+                            '<span class="label label-success">Station Id</span> ' . '<span class="label label-info">' . $StationId . '</span><br>';
                     $token1 = 'Record Successfully Created';
                     header("Location:" . "/success?result=$token&header=$token1&args=");
                 }
@@ -87,11 +81,8 @@ class StationCreateController extends PermissionController {
                 $parishes = $model->GetParishes();
                 $template = new MasterTemplate();
                 $template->load("Views/Station/station.html");
-                $template->replace("EquipmentId", $this->EquipmentId);
-                $template->replace("ItemName", $this->ItemName);
-                $template->replace("Category", $this->Category);
-                $template->replace("UnitCost", $this->UnitCost);
-                $template->replace("UnitMeasurement", $this->UnitMeasurement);
+                $template->replace("EquipmentId", $this->StationId);
+                $template->replace("ItemName", $this->StationName);
 
                 $template->publish();
             }
@@ -101,11 +92,8 @@ class StationCreateController extends PermissionController {
             
             $template = new MasterTemplate();
             $template->load("Views/Station/station.html");
-            $template->replace("EquipmentId", "");
-            $template->replace("ItemName", "");
-            $template->replace("Category", "");
-            $template->replace("UnitCost", "");
-            $template->replace("UnitMeasurement", "");
+            $template->replace("StationId", "");
+            $template->replace("StationName", "");
             
             $template->replace("title", " Create New Station ");
             $template->publish();

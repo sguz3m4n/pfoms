@@ -47,13 +47,13 @@ class EquipmentCreateController extends PermissionController {
             $conn = conn();
             $equipinst = new \BarcomModel\Equipment();
             $audinst = new \BarcomModel\Audit();
-            $this->EquipmentId = $EquipmentId = $_POST['EquipmentId'];
-            $this->ItemName = $ItemName = $_POST['ItemName'];
-            $this->Category = $Category = $_POST['Category'];
-            $this->UnitCost = $UnitCost = $_POST['UnitCost'];
+            $this->EquipmentId = $equipinst->EquipmentId = $EquipmentId = $_POST['EquipmentId'];
+            $this->ItemName = $equipinst->ItemName = $ItemName = $_POST['ItemName'];
+            $this->Category = $equipinst->Category = $Category = $_POST['Category'];
+            $this->UnitCost = $equipinst->UnitCost = $UnitCost = $_POST['UnitCost'];
             $UnitCost = number_format($UnitCost, 2, '.', '');
             $this->UnitMeasurement = $UnitMeasurement = $_POST['UnitMeasurement'];
-
+            
             $equipinst->DelFlg = 'N';
 //if validation succeeds then commit info to database
 //put validation if statement here
@@ -62,7 +62,7 @@ class EquipmentCreateController extends PermissionController {
 
 
 //if validation succeeds then log audit record to database
-                //check to see it autdit ok
+                //check audit ok
                 $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CCMP');
                 $TranDesc = 'Create New Equipment for ' . $EquipmentId . " Name " . $ItemName;
                 $User = $username;

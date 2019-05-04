@@ -19,6 +19,7 @@ return [
     [['GET', 'POST'], '/admin/config/create', ['Controllers\ConfigCreateController', 'display']],
     [['GET', 'POST'], '/equipment/create', ['Controllers\EquipmentCreateController', 'display']],
     [['GET', 'POST'], '/equipment/edit', ['Controllers\EquipmentEditController', 'display']],
+    [['GET', 'POST'], '/equipment/deactivate', ['Controllers\EquipmentDeactivateController', 'display']],
     [['GET', 'POST'], '/account/create', ['Controllers\AccountCreateController', 'display']],
     [['GET', 'POST'], '/account/edit', ['Controllers\AccountEditController', 'display']],
     [['GET', 'POST'], '/station/create', ['Controllers\StationCreateController', 'display']],

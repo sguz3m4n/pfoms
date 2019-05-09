@@ -1,6 +1,83 @@
 <html lang="en-US">
     <head>
         { head }
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var contactcount = 0;
+                var contactarr = [];
+
+                $('#AddContact').on('click', function () {
+                    alert("hello");
+                    var contactrec = [];
+                    var contactemail = $('#ContactEmail').val();
+                    var contactname = $('#ContactName').val();
+                    var contactnumber = $('#ContactNumber').val();
+
+                    var pillcontainer = document.getElementById('pillcontainer');
+                    var pillwrapper = document.getElementById('pillwrapper');
+
+                    //create instance of list elements
+                    var pill = document.createElement("li");
+                    pill.setAttribute("id", "contactcount" + contactcount);
+
+                    var removeicon = document.createElement("span");
+                    removeicon.setAttribute("class", "glyphicon glyphicon-minus");
+
+                    //dynamically create functions
+                    var pillanchor = document.createElement("a");
+                    //pillanchor.setAttribute("data-preactotal", OperationalSupportTotal);
+                    pillanchor.setAttribute("style", "bold");
+                    pillanchor.appendChild(document.createTextNode("Contact- " + contactname + " Email " + contactemail + "Contact #" + contactnumber));
+                                //<a href="mailto:webmaster@example.com">Jon Doe</a>
+
+                    pillanchor.appendChild(removeicon);
+
+                    pill.appendChild(pillanchor);
+                    pillwrapper.appendChild(pill);
+                    pillcontainer.appendChild(pillwrapper);
+                    contactrec.push("preaccount" + contactcount);
+                    // acctrec.push(acctid);
+                    //acctrec.push(OperationalSupportTotal);
+                    // acctrec.push(document.getElementById("AccountNumber").value);
+                    contactarr.push(contactrec);
+
+                    contactcount++;
+
+                });
+
+                $(document).on("dblclick", ".pillwrapper li", function (event) {
+
+                    var key = this.id.toString();
+                    var elem = document.getElementById(this.id.toString());
+                    elem.parentNode.removeChild(elem);
+                    RemoveInfo(key);
+
+                });
+
+
+                function RemoveInfo(key) {
+                    var indextoremove;
+
+                    for (i = 0; i < contactarr.length; i++) {
+                        // alert(accountarr[i][0]);
+
+                        if (contactarr[i][0] === key)
+                        {
+                            alert(contactarr[i][1]);
+                           // PreAccountTotal = PreAccountTotal - parseFloat(accountarr[i][1]);
+                            indextoremove = i;
+                        }
+                    }
+                    contactarr.splice(indextoremove, 1);
+                    //$("#eventcost").text(PreAccountTotal.toFixed(2));
+                    /* for (x = 0; x < accountarr.length; x++) {
+                     
+                     alert(accountarr[x][0] + accountarr[x][1]);
+                     }*/
+                    //alert(accountarr);
+                }
+            });
+        </script>
     </head>
     <body class="">
         <div class="wrapper">
@@ -111,7 +188,7 @@
                                         <form method="post" >
                                             <div class="form-group">
                                                 <div class="row center-block panel-body">                                                   
-                                                   <div class="col-xs-4">
+                                                    <div class="col-xs-4">
                                                         <label>TAMIS ID</label>
                                                         <input type="text" class="form-control" name="TIN" placeholder="" autocomplete="off" required value="{ TIN }"  />  
                                                     </div>
@@ -120,15 +197,15 @@
                                                         <input type="text" class="form-control" name="CompanyName" placeholder="" autocomplete="off" required value="{ CompanyName }"  />  
                                                     </div>
                                                 </div> 
-                                                  <div class="row center-block panel-body">
+                                                <div class="row center-block panel-body">
                                                     <div class="col-xs-4 ">
                                                         <label>Caipo ID</label>
                                                         <input type="text" class="form-control" name="CaipoId" placeholder="**********" autocomplete="off" required value="{ CaipoId }"  />
                                                     </div>
-<!--                                                     <div class="col-xs-4 ">
-                                                        <label>Company ID</label>
-                                                        <input type="text" class="form-control" name="CompanyId" placeholder="**********" autocomplete="off" required value="{ CompanyId }"  />
-                                                    </div>                                               -->
+                                                    <!--                                                     <div class="col-xs-4 ">
+                                                                                                            <label>Company ID</label>
+                                                                                                            <input type="text" class="form-control" name="CompanyId" placeholder="**********" autocomplete="off" required value="{ CompanyId }"  />
+                                                                                                        </div>                                               -->
                                                 </div> 
                                                 <div class="row center-block panel-body">
                                                     <div class="col-xs-4">
@@ -144,6 +221,7 @@
                                                         <input type="text" class="form-control" name="AddressLine3" placeholder="" autocomplete="off" required value="{ AddressLine3 }" > 
                                                     </div>
                                                 </div>
+
                                                 <div class="row center-block panel-body">
                                                     <div class="col-xs-4">
                                                         <label>Parish</label>
@@ -156,11 +234,19 @@
                                                         <label>Postal Code</label>
                                                         <input type="text" class="form-control" name="PostalCode" placeholder="" value="{ PostalCode }" >
                                                     </div>
+                                                    <div class="col-xs-4" style="font-size: large">
+                                                        <br>
+
+                                                        <a id="addrank" class="btn btn-default green" data-toggle="modal" data-target="#myModal">Add Contact <i class="glyphicon glyphicon-plus"></i>
+                                                        </a>
+                                                    </div>  
                                                 </div>
                                                 <div class="row center-block panel-body">
                                                     <div class="col-xs-4">
-                                                        <label>Contact Name</label>
-                                                        <input type="text" class="form-control" name="ContactName" placeholder="" autocomplete="off"  value="{ ContactName }" >
+
+                                                        <div class="row">
+
+                                                        </div>
                                                     </div>
 
                                                     <div class="col-xs-4" style="font-size: large">
@@ -179,19 +265,55 @@
                                                         <label>Email</label>
                                                         <input type="text" class="form-control" name="Email" placeholder="example@domain" autocomplete="off"  value="{ Email }" >
                                                     </div>
-                                                    <div class="col-xs-8">
+                                                    <div class="col-xs-4">
                                                         <div class="col-xs-7">
                                                             <label>Notes</label>
                                                             <textarea name="Notes" id="Notes" rows="4" cols="12" class="form-control" ></textarea> 
                                                         </div>
-                                                    </div>                                                    
+                                                    </div>  
+                                                    <div class="col-xs-4">
+                                                        <div class="pillwrapper" id="pillcontainer">
+                                                            <ul class="nav nav-pills nav-stacked" id="pillwrapper" >  
+                                                                <br>
+
+                                                            </ul>   
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                                 <br>
                                                 <center>
                                                     <button type="submit" class="btn btn-default blue" name="btn-create"><strong>Create Company</strong></button>                                     
                                                 </center>
                                             </div>
-                                        </form>                                       
+                                        </form>  
+                                        <div class="modal" id="myModal">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Enter Contact Details</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body">                                                                                                               
+                                                        <label><strong>Contact Email</strong></label>
+                                                        <input type="text"  class="form-control" id="ContactEmail" name="ContactEmail"  required  >     
+                                                        <label><strong>Contact Name</strong></label>
+                                                        <input type="text"  class="form-control" id="ContactName" name="ContactName" min="1"  required  >     
+                                                        <label><strong>Contact Number</strong></label>
+                                                        <input type="text"  class="form-control" id="ContactNumber" name="ContactNumber" min="1"  required  >     
+                                                    </div>
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+
+                                                        <button type="button" class="btn btn-info" id="AddContact" data-enter="modal">Add Contact</button>
+                                                    </div>                                            
+                                                </div>
+                                            </div>
+                                        </div>
                                         <br>
                                     </div>
                                 </div>

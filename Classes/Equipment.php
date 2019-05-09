@@ -64,11 +64,10 @@ class Equipment {
     function UpdateEquipment($EquipmentId) {
         $conn = conn();
 
-        $sql = "UPDATE `equipment` SET `ItemName`=" . $this->ItemName . ",`Category`="
-                . $this->Category . ", `UnitCost`=" . $this->UnitCost . ",`UnitMeasurement`=" . $this->UnitMeasurement . ", `RecEntered`="
-                . $this->RecEntered . ", `RecEnteredBy`=" . $this->RecEnteredBy
-                . ", `RecModified`=" . $this->RecModified . ",`RecModifiedBy`=" . $this->RecModifiedBy
-                . " WHERE EquipmentId ='" . $EquipmentId . "'";
+        $sql = "UPDATE `equipment` SET `ItemName`='" . $this->ItemName . "',`Category`='"
+                . $this->Category . "', `UnitCost`='" . $this->UnitCost . "',`UnitMeasurement`='" . $this->UnitMeasurement
+                . "', `RecModified`='" . $this->RecModified . "',`RecModifiedBy`='" . $this->RecModifiedBy
+                . "' WHERE EquipmentId ='" . $EquipmentId . "'";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {

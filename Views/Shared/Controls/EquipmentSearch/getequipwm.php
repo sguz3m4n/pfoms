@@ -3,12 +3,14 @@
 include '../../../../dbconfig.php';
 include '../../../../Classes/Equipment.php';
 $q = $_GET['q'];
+
 $conn = conn();
 
 $sql = 'SELECT * FROM equipment WHERE ItemName = "' . $q . '" AND DelFlg="N"';
 
 $result = $conn->prepare($sql);
 $result->execute();
+
 $compinst = new BarcomModel\Equipment();
 
 foreach ($result as $value) {
@@ -26,29 +28,21 @@ foreach ($result as $value) {
     $compinst->RecModifiedBy = $value['RecModifiedBy'];
     $compinst->DelFlg = $value['DelFlg'];
 }
-
 $conn = NULL;
-
-function AddressBuilder() {
-    $Address = 'make address builder function';
-    return;
-}
-
-$model = new \BarcomModel\Equipment();
-$parishes = $model->GetParishes();
+//$parishes = $model->GetParishes();
 ?>  
 <div class="panel panel-info">
     <div class="panel-heading">
         <center>
             <h3> 
                 <span class="label label-info"><?php echo $compinst->ItemName; ?></span>           
-                <span class="label label-info"><?php echo $compinst->EquipmentId; ?></span>                
+                <span class="label label-info"><?php echo $compinst->EquipmentId; ?></span>  
             </h3>  
         </center>
         <ul style="list-style: none">
-            <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Category: </label><?php echo $compinst->Category; ?></li> 
-            <li><span class="glyphicon glyphicon-send"></span> <label>Unit Cost </label><?php echo $compinst->UnitCost; ?></li>                        
-            <li><span class="glyphicon glyphicon-phone"></span><label>Unit Measurement </label><?php echo $compinst->UnitMeasurement; ?></li> 
+            <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Category:  </label><?php echo $compinst->Category; ?></li> 
+            <li><span class="glyphicon glyphicon-send"></span> <label>Unit Cost:  </label><?php echo $compinst->UnitCost; ?></li>                        
+            <li><span class="glyphicon glyphicon-phone"></span><label>Unit Measurement:  </label><?php echo $compinst->UnitMeasurement; ?></li> 
         </ul>
     </div>
 </div>
@@ -64,7 +58,7 @@ $parishes = $model->GetParishes();
     <button type="submit" class="btn btn-danger btn-default pull-right col-xs-3" name="btn-delete"><strong>Delete Equipment</strong></button> 
 </form>
 <!-- Modal --> 
-<form method="post">
+<form method="post" action="/equipment/edit">
     <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-lg">
                 <!-- Modal content-->

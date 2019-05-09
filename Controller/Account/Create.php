@@ -65,12 +65,12 @@ class AccountCreateController extends PermissionController {
 //if validation succeeds then log audit record to database
                 if (1) {
                     $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CCMP');
-                    $TranDesc = 'Create New Account for ' . $compid . " Name " . $compname;
+                    $TranDesc = 'Create New Account for ' . $AccountId . " Name " . $AccountName;
                     $User = $username;
                     $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
   
-                    $token = '<br><br><span class="label label-success">Account Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
-                            '<span class="label label-success">Account Id</span> ' . '<span class="label label-info">' . $compid . '</span><br>';
+                    $token = '<br><br><span class="label label-success">Account Name</span> ' . '<span class="label label-info"> ' . $AccountName . '</span><br><br><br>' .
+                            '<span class="label label-success">Account Id</span> ' . '<span class="label label-info">' . $AccountId . '</span><br>';
                     $token1 = 'Record Successfully Created';
                     header("Location:" . "/success?result=$token&header=$token1&args=");
                 }
@@ -80,7 +80,7 @@ class AccountCreateController extends PermissionController {
                 $template = new MasterTemplate();
                 $template->load("Views/Account/account.html");
                 $template->replace("AccountId", $this->AccountId);
-
+                $template->replace("AccountName", $this->Name);
 
                 $template->replace("val_AccountId", $_SESSION['$compidwrapper']);
                 $template->publish();

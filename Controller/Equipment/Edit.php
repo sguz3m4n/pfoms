@@ -57,6 +57,7 @@ class EquipmentEditController extends PermissionController {
                 $this->UnitMeasurement = $equipinst->UnitMeasurement = $_POST['UnitMeasurement'];
                 
                 $equipinst->RecModifiedBy = $username;
+                $equipinst->RecModified  = date("Y-m-d H:i:s");
 
                 //Send elements to be validated
 //                $validateme = ["EquipmentName"];
@@ -64,7 +65,7 @@ class EquipmentEditController extends PermissionController {
 
                 //if validation succeeds then commit info to database
                 if (1) {
-                    $equipinst->EditEquipment($EquipmentId);
+                    $equipinst->GetEquipment($EquipmentId);
 
                     if (1) {
                         $tranid = $audinst->TranId = $audinst->GenerateTimestamp('UCMP');

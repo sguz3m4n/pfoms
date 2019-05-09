@@ -3,26 +3,30 @@
     <head>
         { head }
         <script type="text/javascript">
-            $(document).ready(function () {
-                $('.search-boxcomp input[type="text"]').on("keyup input", function () {
-                    /* Get input value on change */
+            $(document).ready(function (e) {
+
+
+                $('.search-boxemp input[type="text"]').on("keyup input", function () {
+                    /* Get input value for search on change */
                     var inputVal = $(this).val();
-                    var table = "equipment";
-                    var resultDropdown = $(this).siblings(".resultcomp");
+                    var resultDropdown = $(this).siblings(".resultemp");
                     var isnum = /[0-9]/;
                     var isalpha = /[a-zA-Z]/;
 
-                    if (inputVal.length) {
+                    if (inputVal.length)
+                    {
                         if (isalpha.test(inputVal))
                         {
-                            $.get("../Views/Shared/Controls/EquipmentSearch/backend-search.php?type=" + "EquipmentId", {term: inputVal, table: table}).done(function (data) {
+                            // alert('isalpha');
+                            $.get("../Views/Shared/Controls/EquipmentSearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
                                 // Display the returned data in browser
                                 resultDropdown.html(data);
                             });
                         } else
                         if (isnum.test(inputVal))
                         {
-                            $.get("../Views/Shared/Controls/EquipmentSearch/backend-search.php?type=" + "EquipmentId", {term: inputVal, table: table}).done(function (data) {
+                            //alert('isnumeric');
+                            $.get("../Views/Shared/Controls/EquipmentSearch/backend-search.php?type=" + "equipmentid", {term: inputVal}).done(function (data) {
                                 // Display the returned data in browser
                                 resultDropdown.html(data);
                             });
@@ -34,11 +38,11 @@
                 });
 
                 // Set search input value on click of result item
-                $(document).on("click", ".resultcomp p", function () {
-                    $(this).parents(".search-boxcomp").find('input[type="text"]').val($(this).text());
-                    $test = document.getElementById('searchcomp').value;
+                $(document).on("click", ".resultemp p", function () {
+                    $(this).parents(".search-boxemp").find('input[type="text"]').val($(this).text());
+                    $test = document.getElementById('searchemp').value;
                     if ($test == "") {
-                                document.getElementById("txtHintcomp").innerHTML = "";
+                                document.getElementById("txtHintemp").innerHTML = "";
                                 return;
                         } else {
                                 if (window.XMLHttpRequest) {
@@ -50,17 +54,18 @@
                                 }
                                 xmlhttp.onreadystatechange = function () {
                                         if (this.readyState == 4 && this.status == 200) {
-                                                document.getElementById("txtHintcomp").innerHTML = this.responseText;
+                                                document.getElementById("txtHintemp").innerHTML = this.responseText;
+                                $('input#DateOfBirth').datepicker({dateFormat: 'yy-mm-dd'});
                                         }
                                 };
-                                xmlhttp.open("GET", "../Views/Shared/Controls/EquipmentSearch/getuserwm.php?q=" + $test, true);
+                                xmlhttp.open("GET", "../Views/Shared/Controls/EquipmentSearch/getequipwm.php?q=" + $test, true);
                                 xmlhttp.send();
                         }
                     $(this).parent(".result").empty();
                     //alert('test');
                 });
             });
-        </script>         
+        </script>
     </head>
     <body>
         <div class="wrapper">
@@ -157,7 +162,7 @@
                                 </div>
                             </div>
                             <div class="col-xs-4" style="font-size: large">
-                                { val_EquipmentName }      <br>   
+              
                             </div>
                         </div>
                     </div>

@@ -48,9 +48,9 @@ class AccountCreateController extends PermissionController {
             $conn = conn();
             $acctinst = new \BarcomModel\Account();
             $audinst = new \BarcomModel\Audit();
-            $compid = $acctinst->AccountId = $AccountId = $_POST['AccountID'];
-            $this->Name = $compname = $acctinst->Name = $AccountName = $_POST['Name'];
-            $this->Type = $acctinst->Type = $Type = $_POST['Type'];
+            $compid = $acctinst->AccountId = $AccountId = $_POST['AccountId'];
+            $this->Name = $AccountName = $_POST['AccountName'];
+            $this->Type = $Type = $_POST['Type'];
             $acctinst->DelFlg = 'N';
 
 //Send elements to be validated

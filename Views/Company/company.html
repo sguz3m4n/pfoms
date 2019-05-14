@@ -7,12 +7,14 @@
                 var contactarr = [];
 
                 $('#AddContact').on('click', function () {
-                    alert("hello");
+                    //alert("hello");
                     var contactrec = [];
                     var contactemail = $('#ContactEmail').val();
                     var contactname = $('#ContactName').val();
                     var contactnumber = $('#ContactNumber').val();
-
+                    contactrec.push(contactname);
+                    contactrec.push(contactemail);
+                    contactrec.push(contactnumber);
                     var pillcontainer = document.getElementById('pillcontainer');
                     var pillwrapper = document.getElementById('pillwrapper');
 
@@ -28,14 +30,14 @@
                     //pillanchor.setAttribute("data-preactotal", OperationalSupportTotal);
                     pillanchor.setAttribute("style", "bold");
                     pillanchor.appendChild(document.createTextNode("Contact- " + contactname + " Email " + contactemail + "Contact #" + contactnumber));
-                                //<a href="mailto:webmaster@example.com">Jon Doe</a>
+                    //<a href="mailto:webmaster@example.com">Jon Doe</a>
 
                     pillanchor.appendChild(removeicon);
 
                     pill.appendChild(pillanchor);
                     pillwrapper.appendChild(pill);
                     pillcontainer.appendChild(pillwrapper);
-                    contactrec.push("preaccount" + contactcount);
+                    //contactrec.push("preaccount" + contactcount);
                     // acctrec.push(acctid);
                     //acctrec.push(OperationalSupportTotal);
                     // acctrec.push(document.getElementById("AccountNumber").value);
@@ -54,7 +56,13 @@
 
                 });
 
-
+                //Send the populated array to the controller
+                $("#companyform").submit(function () {
+                    //TogglePRNControl();
+                    //var key = this.id.toString().trim();
+                    //PopulatePanelInfo(key);
+                    $("#contactlist").val(JSON.stringify(contactarr));
+                });
                 function RemoveInfo(key) {
                     var indextoremove;
 
@@ -64,7 +72,7 @@
                         if (contactarr[i][0] === key)
                         {
                             alert(contactarr[i][1]);
-                           // PreAccountTotal = PreAccountTotal - parseFloat(accountarr[i][1]);
+                            // PreAccountTotal = PreAccountTotal - parseFloat(accountarr[i][1]);
                             indextoremove = i;
                         }
                     }
@@ -185,7 +193,7 @@
                                         </div>
                                     </div>
                                     <div class="portlet-body form">
-                                        <form method="post" >
+                                        <form method="post" action="" id="companyform">
                                             <div class="form-group">
                                                 <div class="row center-block panel-body">                                                   
                                                     <div class="col-xs-4">
@@ -279,7 +287,7 @@
                                                             </ul>   
                                                         </div>
                                                     </div>
-
+                                                    <div><input id="contactlist" name="contactlist" class="form-control" type="hidden" ></div>
                                                 </div>
                                                 <br>
                                                 <center>
@@ -298,11 +306,11 @@
                                                     </div>
 
                                                     <!-- Modal body -->
-                                                    <div class="modal-body">                                                                                                               
+                                                    <div class="modal-body">      
+                                                        <label><strong>Contact Name</strong></label>
+                                                        <input type="text"  class="form-control" id="ContactName" name="ContactName" min="1"  required  >                                                                                                        
                                                         <label><strong>Contact Email</strong></label>
                                                         <input type="text"  class="form-control" id="ContactEmail" name="ContactEmail"  required  >     
-                                                        <label><strong>Contact Name</strong></label>
-                                                        <input type="text"  class="form-control" id="ContactName" name="ContactName" min="1"  required  >     
                                                         <label><strong>Contact Number</strong></label>
                                                         <input type="text"  class="form-control" id="ContactNumber" name="ContactNumber" min="1"  required  >     
                                                     </div>

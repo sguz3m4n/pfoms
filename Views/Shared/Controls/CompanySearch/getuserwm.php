@@ -2,6 +2,7 @@
 <?php
 include '../../../../dbconfig.php';
 include '../../../../Classes/Company.php';
+
 $q = $_GET['q'];
 $conn = conn();
 

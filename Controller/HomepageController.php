@@ -189,7 +189,13 @@ class Homepage extends LoggedInController {
                                 </li> ';
             $this->menu = $this->menu . $billitem;
         }
-
+         if (in_array($role, $BillPayment)) {
+            $DutySheet = ' <li >
+                                    <a class="text-uppercase" href="/createdutysheet">Duty Sheet</a>
+                                </li> ';
+            $this->menu = $this->menu . $DutySheet;
+        }
+       
        /* if (in_array($role, $PRNGenerate)) {
             $prnitem = '<li>
                                     <a class="text-uppercase" href="/disburseprn">Generate PRN</a>

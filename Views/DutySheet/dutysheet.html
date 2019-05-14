@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        { head }
+       
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('.search-boxcomp input[type="text"]').on("keyup input", function () {
+                    /* Get input value on change */
+                    var inputVal = $(this).val();
+                    var resultDropdown = $(this).siblings(".resultcomp");
+                    var isnum = /[0-9]/;
+                    var isalpha = /[a-zA-Z]/;
+
+                    if (inputVal.length) {
+                        if (isalpha.test(inputVal))
+                        {
+                            $.get("../Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
+                                // Display the returned data in browser
+                                resultDropdown.html(data);
+                            });
+                        } else
+                        if (isnum.test(inputVal))
+                        {
+                            $.get("../Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "companyid", {term: inputVal}).done(function (data) {
+                                // Display the returned data in browser
+                                resultDropdown.html(data);
+                            });
+                        }
+
+                    } else {
+                        resultDropdown.empty();
+                    }
+                });
+
+                // Set search input value on click of result item
+                $(document).on("click", ".resultcomp p", function () {
+                    $(this).parents(".search-boxcomp").find('input[type="text"]').val($(this).text());
+                    $test = document.getElementById('searchcomp').value;
+                    if ($test == "") {
+                                document.getElementById("txtHintcomp").innerHTML = "";
+                                return;
+                        } else {
+                                if (window.XMLHttpRequest) {
+                                        // code for IE7+, Firefox, Chrome, Opera, Safari
+                                        xmlhttp = new XMLHttpRequest();
+                                } else {
+                                        // code for IE6, IE5
+                                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                                }
+                                xmlhttp.onreadystatechange = function () {
+                                        if (this.readyState == 4 && this.status == 200) {
+                                                document.getElementById("txtHintcomp").innerHTML = this.responseText;
+                                           $('input#EventDate').datepicker({dateFormat: 'yy-mm-dd'});
+                                        }
+                                };
+                        $('input#DateOfBirth').datepicker({dateFormat: 'yy-mm-dd'});
+                                xmlhttp.open("GET", "../Views/Shared/Controls/EventSearch/listevents.php?q=" + $test, true);
+                                xmlhttp.send();
+                        }
+                    $(this).parent(".result").empty();
+                    //alert('test');
+                });
+
+                //$('#EventName').val("test");
+
+//            $("#menu").menu({
+//              select: function(event, ui) {
+//                            ui.item.addClass("selected").siblings().removeClass("selected")
+//                        }
+//
+//                    });
+//
+//                    $('#btn').button().click(function (ev) {
+//                        ev.preventDefault();
+//                        var value = $('#menu li.selected').attr('value');
+//                        alert('Selected menu value: ' + value);
+//                    });
+//                    $(document).on("dblclick", ".li a", function (event) {
+//                        
+//                        alert('test');
+//                    });
+//                    $(".eventList").on('click','li',function (){
+//    alert($(this).text());
+//});
+ $(document).on("click", ".pillwrapper li", function () {
+   
+                    var key = $(this).attr("class");
+
+
+//                     $(".modal-body #EventName").val($("."+key).find('#liEventName').text());
+//                      $(".modal-body #EventCost").val($("."+key).find('#liEventCost').text());
+//                    $(".modal-body #EventDate").val($("."+key).find('#liEventDateStart').text());
+//        $(".modal-body #EventDate").val($("."+key).find('#liEventDate').text());            
+//        $(".modal-body #Comments").val($("."+key).find('#liComments').text());
+//                    //$(".modal-body #Comments").val($("."+key).find('#Comments').text());
+//                    $(".modal-body #OperationalSupport").val($("."+key).find('#liOperationalSupport').text());
+//                    $(".modal-body #PoliceServices").val($("."+key).find('#liPoliceServices').text());
+//                    $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
+//                    $(".modal-body #SubmitEventId").val($("."+key).find('#liEventId').text());
+//        
+        var EventId = $("."+key).find('#liEventId').text();
+        var EventName = $("."+key).find('#liEventName').text();
+            var EventCost = $("."+key).find('#liEventCost').text();
+           
+        var EventDateStart = $("."+key).find('#liEventDateStart').text();
+        var EventDateEnd = $("."+key).find('#liEventDateEnd').text();
+        
+        var PoliceServices = $("."+key).find('#liPoliceServices').text();
+        var VATPoliceServices = $("."+key).find('#liVATPoliceServices').text();
+        var OperationalSupport = $("."+key).find('#liOperationalSupport').text();
+
+       // $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
+        if (EventDateEnd !== "")
+        {
+           document.getElementById("DetailsEventDateEnd").innerHTML = EventDateEnd; 
+        }
+        document.getElementById("DetailsEventName").innerHTML = EventName;
+        document.getElementById("DetailsEventDateStart").innerHTML = EventDateStart;
+        document.getElementById("DetailsEventCost").innerHTML = "$" + EventCost;
+        document.getElementById("DetailsPoliceServices").innerHTML = "$" + PoliceServices;
+        document.getElementById("DetailsVATPoliceServices").innerHTML = "$" + VATPoliceServices;
+        document.getElementById("DetailsOperationalSupport").innerHTML =  "$" + OperationalSupport;
+        
+document.getElementById("hdnEventId").value = EventId;
+document.getElementById("hdnEventName").value = EventName;
+
+//document.getElementById("SubmitEventId").value = EventId;
+
+//document.getElementById("divEditEvent").style.display = "";
+document.getElementById("divEventDetails").style.display = "";
+document.getElementById("formDeleteEvent").style.display = "";
+                });
+                
+//                var acc = document.getElementsByClassName("accordion");
+//var i;
+//
+//for (i = 0; i < acc.length; i++) {
+//  acc[i].addEventListener("click", function() {
+//    /* Toggle between adding and removing the "active" class,
+//    to highlight the button that controls the panel */
+//    this.classList.toggle("active");
+//
+//    /* Toggle between hiding and showing the active panel */
+//    var panel = this.nextElementSibling;
+//    if (panel.style.display === "block") {
+//      panel.style.display = "none";
+//    } else {
+//      panel.style.display = "block";
+//    }
+//  });
+//}
+                    
+                    //$(document).on("click", "btnDelete", function () {
+//                    $("#btnDelete").click(function (e) {
+////need to add validation that all fields are there 
+////                        var oppSupportVal = document.getElementById("OperationalSupport").value;
+////                        var PoliceServices = document.getElementById("PoliceServices").value;
+//                        var hiddenEventid = document.getElementById("hdnEventId").value;
+//                        if(hiddenEventid == ""){
+//                              e.preventDefault();
+//                        alert("Please select event to delete");
+//                        }
+//                        else{ e.preventDefault();
+//                        alert("Pdelete");}
+////
+////                    try {
+////                       var oppSupportVal = document.getElementById("CompName").value;
+////                    } catch (err) {
+//                        
+//                   });
+
+
+
+            });
+
+        </script>         
+    </head>
+    <body>
+        <div class="wrapper">
+            <header class="page-header">
+                <nav class="navbar mega-menu" role="navigation">
+                    <div class="container-fluid">
+                        <div class="clearfix navbar-fixed-top">
+                            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="toggle-icon">
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </span>
+                            </button>
+                            <a class="page-logo" id="index" href="/index.php">
+                                <img src="../assets/global/img/customs logo no back.png" alt="" height="400"/>                          
+                                <img src="../assets/global/img/OVERTIME-APP-LOGO.png" alt=""/>
+                            </a>
+                            <div class="topbar-actions">
+                                <div class="btn-group-img btn-group">
+                                    <button class="btn btn-sm md-skip dropdown-toggle" type="button" data-toggle="dropdown" data-close-others="true" data-hover="dropdown">
+                                        <span>Hi,<?php echo $_SESSION['firstname']; ?></span>
+                                    </button>
+                                    <ul class="dropdown-menu-v2" role="menu">
+                                        <li>
+                                            <a href="/changepassword">
+                                                <i class="icon-user"></i> Change Password
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/logout">
+                                                <i class="icon-key"></i> Log Out 
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="">
+                                                <i class="icon-briefcase"></i> <?php echo $_SESSION['user_roles']; ?>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>                        
+                        </div>                       
+                        <div class="nav-collapse collapse navbar-collapse navbar-responsive-collapse"  >
+                            <ul class="nav navbar-nav" >
+                                <li class="dropdown dropdown-fw dropdown-fw-disabled active open selected">
+                                    <a class="text-uppercase" href="/index.php">
+                                        <i class="icon-home"></i> Home 
+                                    </a>      
+                                </li>
+                                <li>
+                                    <a class="text-uppercase" href="/dutysheet/view"><i class="glyphicon glyphicon-pencil"></i>View Duty Sheet</a>
+                                </li>
+                            </ul>
+                        </div>                      
+                    </div>                
+                </nav>
+            </header>
+            <div class="container-fluid">
+                <div class="page-content">
+                    <div class="page-content-row">
+                        <div class="col-md-3">
+                            <div class="page-sidebar">
+
+                                <div class="col-xs-12">
+                                    <a class="dashboard-stat dashboard-stat-v2 blue" href="/event/create">
+                                        <div class="visual">
+                                            <i class="fa fa-comments"></i>
+                                        </div>
+                                        <div class="details">
+                                            <div class="number">
+                                                <span data-value="2" id="submittercompany" style="font-size: xx-large"  data-counter="counterup" class="glyphicon glyphicon-briefcase"></span>
+                                            </div>
+                                            <div class="desc"> Create Event </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                 <div class="col-xs-12">
+                                    <div class="dashboard-stat dashboard-stat-v2 red" >
+                                        <div class="visual">
+                                            <i class="fa fa-comments"></i>
+                                        </div>
+                                        <div class="details">
+                                            <div class="number">
+                                                <span class="glyphicon glyphicon-usd"></span><span  id="eventcost" style="font-size: xx-large" ></span>
+                                            </div>
+                                            <div class="desc"> Event Cost </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <center>
+                                    <a class="btn btn-outline blue" href="../../index.php">back to main page</a>    
+                                </center>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="panel panel-info">
+                                  <div class="panel-heading blue"><header>Select Company for list of active events</header></div>
+                                  <div class="panel-body"> <?php
+                                    include 'Views/Shared/Controls/CompanySearch/search-form.php';
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="col-xs-4" style="font-size: large">
+                                { val_CompanyName }      <br>   
+                            </div>
+                        </div>
+<!--                        <form action="/event/deactivate" method="post">
+
+            <input type="hidden" name="EventId" id="hdnEventId" value="">
+            <button type="button" class="btn btn-danger btn-default pull-right col-xs-3" name="btn-delete" id="btnDelete"><strong>Delete Event</strong></button> 
+      </form>-->
+                    </div>
+
+                </div>
+
+
+
+<!--                <form method="post">
+                <div id="myModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                                         Modal content
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Event Details</h4>
+                                  </div>
+                                  <div class="modal-body">
+                                <div class="col-md-4" >
+                                    <br>
+                                    <input type="hidden" name="EventId" id="SubmitEventId">
+
+                                    <label>Police Services</label>
+                                    <input type="text"  class="form-control" id="PoliceServices" name="PoliceServices" autocomplete="off" >  
+
+                                    <label>VAT</label>
+                                    <input type="text" class="form-control"  id="VATPoliceServices" name="VATPoliceServices" autocomplete="off"  >
+
+                                    <label>Equipment</label>
+                                    <input type="text" class="form-control"  id="OperationalSupport" name="OperationalSupport" autocomplete="off"  >
+
+                                  
+                                    
+                                </div>
+                                <div class="col-md-4" >
+                                    <label>Event Name</label>
+                                    <input type="text"  class="form-control" id="EventName" name="EventName" autocomplete="off" required >  
+
+                                    <label>Event Date</label>
+                                    <input type="text" class="form-control" name="EventDate" placeholder="YYYY-MM-DD" autocomplete="off"  id="EventDate" >
+                                    <script>
+                                        $(function () {
+                                            $("#datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+                                        });
+                                    </script>
+                                    <div><input id="paylist" name="paylist" class="form-control" type="hidden" ></div>
+                                    <i class="glyphicon glyphicon-usd"></i><label> Event Cost</label>
+                                    <input type="text"  class="form-control" id="EventCost" name="EventCost" autocomplete="off" required value="" placeholder="This is coming from Proforma">  
+
+                                    <i class="glyphicon glyphicon-comment"></i><label> Comments</label>
+                                    <textarea  class="form-control" id="Comments" name="Comments" rows="4" cols="50"></textarea>
+                                </div>
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <center>
+                                                                         <button type="submit" class="btn btn-default green" name="btn-update"><strong>Update Event</strong></button> 
+                                </center>
+                                  </div> 
+                                  
+                                                      
+                                
+                              </div>
+                    </div> 
+
+                </div> 
+                    </form>-->
+            </div>
+
+
+            { foot } 
+    </body>
+</html>

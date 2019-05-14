@@ -69,6 +69,21 @@
                 $('#Division').on('change', function () {
                     //alert($('#Division :selected').attr('id'));
                     var inputVal = $('#Division :selected').attr('id');
+                    // alert(inputVal);
+                    var station = document.getElementById("Station");
+                    for (i = 0; i < station.options.length; i++) {
+
+                        if (inputVal == station.options[i].id)
+                        {
+
+                           station.options[i].style.display = "inline";
+                           station.options[i].selected = true;
+//Add operations here
+                        } else
+                        {
+                            station.options[i].style.display = "none";
+                        }
+                    }
                     var timestamp = new Date();
                     var date = timestamp.getDate().toString();
                     var month = (timestamp.getMonth() + 1).toString();
@@ -78,11 +93,11 @@
                     var seconds = timestamp.getSeconds().toString();
 
                     var eventid = inputVal + year + month + date + hours + minutes + seconds;// + hours  
-                            // var divId = eventid.substring(0, 4);
+                    // var divId = eventid.substring(0, 4);
                     //alert(test);
                     $('#lblEventRef').text(eventid);
-                   // $('#EventId').val(eventid);
-                   
+                    // $('#EventId').val(eventid);
+
                 });
 
                 $('#Equipment').on('change', function () {
@@ -233,9 +248,9 @@
                     acctrec.push("preaccount" + accountcount);
                     //acctrec.push(acctid);
                     acctrec.push(ResourceTotal);
-                     acctrec.push(inputVal);
-                     acctrec.push(rankcount);
-                     acctrec.push(rankcount);
+                    acctrec.push(inputVal);
+                    acctrec.push(rankcount);
+                    acctrec.push(rankcount);
                     // acctrec.push(document.getElementById("AccountNumber").value);
                     accountarr.push(acctrec);
                     //alert(acctrec[3]);
@@ -330,25 +345,25 @@
                     $("#hdnOperationalSupport").val(preaccountOS.toFixed(2));
                     $("#hdnPoliceServices").val(preaccountPS.toFixed(2));
                     $("#hdnVATPoliceServices").val(preaccountVAT.toFixed(2));
- 
- var divid = document.getElementById("lblEventRef").innerHTML;
+
+                    var divid = document.getElementById("lblEventRef").innerHTML;
 //  var compname = document.getElementById('searchcomp').value;
 //             $('#hdnCompanyName').val(compname);       
- // var divid = document.getElementById("EventId").value;
- $('#hdnDivisionId').val(divid.substring(0, 4));
+                    // var divid = document.getElementById("EventId").value;
+                    $('#hdnDivisionId').val(divid.substring(0, 4));
 // $('#lblEventRef').text(eventid);
-                   $('#EventId').val(divid);
- // var subaccounts = document.getElementById("pillwrapper")
-                                          //for (i = 0; i < accountarr.length; i++) {
-                           $('#hdnAsset').val(JSON.stringify(accountarr));
+                    $('#EventId').val(divid);
+                    // var subaccounts = document.getElementById("pillwrapper")
+                    //for (i = 0; i < accountarr.length; i++) {
+                    $('#hdnAsset').val(JSON.stringify(accountarr));
 
-                                          //}
+                    //}
 //                    var EventDate = document.getElementById("datepicker").value;
 //                    try {
 //                        var oppSupportVal = document.getElementById("CompName").value;
 //                    } catch (err) {
-    //                    e.preventDefault();
-                        //alert(test);
+                    //                    e.preventDefault();
+                    //alert(test);
 //                    }
 
 
@@ -492,19 +507,19 @@
                                         <div class="details">
                                             <div class="number">
                                                 <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="policeservicestotal" style="font-size: xx-large" >0</span>
-                                                
+
                                             </div>
                                             <div class="desc"> Police Services Total </div>
                                         </div>
                                     </div>
-                                         <div class="dashboard-stat dashboard-stat-v2 purple" >
+                                    <div class="dashboard-stat dashboard-stat-v2 purple" >
                                         <div class="visual">
                                             <i class="fa fa-comments"></i>
                                         </div>
                                         <div class="details">
                                             <div class="number">
                                                 <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="policeservicestotal" style="font-size: xx-large" >0</span>
-                                               
+
                                             </div>
                                             <div class="desc"> Vat Total </div>
                                         </div>
@@ -616,6 +631,11 @@
 
                                                             { Divisions }
                                                         </select>
+                                                        <label>Select Station</label>
+                                                        <select class="form-control" id="Station">
+
+                                                            { Stations }
+                                                        </select>
                                                         <label>Event Name</label>
                                                         <input type="text"  class="form-control" id="EventName" name="EventName" autocomplete="off" required value="{ EventName }" placeholder="Enter company event">  
 
@@ -651,12 +671,12 @@
                                                 <div class="col-md-3" >
 
                                                     <input type="hidden" class="form-control" id="EventId" name="EventId"  >
-                                                   <input type="hidden" class="form-control" id="hdnDivisionId" name="hdnDivisionId"  >
+                                                    <input type="hidden" class="form-control" id="hdnDivisionId" name="hdnDivisionId"  >
                                                     <input type="hidden" class="form-control" id="hdnEventCost" name="hdnEventCost"  >
                                                     <input type="hidden" class="form-control" id="hdnOperationalSupport" name="hdnOperationalSupport"  >
                                                     <input type="hidden" class="form-control" id="hdnPoliceServices" name="hdnPoliceServices"  >
                                                     <input type="hidden" class="form-control" id="hdnVATPoliceServices" name="hdnVATPoliceServices"  >
-                                                   <input type="hidden" class="form-control" id="hdnAsset" name="hdnAsset" value="" >
+                                                    <input type="hidden" class="form-control" id="hdnAsset" name="hdnAsset" value="" >
                                                     <input type="hidden" class="form-control" id="VATDBval" name="VATDBval" value="{ VATDBval }" >
 
                                                 </div>
@@ -687,6 +707,9 @@
                                                         <label><strong>Resource Count</strong></label>
                                                         <input type="number"  class="form-control" id="ResourceCount" name="ResourceCount" min="1" value="1" required  >     
 
+                                                        <label><strong>Hours</strong></label>
+                                                        <input type="number"  class="form-control" id="RSHoursCount" name="RSHoursCount" min="1" value="1" required  >     
+
                                                     </div>
                                                     <!-- Modal footer -->
                                                     <div class="modal-footer">
@@ -714,8 +737,12 @@
                                                             <option>Select Equipment</option>
                                                             { Equipment }
                                                         </select>
+
+                                                        <label><strong>Hours</strong></label>
+                                                        <input type="number"  class="form-control" id="EquipmentHoursCount" name="EquipmentHoursCount" min="1" value="1" required  >     
+
                                                         <label><strong>Resource Count</strong></label>
-                                                        <input type="number"  class="form-control" id="OPResourceCount" name="OPResourceCount" min="1" value="1" required  > 
+                                                        <input type="number"  class="form-control" id="OSHoursCount" name="OSHoursCount" min="1" value="1" required  > 
 
                                                     </div>
                                                     <!-- Modal footer -->

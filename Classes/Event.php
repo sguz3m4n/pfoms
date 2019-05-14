@@ -38,6 +38,29 @@ class Event {
     public $AssetName = "";
     public $Quantity = "";
     public $Value = "";
+    
+    function  GetListOfStations(){
+         $result = "";
+        $conn = conn();
+        $stmt = $conn->prepare("SELECT `StationName`, `DivisionId`"
+                . " FROM `station` "
+                . "WHERE DelFlg ='N';");
+        $stmt->execute();
+        $result_array = $stmt->fetchAll();
+     
+        foreach ($result_array as $value) {
+            $DivCode = $value['DivisionId'];
+            if ($DivCode == "BDIV"){
+                $result .= "<option id='$DivCode' >" . $value['StationName'] . "</option>";
+            }
+            else {$result .= "<option id='$DivCode' style='display:none;' >" . $value['StationName'] . "</option>";}
+            
+        }
+        return $result;
+        $conn = NULL;
+     
+    }
+    
  
     function CreateEventPreAccount($EventId, $AssetName, $Quantity, $Value, $CompanyName) {
 

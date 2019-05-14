@@ -178,6 +178,7 @@ class EventCreateController extends PermissionController {
             $divisions = $divmodel->GetDivisions();
             $rolerates = $model->GetRoleRates();
             $equipment = $equipmodel->GetEquipmentItems();
+            $stations = $model->GetListOfStations();
 //$preaccounts = $model->GetPreAccounts();
             $VAT = $model->getVat();
 //put prefix from division drop down id here
@@ -201,6 +202,7 @@ class EventCreateController extends PermissionController {
             $template->replace("Divisions", $divisions);
             $template->replace("RoleRates", $rolerates);
             $template->replace("Equipment", $equipment);
+                        $template->replace("Stations", $stations);
             $template->publish();
         }
     }

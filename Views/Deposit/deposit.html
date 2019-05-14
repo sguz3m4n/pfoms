@@ -288,11 +288,24 @@
                                                     <div id='container' >   
                                                         <span class="glyphicon glyphicon-"></span> <label><strong>Pro Forma #</strong></label>
                                                         <input type="text" class="form-control" id="ProformaNumber" name="ProformaNumber" autocomplete="off" required value="{ ProformaNumber }" placeholder="********">
+                                                         <label>Receipt Date</label>
+                                                        <input type="text" class="form-control" name="ReceiptDate" placeholder="YYYY-MM-DD" autocomplete="off"  id="datepicker" >
+                                                        <script>
+                                                            $(function () {
+                                                                $("#datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+                                                            });
+                                                        </script>
                                                          <span class="glyphicon glyphicon-"></span> <label><strong>Receipt #</strong></label>
-                                                        <input type="text" class="form-control" id="ASYCUDANum" name="ASYCUDANum" autocomplete="off" required value="{ ASYCUDANum }" placeholder="R********">
+                                                        <input type="text" class="form-control" id="Receipt" name="Receipt" autocomplete="off" required value="{ ASYCUDANum }" placeholder="R********">
                                                         <span class="glyphicon glyphicon-"></span> <label><strong>GOB AVJ #</strong></label>
                                                         <input type="text" class="form-control" id="InvoiceNumber" name="InvoiceNumber" autocomplete="off" required value="{ InvoiceNumber }" placeholder="R********">
-                                                       
+                                                             <label>GOB AVJ Date</label>
+                                                        <input type="text" class="form-control" name="GOBDate" placeholder="YYYY-MM-DD" autocomplete="off"  id="datepicker2" >
+                                                        <script>
+                                                            $(function () {
+                                                                $("#datepicker2").datepicker({dateFormat: 'yy-mm-dd'});
+                                                            });
+                                                        </script>
                                                         <span class="glyphicon glyphicon-comment"></span><label><strong>Comments</strong></label>
                                                         <textarea  class="form-control" id="Comments" name="Comments" rows="4" cols="50"></textarea>
                                                         <div><input id="paylist" name="paylist" class="form-control" type="hidden" ></div>

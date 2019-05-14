@@ -13,7 +13,7 @@ namespace BarcomModel;
 class Company {
 
     function __construct() {
-        
+    
     }
 
     //Company class properties map directly to company table
@@ -58,6 +58,8 @@ class Company {
         }
         $conn = NULL;
     }
+
+
 
     //Update Company Method
     function EditCompany($compid) {

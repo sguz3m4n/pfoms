@@ -17,6 +17,9 @@ class Deposit {
     public $ProformaNumber;
     public $InvoiceNumber;
     public $ReceiptNumber;
+    public $ReceiptDate;
+    public $GOBAVJ;
+    public $GOBAVJDate;
     public $TranType;
     public $CompanyName;
     public $CompanyId;
@@ -31,8 +34,6 @@ class Deposit {
     //Employee class properties map directly to employee table
 
     public $auditok;
-
- 
 
     //Method used to calculate current balance
     function CurrentBalance($depamount, $prevamount) {
@@ -87,8 +88,8 @@ class Deposit {
     //Method to create first time new company deposit
     function CreateDeposit() {
         $conn = conn();
-        $sql = "INSERT INTO `deposit` (`CompanyId`, `ASYCUDANo`, `ASYCUDADate`, `DepositAmount`, `PreviousBalance`, `CurrentBalance`, `Comments`, `RecEntered`, `RecEnteredBy`) VALUES
-                                 ('$this->CompanyId', '$this->ASYCUDA', NOW(), '$this->DepositAmount', '$this->PreviousBalance', '$this->CurrentBalance', '$this->Comments', NOW(), '$this->ReEnteredBy') ";
+        $sql = "INSERT INTO `deposit`(`CompanyId`, `InvoiceNo`, `ReceiptNo`, `ReceiptDate`, `GOBNo`, `GOBDate`, `DepositAmount`, `PreviousBalance`, `CurrentBalance`, `Comments`, `RecEntered`, `RecEnteredBy`) VALUES "
+                . "('$this->CompanyId','$this->InvoiceNumber','$this->ReceiptNumber','$this->ReceiptDate','$this->GOBAVJ','$this->GOBAVJDate','$this->DepositAmount','$this->DepositAmount','$this->PreviousBalance','$this->CurrentBalance','$this->Comments',NOW(), '$this->ReEnteredBy')";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {

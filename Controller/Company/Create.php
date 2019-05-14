@@ -1,4 +1,5 @@
 <?php
+
 /*
   Developed by Kitji Studios
   Development Team: Shayne Marshall, Frederick Masterton Chandler, Kamar Durant
@@ -37,6 +38,7 @@ class CompanyCreateController extends PermissionController {
     private $Email = "";
     private $Notes = "";
     private $CompanyIdIsValid = "";
+    private $MyContactRecords;
 
 //Validation Engine will execute any validation on the fields in the interface
     function ValidationEngine($elements) {
@@ -67,7 +69,7 @@ class CompanyCreateController extends PermissionController {
             $conn = conn();
             $compinst = new \BarcomModel\Company();
             $audinst = new \BarcomModel\Audit();
-            $this->CompanyId = $compid = $compinst->CompanyId = $_POST['CompanyId'];
+            $this->CompanyId = $compid = $compinst->CompanyId = $_POST['TIN'];
             $this->CaipoId = $caipoid = $compinst->CaipoId = $_POST['CaipoId'];
             $this->TIN = $tin = $compinst->TIN = $_POST['TIN'];
             $this->CompanyName = $compname = $compinst->CompanyName = $_POST['CompanyName'];
@@ -76,7 +78,7 @@ class CompanyCreateController extends PermissionController {
             $this->AddressLine3 = $compinst->AddressLine3 = $_POST['AddressLine3'];
             $this->Parish = $compinst->Parish = $_POST['Parish'];
             $this->PostalCode = $compinst->PostalCode = $_POST['PostalCode'];
-            $this->ContactName = $compinst->ContactName = $_POST['ContactName'];
+            //$this->ContactName = $compinst->ContactName = $_POST['ContactName'];
             $this->PhoneNumber = $compinst->PhoneNumber = $_POST['PhoneNumber'];
             $this->FaxNumber = $compinst->FaxNumber = $_POST['FaxNumber'];
             $this->Email = $compinst->Email = $_POST['Email'];
@@ -84,28 +86,38 @@ class CompanyCreateController extends PermissionController {
             $compinst->CompStatus = 'Active';
             $compinst->DelFlg = 'N';
 
+            $this->MyContactRecords = $contactrecs = json_decode($_POST['contactlist'], TRUE);
+
 //Send elements to be validated
             $validateme = ["CompanyId"];
             $this->ValidationEngine($validateme);
 
 //if validation succeeds then commit info to database
-            if ($this->CompanyIdIsValid) {
-                if ($compinst->IfExists($compinst->CompanyId) === 0) {
-                    $compinst->CreateCompany($username);
+            //if ($this->CompanyIdIsValid) {
+            if ($compinst->IfExists($compinst->CompanyId) === 0) {
+                $compinst->CreateCompany($username);
+                foreach ($contactrecs as $value) {
+                    $contactname = $value[0];
+                    $contactemail = $value[1];
+                    $contactnumber = $value[2];
+                    $contactinst = new \BarcomModel\Contact();
+                    $contactinst->CreateContact($contactname, $contactemail, $contactnumber, $compid);
                 }
+            }
 
 //if validation succeeds then log audit record to database
-                if ($compinst->auditok == 1) {
-                    $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CCMP');
-                    $TranDesc = 'Create New Company for ' . $compid . " Name " . $compname;
-                    $User = $username;
-                    $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
-                    $token = '<br><br><span class="label label-success">Company Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
-                            '<span class="label label-success">Company Id</span> ' . '<span class="label label-info">' . $compid . '</span><br>';
-                    $token1 = 'Record Successfully Created';
-                    header("Location:" . "/success?result=$token&header=$token1&args=");
-                }
-            } else {
+            if ($compinst->auditok == 1) {
+                $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CCMP');
+                $TranDesc = 'Create New Company for ' . $compid . " Name " . $compname;
+                $User = $username;
+                $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
+                $token = '<br><br><span class="label label-success">Company Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
+                        '<span class="label label-success">Company Id</span> ' . '<span class="label label-info">' . $compid . '</span><br>';
+                $token1 = 'Record Successfully Created';
+                header("Location:" . "/success?result=$token&header=$token1&args=");
+            }
+            // } 
+            else {
                 //if validation fails do postback with values already entered
                 $model = new \BarcomModel\Company();
                 $parishes = $model->GetParishes();

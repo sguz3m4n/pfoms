@@ -104,6 +104,7 @@ class ComposerStaticInitdbfd59ea50047003c0635f21387c380a
         'Composer\\Autoload\\ClassLoader' => __DIR__ . '/..' . '/composer/ClassLoader.php',
         'Composer\\Autoload\\ComposerStaticInitdbfd59ea50047003c0635f21387c380a' => __DIR__ . '/..' . '/composer/autoload_static.php',
         'Controllers\\AccountCreateController' => __DIR__ . '/../..' . '/Controller/Account/Create.php',
+        'Controllers\\AccountDeactivateController' => __DIR__ . '/../..' . '/Controller/Account/Delete.php',
         'Controllers\\AccountEditController' => __DIR__ . '/../..' . '/Controller/Account/Edit.php',
         'Controllers\\AmendPaymentController' => __DIR__ . '/../..' . '/Controller/Payment/Amend.php',
         'Controllers\\BaseController' => __DIR__ . '/../..' . '/Controller/base_template.php',

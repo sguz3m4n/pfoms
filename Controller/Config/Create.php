@@ -53,24 +53,26 @@ class ConfigCreateController extends PermissionController {
             $audinst = new \BarcomModel\Audit();
             $this->ConfigId = $compid = $compinst->ConfigId = $_POST['ConfigId'];
 
-            $this->ItemName = $compname = $compinst->ItemName = $_POST['ItemName'];
-            $this->ItemCode = $compinst->ItemCode = $_POST['ItemCode'];
-            $this->Value = $compinst->Value = $_POST['Value'];
-            $this->Comments = $compinst->Comments = $_POST['Comments'];
+            $this->ItemName = $ItemName = $compinst->ItemName = $_POST['ItemName'];
+            $this->ItemCode = $ItemCode = $compinst->ItemCode = $_POST['ItemCode'];
+            $this->Value = $Value =  $compinst->Value = $_POST['Value'];
+            $this->Comments = $Comments =  $compinst->Comments = $_POST['Comments'];
             
-            $this->RecEntered = $compinst->RecEntered = $_POST['RecEntered'];
-            $this->RecEnteredBy = $compinst->RecEnteredBy = $_POST['RecEnteredBy'];
-            $this->RecModified = $compinst->RecModified = $_POST['RecModified'];
-            $this->RecModifiedBy = $compinst->RecModifiedBy = $_POST['RecModifiedBy'];
+//            $this->RecEntered = $Comments = $compinst->RecEntered = $_POST['RecEntered'];
+            $this->RecEnteredBy = $Comments = $compinst->RecEnteredBy = $username;
+//            $this->RecModified = $Comments = $compinst->RecModified = $_POST['RecModified'];
+//            $this->RecModifiedBy = $Comments = $compinst->RecModifiedBy = $_POST['RecModifiedBy'];
             
-            $compinst->DelFlg = 'N';
+            $compinst->DelFlg = $DelFlg = 'N';
 
 //Send elements to be validated
             //$validateme = ["ConfigId"];
             //$this->ValidationEngine($validateme);
 
 //if validation succeeds then commit info to database
-            if ($this->ConfigIdIsValid) {
+            if (1) {
+                $compinst->CreateConfig($ItemCode, $ItemName, $Value, $Comments, $RecEnteredBy, $DelFlg);
+                    
 //                if ($compinst->IfExists($compinst->ConfigId) === 0) {
 //                    $compinst->CreateConfig($username);
 //                }
@@ -78,12 +80,11 @@ class ConfigCreateController extends PermissionController {
 //if validation succeeds then log audit record to database
                 if ($compinst->auditok == 1) {
                     $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CCMP');
-                    $TranDesc = 'Create New Config for ' . $compid . " Name " . $compname;
+                    $TranDesc = 'Create New Config for ' . $ItemCode . " Name " . $ItemName;
                     $User = $username;
                     $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
-                    $compinst->CreateConfig($ItemCode, $ItemName, $Value, $Comments, $RecEntered, $RecEnteredBy, $DelFlg);
-                    $token = '<br><br><span class="label label-success">Config Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
-                            '<span class="label label-success">Config Id</span> ' . '<span class="label label-info">' . $compid . '</span><br>';
+                    $token = '<br><br><span class="label label-success">Config Name</span> ' . '<span class="label label-info"> ' . $ItemName . '</span><br><br><br>' .
+                            '<span class="label label-success">Config Id</span> ' . '<span class="label label-info">' . $ItemCode . '</span><br>';
                     $token1 = 'Record Successfully Created';
                     header("Location:" . "/success?result=$token&header=$token1&args=");
                 }
@@ -93,6 +94,10 @@ class ConfigCreateController extends PermissionController {
                 $template = new MasterTemplate();
                 $template->load("Views/Config/config.html");
                 $template->replace("ConfigId", $this->ConfigId);
+                $template->replace("ItemName", $this->ItemName);
+                $template->replace("ItemCode", $this->ItemCode);
+                $template->replace("Value", $this->Value);
+                $template->replace("Comments", $this->Comments);
                 
 
                 $template->replace("val_ConfigId", $_SESSION['$compidwrapper']);

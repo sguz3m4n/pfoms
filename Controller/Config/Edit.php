@@ -47,12 +47,11 @@ class ConfigEditController extends PermissionController {
             $audinst = new \BarcomModel\Audit();
 
             //Get Id from browser interface
-            $ConfigId = $_POST['ConfigId'];
+            $ItemCode = $_POST['ItemCode'];
 
             //Check to see if the record already exists            
             //If it does execute update
-            if ($compinst->IfExists($ConfigId) === 1) {
-                $this->ConfigId = $compid = $compinst->ConfigId = $_POST['ConfigId'];
+            if ($compinst->IfExists($ItemCode) === 1) {
                 $this->ItemName = $compname = $compinst->ItemName = $_POST['ItemName'];
                 $this->ItemCode = $compinst->ItemCode = $_POST['ItemCode'];
                 $this->Value = $compinst->Value = $_POST['Value'];
@@ -60,23 +59,24 @@ class ConfigEditController extends PermissionController {
                 
                 
                 $compinst->RecModifiedBy = $username;
+                $compinst->RecModified  = date("Y-m-d H:i:s");
 
                 //Send elements to be validated
 //                $validateme = ["ConfigName"];
 //                $this->ValidationEngine($validateme);
 
                 //if validation succeeds then commit info to database
-                if ($this->NameIsValid) {
-                    $compinst->EditConfig($ConfigId);
+                if (1) {
+                    $compinst->UpdateConfig($ItemCode);
 
                     if ($compinst->auditok == 1) {
                         $tranid = $audinst->TranId = $audinst->GenerateTimestamp('UCMP');
-                        $TranDesc = 'Update Config for ' . $compid . " Name " . $compname;
+                        $TranDesc = 'Update Config for ' . $ItemCode . " Name " . $ItemName;
                         $User = $username;
                         $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
                         $compinst->UpdateConfig($ItemCode);
-                        $token = '<br><br><span class="label label-success">Config Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
-                                '<span class="label label-success">Config Id</span> ' . '<span class="label label-info">' . $compid . '</span><br>';
+                        $token = '<br><br><span class="label label-success">Config Name</span> ' . '<span class="label label-info"> ' . $ItemName . '</span><br><br><br>' .
+                                '<span class="label label-success">Config Id</span> ' . '<span class="label label-info">' . $ItemCode . '</span><br>';
                         $token1 = 'Record Successfully Updated';
                         header("Location:" . "/success?result=$token&header=$token1&args=");
                     }
@@ -86,7 +86,10 @@ class ConfigEditController extends PermissionController {
                     $template->load("Views/Config/config_edit.html");
                     //$template->replace("parishes", $parishes);
                     $template->replace("title", " Create New Config ");
-                    $template->replace("ConfigName", $this->Name);
+                    $template->replace("Value", $this->Value);
+                    $template->replace("ItemName", $this->ItemCode);
+                    $template->replace("ItemCode", $this->ItemName);
+                    $template->replace("Comments", $this->Comments);
                     $template->publish();
                 }
             }

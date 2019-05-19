@@ -3,44 +3,42 @@
 include '../../../../dbconfig.php';
 include '../../../../Classes/Account.php';
 $q = $_GET['q'];
+
 $conn = conn();
 
-$sql = 'SELECT * FROM account WHERE Name = "' . $q . '" AND DelFlg="N"';
+$sql = 'SELECT * FROM account WHERE AccountName = "' . $q . '" AND DelFlg="N"';
 
 $result = $conn->prepare($sql);
 $result->execute();
+
 $compinst = new BarcomModel\Account();
 
 foreach ($result as $value) {
+
     $compinst->AccountId = $value['AccountId'];
-    $compinst->ItemName = $value['Name'];
+    $compinst->Name = $value['AccountName'];
     
-    $compinst->Category = $value['Type'];
+    $compinst->Type = $value['Type'];
     
-    $compinst->CompStatus = $value['CompStatus'];
     $compinst->RecEntered = $value['RecEntered'];
     $compinst->RecEnteredBy = $value['RecEnteredBy'];
     $compinst->RecModified = $value['RecModified'];
     $compinst->RecModifiedBy = $value['RecModifiedBy'];
     $compinst->DelFlg = $value['DelFlg'];
 }
-
 $conn = NULL;
-
-
-$model = new \BarcomModel\Account();
-$parishes = $model->GetParishes();
+//$parishes = $model->GetParishes();
 ?>  
 <div class="panel panel-info">
     <div class="panel-heading">
         <center>
             <h3> 
                 <span class="label label-info"><?php echo $compinst->Name; ?></span>           
-                <span class="label label-info"><?php echo $compinst->AccountId; ?></span>                
+                <span class="label label-info"><?php echo $compinst->AccountId; ?></span>  
             </h3>  
         </center>
         <ul style="list-style: none">
-            <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Type: </label><?php echo $compinst->Type; ?></li> 
+            <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Type:  </label><?php echo $compinst->Type; ?></li>  
         </ul>
     </div>
 </div>
@@ -56,7 +54,7 @@ $parishes = $model->GetParishes();
     <button type="submit" class="btn btn-danger btn-default pull-right col-xs-3" name="btn-delete"><strong>Delete Account</strong></button> 
 </form>
 <!-- Modal --> 
-<form method="post">
+<form method="post" action="/account/edit">
     <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-lg">
                 <!-- Modal content-->
@@ -76,8 +74,8 @@ $parishes = $model->GetParishes();
                         <div class="col-xs-3">
                             <label>Type</label>
                             <input type="text" class="form-control" name="Type" value="<?php echo $compinst->Type; ?>"  >
-
                             <input type="hidden" name="AccountId" value="<?php echo $compinst->AccountId; ?>">
+                            
                         </div>
                     </div>
                                              

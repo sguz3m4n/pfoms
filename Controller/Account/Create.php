@@ -26,6 +26,11 @@ class AccountCreateController extends PermissionController {
     private $AccountId = "";
     private $AccountName = "";
     private $Type = "";
+    
+    private $RecEntered = "";
+    private $RecEnteredBy = "";
+    private $RecModified = "";
+    private $RecModifiedBy = "";
     private $DelFlg = "";
 
 //Validation Engine will execute any validation on the fields in the interface
@@ -48,9 +53,9 @@ class AccountCreateController extends PermissionController {
             $conn = conn();
             $acctinst = new \BarcomModel\Account();
             $audinst = new \BarcomModel\Audit();
-            $compid = $acctinst->AccountId = $AccountId = $_POST['AccountId'];
-            $this->Name = $AccountName = $_POST['AccountName'];
-            $this->Type = $Type = $_POST['Type'];
+            $acctinst->AccountId = $AccountId = $_POST['AccountId'];
+            $acctinst->Name = $this->Name = $AccountName = $_POST['AccountName'];
+            $acctinst->Type = $this->Type = $Type = $_POST['Type'];
             $acctinst->DelFlg = 'N';
 
 //Send elements to be validated
@@ -58,7 +63,6 @@ class AccountCreateController extends PermissionController {
             //$this->ValidationEngine($validateme);
 //if validation succeeds then commit info to database
             if (1) {  
-                $acctinst->CreateAccount($AccountId, $AccountName, $Type, $username);
 //                if ($acctinst->IfExists($acctinst->AccountId) === 0) {
 //                    $acctinst->CreateAccount($username);
 //                }
@@ -68,7 +72,7 @@ class AccountCreateController extends PermissionController {
                     $TranDesc = 'Create New Account for ' . $AccountId . " Name " . $AccountName;
                     $User = $username;
                     $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
-  
+                    $acctinst->CreateAccount($AccountId, $AccountName, $Type, $username);
                     $token = '<br><br><span class="label label-success">Account Name</span> ' . '<span class="label label-info"> ' . $AccountName . '</span><br><br><br>' .
                             '<span class="label label-success">Account Id</span> ' . '<span class="label label-info">' . $AccountId . '</span><br>';
                     $token1 = 'Record Successfully Created';
@@ -81,6 +85,7 @@ class AccountCreateController extends PermissionController {
                 $template->load("Views/Account/account.html");
                 $template->replace("AccountId", $this->AccountId);
                 $template->replace("AccountName", $this->Name);
+                $template->replace("Type", $this->Type);
 
                 $template->replace("val_AccountId", $_SESSION['$compidwrapper']);
                 $template->publish();
@@ -92,6 +97,7 @@ class AccountCreateController extends PermissionController {
             $template = new MasterTemplate();
             $template->load("Views/Account/account.html");
             $template->replace("AccountId", "");
+            $template->replace("AccountName", "");
             $template->replace("Type", "");
             $template->replace("RecEntered", "");
             $template->replace("RecEnteredBy", "");

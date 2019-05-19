@@ -28,7 +28,7 @@ if (isset($_REQUEST['term'])) {
             if (!empty($result)) {
                 // Fetch result rows as an associative array
                 foreach ($result as $value) {
-                    echo "<p><strong>" . $value["ItemName"] . $value["ItemCode"] . "</strong></p>";
+                    echo "<p><strong>" . $value["ItemName"] . "</strong></p>";
                 }
             } else {
                 echo "<p>No matches found</p>";

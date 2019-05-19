@@ -34,6 +34,7 @@ return array(
     'Composer\\Autoload\\ClassLoader' => $vendorDir . '/composer/ClassLoader.php',
     'Composer\\Autoload\\ComposerStaticInitdbfd59ea50047003c0635f21387c380a' => $vendorDir . '/composer/autoload_static.php',
     'Controllers\\AccountCreateController' => $baseDir . '/Controller/Account/Create.php',
+    'Controllers\\AccountDeactivateController' => $baseDir . '/Controller/Account/Delete.php',
     'Controllers\\AccountEditController' => $baseDir . '/Controller/Account/Edit.php',
     'Controllers\\AmendPaymentController' => $baseDir . '/Controller/Payment/Amend.php',
     'Controllers\\BaseController' => $baseDir . '/Controller/base_template.php',

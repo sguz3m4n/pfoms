@@ -1,4 +1,5 @@
 <?php
+
 /*
   Developed by Kitji Studios
   Development Team: Shayne Marshall, Frederick Masterton Chandler, Kamar Durant
@@ -13,13 +14,12 @@ require 'Classes/Station.php';
 require 'Classes/Audit.php';
 require 'Controller/base_template.php';
 
-
 class StationCreateController extends PermissionController {
 
     function __construct() {
         $this->setRoles(['Manager', 'Administrator', 'Super User']);
     }
-    
+
     public $StationId;
     public $StationName;
     public $RecEntered;
@@ -27,7 +27,8 @@ class StationCreateController extends PermissionController {
     public $RecModified;
     public $RecModifiedBy;
     public $DelFlg;
-    
+    public $MyStationRecords;
+
 //Validation Engine will execute any validation on the fields in the interface
     function ValidationEngine($elements) {
         foreach ($elements as $value) {
@@ -49,20 +50,18 @@ class StationCreateController extends PermissionController {
             $compinst = new \BarcomModel\Station();
             $audinst = new \BarcomModel\Audit();
             $this->StationId = $StationId = $compinst->StationId = $_POST['StationId'];
-            $this->StationName = $compinst->StationName = $StationName =  $_POST['StationName'];
-                        
+            $this->StationName = $compinst->StationName = $StationName = $_POST['StationName'];
+            $this->MyStationRecords = $stationrecs = json_decode($_POST['stationlist'], TRUE);
             $compinst->DelFlg = 'N';
 
 //Send elements to be validated
 //            $validateme = ["EquipmentId"];
 //            $this->ValidationEngine($validateme);
-
 //if validation succeeds then commit info to database
             if (1) {
 //                if ($compinst->IfExists($compinst->EquipmentId) === 0) {
 //                    $compinst->CreateStation($username);
 //                }
-
 //if validation succeeds then log audit record to database
                 if (1) {
                     $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CCMP');
@@ -89,12 +88,12 @@ class StationCreateController extends PermissionController {
         } else
         if (isset($_GET)) {
             $model = new \BarcomModel\Station();
-            
+
             $template = new MasterTemplate();
             $template->load("Views/Station/station.html");
             $template->replace("StationId", "");
             $template->replace("StationName", "");
-            
+
             $template->replace("title", " Create New Station ");
             $template->publish();
         }

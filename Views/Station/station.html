@@ -1,6 +1,90 @@
 <html lang="en-US">
     <head>
         { head }
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var stationcount = 0;
+                var stationarr = [];
+
+                $('#AddStation').on('click', function () {
+                    // alert("hello");
+                    var stationrec = [];
+                    var stationid = $('#StationId').val();
+                    var stationname = $('#StationName').val();
+                    stationrec.push(stationid);
+                    stationrec.push(stationname);
+
+                    var pillcontainer = document.getElementById('pillcontainer');
+                    var pillwrapper = document.getElementById('pillwrapper');
+
+                    //create instance of list elements
+                    var pill = document.createElement("li");
+                    pill.setAttribute("id", "stationcount" + stationcount);
+
+                    var removeicon = document.createElement("span");
+                    removeicon.setAttribute("class", "glyphicon glyphicon-minus");
+
+                    //dynamically create functions
+                    var pillanchor = document.createElement("a");
+                    //pillanchor.setAttribute("data-preactotal", OperationalSupportTotal);
+                    pillanchor.setAttribute("style", "bold");
+                    pillanchor.appendChild(document.createTextNode("Station Name- " + stationname + " Station Id " + stationid ));
+                    //<a href="mailto:webmaster@example.com">Jon Doe</a>
+
+                    pillanchor.appendChild(removeicon);
+
+                    pill.appendChild(pillanchor);
+                    pillwrapper.appendChild(pill);
+                    pillcontainer.appendChild(pillwrapper);
+                    //stationrec.push("preaccount" + stationcount);
+                    // acctrec.push(acctid);
+                    //acctrec.push(OperationalSupportTotal);
+                    // acctrec.push(document.getElementById("AccountNumber").value);
+                    stationarr.push(stationrec);
+
+                    stationcount++;
+
+                });
+
+                $(document).on("dblclick", ".pillwrapper li", function (event) {
+
+                    var key = this.id.toString();
+                    var elem = document.getElementById(this.id.toString());
+                    elem.parentNode.removeChild(elem);
+                    RemoveInfo(key);
+
+                });
+
+                //Send the populated array to the controller
+                $("#stationform").submit(function () {
+                    //TogglePRNControl();
+                    //var key = this.id.toString().trim();
+                    //PopulatePanelInfo(key);
+                    $("#stationlist").val(JSON.stringify(stationarr));
+                });
+                function RemoveInfo(key) {
+                    var indextoremove;
+
+                    for (i = 0; i < stationarr.length; i++) {
+                        // alert(accountarr[i][0]);
+
+                        if (stationarr[i][0] === key)
+                        {
+                            alert(stationarr[i][1]);
+                            // PreAccountTotal = PreAccountTotal - parseFloat(accountarr[i][1]);
+                            indextoremove = i;
+                        }
+                    }
+                    stationarr.splice(indextoremove, 1);
+                    //$("#eventcost").text(PreAccountTotal.toFixed(2));
+                    /* for (x = 0; x < accountarr.length; x++) {
+                     
+                     alert(accountarr[x][0] + accountarr[x][1]);
+                     }*/
+                    //alert(accountarr);
+                }
+            });
+        </script>
     </head>
     <body class="">
         <div class="wrapper">
@@ -113,7 +197,7 @@
 
 
                                     <div class="portlet-body form">
-                                        <form method="post" >
+                                        <form method="post" id="stationform" >
                                             <div class="form-group">
                                                 <div class="row center-block panel-body">
 
@@ -134,10 +218,17 @@
                                                         <a id="addstation" class="btn btn-default green" data-toggle="modal" data-target="#myModal">Station <i class="glyphicon glyphicon-plus"></i>
                                                         </a>
                                                     </div>  
+                                                    <div class="pillwrapper" id="pillcontainer">
+                                                        <ul class="nav nav-pills nav-stacked" id="pillwrapper" >  
+                                                            <br>
+
+                                                        </ul>   
+                                                    </div>
                                                 </div>                                               
 
                                             </div>
                                             <br>
+                                                 <div><input id="stationlist" name="stationlist" class="form-control" type="hidden" ></div>
                                             <center>
                                                 <button type="submit" class="btn btn-default blue" name="btn-create"><strong>Create Station</strong></button>                                     
                                             </center>
@@ -168,7 +259,8 @@
                                                     <!-- Modal footer -->
                                                     <div class="modal-footer">
                                                         <!-- <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>-->
-                                                        <button type="button" class="btn btn-info" id="AddAccount" data-enter="modal">Assign Station</button>
+                                                        <button type="button" class="btn btn-info" id="AddStation" data-enter="modal">Assign Station</button>
+
                                                     </div>                                            
                                                 </div>
                                             </div>

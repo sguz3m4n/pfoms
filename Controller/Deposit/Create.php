@@ -27,8 +27,14 @@ class MakeDepositController extends PermissionController {
         $this->setRoles(['Receipt Clerk', 'Manager', 'Super User']);
     }
 
-    private $Asycuda = "";
-    private $AsycudaIsValid = "";
+    private $EventId = "";
+    private $ProformaNo = "";
+    private $ProformaIsValid = "";
+    private $Receipt = "";
+    private $ReceiptNo = "";
+    private $ReceiptDate = "";
+    private $GOBNo = "";
+    private $GoBDate = "";
     private $DepAmount = "";
     private $DepAmountIsValid = "";
     private $CompId = "";
@@ -37,47 +43,47 @@ class MakeDepositController extends PermissionController {
 
     //Validation Engine will execute any validation on the fields in the interface
     function ValidationEngine($elements) {
-        foreach ($elements as $value) {
-            if ($value == "ASYCUDANum") {
-                $Rtest = substr($this->Asycuda, 0, 1);
-                if (($Rtest != 'R')) {
-                    $asycuderr = "ASYCUDA number is invalid format";
-                    $_SESSION['$asycudawrapper'] = '<span style="color:red" >' . " * " . $asycuderr . '</span>';
-                    $this->AsycudaIsValid = 0;
-                } else {
-                    $this->AsycudaIsValid = 1;
-                    $_SESSION['$asycudawrapper'] = NULL;
-                }
-            }
-            if ($value == "Deposit") {
-                if ($this->DepAmount <= 0) {
-                    $depamounterr = "Deposit amount must be greater than $0.00";
-                    $_SESSION['$depamountwrapper'] = '<span style="color:red" >' . " * " . $depamounterr . '</span>';
-                    $this->DepAmountIsValid = 0;
-                } else {
-                    $this->DepAmountIsValid = 1;
-                    $_SESSION['$depamountwrapper'] = NULL;
-                }
-            }
-            if ($value == "CompId") {
-                if (($this->CompId == "") || ($this->CompId == NULL)) {
-                    $compiderr = "You must select a company";
-                    $_SESSION['$compidwrapper'] = '<span style="color:red" >' . " * " . $compiderr . '</span>';
-                    $this->CompIdIsValid = 0;
-                } else {
-                    $this->CompIdIsValid = 1;
-                    $_SESSION['$compidwrapper'] = NULL;
-                }
-            }
-        }
-    }
-
+      foreach ($elements as $value) {
+      if ($value == "ASYCUDANum") {
+      $Rtest = substr($this->Asycuda, 0, 1);
+      if (($Rtest != 'R')) {
+      $asycuderr = "ASYCUDA number is invalid format";
+      $_SESSION['$asycudawrapper'] = '<span style="color:red" >' . " * " . $asycuderr . '</span>';
+      $this->AsycudaIsValid = 0;
+      } else {
+      $this->AsycudaIsValid = 1;
+      $_SESSION['$asycudawrapper'] = NULL;
+      }
+      }
+      if ($value == "Deposit") {
+      if ($this->DepAmount <= 0) {
+      $depamounterr = "Deposit amount must be greater than $0.00";
+      $_SESSION['$depamountwrapper'] = '<span style="color:red" >' . " * " . $depamounterr . '</span>';
+      $this->DepAmountIsValid = 0;
+      } else {
+      $this->DepAmountIsValid = 1;
+      $_SESSION['$depamountwrapper'] = NULL;
+      }
+      }
+      if ($value == "CompId") {
+      if (($this->CompId == "") || ($this->CompId == NULL)) {
+      $compiderr = "You must select a company";
+      $_SESSION['$compidwrapper'] = '<span style="color:red" >' . " * " . $compiderr . '</span>';
+      $this->CompIdIsValid = 0;
+      } else {
+      $this->CompIdIsValid = 1;
+      $_SESSION['$compidwrapper'] = NULL;
+      }
+      }
+      }
+      }
+     
     //Validation Engine will execute any validation on the fields in the interface
     function show($params) {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-create'])) {
-            $this->MyPreAccountRecords = $pymntrecs = json_decode($_POST['paylist'], TRUE);
+            //$this->MyPreAccountRecords = $pymntrecs = json_decode($_POST['paylist'], TRUE);
             //variables for data input 
             $depinst = new \BarcomModel\Deposit();
             $audinst = new \BarcomModel\Audit();
@@ -86,9 +92,15 @@ class MakeDepositController extends PermissionController {
             if ($varid != "") {
                 //If the company is making deposit for the first time
                 if ($depinst->IfExists($varid) === 0) {
-                    $asycuda = $this->Asycuda = $depinst->ASYCUDA = $_POST["ASYCUDANum"];
+                    $eventid = $this->EventId = $depinst->EventId = $_POST["hdnEventId"];
                     $CompanyName = $depinst->CompanyName = $_POST["CompName"];
+                    $proforma = $this->ProformaNo = $depinst->ProformaNumber = $_POST["ProformaNumber"];
+                    $receiptno = $this->ReceiptNo = $depinst->ReceiptNumber = $_POST["Receipt"];
+                    $reciptdate = $this->ReceiptDate = $depinst->ReceiptDate = $_POST["ReceiptDate"];
+                    $gobavj = $this->GOBNo = $depinst->GOBAVJ = $_POST["GOBAvj"];
+                    $gobdate = $this->GoBDate = $depinst->GOBAVJDate = $_POST["GOBDate"];
                     $depinst->Comments = $comments = 'New Deposit Account';
+
                     $depamount = number_format($_POST["Deposit"], 2, '.', '');
                     $prevamount = number_format(0, 2, '.', '');
                     $curamount = $depinst->CurrentBalance = $depinst->DepositAmount = $this->DepAmount = $depamount;
@@ -96,7 +108,7 @@ class MakeDepositController extends PermissionController {
                     $depinst->ReEnteredBy = $username;
 
                     //Send html post elements to be validated
-                    $validateme = ["ASYCUDANum", "Deposit", "CompId"];
+                    $validateme = [ "CompId"];
                     $this->ValidationEngine($validateme);
 
                     //if validation succeeds then commit info to database
@@ -136,8 +148,13 @@ class MakeDepositController extends PermissionController {
                         $template->publish();
                     }
                 } else if ($depinst->IfExists($varid) == 1) {
-                    $asycuda = $this->Asycuda = $depinst->ASYCUDA = $_POST["ASYCUDANum"];
+                    $eventid = $this->EventId = $depinst->EventId = $_POST["hdnEventId"];
                     $CompanyName = $depinst->CompanyName = $_POST["CompName"];
+                    $proforma = $this->ProformaNo = $depinst->ProformaNumber = $_POST["ProformaNumber"];
+                    $receiptno = $this->ReceiptNo = $depinst->ReceiptNumber = $_POST["Receipt"];
+                    $reciptdate = $this->ReceiptDate = $depinst->ReceiptDate = $_POST["ReceiptDate"];
+                    $gobavj = $this->GOBNo = $depinst->GOBAVJ = $_POST["GOBAvj"];
+                    $gobdate = $this->GoBDate = $depinst->GOBAVJDate = $_POST["GOBDate"];
                     $depinst->Comments = $comments = $_POST["Comments"];
                     $depamount = number_format($_POST["Deposit"], 2, '.', '');
                     $prevamount = number_format($_POST["CompanyBalance"], 2, '.', '');
@@ -147,8 +164,8 @@ class MakeDepositController extends PermissionController {
                     $depinst->ReEnteredBy = $username;
 
                     //Send elements to be validated
-                    $validateme = ["ASYCUDANum", "Deposit", "CompId"];
-                    $this->ValidationEngine($validateme);
+                    //$validateme = ["ASYCUDANum", "Deposit", "CompId"];
+                   // $this->ValidationEngine($validateme);
 
                     //if validation succeeds then commit info to database
                     if (($this->AsycudaIsValid) && ($this->DepAmountIsValid) && ($this->CompIdIsValid)) {
@@ -186,19 +203,19 @@ class MakeDepositController extends PermissionController {
                 }
             } else
             if ($varid == "") {
-                $this->CompId = $varid = $depinst->CompanyId = "";
-                $this->Asycuda = $depinst->ASYCUDA = $_POST["ASYCUDANum"];
+               // $this->CompId = $varid = $depinst->CompanyId = "";
+               // $this->Asycuda = $depinst->ASYCUDA = $_POST["ASYCUDANum"];
                 $this->DepAmount = $depamount = $_POST["Deposit"];
                 $depinst->Comments = $comments = $_POST["Comments"];
                 //Do postback with values already entered 
                 $template = new MasterTemplate();
                 $template->load("Views/Deposit/deposit.html");
                 $template->replace("title", " Create New Company Deposit");
-                $template->replace("ASYCUDANum", $this->Asycuda);
+                //$template->replace("ASYCUDANum", $this->Asycuda);
                 $template->replace("Deposit", $this->DepAmount);
                 $template->replace("CompId", $this->CompId);
                 $template->replace("val_Deposit", "");
-                $template->replace("val_AsycudaNum", "");
+                //$template->replace("val_AsycudaNum", "");
                 $template->replace("val_CompId", '<span style="color:red" >' . " * " . "Please select a company" . '</span>');
                 $template->publish();
             }
@@ -208,10 +225,10 @@ class MakeDepositController extends PermissionController {
             $template->load("Views/Deposit/deposit.html");
             $template->replace("title", " Create New Company Deposit");
             $template->replace("val_Deposit", "");
-            $template->replace("val_AsycudaNum", "");
+            //$template->replace("val_AsycudaNum", "");
             $template->replace("val_CompId", "");
             $template->replace("Deposit", "");
-            $template->replace("ASYCUDANum", "");
+           // $template->replace("ASYCUDANum", "");
             $template->replace("ProformaNumber", "");
             $template->replace("InvoiceNumber", "");
             $template->publish();

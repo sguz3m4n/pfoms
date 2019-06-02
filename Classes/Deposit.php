@@ -14,6 +14,7 @@ class Deposit {
 
     //Employee class properties map directly to employee table
     public $TransId;
+    public $EventId;
     public $ProformaNumber;
     public $InvoiceNumber;
     public $ReceiptNumber;
@@ -23,7 +24,6 @@ class Deposit {
     public $TranType;
     public $CompanyName;
     public $CompanyId;
-    public $EventId;
     public $PreviousBalance;
     public $CurrentBalance;
     public $CompanyBalance;
@@ -88,8 +88,9 @@ class Deposit {
     //Method to create first time new company deposit
     function CreateDeposit() {
         $conn = conn();
-        $sql = "INSERT INTO `deposit`(`CompanyId`, `InvoiceNo`, `ReceiptNo`, `ReceiptDate`, `GOBNo`, `GOBDate`, `DepositAmount`, `PreviousBalance`, `CurrentBalance`, `Comments`, `RecEntered`, `RecEnteredBy`) VALUES "
-                . "('$this->CompanyId','$this->InvoiceNumber','$this->ReceiptNumber','$this->ReceiptDate','$this->GOBAVJ','$this->GOBAVJDate','$this->DepositAmount','$this->DepositAmount','$this->PreviousBalance','$this->CurrentBalance','$this->Comments',NOW(), '$this->ReEnteredBy')";
+
+        $sql = "INSERT INTO `deposit`(`CompanyId`,`EventId`, `InvoiceNo`, `ReceiptNo`, `ReceiptDate`, `GOBNo`, `GOBDate`, `DepositAmount`, `PreviousBalance`, `CurrentBalance`, `Comments`, `RecEntered`, `RecEnteredBy`) VALUES "
+                . "('$this->CompanyId','$this->EventId','$this->InvoiceNumber','$this->ReceiptNumber','$this->ReceiptDate','$this->GOBAVJ','$this->GOBAVJDate','$this->DepositAmount','$this->DepositAmount','$this->PreviousBalance','$this->CurrentBalance','$this->Comments',NOW(), '$this->ReEnteredBy')";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {

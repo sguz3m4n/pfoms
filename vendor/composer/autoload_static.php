@@ -77,6 +77,7 @@ class ComposerStaticInitdbfd59ea50047003c0635f21387c380a
 
     public static $classMap = array (
         'Controllers\\AccountCreateController' => __DIR__ . '/../..' . '/Controller/Account/Create.php',
+        'Controllers\\AccountDeactivateController' => __DIR__ . '/../..' . '/Controller/Account/Delete.php',
         'Controllers\\AccountEditController' => __DIR__ . '/../..' . '/Controller/Account/Edit.php',
         'Controllers\\AddOfficerController' => __DIR__ . '/../..' . '/Controller/DutySheet/Create.php',
         'Controllers\\AmendPaymentController' => __DIR__ . '/../..' . '/Controller/Payment/Amend.php',

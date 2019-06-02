@@ -22,6 +22,8 @@ class AccountEditController extends PermissionController {
     }
 
     private $Name = "";
+    private $AccountId = "";
+    private $Type = "";
 
     //Validation Engine will execute any validation on the fields in the interface
     function ValidationEngine($elements) {
@@ -49,8 +51,8 @@ class AccountEditController extends PermissionController {
             //Check to see if the record already exists            
             //If it does execute update
             if ($compinst->IfExists($AccountId) === 1) {
-                $this->AccountId = $compid = $compinst->AccountId = $_POST['AccountId'];
-                $this->Name = $compname = $compinst->AccountName = $_POST['AccountName'];
+                $this->AccountId = $AccountId = $compinst->AccountId = $_POST['AccountId'];
+                $this->Name = $Name = $compinst->Name = $_POST['Name'];
                 $this->Type = $compinst->Type = $_POST['Type'];
                 
                 $compinst->RecModifiedBy = $username;
@@ -61,16 +63,15 @@ class AccountEditController extends PermissionController {
 
                 //if validation succeeds then commit info to database
                 if (1) {
-                    $compinst->EditAccount($AccountId);
 
                     if (1) {
                         $tranid = $audinst->TranId = $audinst->GenerateTimestamp('UCMP');
-                        $TranDesc = 'Update Account for ' . $compid . " Name " . $compname;
+                        $TranDesc = 'Update Account for ' . $AccountId . " Name " . $Name;
                         $User = $username;
                         $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
                         $compinst->UpdateAccount($AccountId);
-                        $token = '<br><br><span class="label label-success">Account Name</span> ' . '<span class="label label-info"> ' . $compname . '</span><br><br><br>' .
-                                '<span class="label label-success">Account Id</span> ' . '<span class="label label-info">' . $compid . '</span><br>';
+                        $token = '<br><br><span class="label label-success">Account Name</span> ' . '<span class="label label-info"> ' . $Name . '</span><br><br><br>' .
+                                '<span class="label label-success">Account Id</span> ' . '<span class="label label-info">' . $AccountId . '</span><br>';
                         $token1 = 'Record Successfully Updated';
                         header("Location:" . "/success?result=$token&header=$token1&args=");
                     }

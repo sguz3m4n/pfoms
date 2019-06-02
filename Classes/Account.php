@@ -67,16 +67,28 @@ class Account {
      function UpdateAccount($AccountId) {
         $conn = conn();
     
-        $sql = "UPDATE `account` SET `Name`=" . $this->Name . ",`Type`="
-                . $this->Type . "',`RecEntered`="
-                . $this->RecEntered . ", `RecEnteredBy`=" . $this->RecEnteredBy
-                . ", `RecModified`=" . $this->RecModified . ",`RecModifiedBy`=" . $this->RecModifiedBy 
-                . " WHERE AccountId ='" . $AccountId . "'";
+        $sql = "UPDATE `account` SET `AccountName`='" . $this->Name . "',`Type`='"
+                . $this->Type
+                . "', `RecModified`= NOW(),`RecModifiedBy`='" . $this->RecModifiedBy 
+                . "' WHERE AccountId ='" . $AccountId . "'";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {
             $this->auditok = 0;
         }
+        $conn = NULL;
+    }
+    
+    //Check to see if Employee currently exist Method
+    function IfExists($EquipmentId) {
+        $conn = conn();
+        $stmt = $conn->prepare("SELECT * FROM account WHERE AccountId  = '$AccountId' ;");
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        if (($result)) {
+            return 1;
+        }
+        return 0;
         $conn = NULL;
     }
 

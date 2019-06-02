@@ -26,7 +26,7 @@ class Config {
             
 
   
-    function CreateConfig($ItemCode, $ItemName, $Value,$Comments,$RecEntered, $RecEnteredBy,$DelFlg) {
+    function CreateConfig($ItemCode, $ItemName, $Value,$Comments,$RecEnteredBy,$DelFlg) {
 
         $conn = conn();
         $sql = "INSERT INTO `config` (`ItemCode`, `ItemName`, `Value`, `Comments`, `RecEntered`, `RecEnteredBy`,`DelFlg`)
@@ -69,17 +69,26 @@ class Config {
      function UpdateConfig($ItemCode) {
         $conn = conn();
     
-        $sql = "UPDATE `config` SET `ItemCode`= $this->ItemCode ,`ItemName`=
-                . $this->ItemName, `Value`= $this->Value,`Comments`= $this->Comments , `RecEntered`= 
-                . $this->RecEntered, `RecEnteredBy`= $this->RecEnteredBy
-                . , `RecModified`= $this->RecModified ,`RecModifiedBy`= $this->RecModifiedBy 
-                .  WHERE ItemCode ='" . $ItemCode . "'";
+        $sql = "UPDATE `config` SET `ItemCode`= '$this->ItemCode' ,`ItemName`="
+                . "'$this->ItemName', `Value`= '$this->Value',`Comments`= '$this->Comments' , "
+                . "`RecModified`= '$this->RecModified' ,`RecModifiedBy`= '$this->RecModifiedBy' "
+                .  "WHERE ItemCode ='" . $ItemCode . "'";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {
             $this->auditok = 0;
         }
         $conn = NULL;
+    }
+    
+    function IfExists($ItemCode) {
+        $conn = conn();
+        $stmt = $conn->prepare("select * from `config` WHERE `ItemCode`='$ItemCode';");
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        if (($result)) {
+            return 1;
+        }    
     }
 
     

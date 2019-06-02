@@ -5,7 +5,7 @@ include '../../../../Classes/Config.php';
 $q = $_GET['q'];
 $conn = conn();
 
-$sql = 'SELECT * FROM config WHERE Name = "' . $q . '" AND DelFlg="N"';
+$sql = 'SELECT * FROM config WHERE ItemName = "' . $q . '" AND DelFlg="N"';
 
 $result = $conn->prepare($sql);
 $result->execute();
@@ -13,7 +13,7 @@ $compinst = new BarcomModel\Config();
 
 foreach ($result as $value) {
     $compinst->ItemCode = $value['ItemCode'];
-    $compinst->ItemName = $value['Name'];
+    $compinst->ItemName = $value['ItemName'];
     
     $compinst->Value = $value['Value'];
     $compinst->Comments = $value['Comments'];
@@ -30,18 +30,18 @@ $conn = NULL;
 
 
 $model = new \BarcomModel\Config();
-$parishes = $model->GetParishes();
 ?>  
 <div class="panel panel-info">
     <div class="panel-heading">
         <center>
-            <h3> 
-                <span class="label label-info"><?php echo $compinst->Name; ?></span>           
+            <h3>
+                <span class="label label-info"><?php echo $sql; ?></span>
+                <span class="label label-info"><?php echo $compinst->ItemName; ?></span>           
                 <span class="label label-info"><?php echo $compinst->ItemCode; ?></span>                
             </h3>  
         </center>
         <ul style="list-style: none">
-            <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Type: </label><?php echo $compinst->Value; ?></li>
+            <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Value: </label><?php echo $compinst->Value; ?></li>
             <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Comments: </label><?php echo $compinst->Comments; ?></li> 
         </ul>
     </div>
@@ -54,7 +54,7 @@ $parishes = $model->GetParishes();
 </center> 
 <form action="/account/deactivate" method="post">
     <input type="hidden" name="ItemCode" value="<?php echo $compinst->ItemCode; ?>">
-    <input type="hidden" name="Name" value="<?php echo $compinst->Name; ?>">
+    <input type="hidden" name="ItemName" value="<?php echo $compinst->ItemName; ?>">
     <button type="submit" class="btn btn-danger btn-default pull-right col-xs-3" name="btn-delete"><strong>Delete Config</strong></button> 
 </form>
 <!-- Modal --> 
@@ -72,12 +72,11 @@ $parishes = $model->GetParishes();
                     <div class="row center-block panel-body">
                         <div class="col-xs-8">
                             <label>Config Name</label>
-                            <input type="text" class="form-control" name="Name" value="<?php echo $compinst->Name; ?>"  >
+                            <input type="text" class="form-control" name="ItemName" value="<?php echo $compinst->ItemName; ?>"  >
                         </div>
 
                         <div class="col-xs-3">
                             <label>Type</label>
-                            <input type="text" class="form-control" name="Type" value="<?php echo $compinst->Type; ?>"  >
                             <input type="text" class="form-control" name="Value" value="<?php echo $compinst->Value; ?>"  >
                             <input type="text" class="form-control" name="Comments" value="<?php echo $compinst->Comments; ?>"  >
                             <input type="hidden" name="ItemCode" value="<?php echo $compinst->ItemCode; ?>">
@@ -96,6 +95,5 @@ $parishes = $model->GetParishes();
 </form>
 
  
-
 
 

@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Controllers\\AccountCreateController' => $baseDir . '/Controller/Account/Create.php',
+    'Controllers\\AccountDeactivateController' => $baseDir . '/Controller/Account/Delete.php',
     'Controllers\\AccountEditController' => $baseDir . '/Controller/Account/Edit.php',
     'Controllers\\AddOfficerController' => $baseDir . '/Controller/DutySheet/Create.php',
     'Controllers\\AmendPaymentController' => $baseDir . '/Controller/Payment/Amend.php',

@@ -17,6 +17,9 @@ if (isset($_REQUEST['term'])) {
     if ($type == 'natregno') {
         $sql = "SELECT * FROM employee WHERE Natregno LIKE ? AND DelFlg='N'";
     }
+if ($type == 'forcenumber') {
+        $sql = "SELECT * FROM employee WHERE ForceNumber LIKE ? AND DelFlg='N'";
+    }
 
     if ($stmt = $conn->prepare($sql)) {
         // Bind variables to the prepared statement as parameters

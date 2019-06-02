@@ -41,7 +41,7 @@ return [
     [['GET', 'POST'], '/editpayment', ['Controllers\EditPaymentController', 'display']],
     [['GET', 'POST'], '/amendpayment', ['Controllers\AmendPaymentController', 'display']],
      [['GET', 'POST'], '/createdutysheet', ['Controllers\CreateDutySheetController', 'display']],
-     [['GET', 'POST'], '/dutysheet/view', ['Controllers\CreateDutySheetController', 'display']],    
+     [['GET', 'POST'], '/dutysheet/edit', ['Controllers\EditDutySheetController', 'display']],    
     [['GET', 'POST'], '/admin/processpayroll', ['Controllers\PayrollController', 'display']],
     [['GET', 'POST'], '/tablepymt', ['Controllers\PaymentTableController', 'display']],
     [['GET', 'POST'], '/success', ['Controllers\SuccessController', 'display']],

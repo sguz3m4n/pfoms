@@ -38,12 +38,35 @@ class Event {
     public $AssetName = "";
     public $Quantity = "";
     public $Value = "";
+    
+    function  GetListOfStations(){
+         $result = "";
+        $conn = conn();
+        $stmt = $conn->prepare("SELECT `StationName`, `DivisionId`"
+                . " FROM `station` "
+                . "WHERE DelFlg ='N';");
+        $stmt->execute();
+        $result_array = $stmt->fetchAll();
+     
+        foreach ($result_array as $value) {
+            $DivCode = $value['DivisionId'];
+            if ($DivCode == "BDIV"){
+                $result .= "<option id='$DivCode' >" . $value['StationName'] . "</option>";
+            }
+            else {$result .= "<option id='$DivCode' style='display:none;' >" . $value['StationName'] . "</option>";}
+            
+        }
+        return $result;
+        $conn = NULL;
+     
+    }
+    
  
-    function CreateEventPreAccount($EventId, $AssetName, $Quantity, $Value, $CompanyName) {
+    function CreateEventPreAccount($EventId, $AssetName, $Quantity, $Hours, $Value, $CompanyName, $CompanyId) {
 
         $conn = conn();
-        $sql = "INSERT INTO `eventpreaccount` (`EventId`, `AssetName`, `Quantity`, `Value`,`CompanyName`,`DelFlag`)
-            VALUES ('$EventId', '$AssetName', '$Quantity', '$Value','$CompanyName','N')";
+        $sql = "INSERT INTO `eventpreaccount` (`EventId`, `AssetName`, `Quantity`, `Hours`, `Value`,`CompanyName`,`CompanyId`,`DelFlag`)
+            VALUES ('$EventId', '$AssetName', '$Quantity','$Hours', '$Value','$CompanyName','$CompanyId','N')";
 
         if ($conn->exec($sql)) {
             $this->auditok = 1;
@@ -112,7 +135,7 @@ class Event {
     `Status`, `DelFlg`, `OperationalSupport`, `PoliceServices`, `VATPoliceServices`, `Division`)
             VALUES ('$EventId', '$EventName', '$EventCost', '$CompanyId', '$CompanyName', '$ContactName',"
                 . "'$ContactEmail','$ContactNumber', '$EventDateStart','$EventDateEnd', '$Comments', NOW(), '$RecEnteredBy',"
-                . "'Active','N', $OperationalSupport, $PoliceServices, $VATPoliceServices, '$Division')";
+                . "'Registered','N', $OperationalSupport, $PoliceServices, $VATPoliceServices, '$Division')";
 
         if ($conn->exec($sql)) {
             $this->auditok = 1;
@@ -136,6 +159,16 @@ class Event {
     function RemoveEvent($EventId) {
         $conn = conn();
         $sql = "UPDATE event SET DelFlg='Y' WHERE EventId='$EventId'";
+        if ($conn->exec($sql)) {
+            $this->auditok = 1;
+        } else {
+            $this->auditok = 0;
+        }
+    }
+    
+    function SubmitEvent($EventId, $UserId) {
+        $conn = conn();
+        $sql = "UPDATE event SET Status='Registered' WHERE EventId='$EventId'";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {

@@ -65,6 +65,7 @@
                 var accountcount = 0;
                 var accountarr = [];
                 var acctid;
+                var dailyRate;
 
                 $('#Division').on('change', function () {
                     //alert($('#Division :selected').attr('id'));
@@ -101,13 +102,40 @@
                 });
 
                 $('#Equipment').on('change', function () {
-                    var inputVal = 0;
+        $('#OPResourceCount').val(1);
+                     $('#OSHoursCount').val(1);
+                                
+        var inputVal = 0;
                     inputVal = $('#Equipment :selected').attr('value');
                     inputVal = parseFloat(inputVal).toFixed(2);
+                    var OPResource = $('#Equipment :selected').text();
+                    var OSHoursCount = $('#OSHoursCount').val();;
+                    
+                    
                     var count = $('#OPResourceCount').val();
+                    if (OPResource == 'Document Examination' || OPResource == 'Ballistic Examination' 
+                            || OPResource == 'Jet Ski' || OPResource == 'Boats'
+                            || OPResource == 'Canine' || OPResource == 'Horse'
+                            || OPResource == 'Light Towers' || OPResource == 'Tow Truck'
+                            || OPResource == 'Crash Barriers'){
+                        
+                        document.getElementById('lblHours').style.display = "";
+                        document.getElementById('OSHoursCount').style.display = "";
+                       dailyRate = true;
+                    }
+                    else
+                    {
+                         document.getElementById('lblHours').style.display = "none";
+                        document.getElementById('OSHoursCount').style.display = "none";
+                        dailyRate = false;
+                    }
                     if (count !== '')
                     {
+                        
                         var total = count * (inputVal);
+                        if(dailyRate == true){
+                            total = OSHoursCount * total;
+                        }
                         $('#EquipmentAmount').text(total.toFixed(2));
                     } else
                     {
@@ -115,12 +143,16 @@
                     }
                 });
 
-                $('#OPResourceCount').on('change', function () {
+                $('#OPResourceCount, #OSHoursCount').on('change click', function () {
                     var count = $('#OPResourceCount').val();
                     var inputVal = $('#Equipment :selected').attr('value');
+                     var OSHoursCount = $('#OSHoursCount').val();
                     if (inputVal !== '' && count !== '')
                     {
                         var total = count * (inputVal);
+                        if(dailyRate == true){
+                            total = OSHoursCount * total;
+                        }
                         $('#EquipmentAmount').text(total.toFixed(2));
                     } else
                     {
@@ -136,6 +168,8 @@
                     OperationalSupportTotal = $('#EquipmentAmount').text();
                     var pillcontainer = document.getElementById('pillcontainer');
                     var pillwrapper = document.getElementById('pillwrapper');
+                    var hour = $('#OSHoursCount').val();;
+
 
                     //create instance of list elements
                     var pill = document.createElement("li");
@@ -148,7 +182,17 @@
                     var pillanchor = document.createElement("a");
                     pillanchor.setAttribute("data-preactotal", OperationalSupportTotal);
                     pillanchor.setAttribute("style", "bold");
-                    pillanchor.appendChild(document.createTextNode("Resource- " + inputVal + " x " + equipcount + ": $" + OperationalSupportTotal));
+                   
+        //if have hourly rate
+if (dailyRate == true){
+    hour = $('#OSHoursCount').val();
+            pillanchor.appendChild(document.createTextNode("Resource- " + inputVal + " x " + equipcount +" x "+ hour+"hr(s)" +": $" + OperationalSupportTotal));    
+}
+        else
+        {
+            hour = 0; 
+            pillanchor.appendChild(document.createTextNode("Resource- " + inputVal + " x " + equipcount +": $" + OperationalSupportTotal));
+        }
 
                     pillanchor.appendChild(removeicon);
 
@@ -166,6 +210,7 @@
                     acctrec.push(OperationalSupportTotal);
                     acctrec.push(inputVal);
                     acctrec.push(equipcount);
+                    acctrec.push(hour);
                     // acctrec.push(document.getElementById("AccountNumber").value);
                     accountarr.push(acctrec);
                     //alert(acctrec[3]);
@@ -175,7 +220,10 @@
                 });
 
                 $('#Rank').on('change', function () {
-                    var inputVal = 0;
+        
+                    $('#ResourceCount').val(1);
+                    $('#RSHoursCount').val(1);
+        var inputVal = 0;
                     inputVal = $('#Rank :selected').attr('value');
                     inputVal = parseFloat(inputVal).toFixed(2);
                     var count = $('#ResourceCount').val();
@@ -189,29 +237,35 @@
                     }
                     var vatVal = document.getElementById("VATDBval").value;
                     var vatCalc = (total * parseFloat(vatVal)).toFixed(2);
-                    //VATPoliceServices = 
+                    //
+        
+//VATPoliceServices = 
                     //$("#VATPoliceServices").val(vatCalc);
                     //var VATPoliceServices = document.getElementById("VATPoliceServices").value;
                 });
 
-                $('#ResourceCount').on('change', function () {
+                $('#ResourceCount, #RSHoursCount').on('change click', function () {
                     var count = $('#ResourceCount').val();
+                    var RSHoursCount = $('#RSHoursCount').val();
                     var inputVal = $('#Rank :selected').attr('value');
                     if (inputVal !== '' && count !== '')
                     {
-                        var total = count * (inputVal);
+                        var subtotal = count * (inputVal);
+                        var total = subtotal * (RSHoursCount);
                         $('#ResourceAmount').text(total.toFixed(2));
                     } else
                     {
                         $('#ResourceAmount').text(0);
                     }
                 });
-
+                
+                
                 $('#AddResource').on('click', function () {
                     //alert("hello");
                     var acctrec = [];
                     var inputVal = $('#Rank :selected').text();
                     var rankcount = $('#ResourceCount').val();
+                     var rshours = $('#RSHoursCount').val();
                     ResourceTotal = $('#ResourceAmount').text();
                     var pillcontainer = document.getElementById('pillcontainer');
                     var pillwrapper = document.getElementById('pillwrapper');
@@ -227,7 +281,7 @@
                     var pillanchor = document.createElement("a");
                     pillanchor.setAttribute("data-preactotal", ResourceTotal);
                     pillanchor.setAttribute("style", "bold");
-                    pillanchor.appendChild(document.createTextNode("Rank- " + inputVal + " x " + rankcount + ": $" + ResourceTotal));
+                    pillanchor.appendChild(document.createTextNode("Rank- " + inputVal + " x " + rankcount +" x "+ rshours +"hr(s)"+ ": $" + ResourceTotal));
 
                     pillanchor.appendChild(removeicon);
 
@@ -242,7 +296,7 @@
                     var vatVal = document.getElementById("VATDBval").value;
                     var vatCalc = (parseFloat(ResourceTotal) * parseFloat(vatVal)).toFixed(2);
                     preaccountVAT = parseFloat(preaccountVAT) + parseFloat(vatCalc);
-                    PreAccountTotal = parseFloat(PreAccountTotal) + parseFloat(ResourceTotal) + parseFloat(preaccountVAT);
+                    PreAccountTotal = parseFloat(PreAccountTotal) + parseFloat(ResourceTotal) + parseFloat(vatCalc);
                     $("#eventcost").text(PreAccountTotal.toFixed(2));
                     $("#VATPoliceServices").text(preaccountVAT.toFixed(2));
                     acctrec.push("preaccount" + accountcount);
@@ -250,7 +304,7 @@
                     acctrec.push(ResourceTotal);
                     acctrec.push(inputVal);
                     acctrec.push(rankcount);
-                    acctrec.push(rankcount);
+                    acctrec.push(rshours);
                     // acctrec.push(document.getElementById("AccountNumber").value);
                     accountarr.push(acctrec);
                     //alert(acctrec[3]);
@@ -387,13 +441,15 @@
                                 PreAccountTotal = PreAccountTotal - parseFloat(accountarr[i][1]);
                             } else
                             {
-                                preaccountPS = preaccountPS - parseFloat(accountarr[i][1]);
+                                preaccountPS = parseFloat(preaccountPS).toFixed(2) - parseFloat(accountarr[i][1]);
                                 var vatVal = document.getElementById("VATDBval").value;
-
-                                preaccountVAT = preaccountVAT - (parseFloat(accountarr[i][1]) * parseFloat(vatVal)).toFixed(2);
+                                 
+                                        var vatTot = (parseFloat(accountarr[i][1]) * parseFloat(vatVal)).toFixed(2);
+                                                var subTot = parseFloat(accountarr[i][1]) +  parseFloat(vatTot);
+                                preaccountVAT = parseFloat(preaccountVAT).toFixed(2) - (parseFloat(accountarr[i][1]) * parseFloat(vatVal)).toFixed(2);
                                 $("#policeservicestotal").text(preaccountPS.toFixed(2));
                                 $("#VATPoliceServices").text(preaccountVAT.toFixed(2));
-                                PreAccountTotal = PreAccountTotal - parseFloat(accountarr[i][1]) - (parseFloat(accountarr[i][1]) * parseFloat(vatVal)).toFixed(2);
+                                PreAccountTotal = parseFloat(PreAccountTotal).toFixed(2) - parseFloat(subTot);
                             }
 
                             indextoremove = i;
@@ -518,7 +574,7 @@
                                         </div>
                                         <div class="details">
                                             <div class="number">
-                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="policeservicestotal" style="font-size: xx-large" >0</span>
+                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="VATPoliceServices" style="font-size: xx-large" >0</span>
 
                                             </div>
                                             <div class="desc"> Vat Total </div>
@@ -737,12 +793,12 @@
                                                             <option>Select Equipment</option>
                                                             { Equipment }
                                                         </select>
+                                                     
+                                                        <label id="lblRSCount"><strong>Resource Count</strong></label>
+                                                        <input type="number"  class="form-control" id="OPResourceCount" name="OPResourceCount" min="1" value="1" required  > 
 
-                                                        <label><strong>Hours</strong></label>
-                                                        <input type="number"  class="form-control" id="EquipmentHoursCount" name="EquipmentHoursCount" min="1" value="1" required  >     
-
-                                                        <label><strong>Resource Count</strong></label>
-                                                        <input type="number"  class="form-control" id="OSHoursCount" name="OSHoursCount" min="1" value="1" required  > 
+                                                          <label id="lblHours"><strong>Hours</strong></label>
+                                                        <input type="number"  class="form-control" id="OSHoursCount" name="OSHoursCount" min="1" value="1" required  >     
 
                                                     </div>
                                                     <!-- Modal footer -->

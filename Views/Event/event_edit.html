@@ -41,6 +41,7 @@
                                 document.getElementById("txtHintcomp").innerHTML = "";
                                 return;
                         } else {
+                        document.getElementById("divEventRef").style.display = "none";
                                 if (window.XMLHttpRequest) {
                                         // code for IE7+, Firefox, Chrome, Opera, Safari
                                         xmlhttp = new XMLHttpRequest();
@@ -109,6 +110,7 @@
         var PoliceServices = $("."+key).find('#liPoliceServices').text();
         var VATPoliceServices = $("."+key).find('#liVATPoliceServices').text();
         var OperationalSupport = $("."+key).find('#liOperationalSupport').text();
+         var Status = $("."+key).find('#liStatus').text();
 
        // $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
         if (EventDateEnd !== "")
@@ -121,6 +123,7 @@
         document.getElementById("DetailsPoliceServices").innerHTML = "$" + PoliceServices;
         document.getElementById("DetailsVATPoliceServices").innerHTML = "$" + VATPoliceServices;
         document.getElementById("DetailsOperationalSupport").innerHTML =  "$" + OperationalSupport;
+        document.getElementById("lblEventRef").innerHTML = EventId;
         
 document.getElementById("hdnEventId").value = EventId;
 document.getElementById("hdnEventName").value = EventName;
@@ -130,6 +133,15 @@ document.getElementById("hdnEventName").value = EventName;
 //document.getElementById("divEditEvent").style.display = "";
 document.getElementById("divEventDetails").style.display = "";
 document.getElementById("formDeleteEvent").style.display = "";
+document.getElementById("divEventRef").style.display = "";
+
+//if(Status == 'Registered'){
+//document.getElementById("btnApprove").style.display = "none";
+//}
+//else{
+//    document.getElementById("btnApprove").style.display = "";
+//}
+
                 });
                 
 //                var acc = document.getElementsByClassName("accordion");
@@ -261,6 +273,12 @@ document.getElementById("formDeleteEvent").style.display = "";
                         </div>
                         <div class="col-md-9">
                             <div class="panel panel-info">
+                                    <div id ="divEventRef" class="panel-heading" style="display: none">
+                                        <center>
+                                            <h3><label id="lblEventRef" class="label label-info"></label>&nbsp;&nbsp; &nbsp;<label id="lblEventFormNum" style="display:none" class="label label-info" ></label></h3>
+                                        </center>
+                                    </div>
+                                
                                   <div class="panel-heading blue"><header>Select Company for list of active events</header></div>
                                   <div class="panel-body"> <?php
                                     include 'Views/Shared/Controls/CompanySearch/search-form.php';

@@ -59,6 +59,7 @@ class EventCreateController extends PermissionController {
     private $AssetName = "";
     private $Quantity = "";
     private $Value = "";
+     private $Hours = "";
     
     private $assetsbreakdown;
     private $arrbreakdown;
@@ -127,9 +128,10 @@ class EventCreateController extends PermissionController {
           $AssetName =  str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[2])));
                  $Value = str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[1])));
                 $Quantity = str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[3])));
+                $Hours = str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[4])));
                  //$Quantity = str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[3])));
                
-               $eventinst->CreateEventPreAccount($EventId, $AssetName, $Quantity, $Value, $CompanyName);
+               $eventinst->CreateEventPreAccount($EventId, $AssetName, $Quantity,$Hours, $Value, $CompanyName, $CompanyId);
     
   }
   

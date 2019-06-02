@@ -8,7 +8,6 @@ $baseDir = dirname($vendorDir);
 return array(
     'Controllers\\AccountCreateController' => $baseDir . '/Controller/Account/Create.php',
     'Controllers\\AccountEditController' => $baseDir . '/Controller/Account/Edit.php',
-    'Controllers\\AddOfficerController' => $baseDir . '/Controller/DutySheet/Create.php',
     'Controllers\\AmendPaymentController' => $baseDir . '/Controller/Payment/Amend.php',
     'Controllers\\BaseController' => $baseDir . '/Controller/base_template.php',
     'Controllers\\BaseTemplate' => $baseDir . '/Controller/base_template.php',
@@ -22,6 +21,7 @@ return array(
     'Controllers\\CreateDutySheetController' => $baseDir . '/Controller/DutySheet/Create.php',
     'Controllers\\DisburseController' => $baseDir . '/Controller/PRNGen/PRNGenerate.php',
     'Controllers\\EditAdminUserController' => $baseDir . '/Controller/Admin/EditUser.php',
+    'Controllers\\EditDutySheetController' => $baseDir . '/Controller/DutySheet/Edit.php',
     'Controllers\\EditPRNController' => $baseDir . '/Controller/PRNGen/PRNGenerate.php',
     'Controllers\\EditPaymentController' => $baseDir . '/Controller/Payment/Edit.php',
     'Controllers\\EmployeeCreateController' => $baseDir . '/Controller/Employee/Create.php',

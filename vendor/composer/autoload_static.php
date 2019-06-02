@@ -78,7 +78,6 @@ class ComposerStaticInitdbfd59ea50047003c0635f21387c380a
     public static $classMap = array (
         'Controllers\\AccountCreateController' => __DIR__ . '/../..' . '/Controller/Account/Create.php',
         'Controllers\\AccountEditController' => __DIR__ . '/../..' . '/Controller/Account/Edit.php',
-        'Controllers\\AddOfficerController' => __DIR__ . '/../..' . '/Controller/DutySheet/Create.php',
         'Controllers\\AmendPaymentController' => __DIR__ . '/../..' . '/Controller/Payment/Amend.php',
         'Controllers\\BaseController' => __DIR__ . '/../..' . '/Controller/base_template.php',
         'Controllers\\BaseTemplate' => __DIR__ . '/../..' . '/Controller/base_template.php',
@@ -92,6 +91,7 @@ class ComposerStaticInitdbfd59ea50047003c0635f21387c380a
         'Controllers\\CreateDutySheetController' => __DIR__ . '/../..' . '/Controller/DutySheet/Create.php',
         'Controllers\\DisburseController' => __DIR__ . '/../..' . '/Controller/PRNGen/PRNGenerate.php',
         'Controllers\\EditAdminUserController' => __DIR__ . '/../..' . '/Controller/Admin/EditUser.php',
+        'Controllers\\EditDutySheetController' => __DIR__ . '/../..' . '/Controller/DutySheet/Edit.php',
         'Controllers\\EditPRNController' => __DIR__ . '/../..' . '/Controller/PRNGen/PRNGenerate.php',
         'Controllers\\EditPaymentController' => __DIR__ . '/../..' . '/Controller/Payment/Edit.php',
         'Controllers\\EmployeeCreateController' => __DIR__ . '/../..' . '/Controller/Employee/Create.php',

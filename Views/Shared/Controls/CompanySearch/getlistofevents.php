@@ -34,7 +34,7 @@ $q = $_GET['q'];
 $conn = conn();
 $Id = "Id";
 
-$sql = 'SELECT EventId, EventName, CompanyName, EventCost, EventDateStart, EventDateEnd, Comments, CompanyId, Division, OperationalSupport, PoliceServices, VATPoliceServices FROM event WHERE CompanyName = "' . $q . '" AND DelFlg="N" AND Status="Active"';
+$sql = 'SELECT EventId, EventName, CompanyName, EventCost, EventDateStart, EventDateEnd, Comments, CompanyId, Division, OperationalSupport, PoliceServices, VATPoliceServices, Status FROM event WHERE CompanyName = "' . $q . '" AND DelFlg="N" AND Status<>"Complete"';
 //$sql = 'SELECT `a.EventId,`EventName,`eventCost`,`CompanyId`,`CompanyName`,'$EventDateStart','$EventDateEnd',
 //    `ContactEmail`,`ContactNumber`,`EventDate`,`Comments`, AccountId, AccountName, TranId, TranAmt, b.EventId as "' . $Id . '" 
 //FROM `event` a LEFT JOIN preaccounttransactions b ON a.EventId = b.EventId';
@@ -71,7 +71,6 @@ if (empty($EventIds)) {
         }</style>
         <?php
     }
-
 
     $eventinst = new BarcomModel\Event();
     $conn = NULL;
@@ -116,6 +115,7 @@ if (empty($EventIds)) {
                             <a class="nav-link" style="display:none" id="liOperationalSupport" href="#"><?= $EventId['OperationalSupport']; ?></a>
                             <a class="nav-link" style="display:none" id="liPoliceServices" href="#"><?= $EventId['PoliceServices']; ?></a>
                             <a class="nav-link" style="display:none" id="liVATPoliceServices" href="#"><?= $EventId['VATPoliceServices']; ?></a>
+                            <a class="nav-link" style="display:none" id="liStatus" href="#"><?= $EventId['Status']; ?></a>
                         </li>
                         <br>
                     <?php endforeach; ?>
@@ -133,8 +133,10 @@ if (empty($EventIds)) {
                 <input type="hidden" name="EventName" id="hdnEventName" value="">
                 <input type="hidden" name="EventId" id="hdnEventId" value="">
                 <center>
+<!--                   <button type="submit" class="btn btn-success" name="btn-submit" id="btnApprove"><strong>Submit Event</strong></button>-->
                 <button type="submit" class="btn btn-danger" name="btn-delete" id="btnDelete"><strong>Delete Event</strong></button> 
                 </center>
+       
             </form>
         </div>
         <div class="col-md-6" style="display:none" id="divEventDetails"><br>

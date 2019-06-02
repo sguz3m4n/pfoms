@@ -49,6 +49,31 @@ class EventDeactivateController extends PermissionController {
                 }
            // }
         }
+        else if(isset($_POST['btn-submit'])){
+             $eventinst = new \BarcomModel\Event();
+            $audinst = new \BarcomModel\Audit();
+
+            $EventId = $_POST['EventId'];
+            //Check to see if the record already exists            
+            //If it does execute delete
+            //if ($eventinst->IfExists($EventId) === 1) {
+                //Get Id from browser interface
+                $varid = $EventId;
+                $eventname = $_POST['EventName'];
+                $eventinst->RecModifiedBy = $username;
+
+                $eventinst->SubmitEvent($EventId,$username);
+                if ($eventinst->auditok == 1) {
+                    $tranid = $audinst->TranId = $audinst->GenerateTimestamp('DCMP');
+                    $TranDesc = 'Event Approved by ' . $username . " Event Name: " . $eventname;
+                    $User = $username;
+                    $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
+                    $token = '<br><br><span class="label label-success">Event Name</span> ' . '<span class="label label-info"> ' . $eventname . '</span><br><br><br>' .
+                            '<span class="label label-success">Event Id</span> ' . '<span class="label label-info">' . $varid . '</span><br>';
+                    $token1 = 'Event Successfully submitted for approval';
+                    header("Location:" . "/success?result=$token&header=$token1&args=");
+                }
+        }
         
     }
 

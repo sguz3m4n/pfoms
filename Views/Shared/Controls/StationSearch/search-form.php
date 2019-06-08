@@ -5,7 +5,7 @@
             <span class="glyphicon glyphicon-user"></span>
             <input type="text" class="form-control" autocomplete="off" placeholder="Search Station name or Station Id..." id="searchemp" >
             <div class="resultemp" id="txtHintemp">
-                <span class="glyphicon glyphicon-list"></span> <b style="color: #0033ff">Equipment info will be listed here...</b>
+                <span class="glyphicon glyphicon-list"></span> <b style="color: #0033ff">Station info will be listed here...</b>
             </div>
         </div> 
 </div>

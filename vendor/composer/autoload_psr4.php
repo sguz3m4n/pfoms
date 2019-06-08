@@ -12,5 +12,5 @@ return array(
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'FastRoute\\' => array($vendorDir . '/nikic/fast-route/src'),
     'Controllers\\' => array($baseDir . '/Controller'),
-    '' => array($baseDir . '/../pfoms'),
+    '' => array($baseDir . '/'),
 );

@@ -4,10 +4,10 @@
         { head }
         <script type="text/javascript">
             $(document).ready(function () {
-                $('.search-boxcomp input[type="text"]').on("keyup input", function () {
-                    /* Get input value on change */
+                $('#searchemp').on("keyup input", function () {
+                    /* Get input value on change */          
                     var inputVal = $(this).val();
-                    var resultDropdown = $(this).siblings(".resultcomp");
+                    var resultDropdown = $(this).siblings(".resultemp");
                     var isnum = /[0-9]/;
                     var isalpha = /[a-zA-Z]/;
 
@@ -33,11 +33,13 @@
                 });
 
                 // Set search input value on click of result item
-                $(document).on("click", ".resultcomp p", function () {
-                    $(this).parents(".search-boxcomp").find('input[type="text"]').val($(this).text());
-                    $test = document.getElementById('searchcomp').value;
+                $(document).on("click", ".resultemp p", function () {
+     
+                    $(this).parents("#searchemp").find('input[type="text"]').val($(this).text());
+                    //$test = document.getElementById('searchemp').value;
+                    $test = $(this).text();
                     if ($test == "") {
-                                document.getElementById("txtHintcomp").innerHTML = "";
+                                document.getElementById("txtHintemp").innerHTML = "";
                                 return;
                         } else {
                                 if (window.XMLHttpRequest) {
@@ -49,7 +51,7 @@
                                 }
                                 xmlhttp.onreadystatechange = function () {
                                         if (this.readyState == 4 && this.status == 200) {
-                                                document.getElementById("txtHintcomp").innerHTML = this.responseText;
+                                                document.getElementById("txtHintemp").innerHTML = this.responseText;
                                         }
                                 };
                                 xmlhttp.open("GET", "../Views/Shared/Controls/StationSearch/getuserwm.php?q=" + $test, true);

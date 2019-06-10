@@ -1,7 +1,7 @@
 <?php
 
 namespace BarcomModel;
-require 'Classes/Division.php';
+require_once 'Division.php';
 /*
   Developed by Kitji Studios
   Development Team: Shayne Marshall, Frederick Masterton Chandler, Kamar Durant
@@ -12,7 +12,7 @@ require 'Classes/Division.php';
 
 class Station extends Division {
 
-   
+    public $DivisionId;
     public $StationId;
     public $StationName;
     public $RecEntered;
@@ -23,11 +23,10 @@ class Station extends Division {
             
 
   
-    function CreateStation($StationId, $StationName, $RecEnteredBy) {
-
+    function CreateStation($DivisionId, $StationId, $StationName, $RecEnteredBy) {
         $conn = conn();
-        $sql = "INSERT INTO `station` (`StationId`, `StationName`, `RecEntered`, `RecEnteredBy`,`DelFlg`)
-            VALUES ('$StationId', '$StationName', NOW(), '$RecEnteredBy','N')";
+        $sql = "INSERT INTO `station` (`DivisionId`, `StationId`, `StationName`, `RecEntered`, `RecEnteredBy`,`DelFlg`)
+            VALUES ('$DivisionId', '$StationId', '$StationName', NOW(), '$RecEnteredBy','N')";
 
         if ($conn->exec($sql)) {
             $this->auditok = 1;
@@ -63,18 +62,31 @@ class Station extends Division {
         
     }
             
-     function UpdateStation($StationId) {
+    function UpdateStation($DivisionId, $StationId, $StationName, $username) {
         $conn = conn();
     
-        $sql = "UPDATE `station` SET `StationName`=" . $this->StationName .", `RecEntered`=" 
-                . $this->RecEntered . ", `RecEnteredBy`=" . $this->RecEnteredBy
-                . ", `RecModified`=" . $this->RecModified . ",`RecModifiedBy`=" . $this->RecModifiedBy 
-                . " WHERE StationId ='" . $StationId . "'";
+        $sql = "UPDATE `station` SET `DivisionId`='" . $DivisionId ."', `StationName`='" . $StationName
+                . "', `RecModified`=NOW(),`RecModifiedBy`='" . $username 
+                . "' WHERE StationId ='" . $StationId . "'";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {
             $this->auditok = 0;
         }
+        $conn = NULL;
+    }
+    
+    //Check to see if company currently exists
+    function IfExists($StationId) {
+        $conn = conn();
+        $sql = "SELECT * FROM station WHERE StationId='$StationId'";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        if (($result)) {
+            return 1;
+        }
+        return 0;
         $conn = NULL;
     }
 

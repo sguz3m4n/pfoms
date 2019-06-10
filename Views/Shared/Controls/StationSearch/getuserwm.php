@@ -12,10 +12,10 @@ $result->execute();
 $compinst = new BarcomModel\Station();
 
 foreach ($result as $value) {
+    $compinst->DivisionId = $value['DivisionId'];
     $compinst->StationId = $value['StationId'];
     $compinst->StationName = $value['StationName'];
     
-    $compinst->CompStatus = $value['CompStatus'];
     $compinst->RecEntered = $value['RecEntered'];
     $compinst->RecEnteredBy = $value['RecEnteredBy'];
     $compinst->RecModified = $value['RecModified'];
@@ -25,13 +25,6 @@ foreach ($result as $value) {
 
 $conn = NULL;
 
-function AddressBuilder() {
-    $Address = 'make address builder function';
-    return;
-}
-
-$model = new \BarcomModel\Station();
-$parishes = $model->GetParishes();
 ?>  
 <div class="panel panel-info">
     <div class="panel-heading">
@@ -69,6 +62,10 @@ $parishes = $model->GetParishes();
                       <div class="modal-body">
                     <center> <span class="label label-info">Station Id <?php echo $compinst->StationId; ?></span></center>
                     <div class="row center-block panel-body">
+                        <div class="col-xs-8">
+                            <label>Division Id</label>
+                            <input type="text" class="form-control" name="DivisionId" value="<?php echo $compinst->DivisionId; ?>"  >
+                        </div>
                         <div class="col-xs-8">
                             <label>Station Name</label>
                             <input type="text" class="form-control" name="StationName" value="<?php echo $compinst->StationName; ?>"  >

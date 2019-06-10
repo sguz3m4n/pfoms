@@ -102,22 +102,6 @@ if (btnshowevents == "Show Events"){
 
 });
 //
-// $('#HoursEngaged').on('change click', function () {
-//                    var hrsWorked = $('#HoursEngaged').val();
-////                    var inputVal = $('#Equipment :selected').attr('value');
-////                     var OSHoursCount = $('#OSHoursCount').val();
-////                    if (inputVal !== '' && count !== '')
-////                    {
-////                        var total = count * (inputVal);
-////                        if(dailyRate == true){
-////                            total = OSHoursCount * total;
-////                        }
-////                        $('#EquipmentAmount').text(total.toFixed(2));
-////                    } else
-////                    {
-////                        $('#EquipmentAmount').text(0);
-////                    }
-//                });
 
                 // Set search input value on click of result item Employee ONLY
                 $(document).on("click", ".result p", function () {
@@ -146,12 +130,13 @@ if (btnshowevents == "Show Events"){
                                 $("#addofficer").show();
                                 $("#subsamt").hide();
                                 $("#passnum").hide();
+                                document.getElementById('hours').value = document.getElementById('HoursEngaged').value;   
                                         }
                                 };
                                 xmlhttp.open("GET", "/Views/Shared/Controls/EmployeeSearch/getuser-sub.php?q[]=" + $test + "&InspectionDateStart[]=" + $("#InspectionDateStart").val(), true);
                                 xmlhttp.send();
                         
-                                               
+                                           
                         }
                     $(this).parent(".result").empty();
                 });
@@ -159,6 +144,8 @@ if (btnshowevents == "Show Events"){
                 //Add the information capture panel to the form
                 $(document).on("click", "#adddetails", function () {
                     count = 1;
+
+                    
 
                     $("#dutySheet").show();
                     $("#adddetails").hide();
@@ -275,6 +262,8 @@ if (btnshowevents == "Show Events"){
                         $('input#DateOfBirth').datepicker({dateFormat: 'yy-mm-dd'});
                                 xmlhttp.open("GET", "../Views/Shared/Controls/EventSearch/listapprovedevents.php?q=" + $test, true);
                                 xmlhttp.send();
+                        
+                        
                         }
                     $(this).parent(".result").empty();
                     //alert('test');
@@ -322,10 +311,107 @@ if (btnshowevents == "Show Events"){
 
                     //document.getElementById("adddetails").style.display = "show";
                     document.getElementById("divEventDetails").style.display = "";
-                    document.getElementById("formDeleteEvent").style.display = "";
+                   // document.getElementById("formDeleteEvent").style.display = "";
+                    document.getElementById("DateOfDuty").value = EventDateStart;
                     
                     
 
+                });
+                
+                 $('#TimeDispatchhrs, #TimeDispatchmins').on('change click input', function () {
+                    var TimeDispatchhrs = $('#TimeDispatchhrs').val();
+                                       
+                    if (TimeDispatchhrs.length >= 2)
+                    {
+                        $('#TimeDispatchhrs').val(TimeDispatchhrs.slice(0,2))
+                    } else if ((TimeDispatchhrs.length === 1))
+                    {
+                        $('#TimeDispatchhrs').val("0"+TimeDispatchhrs);
+                    }
+                    
+                    var TimeDispatchmins = $('#TimeDispatchmins').val();
+                                        
+                     if (TimeDispatchmins.length >= 2)
+                    {
+                        $('#TimeDispatchmins').val(TimeDispatchmins.slice(0,2))
+                    } else if ((TimeDispatchmins.length === 1))
+                    {
+                        $('#TimeDispatchmins').val("0"+TimeDispatchmins);
+                    }
+                    
+                    document.getElementById("hdnDispatchTime").value = $('#TimeDispatchhrs').val() + ':' +$('#TimeDispatchmins').val();
+                                      
+                });
+                
+                $('#TimeArrivalhrs, #TimeArrivalmins').on('change click input', function () {
+                    var TimeArrivalhrs = $('#TimeArrivalhrs').val();
+                                       
+                    if (TimeArrivalhrs.length >= 2)
+                    {
+                        $('#TimeArrivalhrs').val(TimeArrivalhrs.slice(0,2))
+                    } else if ((TimeArrivalhrs.length === 1))
+                    {
+                        $('#TimeArrivalhrs').val("0"+TimeArrivalhrs);
+                    }
+                    
+                    var TimeArrivalmins = $('#TimeArrivalmins').val();
+                                        
+                     if (TimeArrivalmins.length >= 2)
+                    {
+                        $('#TimeArrivalmins').val(TimeArrivalmins.slice(0,2))
+                    } else if ((TimeArrivalmins.length === 1))
+                    {
+                        $('#TimeArrivalmins').val("0"+TimeArrivalmins);
+                    }
+                               document.getElementById("hdnArrivalTime").value = $('#TimeArrivalhrs').val() + ':' +$('#TimeArrivalmins').val();        
+                });
+                
+                 $('#TimeDismissalhrs, #TimeDismissalmins').on('change click input', function () {
+                    var TimeDismissalhrs = $('#TimeDismissalhrs').val();
+                                       
+                    if (TimeDismissalhrs.length >= 2)
+                    {
+                        $('#TimeDismissalhrs').val(TimeDismissalhrs.slice(0,2))
+                    } else if ((TimeDismissalhrs.length === 1))
+                    {
+                        $('#TimeDismissalhrs').val("0"+TimeDismissalhrs);
+                    }
+                    
+                    var TimeDismissalmins = $('#TimeDismissalmins').val();
+                                        
+                     if (TimeDismissalmins.length >= 2)
+                    {
+                        $('#TimeDismissalmins').val(TimeDismissalmins.slice(0,2))
+                    } else if ((TimeDismissalmins.length === 1))
+                    {
+                        $('#TimeDismissalmins').val("0"+TimeDismissalmins);
+                    }
+                         document.getElementById("hdnDismissalTime").value = $('#TimeDismissalhrs').val() + ':' +$('#TimeDismissalmins').val();                      
+                });
+                
+                 $('#TimeReturnhrs, #TimeReturnmins').on('change click input', function () {
+                    var TimeReturnhrs = $('#TimeReturnhrs').val();
+                                       
+                    if (TimeReturnhrs.length >= 2)
+                    {
+                        $('#TimeReturnhrs').val(TimeReturnhrs.slice(0,2))
+                    } else if ((TimeReturnhrs.length === 1))
+                    {
+                        $('#TimeReturnhrs').val("0"+TimeReturnhrs);
+                    }
+                    
+                    var TimeReturnmins = $('#TimeReturnmins').val();
+                                        
+                     if (TimeReturnmins.length >= 2)
+                    {
+                        $('#TimeReturnmins').val(TimeReturnmins.slice(0,2))
+                    } else if ((TimeReturnmins.length === 1))
+                    {
+                        $('#TimeReturnmins').val("0"+TimeReturnmins);
+                    }
+                    
+                    document.getElementById("hdnReturnTime").value = $('#TimeReturnhrs').val() + ':' +$('#TimeReturnmins').val();                      
+                                      
                 });
 
                 function PopulatePanelInfo(key)
@@ -533,33 +619,89 @@ if (btnshowevents == "Show Events"){
                                                         include 'Views/Shared/Controls/CompanySearch/search-form.php';
                                                         ?> 
                                                         <div id="dutySheet" style="display: none">
+<!--                                                            <div class="row center-block">
+                                                                <center><label id="lblDutySheeetId"></label></center>
+                                                            </div>-->
                                                             <div class="row center-block">
                                                                 <div class="col-md-4">
                                                                     <span class="glyphicon glyphicon-calendar"></span><label style="color: #00B0E8">Date of Duty</label>
-                                                                    <input type="text" class="form-control" name="DateOfDuty" id="DateOfDuty" required="" readonly="" > 
+                                                                    
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <span class="glyphicon glyphicon-calendar"></span><label style="color: #00B0E8">Dispatch Time</label>
-                                                                    <input type="text" class="form-control" name="TimeDispatch" id="TimeDispatch" required="" > 
+                                                                   
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <span class="glyphicon glyphicon-calendar"></span><label style="color: #00B0E8">Arrival Time</label>
-                                                                    <input type="text" class="form-control" name="TimeArrival" id="TimeArrival" required="" > 
+                                                                    
+                                                                </div> 
+                                                            </div>
+                                                            <div class="row center-block">
+                                                                <div class="col-md-4">
+                                                                    
+                                                                    <input type="text" class="form-control" name="DateOfDuty" id="DateOfDuty" required="" readonly="" > 
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    
+                                                                   
+                                                                         <div class="col-md-8 form-inline">
+                                                                            <input type="number" class="form-control" name="TimeDispatchhrs" id="TimeDispatchhrs" min="0" max="23" placeholder="23" >
+                                                                       :
+                                                                        
+                                                                             <input type="number" class="form-control" name="TimeDispatchmins" id="TimeDispatchmins" min="0" step="5" max="59" placeholder="00" >
+                                                                    </div>
+                                                                   
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                       <div class="col-md-8 form-inline">
+                                                                            <input type="number" class="form-control" name="TimeArrivalhrs" id="TimeArrivalhrs" min="0" max="23" placeholder="23" >
+                                                                       :
+                                                                        
+                                                                             <input type="number" class="form-control" name="TimeArrivalmins" id="TimeArrivalmins" min="0" max="59" placeholder="00" >
+                                                                    </div>
+<!--                                                                    <input type="text" class="form-control" name="TimeArrival" id="TimeArrival" required="" > -->
                                                                 </div> 
                                                             </div>
                                                             <div class="row center-block">
                                                                 <div class="col-md-4">
                                                                     <span class="glyphicon glyphicon-calendar"></span><label style="color: #00B0E8">Dismissal Time</label>
-                                                                    <input type="text" class="form-control" name="TimeDismissal" id="TimeDismissal" required="" > 
+<!--                                                                    <input type="text" class="form-control" name="TimeDismissal" id="TimeDismissal" required="" > -->
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <span class="glyphicon glyphicon-calendar"></span><label style="color: #00B0E8">Return Time</label>
-                                                                    <input type="text" class="form-control" name="TimeReturn" id="TimeReturn" required="" > 
+<!--                                                                    <input type="text" class="form-control" name="TimeReturn" id="TimeReturn" required="" > -->
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <span class="glyphicon glyphicon-calendar"></span><label style="color: #00B0E8">Hours Engaged</label>
-                                                                    <input type="number" class="form-control" name="HoursEngaged" id="HoursEngaged" required="" min="1" max="24"> 
+<!--                                                                    <input type="number" class="form-control" name="HoursEngaged" id="HoursEngaged" required="" min="1" max="24"> -->
                                                                 </div> 
+                                                            </div>
+                                                            <div class="row center-block">
+                                                                
+                                                                <div class="col-md-4">
+                                                                    
+                                                                   
+                                                                         <div class="col-md-8 form-inline">
+                                                                            <input type="number" class="form-control" name="TimeDismissalhrs" id="TimeDismissalhrs" min="0" max="23" placeholder="23" >
+                                                                       :
+                                                                        
+                                                                             <input type="number" class="form-control" name="TimeDismissalmins" id="TimeDismissalmins" min="0" max="55" step="5" placeholder="00" >
+                                                                    </div>
+                                                                   
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                       <div class="col-md-8 form-inline">
+                                                                            <input type="number" class="form-control" name="TimeReturnhrs" id="TimeReturnhrs" min="0" max="23" placeholder="23" >
+                                                                       :
+                                                                        
+                                                                             <input type="number" class="form-control" name="TimeReturnmins" id="TimeReturnmins" min="0" max="55" step="5" placeholder="00" >
+                                                                    </div>
+<!--                                                                    <input type="text" class="form-control" name="TimeArrival" id="TimeArrival" required="" > -->
+                                                                </div> 
+                                                                <div class="col-md-4">
+                                                                    
+                                                                    <input type="number" class="form-control" name="HoursEngaged" id="HoursEngaged" required="" min="1" max="24">
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -585,7 +727,12 @@ if (btnshowevents == "Show Events"){
                                             </div>
                                             <input type="hidden" name="EventName" id="hdnEventName" value="">
                                             <input type="hidden" name="EventId" id="hdnEventId" value="">
-                    
+                                            <input type="hidden" name="DispatchTime" id="hdnDispatchTime" value="">
+                                            <input type="hidden" name="ArrivalTime" id="hdnArrivalTime" value="">
+                                            <input type="hidden" name="DismissalTime" id="hdnDismissalTime" value="">
+                                            <input type="hidden" name="ReturnTime" id="hdnReturnTime" value="">
+                                            <input type="hidden" name="CompID" id="hdnCompID" value="">
+<!--                                            <input type="hidden" name="DutySheetId" id="hdnDutySheetId" value="">    -->
                                         </form>
                                     </div>
                                 </div>

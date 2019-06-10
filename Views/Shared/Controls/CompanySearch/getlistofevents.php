@@ -93,7 +93,7 @@ if (empty($EventIds)) {
     <div class="eventList" id="HaveEvents">
         <div class="col-md-6">
             <br>
-            <center id="addcontrols">                                                                                                                           
+            <center>                                                                                                                           
                 <h3> 
                     <span class="label label-info">List of Active events for:</span> 
                     <span class="label label-info"><?php echo $q; ?></span>           
@@ -140,7 +140,7 @@ if (empty($EventIds)) {
             </form>
         </div>
         <div class="col-md-6" style="display:none" id="divEventDetails"><br>
-            <center id="addcontrols">                                                                                                                           
+            <center>                                                                                                                           
                 <h3> 
                     <span class="label label-info">Event Details:</span> 
                 </h3>  

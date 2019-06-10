@@ -43,6 +43,7 @@
                     stationarr.push(stationrec);
 
                     stationcount++;
+                    $('#myModal').modal('toggle');
 
                 });
 
@@ -189,7 +190,7 @@
                             <div class="page-content-col-8">
                                 <div class="portlet box blue">
                                     <div class="portlet-title">
-                                        <div class="caption"><em class="fa fa-group"></em><h4>Enter Station Details</h4></div>
+                                        <div class="caption"><em class="fa fa-group"></em><h4>Enter Division/Station Details</h4></div>
                                         <div class="tools">
                                             <a title="" class="collapse" href="javascript:;" data-original-title=""> </a>
                                         </div>
@@ -205,7 +206,7 @@
 
                                                     <div class="col-xs-4 ">
                                                         <label>Division ID</label>
-                                                        <input type="text" class="form-control" name="StationId" placeholder="****" autocomplete="off" required value=""  />
+                                                        <input type="text" class="form-control" name="DivisionId" placeholder="****" autocomplete="off" required value=""  />
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <label>Division Name</label>
@@ -221,7 +222,8 @@
                                                     <div class="pillwrapper" id="pillcontainer">
                                                         <ul class="nav nav-pills nav-stacked" id="pillwrapper" >  
                                                             <br>
-
+                                                            <br>
+                                                            <br>
                                                         </ul>   
                                                     </div>
                                                 </div>                                               
@@ -230,7 +232,7 @@
                                             <br>
                                                  <div><input id="stationlist" name="stationlist" class="form-control" type="hidden" ></div>
                                             <center>
-                                                <button type="submit" class="btn btn-default blue" name="btn-create"><strong>Create Station</strong></button>                                     
+                                                <button type="submit" class="btn default blue" name="btn-create"><strong>Create Station</strong></button>                                     
                                             </center>
                                             <br>
                                             <br>

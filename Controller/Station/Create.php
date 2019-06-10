@@ -76,11 +76,13 @@ class StationCreateController extends PermissionController {
                     foreach ($stationrecs as list($StationId, $StationName)) {
                         $compinst->CreateStation($DivisionId, $StationId, $StationName, $username);
                         $TranDesc = 'Create New Station for ' . $StationId . " Name " . $StationName;
-                        $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CCMP');
-                        $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
                         $token = $token . '<br><br><span class="label label-success">Station Name</span> ' . '<span class="label label-info"> ' . $StationName . '</span><br><br><br>' .
                             '<span class="label label-success">Station Id</span> ' . '<span class="label label-info">' . $StationId . '</span><br>';
                     }
+//                    
+//                     $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CCMP');
+//                        $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
+//                       
                     
                     $token1 = 'Record Successfully Created';
                     header("Location:" . "/success?result=$token&header=$token1&args=");

@@ -1,4 +1,5 @@
 <?php
+
 return [
     [['GET', 'POST'], '/adminconsole', ['Controllers\ConsoleController', 'display']],
     [['GET', 'POST'], '/report/{name}/{format}', ['Controllers\ReportController', 'display']],
@@ -10,7 +11,7 @@ return [
     [['GET', 'POST'], '/employee/deactivate', ['Controllers\EmployeeDeactivateController', 'display']],
     [['GET', 'POST'], '/event/create', ['Controllers\EventCreateController', 'display']],
     [['GET', 'POST'], '/event/edit', ['Controllers\EventEditController', 'display']],
-    [['GET', 'POST'], '/event/view', ['Controllers\EventViewController', 'display']],    
+    [['GET', 'POST'], '/event/view', ['Controllers\EventViewController', 'display']],
     [['GET', 'POST'], '/event/deactivate', ['Controllers\EventDeactivateController', 'display']],
     [['GET', 'POST'], '/admin/account/create', ['Controllers\AccountCreateController', 'display']],
     [['GET', 'POST'], '/admin/equipment/create', ['Controllers\EquipmentCreateController', 'display']],
@@ -40,10 +41,11 @@ return [
     [['GET', 'POST'], '/createpayment', ['Controllers\MakePaymentController', 'display']],
     [['GET', 'POST'], '/editpayment', ['Controllers\EditPaymentController', 'display']],
     [['GET', 'POST'], '/amendpayment', ['Controllers\AmendPaymentController', 'display']],
-     [['GET', 'POST'], '/createdutysheet', ['Controllers\CreateDutySheetController', 'display']],
-     [['GET', 'POST'], '/dutysheet/edit', ['Controllers\EditDutySheetController', 'display']],    
+    [['GET', 'POST'], '/createdutysheet', ['Controllers\CreateDutySheetController', 'display']],
+    [['GET', 'POST'], '/dutysheet/edit', ['Controllers\EditDutySheetController', 'display']],
     [['GET', 'POST'], '/admin/processpayroll', ['Controllers\PayrollController', 'display']],
     [['GET', 'POST'], '/tablepymt', ['Controllers\PaymentTableController', 'display']],
+    [['GET', 'POST'], '/dutysheettablepymt', ['Controllers\DutySheetTableController', 'display']],
     [['GET', 'POST'], '/success', ['Controllers\SuccessController', 'display']],
     [['GET'], '/unlockpymt', ['Controllers\PaymentUnlockController', 'display']],
     [['GET', 'POST'], '/tableprn', ['Controllers\PRNTableController', 'display']],

@@ -7,6 +7,7 @@
             var offcrcount = 0;
             var offcrarr = [];
             var CreatedutySheet = false;
+            var GEventId ="";
             $(document).ready(function () {
 
 //                var submitcontainer = document.getElementById("submitcontrol");
@@ -90,17 +91,17 @@
 
 //show events button
 //$('#btnShowEvents').on('click', function () {
-     $(document).on("click", "#btnShowEvents", function () {
-var btnshowevents =  document.getElementById("btnShowEvents").innerHTML;
+                $(document).on("click", "#btnShowEvents", function () {
+                    var btnshowevents = document.getElementById("btnShowEvents").innerHTML;
 
-if (btnshowevents == "Show Events"){
-    document.getElementById("btnShowEvents").innerHTML = "Hide Events";
-}else{
-    document.getElementById("btnShowEvents").innerHTML = "Show Events";
-}
-    //document.getElementById("btnShowEvents").innerHTML = "Show Events";
+                    if (btnshowevents == "Show Events") {
+                        document.getElementById("btnShowEvents").innerHTML = "Hide Events";
+                    } else {
+                        document.getElementById("btnShowEvents").innerHTML = "Show Events";
+                    }
+                    //document.getElementById("btnShowEvents").innerHTML = "Show Events";
 
-});
+                });
 //
 // $('#HoursEngaged').on('change click', function () {
 //                    var hrsWorked = $('#HoursEngaged').val();
@@ -150,78 +151,78 @@ if (btnshowevents == "Show Events"){
                                 };
                                 xmlhttp.open("GET", "/Views/Shared/Controls/EmployeeSearch/getuser-sub.php?q[]=" + $test + "&InspectionDateStart[]=" + $("#InspectionDateStart").val(), true);
                                 xmlhttp.send();
-                        
-                                               
+
+
                         }
                     $(this).parent(".result").empty();
                 });
 
                 //Add the information capture panel to the form
-                $(document).on("click", "#adddetails", function () {
-                    count = 1;
-
-                    $("#dutySheet").show();
-                    $("#adddetails").hide();
-                    //create dynamic instance of payment
-                    var container = document.getElementById('container');
-                    container.setAttribute("class", "col-xs-12");
-
-                    //create instances of div wrappers
-                    var divmid = document.createElement("div");
-                    var divsearch = document.createElement("div");
-                    var divhint = document.createElement("div");
-
-                    //set attributes for div wrappers for bootstrap styling
-                    divhint.setAttribute("class", "result");
-                    divhint.setAttribute("id", "txtHint");
-                    divsearch.setAttribute("class", "search-boxemp" + count)
-                    divmid.setAttribute("class", "col-xs-12");
-
-                    //create officer text control
-                    var offcrinput = document.createElement("input");
-                    offcrinput.name = "officerid" + count;
-                    offcrinput.setAttribute("class", "form-control");
-                    offcrinput.setAttribute("id", "searchemp" + count);
-                    offcrinput.setAttribute("type", "text");
-                    offcrinput.setAttribute("autocomplete", "off");
-                    offcrinput.setAttribute("placeholder", "Search employee name or force number...");
-
-                    offcrinput.onkeyup = function () {
-                        /* Get input value on change */
-                        var inputVal = $(this).val();
-                        var resultDropdown = $(this).siblings(".result");
-                        var isnum = /[0-9]/;
-                        var isalpha = /[a-zA-Z]/;
-
-                        if (inputVal.length)
-                        {
-                            if (isalpha.test(inputVal))
-                            {
-                                $.get("/Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
-                                    // Display the returned data in browser
-                                    resultDropdown.html(data);
-                                });
-                            } else
-                            if (isnum.test(inputVal))
-                            {
-                                $.get("/Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "forcenumber", {term: inputVal}).done(function (data) {
-                                    // Display the returned data in browser
-                                    resultDropdown.html(data);
-                                });
-                            }
-                            $("#adddetails").hide();
-                        } else {
-                            resultDropdown.empty();
-                        }
-                    }
-
-                    //start wrapping and adding
-                    divsearch.appendChild(offcrinput);
-                    divhint.appendChild(document.createElement("p"));
-                    divsearch.appendChild(divhint);
-                    divmid.appendChild(divsearch);
-                    container.appendChild(divmid);
-                });
+//                $(document).on("click", "#adddetails", function () {
+//                    count = 1;
+//
+//                    $("#dutySheet").show();
+//                    $("#adddetails").hide();
+//                    //create dynamic instance of payment
+//                    var container = document.getElementById('container');
+//                    container.setAttribute("class", "col-xs-12");
+//
+//                    //create instances of div wrappers
+//                    var divmid = document.createElement("div");
+//                    var divsearch = document.createElement("div");
+//                    var divhint = document.createElement("div");
+//
+//                    //set attributes for div wrappers for bootstrap styling
+//                    divhint.setAttribute("class", "result");
+//                    divhint.setAttribute("id", "txtHint");
+//                    divsearch.setAttribute("class", "search-boxemp" + count)
+//                    divmid.setAttribute("class", "col-xs-12");
+//
+//                    //create officer text control
+//                    var offcrinput = document.createElement("input");
+//                    offcrinput.name = "officerid" + count;
+//                    offcrinput.setAttribute("class", "form-control");
+//                    offcrinput.setAttribute("id", "searchemp" + count);
+//                    offcrinput.setAttribute("type", "text");
+//                    offcrinput.setAttribute("autocomplete", "off");
+//                    offcrinput.setAttribute("placeholder", "Search employee name or force number...");
+//
+//                    offcrinput.onkeyup = function () {
+//                        /* Get input value on change */
+//                        var inputVal = $(this).val();
+//                        var resultDropdown = $(this).siblings(".result");
+//                        var isnum = /[0-9]/;
+//                        var isalpha = /[a-zA-Z]/;
+//
+//                        if (inputVal.length)
+//                        {
+//                            if (isalpha.test(inputVal))
+//                            {
+//                                $.get("/Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
+//                                    // Display the returned data in browser
+//                                    resultDropdown.html(data);
+//                                });
+//                            } else
+//                            if (isnum.test(inputVal))
+//                            {
+//                                $.get("/Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "forcenumber", {term: inputVal}).done(function (data) {
+//                                    // Display the returned data in browser
+//                                    resultDropdown.html(data);
+//                                });
+//                            }
+//                            $("#adddetails").hide();
+//                        } else {
+//                            resultDropdown.empty();
+//                        }
+//                    }
+//
+//                    //start wrapping and adding
+//                    divsearch.appendChild(offcrinput);
+//                    divhint.appendChild(document.createElement("p"));
+//                    divsearch.appendChild(divhint);
+//                    divmid.appendChild(divsearch);
+//                    container.appendChild(divmid);
+//                });
 
                 $('.search-boxcomp input[type="text"]').on("keyup input", function () {
                     /* Get input value on change */
@@ -250,6 +251,42 @@ if (btnshowevents == "Show Events"){
                         resultDropdown.empty();
                     }
                 });
+
+                $(document).on("click", "#submitpaymenttable", function () {
+                    paymentTable();
+                });
+
+                function paymentTable() {
+//                    var startDate = ($('#inspection-start').val()).replace('Start Date', '');
+//                    var endDate = ($('#inspection-end').val()).replace('End Date', '');
+//                    var employee = $('#searchemp').val();
+                    var company = $('#searchcomp').val();
+                    var isnum = /[0-9]/;
+                    var isalpha = /[a-zA-Z]/;
+
+                    var resultDiv = $('#paymenttable');
+
+                    var payload = {};
+//                    if (endDate != '') {
+//                        payload['enddate'] = endDate;
+//                    }
+//                    if (startDate != '') {
+//                        payload['startdate'] = startDate;
+//                    }
+//                    if (GEventId != '') {
+//                        payload['GEventId'] = GEventId;
+//                    }
+                       if (company != '') {
+                        payload['compname'] = company;
+                    }
+//                    if (employee != '') {
+//                        payload['empid'] = employee;
+//                    }
+
+                    $.get("/dutysheettablepymt?", payload).done(function (data) {
+                        resultDiv.html(data);
+                    });
+                }
 
                 // Set search input value on click of result item
                 $(document).on("click", ".resultcomp p", function () {
@@ -283,48 +320,57 @@ if (btnshowevents == "Show Events"){
                 $(document).on("click", ".pillwrapper li", function () {
 
                     var key = $(this).attr("class");
-                    
-                    if (CreatedutySheet === false){
-                    $("#adddetails").show();
-                    CreatedutySheet = true;
-                }
+
+//                    if (CreatedutySheet === false){
+//                    $("#adddetails").show();
+//                    CreatedutySheet = true;
+//                }
                     //$("#dutySheet").show();
 
-
+                    var DutySheetId = $("." + key).find('#liDutySheetId').text();
                     var EventId = $("." + key).find('#liEventId').text();
+                    
+                    //Global event id
+                    GEventId = EventId;
                     var EventName = $("." + key).find('#liEventName').text();
-                    var EventCost = $("." + key).find('#liEventCost').text();
+                    var DateOfDuty = $("." + key).find('#liDateOfDuty').text();
 
-                    var EventDateStart = $("." + key).find('#liEventDateStart').text();
-                    var EventDateEnd = $("." + key).find('#liEventDateEnd').text();
+                    var DispatchTime = $("." + key).find('#liDispatchTime').text();
+                    var ArrivalTime = $("." + key).find('#liArrivalTime').text();
 
-                    var PoliceServices = $("." + key).find('#liPoliceServices').text();
-                    var VATPoliceServices = $("." + key).find('#liVATPoliceServices').text();
-                    var OperationalSupport = $("." + key).find('#liOperationalSupport').text();
+                    var DismissalTime = $("." + key).find('#liDismissalTime').text();
+                    var ReturnTime = $("." + key).find('#liReturnTime').text();
+                    var HoursEngaged = $("." + key).find('#liHoursEngaged').text();
+                    var ForceNumber = $("." + key).find('#liForceNumber').text();
+                    var OfficerName = $("." + key).find('#liOfficerName').text();
+                    var Hours = $("." + key).find('#liHours').text();
+                    var PayRate = $("." + key).find('#liPayRate').text();
+                    var RateCode = $("." + key).find('#liRateCode').text();
+
 
                     // $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
-                    if (EventDateEnd !== "")
-                    {
-                        document.getElementById("DetailsEventDateEnd").innerHTML = EventDateEnd;
-                    }
+
+
+
                     document.getElementById("DetailsEventName").innerHTML = EventName;
-                    document.getElementById("DetailsEventDateStart").innerHTML = EventDateStart;
-                    document.getElementById("DetailsEventCost").innerHTML = "$" + EventCost;
-                    document.getElementById("DetailsPoliceServices").innerHTML = "$" + PoliceServices;
-                    document.getElementById("DetailsVATPoliceServices").innerHTML = "$" + VATPoliceServices;
-                    document.getElementById("DetailsOperationalSupport").innerHTML = "$" + OperationalSupport;
+                    document.getElementById("DetailsDateOfDuty").innerHTML = DateOfDuty;
+                    document.getElementById("DetailsDispatchTime").innerHTML = DispatchTime;
+                    document.getElementById("DetailsArrivalTime").innerHTML = ArrivalTime;
+                    document.getElementById("DetailsDismissalTime").innerHTML = DismissalTime;
+                    document.getElementById("DetailsReturnTime").innerHTML = ReturnTime;
+                    document.getElementById("DetailsHoursEngaged").innerHTML = HoursEngaged;
 
 //                    document.getElementById("hdnEventId").value = EventId;
 //                    document.getElementById("hdnEventName").value = EventName;
 //                    
-                    document.getElementById("lblEventRef").innerHTML = EventId;
-        
+                    //document.getElementById("lblEventRef").innerHTML = EventId;
+
 
                     //document.getElementById("adddetails").style.display = "show";
-                    document.getElementById("divEventDetails").style.display = "";
-                   // document.getElementById("formDeleteEvent").style.display = "";
-                    document.getElementById("DetailsOperationalSupport").innerHTML = "$" + OperationalSupport;
-                
+                    document.getElementById("divDutySheetDetails").style.display = "";
+                    // document.getElementById("formDeleteEvent").style.display = "";
+                    //document.getElementById("DetailsOperationalSupport").innerHTML = "$" + OperationalSupport;
+
 
 
                 });
@@ -411,7 +457,7 @@ if (btnshowevents == "Show Events"){
 
         </script>         
     </head>
-      <body>
+    <body>
         <div class="wrapper">
             <header class="page-header">
                 <nav class="navbar mega-menu" role="navigation">
@@ -496,12 +542,12 @@ if (btnshowevents == "Show Events"){
                         </div>
                         <div class="col-md-9">
                             <div class="panel panel-info">
-                                    <div id ="divEventRef" class="panel-heading" style="display: none">
-                                        <center>
-                                            <h3><label id="lblEventRef" class="label label-info"></label>&nbsp;&nbsp; &nbsp;<label id="lblEventFormNum" style="display:none" class="label label-info" ></label></h3>
-                                        </center>
-                                    </div>
-                                
+                                <div id ="divEventRef" class="panel-heading" style="display: none">
+                                    <center>
+                                        <h3><label id="lblEventRef" class="label label-info"></label>&nbsp;&nbsp; &nbsp;<label id="lblEventFormNum" style="display:none" class="label label-info" ></label></h3>
+                                    </center>
+                                </div>
+
                                   <div class="panel-heading blue"><header>Select Company</header></div>
                                   <div class="panel-body"> <?php
                                     include 'Views/Shared/Controls/CompanySearch/search-form.php';
@@ -512,77 +558,26 @@ if (btnshowevents == "Show Events"){
                                 { val_CompanyName }      <br>   
                             </div>
                         </div>
-<!--                        <form action="/event/deactivate" method="post">
-
-            <input type="hidden" name="EventId" id="hdnEventId" value="">
-            <button type="button" class="btn btn-danger btn-default pull-right col-xs-3" name="btn-delete" id="btnDelete"><strong>Delete Event</strong></button> 
-      </form>-->
+                        <!--                        <form action="/event/deactivate" method="post">
+                        
+                                    <input type="hidden" name="EventId" id="hdnEventId" value="">
+                                    <button type="button" class="btn btn-danger btn-default pull-right col-xs-3" name="btn-delete" id="btnDelete"><strong>Delete Event</strong></button> 
+                              </form>-->
                     </div>
 
                 </div>
 
 
+                <div class="col-xs-12 row text-center">
+                    <input id="submitpaymenttable" class="btn btn-info btn-md" value="Show Results">
+                </div>
+                <div class="col-xs-12 row">
+                    <div class="table-responsive">
+                        <table class="table" id="paymenttable">
 
-<!--                <form method="post">
-                <div id="myModal" class="modal fade" role="dialog">
-                    <div class="modal-dialog modal-lg">
-                                         Modal content
-                            <div class="modal-content">
-                            <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">Event Details</h4>
-                                  </div>
-                                  <div class="modal-body">
-                                <div class="col-md-4" >
-                                    <br>
-                                    <input type="hidden" name="EventId" id="SubmitEventId">
-
-                                    <label>Police Services</label>
-                                    <input type="text"  class="form-control" id="PoliceServices" name="PoliceServices" autocomplete="off" >  
-
-                                    <label>VAT</label>
-                                    <input type="text" class="form-control"  id="VATPoliceServices" name="VATPoliceServices" autocomplete="off"  >
-
-                                    <label>Equipment</label>
-                                    <input type="text" class="form-control"  id="OperationalSupport" name="OperationalSupport" autocomplete="off"  >
-
-                                  
-                                    
-                                </div>
-                                <div class="col-md-4" >
-                                    <label>Event Name</label>
-                                    <input type="text"  class="form-control" id="EventName" name="EventName" autocomplete="off" required >  
-
-                                    <label>Event Date</label>
-                                    <input type="text" class="form-control" name="EventDate" placeholder="YYYY-MM-DD" autocomplete="off"  id="EventDate" >
-                                    <script>
-                                        $(function () {
-                                            $("#datepicker").datepicker({dateFormat: 'yy-mm-dd'});
-                                        });
-                                    </script>
-                                    <div><input id="paylist" name="paylist" class="form-control" type="hidden" ></div>
-                                    <i class="glyphicon glyphicon-usd"></i><label> Event Cost</label>
-                                    <input type="text"  class="form-control" id="EventCost" name="EventCost" autocomplete="off" required value="" placeholder="This is coming from Proforma">  
-
-                                    <i class="glyphicon glyphicon-comment"></i><label> Comments</label>
-                                    <textarea  class="form-control" id="Comments" name="Comments" rows="4" cols="50"></textarea>
-                                </div>
-
-                            </div>
-
-                            <div class="modal-footer">
-                                <center>
-                                                                         <button type="submit" class="btn btn-default green" name="btn-update"><strong>Update Event</strong></button> 
-                                </center>
-                                  </div> 
-                                  
-                                                      
-                                
-                              </div>
-                    </div> 
-
-                </div> 
-                    </form>-->
+                        </table>
+                    </div>
+                </div>
             </div>
 
 

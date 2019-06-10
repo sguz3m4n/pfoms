@@ -62,6 +62,7 @@
                     offcrrec.push(document.getElementById("hours").value);
                     offcrrec.push(document.getElementById("PayRate").value);
                     offcrrec.push(document.getElementById("RateCode").value);
+                    offcrrec.push(document.getElementById("ForceNumber").value);
 
                     offcrarr.push(offcrrec);
 
@@ -69,20 +70,20 @@
                     pillwrapper.appendChild(pill);
                     pillcontainer.appendChild(pillwrapper);
 
-                    $(".pillwrapper li").on("click", function () {
+                    $(".offcrpillwrapper li").on("click", function () {
                         //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
                         var key = this.id.toString().trim();
-                        //PopulatePanelInfo(key);
+                        PopulatePanelInfo(key);
                     });
 
-                    $(".pillwrapper li").on("dblclick", function () {
+                    $(".offcrpillwrapper li").on("dblclick", function () {
                         //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
 
                         var key = this.id.toString().trim();
 
                         var elem = document.getElementById(this.id.toString());
                         elem.parentNode.removeChild(elem);
-                        //RemoveInfo(key);
+                        RemoveInfo(key);
 
                     });
 
@@ -207,8 +208,11 @@ if (btnshowevents == "Show Events"){
                     divhint.appendChild(document.createElement("p"));
                     divsearch.appendChild(divhint);
                     divmid.appendChild(divsearch);
-                    container.appendChild(divmid);
+                   container.appendChild(divmid);
                 });
+                
+                                    
+                    
 
                 $('.search-boxcomp input[type="text"]').on("keyup input", function () {
                     /* Get input value on change */
@@ -290,6 +294,7 @@ if (btnshowevents == "Show Events"){
                     var PoliceServices = $("." + key).find('#liPoliceServices').text();
                     var VATPoliceServices = $("." + key).find('#liVATPoliceServices').text();
                     var OperationalSupport = $("." + key).find('#liOperationalSupport').text();
+                     var CompID = $("." + key).find('#liCompanyId').text();
 
                     // $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
                     if (EventDateEnd !== "")
@@ -308,7 +313,7 @@ if (btnshowevents == "Show Events"){
                     
                     document.getElementById("lblEventRef").innerHTML = EventId;
         
-
+ document.getElementById("hdnCompID").value = CompID;
                     //document.getElementById("adddetails").style.display = "show";
                     document.getElementById("divEventDetails").style.display = "";
                    // document.getElementById("formDeleteEvent").style.display = "";
@@ -413,17 +418,24 @@ if (btnshowevents == "Show Events"){
                     document.getElementById("hdnReturnTime").value = $('#TimeReturnhrs').val() + ':' +$('#TimeReturnmins').val();                      
                                       
                 });
+                
+                 $("#paymentform").submit(function () {
+                    
+                    var key = this.id.toString().trim();
+                    PopulatePanelInfo(key);
+                    $("#hdnoffarr").val(JSON.stringify(offcrarr));
+                });
+
 
                 function PopulatePanelInfo(key)
                 {
                     var EmpName = document.getElementById("EmpName");
                     var Natregno = document.getElementById("Natregno");
                     var hours = document.getElementById("hours");
-                    var distance = document.getElementById("distance");
-                    var passnum = document.getElementById("passnum");
-                    var subsamt = document.getElementById("subsamt");
+                    
                     var PayRate = document.getElementById("PayRate");
                     var RateCode = document.getElementById("RateCode");
+                    var ForceNumber = document.getElementById("ForceNumber");
                     for (i = 0; i < offcrarr.length; i++) {
 
                         if (offcrarr[i][1] === key)
@@ -431,21 +443,18 @@ if (btnshowevents == "Show Events"){
                             EmpName.value = offcrarr[i][0].toString();
                             Natregno.value = offcrarr[i][1].toString();
                             hours.value = offcrarr[i][2].toString();
-                            distance.value = offcrarr[i][3].toString();
-                            passnum.value = offcrarr[i][4].toString();
-                            subsamt.value = offcrarr[i][5].toString();
-                            PayRate.value = offcrarr[i][6].toString();
-                            RateCode.value = offcrarr[i][7].toString();
-                            haspx = offcrarr[i][8].toString();
-                            hassubs = offcrarr[i][9].toString();
+//                            distance.value = offcrarr[i][3].toString();
+//                            passnum.value = offcrarr[i][4].toString();
+//                            subsamt.value = offcrarr[i][5].toString();
+                            PayRate.value = offcrarr[i][3].toString();
+                            RateCode.value = offcrarr[i][4].toString();
+                            ForceNumber.value = offcrarr[i][5].toString();
+//                            haspx = offcrarr[i][8].toString();
+//                            hassubs = offcrarr[i][9].toString();
                         }
                     }
 
-                    ToggleControl();
-
-                    $("#submitteremployee").text($("#Natregno").val());
-                    $("#submitteremployeename").text($("#EmpName").val());
-                    $("#submitterrates").text($("#PayRate").val());
+                   
                 }
 
                 function RemoveInfo(key) {
@@ -460,37 +469,37 @@ if (btnshowevents == "Show Events"){
                     offcrarr.splice(indextoremove, 1);
                 }
 
-                function UpdateInfo(key) {
-
-                    for (i = 0; i < offcrarr.length; i++) {
-
-                        if (offcrarr[i][1] === key)
-                        {
-                            var EmpName = document.getElementById("EmpName");
-                            var Natregno = document.getElementById("Natregno");
-                            var hours = document.getElementById("hours");
-                            var distance = document.getElementById("distance");
-                            var passnum = document.getElementById("passnum");
-                            var subsamt = document.getElementById("subsamt");
-                            var PayRate = document.getElementById("PayRate");
-                            var RateCode = document.getElementById("RateCode");
-                            var HasPx = document.getElementById("passenger");
-                            var HasSub = document.getElementById("subsistence");
-                            offcrarr[i][0] = EmpName.value;
-                            offcrarr[i][1] = Natregno.value;
-                            offcrarr[i][2] = hours.value;
-                            offcrarr[i][3] = distance.value;
-                            offcrarr[i][4] = passnum.value;
-                            offcrarr[i][5] = subsamt.value;
-                            offcrarr[i][6] = PayRate.value;
-                            offcrarr[i][7] = RateCode.value;
-                            offcrarr[i][8] = haspx;
-                            offcrarr[i][9] = hassubs;
-
-                            ToggleControl();
-                        }
-                    }
-                }
+//                function UpdateInfo(key) {
+//
+//                    for (i = 0; i < offcrarr.length; i++) {
+//
+//                        if (offcrarr[i][1] === key)
+//                        {
+//                            var EmpName = document.getElementById("EmpName");
+//                            var Natregno = document.getElementById("Natregno");
+//                            var hours = document.getElementById("hours");
+////                            var distance = document.getElementById("distance");
+////                            var passnum = document.getElementById("passnum");
+////                            var subsamt = document.getElementById("subsamt");
+//                            var PayRate = document.getElementById("PayRate");
+//                            var RateCode = document.getElementById("RateCode");
+////                            var HasPx = document.getElementById("passenger");
+////                            var HasSub = document.getElementById("subsistence");
+//                            offcrarr[i][0] = EmpName.value;
+//                            offcrarr[i][1] = Natregno.value;
+//                            offcrarr[i][2] = hours.value;
+////                            offcrarr[i][3] = distance.value;
+////                            offcrarr[i][4] = passnum.value;
+////                            offcrarr[i][5] = subsamt.value;
+//                            offcrarr[i][3] = PayRate.value;
+//                            offcrarr[i][4] = RateCode.value;
+////                            offcrarr[i][8] = haspx;
+////                            offcrarr[i][9] = hassubs;
+//
+//                            ToggleControl();
+//                        }
+//                    }
+//                }
 
             });
 
@@ -572,23 +581,23 @@ if (btnshowevents == "Show Events"){
                                         </div>
                                     </a>
                                 </div>
-                                <div class="col-xs-12">
+<!--                                <div class="col-xs-12">
                                     <div class="dashboard-stat dashboard-stat-v2 red" >
                                         <div class="visual">
                                             <i class="fa fa-comments"></i>
                                         </div>
-                                        <div class="details">
+                                       <div class="details">
                                             <div class="number">
                                                 <span class="glyphicon glyphicon-usd"></span><span  id="eventcost" style="font-size: xx-large" ></span>
                                             </div>
                                             <div class="desc"> Event Cost </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
                                 <center>
                                     <a class="btn btn-outline blue" href="../../index.php">back to main page</a>    
                                 </center>
-                                <div class="pillwrapper" id="offcrpillcontainer">
+                                <div class="offcrpillwrapper" id="offcrpillcontainer">
                                     <ul class="nav nav-pills nav-stacked" id="offcrpillwrapper" >                                   
                                     </ul>   
                                 </div>
@@ -644,7 +653,7 @@ if (btnshowevents == "Show Events"){
                                                                 <div class="col-md-4">
                                                                     
                                                                    
-                                                                         <div class="col-md-8 form-inline">
+                                                                         <div class="col-md-10 form-inline">
                                                                             <input type="number" class="form-control" name="TimeDispatchhrs" id="TimeDispatchhrs" min="0" max="23" placeholder="23" >
                                                                        :
                                                                         
@@ -653,7 +662,7 @@ if (btnshowevents == "Show Events"){
                                                                    
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                       <div class="col-md-8 form-inline">
+                                                                       <div class="col-md-10 form-inline">
                                                                             <input type="number" class="form-control" name="TimeArrivalhrs" id="TimeArrivalhrs" min="0" max="23" placeholder="23" >
                                                                        :
                                                                         
@@ -681,7 +690,7 @@ if (btnshowevents == "Show Events"){
                                                                 <div class="col-md-4">
                                                                     
                                                                    
-                                                                         <div class="col-md-8 form-inline">
+                                                                         <div class="col-md-10 form-inline">
                                                                             <input type="number" class="form-control" name="TimeDismissalhrs" id="TimeDismissalhrs" min="0" max="23" placeholder="23" >
                                                                        :
                                                                         
@@ -690,7 +699,7 @@ if (btnshowevents == "Show Events"){
                                                                    
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                       <div class="col-md-8 form-inline">
+                                                                       <div class="col-md-10 form-inline">
                                                                             <input type="number" class="form-control" name="TimeReturnhrs" id="TimeReturnhrs" min="0" max="23" placeholder="23" >
                                                                        :
                                                                         
@@ -732,6 +741,7 @@ if (btnshowevents == "Show Events"){
                                             <input type="hidden" name="DismissalTime" id="hdnDismissalTime" value="">
                                             <input type="hidden" name="ReturnTime" id="hdnReturnTime" value="">
                                             <input type="hidden" name="CompID" id="hdnCompID" value="">
+                                            <input type="hidden" name="offarr" id="hdnoffarr" value="">
 <!--                                            <input type="hidden" name="DutySheetId" id="hdnDutySheetId" value="">    -->
                                         </form>
                                     </div>

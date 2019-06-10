@@ -47,6 +47,7 @@ class CreateDutySheetController extends PermissionController {
     public $RecEnteredBy;
     public $Hours;
    public $RecModifiedBy;
+   public $OfficerArray;
  
  
     function show($params) {
@@ -62,31 +63,51 @@ class CreateDutySheetController extends PermissionController {
             $dutysheetinst->EventId = $EventId = $_POST["EventId"];
             $dutysheetinst->EventName = $EventName = $_POST["EventName"];
             
-            $dutysheetinst->CompanyId = $CompanyId = $_POST["CompId"];
-            $dutysheetinst->OvertimeAmount = $OvertimeAmount = $_POST["OvertimeAmount"];
+            $dutysheetinst->CompanyId = $CompanyId = $_POST["CompID"];
+            
             $dutysheetinst->DateOfDuty = $DateOfDuty = $_POST["DateOfDuty"];
             $dutysheetinst->DispatchTime = $DispatchTime = $_POST["DispatchTime"];
             $dutysheetinst->ArrivalTime = $ArrivalTime = $_POST["ArrivalTime"];
             $dutysheetinst->DismissalTime = $DismissalTime = $_POST["DismissalTime"];
             $dutysheetinst->ReturnTime = $ReturnTime = $_POST["ReturnTime"];
-            $dutysheetinst->TotalHoursWorked = $TotalHoursWorked = $_POST["TotalHoursWorked"];
+           
+              $dutysheetinst->HoursEngaged = $HoursEngaged = $_POST["HoursEngaged"];
+            
+         
+            
+            
                         
             $dutysheetinst->RecEnteredBy = $RecEnteredBy = $username;
             
-            $DutySheetId = 'test1234';
+            $DutySheetId = $audinst->GenerateTimestamp('DYST');
             
             //Duty sheet preaccount 
-            $dutysheetinst->ForceNumber = $ForceNumber = $_POST["ForceNumber"];
-            $dutysheetinst->Natregno = $Natregno = $_POST["Natregno"];
-            $dutysheetinst->OfficerName = $OfficerName = $_POST["OfficerName"];
+               $OfficerArray = json_decode($_POST['offarr'], TRUE);
+               foreach($OfficerArray as $officer)
+  {
+           
             
-            $dutysheetinst->Hours = $ForceNumber = $_POST["Hours"];
-            $dutysheetinst->RateCode = $DateOfDuty = $_POST["RateCode"];
-            $dutysheetinst->PayRate = $OvertimeAmount = $_POST["PayRate"];
+            $dutysheetinst->OfficerName = $OfficerName = $officer[0];
+            $dutysheetinst->Natregno = $Natregno = $officer[1];
+            
+            $dutysheetinst->Hours = $Hours = $officer[2];
+           
+            $dutysheetinst->PayRate = $PayRate = $officer[3];
+             $dutysheetinst->RateCode = $RateCode = $officer[4];
+              $dutysheetinst->ForceNumber = $ForceNumber = $officer[5];
+             
+              $dutysheetinst->CreateDSPA($DutySheetId, $EventId, $CompanyId, $ForceNumber, $Natregno, $OfficerName,
+             $Hours, $RateCode,$PayRate);
+              
+               
+   $dutysheetinst->OvertimeAmount = $OvertimeAmount = ($Hours * $PayRate) + $OvertimeAmount;
+              
+  }
 
-
-               $dutysheetinst->CreateDutySheet($DutySheetId, $EventId, $CompanyId, $OvertimeAmount, $DateOfDuty,
-            $DispatchTime, $ArrivalTime, $DismissalTime,$ReturnTime,$HoursWorked,$RecEnteredBy);
+  
+   
+               $dutysheetinst->CreateDutySheet($DutySheetId, $EventId, $EventName, $CompanyId, $OvertimeAmount, $DateOfDuty,
+            $DispatchTime, $ArrivalTime, $DismissalTime,$ReturnTime,$HoursEngaged,$RecEnteredBy);
                 //if validation succeeds then commit info to database
                   if ($dutysheetinst->auditok == 1) {
                 $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');

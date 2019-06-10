@@ -24,6 +24,7 @@ if (!empty($result)) {
         $empinst->PayRate = $value['RateAmount'];
         $empinst->Natregno = $varid = $value['Natregno'];
         $empinst->RoleName = $value['RoleName'];
+        $empinst->ForceNumber = $value['ForceNumber'];
         $Employeename = $value['FirstName'] . ' ' . $value['LastName'];
         //$EndDate = $_GET['InspectionDateEnd'];
         $test = new \BarcomModel\PayScale();
@@ -106,6 +107,7 @@ $conn = NULL;
                         </div>
                         <div class="col-xs-3">
                             <input type="hidden" class="form-control" id="RateCode"  name="RateCode" value="<?php echo $empinst->RateCode; ?>">
+                            <input type="hidden" class="form-control" id="ForceNumber"  name="ForceNumber" value="<?php echo $empinst->ForceNumber; ?>">
                         </div>
                         <div class="col-xs-3">
 

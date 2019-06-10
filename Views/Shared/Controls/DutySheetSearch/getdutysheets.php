@@ -56,17 +56,18 @@ $companyId = $Comp_value['CompanyId'];
 }
 //Get all dutysheets for company
 $sqlDutySheet = 'SELECT DutySheetId, EventId, EventName, OvertimeAmount, DateOfDuty, DispatchTime, ArrivalTime, DismissalTime, ReturnTime, '
-        . 'TotalHoursWorked FROM dutysheet WHERE CompanyId = "' . $companyId . '" AND DelFlag="N" AND Status="Active"';
+        . 'HoursEngaged FROM dutysheet WHERE CompanyId = "' . $companyId . '" AND DelFlag="N" AND Status="Active"';
 $stmtDutySheet = $conn->prepare($sqlDutySheet);
 $stmtDutySheet->execute();
 $result_DutySheet = $stmtDutySheet->fetchAll();
 
 
-// This is for breakdown of event details
-$sql = 'SELECT EventId, CompanyId, AssetName, SUM(Value) as Value, SUM(Quantity)as Quantity FROM `eventpreaccount` WHERE CompanyName = "' . $q . '" AND DelFlag="N" GROUP by AssetName';
-$stmt = $conn->prepare($sql);
-$stmt->execute();
-$result_array = $stmt->fetchAll();
+// duty sheet officers details
+$sqlDSpreacc = 'SELECT ForceNumber,Natregno,OfficerName, Hours, RateCode, PayRate FROM `dutysheetpreaccount` '
+        . 'WHERE CompanyId = "' . $companyId . '" AND DelFlag="N" AND Status="Active"';
+$stmtDSpreacc = $conn->prepare($sqlDSpreacc);
+$stmtDSpreacc->execute();
+$result_DSpreaccarray = $stmtDSpreacc->fetchAll();
 //
 //        foreach ($result_array as $value) {
 //            
@@ -120,18 +121,28 @@ if (empty($result_DutySheet)) {
                 <div class="pillwrapper" id="pillcontainer">
                     <ul class="nav nav-pills nav-stacked" id="pillwrapper" >
 
-                        <?php foreach ($DutySheetIds as $DutySheetId): ?>
+                        <?php foreach ($result_DutySheet as $DutySheetId): ?>
 
                             <li class="<?= $DutySheetId['DutySheetId']; ?>">      
-                                <a class="nav-link" id="liDutySheetName" name="<?= $DutySheetId['DutySheetName']; ?>"><?= $DutySheetId['DutySheetName']; ?></a>
-                                <a class="nav-link" style="display:none" id="liDutySheetId" href="#"><?= $DutySheetId['DutySheetId']; ?></a>
-                                <a class="nav-link" style="display:none" id="liDutySheetCost" value="<?= $DutySheetId['DutySheetCost']; ?>" href="#"><?= $DutySheetId['DutySheetCost']; ?></a>
-                                <a class="nav-link" style="display:none" id="liDutySheetDateStart" href="#"><?= $DutySheetId['DutySheetDateStart']; ?></a>
-                                <a class="nav-link" style="display:none" id="liDutySheetDateEnd" href="#"><?= $DutySheetId['DutySheetDateEnd']; ?></a>
-                                <a class="nav-link" style="display:none" id="liComments" href="#"><?= $DutySheetId['Comments']; ?></a>
-                                <a class="nav-link" style="display:none" id="liOperationalSupport" href="#"><?= $DutySheetId['OperationalSupport']; ?></a>
-                                <a class="nav-link" style="display:none" id="liPoliceServices" href="#"><?= $DutySheetId['PoliceServices']; ?></a>
-                                <a class="nav-link" style="display:none" id="liVATPoliceServices" href="#"><?= $DutySheetId['VATPoliceServices']; ?></a>
+                                <a class="nav-link" id="liDutySheetId" name="<?= $DutySheetId['DutySheetId']; ?>"><?= $DutySheetId['DutySheetId']; ?></a>
+                                <a class="nav-link" style="display:none" id="liEventId" href="#"><?= $DutySheetId['EventId']; ?></a>
+                                <a class="nav-link" style="display:none" id="liEventName" href="#"><?= $DutySheetId['EventName']; ?></a>
+                                <a class="nav-link" style="display:none" id="liOvertimeAmount" href="#"><?= $DutySheetId['OvertimeAmount']; ?></a>
+                                <a class="nav-link" style="display:none" id="liHoursEngaged" href="#"><?= $DutySheetId['HoursEngaged']; ?></a>
+                                <a class="nav-link" style="display:none" id="liDateOfDuty" href="#"><?= $DutySheetId['DateOfDuty']; ?></a>
+                                <a class="nav-link" style="display:none" id="liDispatchTime" href="#"><?= $DutySheetId['DispatchTime']; ?></a>
+                                <a class="nav-link" style="display:none" id="liArrivalTime" href="#"><?= $DutySheetId['ArrivalTime']; ?></a>
+                                <a class="nav-link" style="display:none" id="liDismissalTime" href="#"><?= $DutySheetId['DismissalTime']; ?></a>
+                                <a class="nav-link" style="display:none" id="liReturnTime" href="#"><?= $DutySheetId['ReturnTime']; ?></a>
+                               
+                                  <?php foreach ($result_DSpreaccarray as $DSPA): ?>
+                                <a class="nav-link" style="display:none" id="liForceNumber" href="#"><?= $DSPA['ForceNumber']; ?></a>
+                                <a class="nav-link" style="display:none" id="liNatregno" href="#"><?= $DSPA['Natregno']; ?></a>
+                                <a class="nav-link" style="display:none" id="liOfficerName" href="#"><?= $DSPA['OfficerName']; ?></a>
+                                <a class="nav-link" style="display:none" id="liHours" href="#"><?= $DSPA['Hours']; ?></a>
+                                <a class="nav-link" style="display:none" id="liRateCode" href="#"><?= $DSPA['RateCode']; ?></a>
+                                <a class="nav-link" style="display:none" id="liPayRate" href="#"><?= $DSPA['PayRate']; ?></a>
+                                <?php endforeach; ?>                                
                             </li>
                             <br>
                         <?php endforeach; ?>
@@ -157,26 +168,36 @@ if (empty($result_DutySheet)) {
 
                 <ul style="list-style: none">
                     <li>
-                        <label>Duty Sheet Name: </label>
-                        <label  id="DetailsDutySheetName" name="DetailsDutySheetName"></label>  
+                        <label>Event Name: </label>
+                        <label  id="DetailsEventName" name="DetailsEventName"></label>  
                         <br>
-                        <label>Duty Sheet Date Start: </label>
-                        <label  id="DetailsDutySheetDateStart" name="DetailsDutySheetDateStart"> </label>   
+                        <label>Date of Duty: </label>
+                        <label  id="DetailsDateOfDuty" name="DetailsDateOfDuty"> </label>   
                         <br>
-                        <label>Duty Sheet Date End: </label>
-                        <label id="DetailsDutySheetDateEnd" name="DetailsDutySheetDateEnd"> </label>    
+                        <label>Dispatch Time: </label>
+                        <label id="DetailsDispatchTime" name="DetailsDispatchTime"> </label>    
                         <br>
-                        <label>Duty Sheet Cost: </label>
-                        <label id="DetailsDutySheetCost" name="DetailsDutySheetCost"></label>    
+                        <label>Arrival Time: </label>
+                        <label id="DetailsArrivalTime" name="DetailsArrivalTime"></label>    
                         <br>
-                        <label>Police Services: </label>
-                        <label id="DetailsPoliceServices" name="DetailsPoliceServices"></label>    
+                        <label>Dismissal Time: </label>
+                        <label id="DetailsDismissalTime" name="DetailsDismissalTime"></label>    
                         <br>
-                        <label>VAT: </label>
-                        <label id="DetailsVATPoliceServices" name="DetailsVATPoliceServices"></label>  
+                        <label>Return Time: </label>
+                        <label id="DetailsReturnTime" name="DetailsReturnTime"></label>  
                         <br>
-                        <label>Equipment: </label>
-                        <label id="DetailsOperationalSupport" name="DetailsOperationalSupport"></label>  
+                        <label>Hours Engaged: </label>
+                        <label id="DetailsHoursEngaged" name="DetailsHoursEngaged"></label>  
+                        <br>
+                        <label>Officers: </label>
+<!--                        <label id="DetailsForceNumber" name="DetailsForceNumber"></label>  
+                        <br>
+                        <label id="DetailsOfficerName" name="DetailsOfficerName"></label>
+                        <br>
+                        <label id="DetailsForceNumber" name="DetailsForceNumber"></label>
+                        <br>
+                        <label id="DetailsRateCode" name="DetailsRateCode"></label>
+                        -->
                     </li>
                 </ul>
             </div>

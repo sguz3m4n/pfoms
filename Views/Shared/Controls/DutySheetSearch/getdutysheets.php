@@ -29,23 +29,40 @@
 
 <?php
 include '../../../../dbconfig.php';
-include '../../../../Classes/Event.php';
+include '../../../../Classes/DutySheet.php';
 $q = $_GET['q'];
 $conn = conn();
 $Id = "Id";
 
-$sql = 'SELECT EventId, EventName, CompanyName, EventCost, EventDateStart, EventDateEnd, Comments, CompanyId, Division, OperationalSupport, PoliceServices, VATPoliceServices FROM event WHERE CompanyName = "' . $q . '" AND DelFlg="N" AND Status="Approved"';
+//$sql = 'SELECT EventId, EventName, CompanyName, EventCost, EventDateStart, EventDateEnd, Comments, CompanyId, Division, OperationalSupport, PoliceServices, VATPoliceServices FROM event WHERE CompanyName = "' . $q . '" AND DelFlg="N" AND Status="Approved"';
 //$sql = 'SELECT `a.EventId,`EventName,`eventCost`,`CompanyId`,`CompanyName`,'$EventDateStart','$EventDateEnd',
 //    `ContactEmail`,`ContactNumber`,`EventDate`,`Comments`, AccountId, AccountName, TranId, TranAmt, b.EventId as "' . $Id . '" 
 //FROM `event` a LEFT JOIN preaccounttransactions b ON a.EventId = b.EventId';
 //$sql = 'SELECT * FROM `event` a LEFT JOIN preaccounttransactions b ON a.EventId = b.EventId';
 
-
-$stmt = $conn->prepare($sql);
-$stmt->execute();
-$EventIds = $stmt->fetchAll();
 //
+//$stmt = $conn->prepare($sql);
+//$stmt->execute();
+//$EventIds = $stmt->fetchAll();
+//
+//Get Company ID
+$sql = 'SELECT CompanyId FROM `company` WHERE CompanyName = "' . $q . '" AND DelFlg="N"';
+$Compstmt = $conn->prepare($sql);
+$Compstmt->execute();
+$Comp_array = $Compstmt->fetchAll();
 
+foreach ($Comp_array as $Comp_value) {
+$companyId = $Comp_value['CompanyId'];
+}
+//Get all dutysheets for company
+$sqlDutySheet = 'SELECT DutySheetId, EventId, EventName, OvertimeAmount, DateOfDuty, DispatchTime, ArrivalTime, DismissalTime, ReturnTime, '
+        . 'TotalHoursWorked FROM dutysheet WHERE CompanyId = "' . $companyId . '" AND DelFlag="N" AND Status="Active"';
+$stmtDutySheet = $conn->prepare($sqlDutySheet);
+$stmtDutySheet->execute();
+$result_DutySheet = $stmtDutySheet->fetchAll();
+
+
+// This is for breakdown of event details
 $sql = 'SELECT EventId, CompanyId, AssetName, SUM(Value) as Value, SUM(Quantity)as Quantity FROM `eventpreaccount` WHERE CompanyName = "' . $q . '" AND DelFlag="N" GROUP by AssetName';
 $stmt = $conn->prepare($sql);
 $stmt->execute();
@@ -60,22 +77,22 @@ $result_array = $stmt->fetchAll();
 //$stmt->execute();
 //$TransActions = $stmt->fetchAll();
 
-if (empty($EventIds)) {
+if (empty($result_DutySheet)) {
     ?>
-    <style type="text/css">#HaveEvents{
+    <style type="text/css">#HaveDutySheets{
             display:none;
         }</style>
         <?php
     } else {
         ?>
-    <style type="text/css">#NoEvents{
+    <style type="text/css">#NoDutySheets{
             display:none;
         }</style>
         <?php
     }
 
 
-    $eventinst = new BarcomModel\Event();
+    $dutysheetinst = new BarcomModel\DutySheet();
     $conn = NULL;
     ?>  
 
@@ -84,73 +101,73 @@ if (empty($EventIds)) {
     <div class="panel-heading" >
         
         
-        <div class="eventList" id="HaveEvents">
-             <center id="addcontrols">                                                                                                                           
+        <div class="eventList" id="HaveDutySheets">
+             <center>                                                                                                                           
             <h3> 
-                <span class="label label-info">List of Active events for:</span> 
+                <span class="label label-info">List of Active DutySheets for:</span> 
                 <span class="label label-info"><?php echo $q; ?></span> 
                
             </h3>  
         </center>
             <div>
                 <center>
-                 <button id="btnShowEvents" type="button" class="btn btn-info" data-toggle="collapse" data-target="#ListOfApprovedEvents,#divEventDetails">Hide Events</button>
+                 <button id="btnShowDutySheets" type="button" class="btn btn-info" data-toggle="collapse" data-target="#ListOfApprovedDutySheets,#divDutySheetDetails">Hide DutySheets</button>
                 </center>
                    
                 </div> 
-            <div class="col-md-6 collapse in" id ="ListOfApprovedEvents">
+            <div class="col-md-6 collapse in" id ="ListOfApprovedDutySheets">
                 <br>
                 <div class="pillwrapper" id="pillcontainer">
                     <ul class="nav nav-pills nav-stacked" id="pillwrapper" >
 
-                        <?php foreach ($EventIds as $EventId): ?>
+                        <?php foreach ($DutySheetIds as $DutySheetId): ?>
 
-                            <li class="<?= $EventId['EventId']; ?>">      
-                                <a class="nav-link" id="liEventName" name="<?= $EventId['EventName']; ?>"><?= $EventId['EventName']; ?></a>
-                                <a class="nav-link" style="display:none" id="liEventId" href="#"><?= $EventId['EventId']; ?></a>
-                                <a class="nav-link" style="display:none" id="liEventCost" value="<?= $EventId['EventCost']; ?>" href="#"><?= $EventId['EventCost']; ?></a>
-                                <a class="nav-link" style="display:none" id="liEventDateStart" href="#"><?= $EventId['EventDateStart']; ?></a>
-                                <a class="nav-link" style="display:none" id="liEventDateEnd" href="#"><?= $EventId['EventDateEnd']; ?></a>
-                                <a class="nav-link" style="display:none" id="liComments" href="#"><?= $EventId['Comments']; ?></a>
-                                <a class="nav-link" style="display:none" id="liOperationalSupport" href="#"><?= $EventId['OperationalSupport']; ?></a>
-                                <a class="nav-link" style="display:none" id="liPoliceServices" href="#"><?= $EventId['PoliceServices']; ?></a>
-                                <a class="nav-link" style="display:none" id="liVATPoliceServices" href="#"><?= $EventId['VATPoliceServices']; ?></a>
+                            <li class="<?= $DutySheetId['DutySheetId']; ?>">      
+                                <a class="nav-link" id="liDutySheetName" name="<?= $DutySheetId['DutySheetName']; ?>"><?= $DutySheetId['DutySheetName']; ?></a>
+                                <a class="nav-link" style="display:none" id="liDutySheetId" href="#"><?= $DutySheetId['DutySheetId']; ?></a>
+                                <a class="nav-link" style="display:none" id="liDutySheetCost" value="<?= $DutySheetId['DutySheetCost']; ?>" href="#"><?= $DutySheetId['DutySheetCost']; ?></a>
+                                <a class="nav-link" style="display:none" id="liDutySheetDateStart" href="#"><?= $DutySheetId['DutySheetDateStart']; ?></a>
+                                <a class="nav-link" style="display:none" id="liDutySheetDateEnd" href="#"><?= $DutySheetId['DutySheetDateEnd']; ?></a>
+                                <a class="nav-link" style="display:none" id="liComments" href="#"><?= $DutySheetId['Comments']; ?></a>
+                                <a class="nav-link" style="display:none" id="liOperationalSupport" href="#"><?= $DutySheetId['OperationalSupport']; ?></a>
+                                <a class="nav-link" style="display:none" id="liPoliceServices" href="#"><?= $DutySheetId['PoliceServices']; ?></a>
+                                <a class="nav-link" style="display:none" id="liVATPoliceServices" href="#"><?= $DutySheetId['VATPoliceServices']; ?></a>
                             </li>
                             <br>
                         <?php endforeach; ?>
                     </ul>   
                 </div>
 
-<!--                <form action="/event/deactivate" method="post" style="display:none" id="formDeleteEvent">
+<!--                <form action="/event/deactivate" method="post" style="display:none" id="formDeleteDutySheet">
 
-                    <input type="hidden" name="EventName" id="hdnEventName" value="">
-                    <input type="hidden" name="EventId" id="hdnEventId" value="">
+                    <input type="hidden" name="DutySheetName" id="hdnDutySheetName" value="">
+                    <input type="hidden" name="DutySheetId" id="hdnDutySheetId" value="">
                     <center>
-                    <button type="submit" class="btn btn-danger" name="btn-delete" id="btnDelete"><strong>Delete Event</strong></button> 
+                    <button type="submit" class="btn btn-danger" name="btn-delete" id="btnDelete"><strong>Delete DutySheet</strong></button> 
                     </center>
                 </form>-->
             </div>
-            <div class="col-md-6 collapse in" style="display:none" id="divEventDetails"><br>
-                <center id="addcontrols">                                                                                                                           
+            <div class="col-md-6 collapse in" style="display:none" id="divDutySheetDetails"><br>
+                <center>                                                                                                                           
                     <h3> 
-                        <span class="label label-info">Event Details:</span> 
+                        <span class="label label-info">Duty Sheet Details:</span> 
                     </h3>  
                 </center></button>
                 <br>
 
                 <ul style="list-style: none">
                     <li>
-                        <label>Event Name: </label>
-                        <label  id="DetailsEventName" name="DetailsEventName"></label>  
+                        <label>Duty Sheet Name: </label>
+                        <label  id="DetailsDutySheetName" name="DetailsDutySheetName"></label>  
                         <br>
-                        <label>Event Date Start: </label>
-                        <label  id="DetailsEventDateStart" name="DetailsEventDateStart"> </label>   
+                        <label>Duty Sheet Date Start: </label>
+                        <label  id="DetailsDutySheetDateStart" name="DetailsDutySheetDateStart"> </label>   
                         <br>
-                        <label>Event Date End: </label>
-                        <label id="DetailsEventDateEnd" name="DetailsEventDateEnd"> </label>    
+                        <label>Duty Sheet Date End: </label>
+                        <label id="DetailsDutySheetDateEnd" name="DetailsDutySheetDateEnd"> </label>    
                         <br>
-                        <label>Event Cost: </label>
-                        <label id="DetailsEventCost" name="DetailsEventCost"></label>    
+                        <label>Duty Sheet Cost: </label>
+                        <label id="DetailsDutySheetCost" name="DetailsDutySheetCost"></label>    
                         <br>
                         <label>Police Services: </label>
                         <label id="DetailsPoliceServices" name="DetailsPoliceServices"></label>    
@@ -164,7 +181,7 @@ if (empty($EventIds)) {
                 </ul>
             </div>
         </div>
-        <div class="eventList" id="NoEvents">
+        <div class="eventList" id="NoDutySheets">
             <center>
             <h3> 
                 <span class="label label-info">No Active events for:</span> 
@@ -176,10 +193,9 @@ if (empty($EventIds)) {
        
         
     </div>
-    <div class="panel-body">
-
-    </div>
+    
 </div>
+ 
 
 
 

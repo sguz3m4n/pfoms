@@ -4,6 +4,10 @@
         { head }
         <script type="text/javascript">
             $(document).ready(function () {
+
+                var contactcount = 0;
+                var contactarr = [];
+
                 $('.search-boxcomp input[type="text"]').on("keyup input", function () {
                     /* Get input value on change */
                     var inputVal = $(this).val();
@@ -57,6 +61,56 @@
                         }
                     $(this).parent(".result").empty();
                     //alert('test');
+                });
+
+                $('#AddContact').on('click', function () {
+                    alert("hello");
+                    var contactrec = [];
+                    var contactemail = $('#ContactEmail').val();
+                    var contactname = $('#ContactName').val();
+                    var contactnumber = $('#ContactNumber').val();
+                    contactrec.push(contactname);
+                    contactrec.push(contactemail);
+                    contactrec.push(contactnumber);
+                    var pillcontainer = document.getElementById('pillcontainer');
+                    var pillwrapper = document.getElementById('pillwrapper');
+
+                    //create instance of list elements
+                    var pill = document.createElement("li");
+                    pill.setAttribute("id", "contactcount" + contactcount);
+
+                    var removeicon = document.createElement("span");
+                    removeicon.setAttribute("class", "glyphicon glyphicon-minus");
+
+                    //dynamically create functions
+                    var pillanchor = document.createElement("a");
+                    //pillanchor.setAttribute("data-preactotal", OperationalSupportTotal);
+                    pillanchor.setAttribute("style", "bold");
+                    pillanchor.appendChild(document.createTextNode("Contact- " + contactname + " Email " + contactemail + "Contact #" + contactnumber));
+                    //<a href="mailto:webmaster@example.com">Jon Doe</a>
+
+                    pillanchor.appendChild(removeicon);
+
+                    pill.appendChild(pillanchor);
+                    pillwrapper.appendChild(pill);
+                    pillcontainer.appendChild(pillwrapper);
+                    //contactrec.push("preaccount" + contactcount);
+                    // acctrec.push(acctid);
+                    //acctrec.push(OperationalSupportTotal);
+                    // acctrec.push(document.getElementById("AccountNumber").value);
+                    contactarr.push(contactrec);
+
+                    contactcount++;
+
+                });
+
+                $(document).on("dblclick", ".pillwrapper li", function (event) {
+
+                    var key = this.id.toString();
+                    var elem = document.getElementById(this.id.toString());
+                    elem.parentNode.removeChild(elem);
+                    RemoveInfo(key);
+
                 });
             });
         </script>         
@@ -138,7 +192,7 @@
                                         </div>
                                     </a>
                                 </div>
-                                
+
                                 <center>
                                     <a class="btn btn-outline blue" href="../../index.php">back to main page</a>    
                                 </center>
@@ -157,9 +211,36 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
-           
+        </div>
+        <div class="modal" id="mycontactModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Enter Contact Details</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">      
+                        <label><strong>Contact Name</strong></label>
+                        <input type="text"  class="form-control" id="ContactName" name="ContactName"   required  >                                                                                                        
+                        <label><strong>Contact Email</strong></label>
+                        <input type="text"  class="form-control" id="ContactEmail" name="ContactEmail"  required  >     
+                        <label><strong>Contact Number</strong></label>
+                        <input type="text"  class="form-control" id="ContactNumber" name="ContactNumber"   required  >     
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-info" id="AddContact" data-enter="modal">Add Contact</button>
+                    </div>                                            
+                </div>
+            </div>
         </div>
         { foot } 
     </body>

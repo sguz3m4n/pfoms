@@ -89,8 +89,8 @@ class Deposit {
     function CreateDeposit() {
         $conn = conn();
 
-        $sql = "INSERT INTO `deposit`(`CompanyId`,`EventId`, `InvoiceNo`, `ReceiptNo`, `ReceiptDate`, `GOBNo`, `GOBDate`, `DepositAmount`, `PreviousBalance`, `CurrentBalance`, `Comments`, `RecEntered`, `RecEnteredBy`) VALUES "
-                . "('$this->CompanyId','$this->EventId','$this->InvoiceNumber','$this->ReceiptNumber','$this->ReceiptDate','$this->GOBAVJ','$this->GOBAVJDate','$this->DepositAmount','$this->DepositAmount','$this->PreviousBalance','$this->CurrentBalance','$this->Comments',NOW(), '$this->ReEnteredBy')";
+        $sql = "INSERT INTO `deposit`(`CompanyId`, `DepositAmount`, `PreviousBalance`, `CurrentBalance`, `Comments`, `RecEntered`, `RecEnteredBy`) VALUES "
+                . "('$this->CompanyId','$this->DepositAmount','$this->PreviousBalance','$this->CurrentBalance','$this->Comments',NOW(), '$this->ReEnteredBy')";
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {
@@ -99,10 +99,22 @@ class Deposit {
         $conn = NULL;
     }
 
+    function CreateDepositTransactionRecord($tranid, $proforma, $invoiceno, $receiptno, $receiptdate, $trantype, $companyname, $companyid, $eventid, $GOBAvj, $GOBDate, $PrevBal, $CurBal, $CompBal, $DepAmt, $Comments, $username) {
+        $conn = conn();
+        $sql = "INSERT INTO `deposittransaction` (`TransId`, `ProformaNumber`, `InvoiceNumber`, `ReceiptNumber`, `ReceiptDate`, `TranType`, `CompanyName`, `CompanyId`, `EventId`, `GOBAvj`, `GOBDate`, `PreviousBalance`, `CurrentBalance`, `CompanyBalance`, `DepositAmount`, `Comments`, `RecEntered`, `RecEnteredBy`)"
+                . " VALUES ('$tranid', '$proforma','$invoiceno','$receiptno','$receiptdate', '$trantype','$companyname','$companyid','$eventid','$GOBAvj','$GOBDate','$PrevBal','$CurBal','$CompBal','$DepAmt','$Comments',NOW(), '$username')";
+        if ($conn->exec($sql)) {
+            //echo "New record created successfully";
+        } else {
+            //echo "New record created successfully";
+        }
+        $conn = NULL;
+    }
+
     //Method to update existing company deposit
     function EditDeposit($companyid) {
         $conn = conn();
-        $sql = "UPDATE `deposit` SET `CompanyId`='$this->CompanyId',`ASYCUDANo`='$this->ASYCUDA',`ASYCUDADate`=NOW(),`DepositAmount`='$this->DepositAmount',`PreviousBalance`='$this->PreviousBalance',
+        $sql = "UPDATE `deposit` SET `CompanyId`='$this->CompanyId',`DepositAmount`='$this->DepositAmount',`PreviousBalance`='$this->PreviousBalance',
                   `CurrentBalance`='$this->CurrentBalance',`Comments`='$this->Comments',`RecEntered`=NOW(),RecEnteredBy='$this->ReEnteredBy' WHERE `CompanyId`='$companyid'";
         if ($conn->exec($sql)) {
             $this->auditok = 1;

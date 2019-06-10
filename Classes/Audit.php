@@ -51,21 +51,6 @@ class Audit {
         }
         $conn = NULL;
     }
-    
-
-    function CreateDepositTransactionRecord($tranid, $asycuda, $trandesc, $username, $trantype, $tranamt, $compid) {
-        $conn = conn();
-        $sql = "INSERT INTO `deposittransaction` (`TransId`, `TranType`, `Asycuda`, `TranAmt`, `TranDesc`, `CompanyId`, `UserName`, `TranDate`) VALUES ('$tranid','$trantype','$asycuda','$tranamt','$trandesc','$compid','$username',NOW())";
-        if ($conn->exec($sql)) {
-            //echo "New record created successfully";
-        } else {
-            //echo "New record created successfully";
-        }
-        $conn = NULL;
-    }
-    
-    
-    
 
     //Method to create user audit record
     //This should be invoked anytime a user action event is executed in the interface

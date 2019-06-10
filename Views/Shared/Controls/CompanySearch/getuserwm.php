@@ -11,30 +11,36 @@ $sql = 'SELECT * FROM company WHERE CompanyName = "' . $q . '" AND DelFlg="N"';
 $result = $conn->prepare($sql);
 $result->execute();
 $compinst = new BarcomModel\Company();
+$resultcontact;
+if (!empty($result)) {
+    foreach ($result as $value) {
+        $compinst->CompanyId = $value['CompanyId'];
+        $compinst->CaipoId = $value['CaipoId'];
+        $compinst->TIN = $value['TIN'];
+        $compinst->CompanyName = $value['CompanyName'];
+        $compinst->AddressLine1 = $value['AddressLine1'];
+        $compinst->AddressLine2 = $value['AddressLine2'];
+        $compinst->AddressLine3 = $value['AddressLine3'];
+        $compinst->Parish = $value['Parish'];
+        $compinst->PostalCode = $value['PostalCode'];
+        $compinst->ContactName = $value['ContactName'];
+        $compinst->PhoneNumber = $value['PhoneNumber'];
+        $compinst->FaxNumber = $value['FaxNumber'];
+        $compinst->Email = $value['Email'];
+        $compinst->Notes = $value['Notes'];
 
-foreach ($result as $value) {
-    $compinst->CompanyId = $value['CompanyId'];
-    $compinst->CaipoId = $value['CaipoId'];
-    $compinst->TIN = $value['TIN'];
-    $compinst->CompanyName = $value['CompanyName'];
-    $compinst->AddressLine1 = $value['AddressLine1'];
-    $compinst->AddressLine2 = $value['AddressLine2'];
-    $compinst->AddressLine3 = $value['AddressLine3'];
-    $compinst->Parish = $value['Parish'];
-    $compinst->PostalCode = $value['PostalCode'];
-    $compinst->ContactName = $value['ContactName'];
-    $compinst->PhoneNumber = $value['PhoneNumber'];
-    $compinst->FaxNumber = $value['FaxNumber'];
-    $compinst->Email = $value['Email'];
-    $compinst->Notes = $value['Notes'];
+        $compinst->CompStatus = $value['CompStatus'];
+        $compinst->RecEntered = $value['RecEntered'];
+        $compinst->RecEnteredBy = $value['RecEnteredBy'];
+        $compinst->RecModified = $value['RecModified'];
+        $compinst->RecModifiedBy = $value['RecModifiedBy'];
+        $compinst->DelFlg = $value['DelFlg'];
+        $compinst->CompanyAddress = '<br>' . $compinst->AddressLine1 . '<br>' . $compinst->AddressLine2 . '<br>' . $compinst->AddressLine3 . '<br>' . $compinst->Parish;
 
-    $compinst->CompStatus = $value['CompStatus'];
-    $compinst->RecEntered = $value['RecEntered'];
-    $compinst->RecEnteredBy = $value['RecEnteredBy'];
-    $compinst->RecModified = $value['RecModified'];
-    $compinst->RecModifiedBy = $value['RecModifiedBy'];
-    $compinst->DelFlg = $value['DelFlg'];
-    $compinst->CompanyAddress = '<br>' . $compinst->AddressLine1 . '<br>' . $compinst->AddressLine2 . '<br>' . $compinst->AddressLine3 . '<br>' . $compinst->Parish;
+        $sqlcontact = 'SELECT * FROM contact WHERE CompanyId ="' . $compinst->CompanyId . '"';
+        $resultcontact = $conn->prepare($sqlcontact);
+        $resultcontact->execute();
+    }
 }
 
 $conn = NULL;
@@ -47,25 +53,48 @@ function AddressBuilder() {
 $model = new \BarcomModel\Company();
 $parishes = $model->GetParishes();
 ?>  
-<div class="panel panel-info">
-    <div class="panel-heading">
-        <center>
-            <h3> 
-                <span class="label label-info"><?php echo $compinst->CompanyName; ?></span>           
-                <span class="label label-info"><?php echo $compinst->TIN; ?></span>                
-            </h3>  
-        </center>
-        <ul style="list-style: none">
-            <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Contact: </label><?php echo $compinst->ContactName; ?></li> 
-            <li><span class="glyphicon glyphicon-send"></span> <label>Address </label><?php echo $compinst->CompanyAddress; ?></li>                        
-            <li><span class="glyphicon glyphicon-phone"></span><label>Phone </label><?php echo $compinst->PhoneNumber; ?></li> 
-            <li><span class="glyphicon glyphicon-print"></span><label>Fax </label><?php echo $compinst->FaxNumber; ?></li>            
-            <li><label>Email </label><a href="mailto:<?php echo $compinst->Email; ?>"> <?php echo $compinst->Email; ?> </a></li>
-        </ul>
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <center>
+                    <h3> 
+                        <span class="label label-info"><?php echo $compinst->CompanyName; ?></span>           
+                        <span class="label label-info"><?php echo $compinst->TIN; ?></span>                
+                    </h3>  
+                </center>
+                <ul style="list-style: none">
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Contact: </label><?php echo $compinst->ContactName; ?></li> 
+                    <li><span class="glyphicon glyphicon-send"></span> <label>Address </label><?php echo $compinst->CompanyAddress; ?></li>                        
+                    <li><span class="glyphicon glyphicon-phone"></span><label>Phone </label><?php echo $compinst->PhoneNumber; ?></li> 
+                    <li><span class="glyphicon glyphicon-print"></span><label>Fax </label><?php echo $compinst->FaxNumber; ?></li>            
+                    <li><label>Email </label><a href="mailto:<?php echo $compinst->Email; ?>"> <?php echo $compinst->Email; ?> </a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <a id="addrank" class="btn btn-default green" data-toggle="modal" data-target="#mycontactModal">Add Contact <i class="glyphicon glyphicon-plus"></i>
+        </a>
+        <div class="pillwrapper" id="pillcontainer">
+            <ul class="nav nav-pills nav-stacked" id="pillwrapper">  
+                <br>
+                <?php foreach ($resultcontact as $value1) : ?>
+                  
+                    <li id="<?php echo $value1['ContactId']; ?>">
+                        <a style="bold">Contact- <?php echo $value1['ContactName']; ?> Email <?php echo $value1['ContactEmail']; ?> <?php echo $value1['ContactNumber']; ?><span class="glyphicon glyphicon-minus"></span></a>
+                    </li>
+                <?php endforeach; ?>
+
+
+            </ul>
+        </div>
     </div>
 </div>
+
 <center>
     <div class="row">
+
         <!-- Trigger the modal with a button -->
         <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Edit Company</button>
     </div> 
@@ -96,8 +125,8 @@ $parishes = $model->GetParishes();
                             <label>Caipo ID</label>
                             <input type="text" class="form-control" name="CaipoId" value="<?php echo $compinst->CaipoId; ?>"  >
 
-<!--                            <label>Company TIN</label>
-                            <input type="text" class="form-control" name="TIN" value="<?php echo $compinst->TIN; ?>"  >-->
+                            <!--                            <label>Company TIN</label>
+                                                        <input type="text" class="form-control" name="TIN" value="<?php echo $compinst->TIN; ?>"  >-->
                             <input type="hidden" name="TIN" value="<?php echo $compinst->TIN; ?>">
                         </div>
                     </div>
@@ -134,7 +163,6 @@ $parishes = $model->GetParishes();
                         <div class="col-xs-4"> 
                             <label>Contact Name</label>
                             <input type="text" class="form-control" name="ContactName" value="<?php echo $compinst->ContactName; ?>" > 
-
                         </div>
                         <div class="col-xs-8"> 
 
@@ -167,7 +195,9 @@ $parishes = $model->GetParishes();
                   </div>
         </div> 
     </div>  
+    <div><input id="contactlist" name="contactlist" class="form-control" type="hidden" ></div>
 </form>
+
 
  
 

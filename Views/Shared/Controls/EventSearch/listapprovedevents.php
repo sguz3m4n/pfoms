@@ -34,7 +34,7 @@ $q = $_GET['q'];
 $conn = conn();
 $Id = "Id";
 
-$sql = 'SELECT EventId, EventName, CompanyName, EventCost, EventDateStart, EventDateEnd, Comments, CompanyId, Division, OperationalSupport, PoliceServices, VATPoliceServices FROM event WHERE CompanyName = "' . $q . '" AND DelFlg="N" AND Status="Approved"';
+$sql = 'SELECT EventId, EventName, CompanyName, EventCost, EventDateStart, EventDateEnd, Comments, CompanyId, Division, OperationalSupport, PoliceServices, VATPoliceServices FROM event WHERE CompanyName = "' . $q . '" AND  DelFlg="N" AND Status="Approved"';
 //$sql = 'SELECT `a.EventId,`EventName,`eventCost`,`CompanyId`,`CompanyName`,'$EventDateStart','$EventDateEnd',
 //    `ContactEmail`,`ContactNumber`,`EventDate`,`Comments`, AccountId, AccountName, TranId, TranAmt, b.EventId as "' . $Id . '" 
 //FROM `event` a LEFT JOIN preaccounttransactions b ON a.EventId = b.EventId';
@@ -50,15 +50,11 @@ $sql = 'SELECT EventId, CompanyId, AssetName, SUM(Value) as Value, SUM(Quantity)
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $result_array = $stmt->fetchAll();
-//
-//        foreach ($result_array as $value) {
-//            
-//            //            $accountcode = $value['AccountId'];
-//            $result .= "<option id='$accountcode' >" . $value['AccountName'] . "</option>";
-//        }
-//$stmt = $conn->prepare($sql);
-//$stmt->execute();
-//$TransActions = $stmt->fetchAll();
+
+$sqldeposit='SELECT * FROM deposit WHERE companyid=(SELECT Companyid FROM company WHERE CompanyName = "' . $q . '" AND DelFlg="N" )';
+$stmtdep=$conn->prepare($sqldeposit);
+$stmt->execute();
+$deposit_arr=$stmtdep->fetchAll();
 
 if (empty($EventIds)) {
     ?>
@@ -82,29 +78,29 @@ if (empty($EventIds)) {
 
 <div class="panel panel-info">
     <div class="panel-heading" >
-        
-        
+
+
         <div class="eventList" id="HaveEvents">
-             <center id="addcontrols">                                                                                                                           
-            <h3> 
-                <span class="label label-info">List of Active events for:</span> 
-                <span class="label label-info"><?php echo $q; ?></span> 
-               
-            </h3>  
-        </center>
+            <center >                                                                                                                           
+                <h3> 
+                    <span class="label label-info">List of Active events for:</span> 
+                    <span class="label label-info"><?php echo $q; ?></span> 
+
+                </h3>  
+            </center>
             <div>
                 <center>
-                 <button id="btnShowEvents" type="button" class="btn btn-info" data-toggle="collapse" data-target="#ListOfApprovedEvents,#divEventDetails">Hide Events</button>
+                    <button id="btnShowEvents" type="button" class="btn btn-info" data-toggle="collapse" data-target="#ListOfApprovedEvents,#divEventDetails">Hide Events</button>
                 </center>
-                   
-                </div> 
+
+            </div> 
             <div class="col-md-6 collapse in" id ="ListOfApprovedEvents">
                 <br>
                 <div class="pillwrapper" id="pillcontainer">
                     <ul class="nav nav-pills nav-stacked" id="pillwrapper" >
 
                         <?php foreach ($EventIds as $EventId): ?>
-
+                            <!--<input type="hidden" value="<?= $EventId['CurrentBalance']; ?>" id="CompanyBalance" name="CompanyBalance">-->
                             <li class="<?= $EventId['EventId']; ?>">      
                                 <a class="nav-link" id="liEventName" name="<?= $EventId['EventName']; ?>"><?= $EventId['EventName']; ?></a>
                                 <a class="nav-link" style="display:none" id="liEventId" href="#"><?= $EventId['EventId']; ?></a>
@@ -115,23 +111,25 @@ if (empty($EventIds)) {
                                 <a class="nav-link" style="display:none" id="liOperationalSupport" href="#"><?= $EventId['OperationalSupport']; ?></a>
                                 <a class="nav-link" style="display:none" id="liPoliceServices" href="#"><?= $EventId['PoliceServices']; ?></a>
                                 <a class="nav-link" style="display:none" id="liVATPoliceServices" href="#"><?= $EventId['VATPoliceServices']; ?></a>
+                                <a class="nav-link" style="display:none" id="liCompanyId" href="#"><?= $EventId['CompanyId']; ?></a>
+
                             </li>
                             <br>
                         <?php endforeach; ?>
                     </ul>   
                 </div>
 
-<!--                <form action="/event/deactivate" method="post" style="display:none" id="formDeleteEvent">
-
-                    <input type="hidden" name="EventName" id="hdnEventName" value="">
-                    <input type="hidden" name="EventId" id="hdnEventId" value="">
-                    <center>
-                    <button type="submit" class="btn btn-danger" name="btn-delete" id="btnDelete"><strong>Delete Event</strong></button> 
-                    </center>
-                </form>-->
+                <!--                <form action="/event/deactivate" method="post" style="display:none" id="formDeleteEvent">
+                
+                                    <input type="hidden" name="EventName" id="hdnEventName" value="">
+                                    <input type="hidden" name="EventId" id="hdnEventId" value="">
+                                    <center>
+                                    <button type="submit" class="btn btn-danger" name="btn-delete" id="btnDelete"><strong>Delete Event</strong></button> 
+                                    </center>
+                                </form>-->
             </div>
             <div class="col-md-6 collapse in" style="display:none" id="divEventDetails"><br>
-                <center id="addcontrols">                                                                                                                           
+                <center >                                                                                                                           
                     <h3> 
                         <span class="label label-info">Event Details:</span> 
                     </h3>  
@@ -166,15 +164,15 @@ if (empty($EventIds)) {
         </div>
         <div class="eventList" id="NoEvents">
             <center>
-            <h3> 
-                <span class="label label-info">No Active events for:</span> 
-                <span class="label label-info"><?php echo $q; ?></span>           
-            </h3> 
-            
-        </center>
+                <h3> 
+                    <span class="label label-info">No Active events for:</span> 
+                    <span class="label label-info"><?php echo $q; ?></span>           
+                </h3> 
+
+            </center>
         </div>
-       
-        
+
+
     </div>
     <div class="panel-body">
 

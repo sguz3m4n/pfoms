@@ -11,8 +11,8 @@
 namespace Controllers;
 
 
-require 'Classes/Event.php';
-require 'Classes/Company.php';
+require 'Classes/DutySheet.php';
+
 require 'Classes/Audit.php';
 //require 'Classes/PreAccount.php';
 require 'Controller/base_template.php';
@@ -26,16 +26,27 @@ class CreateDutySheetController extends PermissionController {
         $this->setRoles(['Manager', 'Administrator', 'Super User']);
     }
 
-    private $EventId = "";
-    private $EventName = "";
-    private $EventDate = "";
-    private $EventCost = "";
-    private $Comments = "";
-        
-    private $RecModifiedBy = "";
-    private $OperationalSupport = "";
-    private $PoliceServices = "";
-    private $VATPoliceServices = "";
+  public $DutySheetId;
+    public $EventId;
+    public $EventName;
+    public $CompanyId;
+    public $Natregno;
+    public $ForceNumber;
+    public $RateCode;
+    public $OfficerName;
+    
+    public $PayRate;
+    
+    public $OvertimeAmount;
+    public $DateOfDuty;
+    public $DispatchTime;
+    public $ArrivalTime;
+    public $DismissalTime;
+    public $ReturnTime;
+    public $TotalHoursWorked;
+    public $RecEnteredBy;
+    public $Hours;
+   public $RecModifiedBy;
  
  
     function show($params) {
@@ -43,53 +54,61 @@ class CreateDutySheetController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         
-        if (isset($_POST['btn-update'])) {
-            $eventinst = new \BarcomModel\Event();
+        if (isset($_POST['btn-create'])) {
+            $dutysheetinst = new \BarcomModel\DutySheet();
             $audinst = new \BarcomModel\Audit();
 
             //Get Id from browser interface
-            $eventinst->EventId = $EventId = $_POST["EventId"];
-
-            //Check to see if the record already exists            
-            //If it does execute update
-            //if ($eventinst->IfExists($EventId) === 1) {
-                
-            $eventinst->EventName = $EventName = $_POST["EventName"];
-            $eventinst->EventDate = $EventDate = $_POST["EventDate"];
-            $eventinst->EventCost = $EventCost = $_POST["EventCost"];
-            $eventinst->Comments = $Comments = $_POST["Comments"];
-            //$eventinst->EventId = $EventId = $_POST["EventId"];
+            $dutysheetinst->EventId = $EventId = $_POST["EventId"];
+            $dutysheetinst->EventName = $EventName = $_POST["EventName"];
             
-            //$eventinst->DelFlg = $DelFlg = "N";
-            //$eventinst->RecEntered = $RecEntered = "";
-            $eventinst->RecModifiedBy = $RecModifiedBy = $username;
-            $eventinst->OperationalSupport = $OperationalSupport = $_POST["OperationalSupport"];
-            $eventinst->PoliceServices = $PoliceServices = $_POST["PoliceServices"];
-            $eventinst->VATPoliceServices = $VATPoliceServices = $_POST["VATPoliceServices"];
+            $dutysheetinst->CompanyId = $CompanyId = $_POST["CompId"];
+            $dutysheetinst->OvertimeAmount = $OvertimeAmount = $_POST["OvertimeAmount"];
+            $dutysheetinst->DateOfDuty = $DateOfDuty = $_POST["DateOfDuty"];
+            $dutysheetinst->DispatchTime = $DispatchTime = $_POST["DispatchTime"];
+            $dutysheetinst->ArrivalTime = $ArrivalTime = $_POST["ArrivalTime"];
+            $dutysheetinst->DismissalTime = $DismissalTime = $_POST["DismissalTime"];
+            $dutysheetinst->ReturnTime = $ReturnTime = $_POST["ReturnTime"];
+            $dutysheetinst->TotalHoursWorked = $TotalHoursWorked = $_POST["TotalHoursWorked"];
+                        
+            $dutysheetinst->RecEnteredBy = $RecEnteredBy = $username;
+            
+            $DutySheetId = 'test1234';
+            
+            //Duty sheet preaccount 
+            $dutysheetinst->ForceNumber = $ForceNumber = $_POST["ForceNumber"];
+            $dutysheetinst->Natregno = $Natregno = $_POST["Natregno"];
+            $dutysheetinst->OfficerName = $OfficerName = $_POST["OfficerName"];
+            
+            $dutysheetinst->Hours = $ForceNumber = $_POST["Hours"];
+            $dutysheetinst->RateCode = $DateOfDuty = $_POST["RateCode"];
+            $dutysheetinst->PayRate = $OvertimeAmount = $_POST["PayRate"];
 
 
-               $eventinst->UpdateEvent($EventId);
+               $dutysheetinst->CreateDutySheet($DutySheetId, $EventId, $CompanyId, $OvertimeAmount, $DateOfDuty,
+            $DispatchTime, $ArrivalTime, $DismissalTime,$ReturnTime,$HoursWorked,$RecEnteredBy);
                 //if validation succeeds then commit info to database
-                  if ($eventinst->auditok == 1) {
+                  if ($dutysheetinst->auditok == 1) {
                 $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');
-                $TranDesc = 'Update complete for Event Name: ' . $EventName . ' Event ID: ' . $EventId;
+                $TranDesc = 'Duty Sheet created: ' . $DutySheetId . ' Event ID: ' . $EventId;
                 $User = $username;
                 $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
-                $token = '<br><br><span class="label label-success">Event Name</span> ' . '<span class="label label-info"> ' . $EventName . '</span><br><br><br>' .
+                $token = '<br><br><span class="label label-success">Duty Sheet ID</span> ' . '<span class="label label-info"> ' . $DutySheetId . '</span><br><br><br>' .
                         '<span class="label label-success">Event Id</span> ' . '<span class="label label-info">' . $EventId . '</span><br>';
-                $token1 = 'Record Successfully Updated';
+                
+                $token1 = 'Duty Sheet Successfully Created';
                 header("Location:" . "/success?result=$token&header=$token1&args=");
             }
         } 
         else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Company();
+            //$model = new \BarcomModel\Company();
             //$parishes = $model->GetParishes();
             $template = new MasterTemplate();
             $template->load("Views/DutySHeet/dutysheet.html");
 //            $template->replace("parishes", $parishes);
   //          $template->replace("title", " Create New Company ");
-            $template->replace("val_CompanyName", "");
+            //$template->replace("val_CompanyName", "");
             $template->publish();
         }
     }

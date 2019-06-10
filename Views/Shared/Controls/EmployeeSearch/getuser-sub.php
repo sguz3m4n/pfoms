@@ -19,8 +19,8 @@ if (!empty($result)) {
     foreach ($result as $value) {
         /* $buffer_data['Natregno'] = $_GET["Natregno"] = $empinst->Natregno = $value['Natregno'];
           //$empinst->FirstName = $row['FirstName'];
-          $_GET["RateAmount"] = $empinst->PayRate = $value['RateAmount'];
-          $empinst->RateCode = $value['RateCode']; */
+          $_GET["RateAmount"] = $empinst->PayRate = $value['RateAmount'];*/
+        $empinst->RateCode = $value['RateCode']; 
         $empinst->PayRate = $value['RateAmount'];
         $empinst->Natregno = $varid = $value['Natregno'];
         $empinst->RoleName = $value['RoleName'];

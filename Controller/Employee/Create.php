@@ -108,7 +108,7 @@ class EmployeeCreateController extends PermissionController {
             //variables for data input 
             $empinst = new \BarcomModel\Employee();
             $audinst = new \BarcomModel\Audit();
-            $bankaccount=new \BarcomModel\BankAccount();
+            $bankaccount = new \BarcomModel\BankAccount();
             //ternary operator example
             (isset($_POST['Natregno']) ? $this->Natregno = $empid = $empinst->Natregno = $_POST['Natregno'] : $this->Natregno = $empid = $empinst->Natregno = "");
             $this->MyPaymentsRecords = $pymntrecs = json_decode($_POST['accountlist'], TRUE);
@@ -132,7 +132,7 @@ class EmployeeCreateController extends PermissionController {
             //$this->PostType = $empinst->PostType = $_POST['PostType'];
             $this->DateOfBirth = $birthDate = $empinst->DateOfBirth = $_POST['DateOfBirth'];
             $this->Age = $empinst->Age = $age = (date('Y') - date('Y', strtotime($birthDate)));
-            ($_POST['Gender'] = "Male" ? $this->Gender = $empinst->Gender = "M" : $this->Gender = $empinst->Gender = "F" );
+            $_POST['Gender'] == "Male" ? $empinst->Gender = "M" : $empinst->Gender = "F";
             // $this->PayRate = $empinst->PayRate = $_POST['PayRate'];
             $this->RateCode = $empinst->RateCode = $_POST['RateCode'];
             $this->Notes = $empinst->Notes = $_POST['Notes'];

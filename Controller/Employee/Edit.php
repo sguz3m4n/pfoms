@@ -82,14 +82,14 @@ class EmployeeEditController extends PermissionController {
                 $empinst->RoleName = $_POST['RoleName'];
                 $birthDate = $empinst->DateOfBirth = $_POST['DateOfBirth'];
                 $empinst->Age = $age = (date('Y') - date('Y', strtotime($birthDate)));
-                ($_POST['Gender'] = "Male" ? $empinst->Gender = "M" : $empinst->Gender = "F" );
+                $_POST['Gender'] == "Male" ? $empinst->Gender = "M" : $empinst->Gender = "F";
                 $empinst->RateCode = $_POST['RateCode'];
                 $empinst->Notes = $_POST['Notes'];
                 $empinst->Email = $_POST['Email'];
 
                 $empinst->RecModifiedBy = $username;
                 $name = $empinst->FirstName . " " . $empinst->LastName;
-                
+
                 //Send elements to be validated
                 $validateme = ["NISNo"];
                 $this->ValidationEngine($validateme);

@@ -45,6 +45,7 @@ class EventCreateController extends PermissionController {
     private $ContactNumber = "";
     private $ContactEmail = "";
     private $Division = "";
+    private $Station= "";
     private $EventDateStart = "";
     private $EventDateEnd = "";
     private $EventCost = "";
@@ -98,17 +99,18 @@ class EventCreateController extends PermissionController {
             $eventinst->EventName = $EventName = $_POST["EventName"];
             $eventinst->EventDateStart = $EventDateStart = $_POST["EventDateStart"];
             $eventinst->EventDateEnd = $EventDateEnd = $_POST["EventDateEnd"];
-            $eventinst->EventCost = $EventCost = $_POST["hdnEventCost"];
-            $eventinst->Comments = $Comments = $_POST["Comments"];
+//            $eventinst->EventCost = $EventCost = $_POST["hdnEventCost"];
+          $eventinst->Comments = $Comments = $_POST["Comments"];
             $eventinst->EventId = $EventId = $_POST["EventId"];
             $eventinst->Division = $Division = $_POST["hdnDivisionId"];
+            $eventinst->Station = $station = $_POST["hdnStation"];
 
             $eventinst->DelFlg = $DelFlg = "N";
             $eventinst->RecEntered = $RecEntered = "";
             $eventinst->RecEnteredBy = $RecEnteredBy = $username;
-            $eventinst->OperationalSupport = $OperationalSupport = $_POST["hdnOperationalSupport"];
-            $eventinst->PoliceServices = $PoliceServices = $_POST["hdnPoliceServices"];
-            $eventinst->VATPoliceServices = $VATPoliceServices = $_POST["hdnVATPoliceServices"];
+//            $eventinst->OperationalSupport = $OperationalSupport = $_POST["hdnOperationalSupport"];
+//            $eventinst->PoliceServices = $PoliceServices = $_POST["hdnPoliceServices"];
+//            $eventinst->VATPoliceServices = $VATPoliceServices = $_POST["hdnVATPoliceServices"];
 
 //all coming from Company/getuser 
             $eventinst->CompanyId = $CompanyId = $_POST["CompId"];
@@ -116,26 +118,44 @@ class EventCreateController extends PermissionController {
             $eventinst->ContactName = $ContactName = $_POST["ContactName"];
             $eventinst->ContactNumber = $ContactNumber = $_POST["PhoneNumber"];
             $eventinst->ContactEmail = $ContactEmail = $_POST["Email"];
-  $eventinst->Assets = $Assets = ($_POST["hdnAsset"]);
-
-         $assetsbreakdown = explode("],",$Assets);
-
-  foreach($assetsbreakdown as $abd)
-  {
-      //$abd.replace("[","");
-     // $abd.replace("]","");
-       $arrbreakdown = explode(",",$abd);
-          $AssetName =  str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[2])));
-                 $Value = str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[1])));
-                $Quantity = str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[3])));
-                $Hours = str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[4])));
-                 //$Quantity = str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[3])));
-               
-               $eventinst->CreateEventPreAccount($EventId, $AssetName, $Quantity,$Hours, $Value, $CompanyName, $CompanyId);
-    
-  }
+//  $eventinst->Assets = $Assets = ($_POST["hdnAsset"]);
+//
+//  $eventinst->Assets = $Assets = json_decode($_POST['hdnAsset'], TRUE);
+//
+//       
+//               foreach($Assets as $Asset)
+//  {
+//           
+//            
+//            $eventinst->AssetName = $AssetName = $Asset[2];
+//            $eventinst->Value = $Value = $Asset[1];
+//            $eventinst->Quantity = $Quantity = $Asset[3];
+//            $eventinst->Hours = $Hours = $Asset[4];
+//              
+//       $eventinst->CreateEventPreAccount($EventId, $AssetName, $Quantity,$Hours, $Value, $CompanyName, $CompanyId);        
+//   
+//              
+//  }
+//         $assetsbreakdown = explode("],",$Assets);
+//
+//  foreach($assetsbreakdown as $abd)
+//  {
+//      //$abd.replace("[","");
+//     // $abd.replace("]","");
+//       $arrbreakdown = explode(",",$abd);
+//          $AssetName =  str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[2])));
+//                 $Value = str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[1])));
+//                $Quantity = str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[3])));
+//                $Hours = str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[4])));
+//                 //$Quantity = str_replace(']',"",str_replace('[',"",str_replace('"', "", $arrbreakdown[3])));
+//               
+//               $eventinst->CreateEventPreAccount($EventId, $AssetName, $Quantity,$Hours, $Value, $CompanyName, $CompanyId);
+//    
+//  }
   
- $eventinst->CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDateStart, $EventDateEnd, $Comments, $RecEnteredBy, $OperationalSupport, $PoliceServices, $VATPoliceServices, $Division);
+ $eventinst->CreateEvent($EventId, $EventName, $CompanyId, $CompanyName,
+         $ContactName, $ContactNumber, $ContactEmail, $EventDateStart, $EventDateEnd,$Comments, 
+         $RecEnteredBy, $Division, $station);
 //
 // foreach ($Assets as $asset)
 //  {

@@ -75,6 +75,8 @@ class Event {
         }
     }
     
+ 
+    
     
     function GetPreAccounts() {
         $result = "";
@@ -126,16 +128,57 @@ class Event {
 
         return $varschema . $vardatestamp;
     }
-
-    function CreateEvent($EventId, $EventName, $EventCost, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDateStart,$EventDateEnd, $Comments, $RecEnteredBy, $OperationalSupport, $PoliceServices, $VATPoliceServices, $Division) {
+    
+       function CreateUpdateProforma($EventId, $EventCost, $OppSupport, $PoliceServices,$VATPoliceServices, $RecEnteredBy) {
 
         $conn = conn();
-        $sql = "INSERT INTO `event` (`EventId`, `EventName`,`EventCost`, `CompanyId`, `CompanyName`, `ContactName`, 
+        $sqlgetevent = $conn->prepare("SELECT * FROM proforma where `EventId` = '$EventId' and DelFlag ='N';");
+        $sqlgetevent->execute();
+        $result_array = $sqlgetevent->fetchAll();
+
+        if(empty($result_array)){
+        $sql = "INSERT INTO `proforma` (`EventId`, `EventCost`, `OpperationalSupport`, `PoliceServices`, `VATPoliceServices`,`Status`,`DelFlag`)
+            VALUES ('$EventId', '$EventCost', '$OppSupport','$PoliceServices','$VATPoliceServices','Registered','N')";
+        }
+        else{
+            $sql = "Update `proforma` SET `OpperationalSupport` = `OpperationalSupport` + '$OppSupport',"
+                    . "`PoliceServices` = `PoliceServices` + '$PoliceServices',"
+                    . " `VATPoliceServices` = `VATPoliceServices` + '$VATPoliceServices',"
+                    . "  `EventCost` = `EventCost` + '$EventCost' WHERE `EventId` = '$EventId' ";
+
+        }
+        if ($conn->exec($sql)) {
+            $this->auditok = 1;
+        } else {
+            $this->auditok = 0;
+        }
+    }
+    
+    function CreateProformaTransaction($EventId, $OppSupport, $PoliceServices,$VATPoliceServices, $RecEnteredBy,$TransId) {
+
+        $conn = conn();
+        $sql = "Insert Into `proformatransaction` (`EventId`,  `OppSupport`, `PoliceServices`, `PoliceServicesVat`,`RecEnteredBy`,`TimeStamp`,`TransId`)
+            VALUES ('$EventId', '$OppSupport','$PoliceServices','$VATPoliceServices','$RecEnteredBy',NOW(), '$TransId')";
+
+        if ($conn->exec($sql)) {
+            $this->auditok = 1;
+        } else {
+            $this->auditok = 0;
+        }
+    }
+
+    function CreateEvent($EventId, $EventName, $CompanyId, $CompanyName,
+         $ContactName, $ContactNumber, $ContactEmail, $EventDateStart, $EventDateEnd, $Comments,
+         $RecEnteredBy, $Division, $station)
+    {
+
+        $conn = conn();
+        $sql = "INSERT INTO `event` (`EventId`, `EventName`, `CompanyId`, `CompanyName`, `ContactName`, 
     `ContactEmail`,`ContactNumber`, `EventDateStart`, `EventDateEnd`, `Comments`, `RecEntered`, `RecEnteredBy`, 
-    `Status`, `DelFlg`, `OperationalSupport`, `PoliceServices`, `VATPoliceServices`, `Division`)
-            VALUES ('$EventId', '$EventName', '$EventCost', '$CompanyId', '$CompanyName', '$ContactName',"
+    `Status`, `DelFlg`,`Division`, `station`)
+            VALUES ('$EventId', '$EventName', '$CompanyId', '$CompanyName', '$ContactName',"
                 . "'$ContactEmail','$ContactNumber', '$EventDateStart','$EventDateEnd', '$Comments', NOW(), '$RecEnteredBy',"
-                . "'Registered','N', $OperationalSupport, $PoliceServices, $VATPoliceServices, '$Division')";
+                . "'Registered','N', '$Division', '$station')";
 
         if ($conn->exec($sql)) {
             $this->auditok = 1;
@@ -176,19 +219,19 @@ class Event {
         }
     }
 
-    function UpdateEvent($EventId) {
-        $conn = conn();
-        $sql = "UPDATE `event` SET `EventName` = '$this->EventName', "
-                . "`EventDate`= '$this->EventDate', `EventCost`= '$this->EventCost' "
-                . ", `Comments`='$this->Comments' , `RecModified`= NOW() ,`RecModifiedBy`= '$this->RecModifiedBy'"
-                . ", `OperationalSupport`= '$this->OperationalSupport',`PoliceServices`= '$this->PoliceServices' "
-                . ",`VATPoliceServices`= '$this->VATPoliceServices' "
-                . " WHERE EventId ='" . $EventId . "'";
-        if ($conn->exec($sql)) {
-            $this->auditok = 1;
-        } else {
-            $this->auditok = 0;
-        }
-    }
+//    function UpdateEvent($EventId) {
+//        $conn = conn();
+//        $sql = "UPDATE `event` SET `EventName` = '$this->EventName', "
+//                . "`EventDate`= '$this->EventDate', `EventCost`= '$this->EventCost' "
+//                . ", `Comments`='$this->Comments' , `RecModified`= NOW() ,`RecModifiedBy`= '$this->RecModifiedBy'"
+//                . ", `OperationalSupport`= '$this->OperationalSupport',`PoliceServices`= '$this->PoliceServices' "
+//                . ",`VATPoliceServices`= '$this->VATPoliceServices' "
+//                . " WHERE EventId ='" . $EventId . "'";
+//        if ($conn->exec($sql)) {
+//            $this->auditok = 1;
+//        } else {
+//            $this->auditok = 0;
+//        }
+//    }
 
 }

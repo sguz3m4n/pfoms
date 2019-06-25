@@ -54,7 +54,7 @@ class Homepage extends LoggedInController {
         $CreateUser = $ManageTravel = $ManageOT = $ManageOther = array('Administrator', 'Super User', 'Manager');
         //CRUD Company Module Permissions
         $CreateCompany = $ViewCompany = $EditCompany = $DeleteCompany = array('Manager', 'Administrator', 'Super User');
-        $CreateEvent = $ViewEvent = $EditEvent = $DeleteEvent = array('Manager', 'Administrator', 'Super User');
+        $CreateEvent = $ViewEvent = $EditEvent = $MakeProforma = $DeleteEvent = array('Manager', 'Administrator', 'Super User');
         //CRUD Company Module Permissions
         //CRU Employee Module Permissions
         $CreateEmployee = $ViewEmployee = $EditEmployee = array('Human Resource Clerk', 'Manager', 'Administrator', 'Super User');
@@ -126,6 +126,11 @@ class Homepage extends LoggedInController {
 
         if (in_array($role, $EditEvent)) {
             $edititem = '<li><a href="/event/edit">View/Edit/Delete Event Details</a></li>';
+            $this->eventmenu = $this->eventmenu . $edititem;
+        }
+        
+        if (in_array($role, $MakeProforma)) {
+            $edititem = '<li><a href="/event/makeproforma">Create ProForma</a></li>';
             $this->eventmenu = $this->eventmenu . $edititem;
         }
 

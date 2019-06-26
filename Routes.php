@@ -12,6 +12,7 @@ return [
     [['GET', 'POST'], '/event/create', ['Controllers\EventCreateController', 'display']],
     [['GET', 'POST'], '/event/edit', ['Controllers\EventEditController', 'display']],
     [['GET', 'POST'], '/event/view', ['Controllers\EventViewController', 'display']],
+    [['GET', 'POST'], '/event/makeproforma', ['Controllers\MakeProformaController', 'display']],
     [['GET', 'POST'], '/event/deactivate', ['Controllers\EventDeactivateController', 'display']],
     [['GET', 'POST'], '/admin/account/create', ['Controllers\AccountCreateController', 'display']],
     [['GET', 'POST'], '/admin/equipment/create', ['Controllers\EquipmentCreateController', 'display']],

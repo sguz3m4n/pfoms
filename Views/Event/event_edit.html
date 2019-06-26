@@ -56,7 +56,7 @@
                                         }
                                 };
                         $('input#DateOfBirth').datepicker({dateFormat: 'yy-mm-dd'});
-                                xmlhttp.open("GET", "../Views/Shared/Controls/CompanySearch/getlistofevents.php?q=" + $test, true);
+                                xmlhttp.open("GET", "../Views/Shared/Controls/EventSearch/getregevents.php?q=" + $test, true);
                                 xmlhttp.send();
                         }
                     $(this).parent(".result").empty();
@@ -240,6 +240,9 @@ document.getElementById("divEventRef").style.display = "";
                                 </li>
                                 <li>
                                     <a class="text-uppercase" href="/event/create"><i class="glyphicon glyphicon-pencil"></i>Create Event</a>
+                                </li>
+                                <li>
+                                    <a class="text-uppercase" href="/event/makeproforma"><i class="glyphicon glyphicon-eye-open"></i>Create ProForma</a>
                                 </li>
                             </ul>
                         </div>                      

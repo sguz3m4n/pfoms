@@ -42,7 +42,7 @@ if (!empty($result)) {
         $payinst->CompanyName = $value['CompanyName'];
         $payinst->FaxNumber = $value['FaxNumber'];
         $payinst->ContactName = $value['ContactName'];
-        $payinst->AgentName = $value['AgentName'];
+        //$payinst->AgentName = $value['AgentName'];
         $payinst->PhoneNumber = $value['PhoneNumber'];
         $payinst->Email = $value['Email'];
 

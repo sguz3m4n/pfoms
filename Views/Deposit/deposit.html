@@ -54,7 +54,7 @@
             }
         </style>
 
-        <script type="text/javascript">
+              <script type="text/javascript">
             $(document).ready(function () {
                 document.getElementById("searchcomp").focus();
                 $('.search-boxcomp input[type="text"]').on("keyup input", function () {
@@ -63,23 +63,21 @@
                     var resultDropdown = $(this).siblings(".resultcomp");
                     var isnum = /[0-9]/;
                     var isalpha = /[a-zA-Z]/;
-
                     if (inputVal.length) {
                         if (isalpha.test(inputVal))
                         {
-                            $.get("../Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
+                            $.get("Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
                                 // Display the returned data in browser
                                 resultDropdown.html(data);
                             });
                         } else
                         if (isnum.test(inputVal))
                         {
-                            $.get("../Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "companyid", {term: inputVal}).done(function (data) {
+                            $.get("Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "companyid", {term: inputVal}).done(function (data) {
                                 // Display the returned data in browser
                                 resultDropdown.html(data);
                             });
                         }
-
                     } else {
                         resultDropdown.empty();
                     }
@@ -88,81 +86,38 @@
                 $(document).on("click", ".resultcomp p", function () {
                     $(this).parents(".search-boxcomp").find('input[type="text"]').val($(this).text());
                     $test = document.getElementById('searchcomp').value;
+                    $type = 'DEP';
                     if ($test == "") {
-                                document.getElementById("txtHintcomp").innerHTML = "";
-                                return;
-                        } else {
-                                if (window.XMLHttpRequest) {
-                                        // code for IE7+, Firefox, Chrome, Opera, Safari
-                                        xmlhttp = new XMLHttpRequest();
-                                } else {
-                                        // code for IE6, IE5
-                                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                                }
-                                xmlhttp.onreadystatechange = function () {
-                                        if (this.readyState == 4 && this.status == 200) {
-                                                document.getElementById("txtHintcomp").innerHTML = this.responseText;
-                                           $('input#EventDate').datepicker({dateFormat: 'yy-mm-dd'});
-                                document.getElementById("submittercompanyid").innerHTML = $('#liCompanyId').text();
-                                document.getElementById("submitterbalance").innerHTML = $('#CompanyBalance').val();
-
-                                ;
-                                        }
-                                };
-                        $('input#DateOfBirth').datepicker({dateFormat: 'yy-mm-dd'});
-                                xmlhttp.open("GET", "../Views/Shared/Controls/EventSearch/listapprovedevents.php?q=" + $test, true);
-                                xmlhttp.send();
-                        }
+                                document.getElementById("txtHintcomp").innerHTML = "";
+                                return;
+                        } else {
+                                if (window.XMLHttpRequest) {
+                                        // code for IE7+, Firefox, Chrome, Opera, Safari
+                                        xmlhttp = new XMLHttpRequest();
+                                } else {
+                                        // code for IE6, IE5
+                                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                                }
+                                xmlhttp.onreadystatechange = function () {
+                                        if (this.readyState == 4 && this.status == 200) {
+                                                document.getElementById("txtHintcomp").innerHTML = this.responseText;
+                                $("#submittercompanyid").text($("#CompId").val());
+                                //$("#submitterprevbalance").text($("#PreviousBalance").val());
+                                $("#submitterbalance").text($("#CompanyBalance").val());
+                                //$("#submitterbalance").$("#CompanyBalance").val();
+                                //var Balance = $("#submitterbalance").$("#CompanyBalance").val().toLocaleString(undefined, { minimumFractionDigits: 2 });
+                                // var t=   ("#CompanyBalance").val().toLocaleString(undefined, { minimumFractionDigits: 2 });
+                                // $("#submitterbalance").text(Balance);
+                                        }
+                                };
+                                xmlhttp.open("GET", "Views/Shared/Controls/CompanySearch/getuser.php?q=" + $test + "&t=" + $type, true);
+                                xmlhttp.send();
+                        }
                     $(this).parent(".result").empty();
                     //alert('test');
                 });
-
-                $(document).on("click", ".pillwrapper li", function () {
-                    //alert('hello');
-                    var key = $(this).attr("class");
-                    $("#adddetails").show();
-
-                    var EventId = $("." + key).find('#liEventId').text();
-                    var EventName = $("." + key).find('#liEventName').text();
-                    var EventCost = $("." + key).find('#liEventCost').text();
-
-                    var EventDateStart = $("." + key).find('#liEventDateStart').text();
-                    var EventDateEnd = $("." + key).find('#liEventDateEnd').text();
-
-                    var PoliceServices = $("." + key).find('#liPoliceServices').text();
-                    var VATPoliceServices = $("." + key).find('#liVATPoliceServices').text();
-                    var OperationalSupport = $("." + key).find('#liOperationalSupport').text();
-                    var CompanyId = $("." + key).find('#liCompanyId').text();
-
-                    // $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
-                    if (EventDateEnd !== "")
-                    {
-                        document.getElementById("DetailsEventDateEnd").innerHTML = EventDateEnd;
-                    }
-
-                    document.getElementById("DetailsEventName").innerHTML = EventName;
-                    document.getElementById("DetailsEventDateStart").innerHTML = EventDateStart;
-                    document.getElementById("DetailsEventCost").innerHTML = "$" + EventCost;
-                    document.getElementById("submittereventcost").innerHTML =  EventCost;
-                    document.getElementById("DetailsPoliceServices").innerHTML = "$" + PoliceServices;
-                    document.getElementById("DetailsVATPoliceServices").innerHTML = "$" + VATPoliceServices;
-                    document.getElementById("DetailsOperationalSupport").innerHTML = "$" + OperationalSupport;
-
-                    document.getElementById("hdnEventId").value = EventId;
-                    document.getElementById("hdnEventName").value = EventName;
-                    document.getElementById("hdnCompanyId").value = CompanyId;
-
-                    //document.getElementById("adddetails").style.display = "show";
-                    document.getElementById("divEventDetails").style.display = "";
-                    // document.getElementById("formDeleteEvent").style.display = "";
-
-                });
-
             }
-
             );
-
-
         </script>
 
         <script>
@@ -264,19 +219,19 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-12">
-                                    <div class="dashboard-stat dashboard-stat-v2 red">
-                                        <div class="visual">
-                                            <i class="fa fa-comments"></i>
-                                        </div>
-                                        <div class="details">
-                                            <div class="number">
-                                                <span class="glyphicon glyphicon-usd"></span><span data-value="2" id="submittereventcost" style="font-size: xx-large"  data-counter="counterup"></span>
-                                            </div>
-                                            <div class="desc"> Event Total </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <!--  <div class="col-xs-12">
+                                      <div class="dashboard-stat dashboard-stat-v2 red">
+                                          <div class="visual">
+                                              <i class="fa fa-comments"></i>
+                                          </div>
+                                          <div class="details">
+                                              <div class="number">
+                                                  <span class="glyphicon glyphicon-usd"></span><span data-value="2" id="submittereventcost" style="font-size: xx-large"  data-counter="counterup"></span>
+                                              </div>
+                                              <div class="desc"> Event Total </div>
+                                          </div>
+                                      </div>
+                                  </div>-->
                                 <center>
                                     <a class="btn btn-outline blue" href="../../index.php">back to main page</a>    
                                 </center>
@@ -346,7 +301,7 @@
                                             <input type="hidden" name="EventId" id="hdnEventId" value="">
                                             <input type="hidden" name="CompanyId" id="hdnCompanyId" value="">
 
-                                            <button type="submit" name="btn-create" class="btn btn-default blue">Make Deposit</button>
+                                            <button type="submit" name="btn-create" id="btn-create" class="btn btn-default blue">Make Deposit</button>
                                         </center> 
                                         <br>
                                     </form>

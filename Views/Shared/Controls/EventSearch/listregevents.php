@@ -34,12 +34,15 @@ $q = $_GET['q'];
 $conn = conn();
 $Id = "Id";
 
-$sql = 'SELECT a.EventId, EventName, CompanyName, b.EventCost, EventDateStart, 
-    EventDateEnd, Comments, CompanyId, Division, b.OpperationalSupport, b.PoliceServices,
+$sql = 'SELECT a.EventId, EventName, CompanyName,c.CurrentBalance, b.EventCost, EventDateStart, 
+    EventDateEnd, a.Comments, c.CompanyId, Division, b.OpperationalSupport, b.PoliceServices,
     b.VATPoliceServices, a.Status ,a.Station
     FROM event a 
     left join proforma b ON a.EventId = b.EventId
+      left join deposit c ON c.CompanyId = a.CompanyId
     WHERE a.CompanyName = "' . $q . '" AND a.DelFlg="N" AND a.Status<>"Complete"';
+
+
 //$sql = 'SELECT EventId, EventName, CompanyName, EventCost, EventDateStart, EventDateEnd, Comments, CompanyId, Division, Station, OperationalSupport, PoliceServices, VATPoliceServices FROM event WHERE CompanyName = "' . $q . '" AND  DelFlg="N" AND Status="Approved"';
 //$sql = 'SELECT `a.EventId,`EventName,`eventCost`,`CompanyId`,`CompanyName`,'$EventDateStart','$EventDateEnd',
 //    `ContactEmail`,`ContactNumber`,`EventDate`,`Comments`, AccountId, AccountName, TranId, TranAmt, b.EventId as "' . $Id . '" 
@@ -106,7 +109,8 @@ if (empty($EventIds)) {
                     <ul class="nav nav-pills nav-stacked" id="pillwrapper" >
 
                         <?php foreach ($EventIds as $EventId): ?>
-                            <!--<input type="hidden" value="<?= $EventId['CurrentBalance']; ?>" id="CompanyBalance" name="CompanyBalance">-->
+                            <input type="hidden" value="<?= $EventId['CurrentBalance']; ?>" id="CompanyBalance" name="CompanyBalance">
+                            <input type="hidden" value="<?= $EventId['CompanyId']; ?>" id="CompanyId" name="CompanyId">
                             <li class="<?= $EventId['EventId']; ?>">      
                                 <a class="nav-link" id="liEventName" name="<?= $EventId['EventName']; ?>"><?= $EventId['EventName']; ?></a>
                                 <a class="nav-link" style="display:none" id="liEventId" href="#"><?= $EventId['EventId']; ?></a>

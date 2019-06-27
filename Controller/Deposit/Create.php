@@ -96,7 +96,7 @@ class MakeDepositController extends PermissionController {
                     $companyname = $depinst->CompanyName = $_POST["CompName"];
                     $invoiceno = $proforma = $this->ProformaNo = $depinst->ProformaNumber = $_POST["ProformaNumber"];
                     $receiptno = $this->ReceiptNo = $depinst->ReceiptNumber = $_POST["Receipt"];
-                    $reciptdate = $this->ReceiptDate = $depinst->ReceiptDate = $_POST["ReceiptDate"];
+                    $receiptdate = $this->ReceiptDate = $depinst->ReceiptDate = $_POST["ReceiptDate"];
                     $gobavj = $this->GOBNo = $depinst->GOBAVJ = $_POST["GOBAvj"];
                     $gobdate = $this->GoBDate = $depinst->GOBAVJDate = $_POST["GOBDate"];
                     $depinst->Comments = $comments = 'New Deposit Account';
@@ -125,7 +125,7 @@ class MakeDepositController extends PermissionController {
                         $audinst->CreateUserAuditRecord($tranid, $User, $AudtDesc);
                         $audinst->CreateTransAuditRecord($tranid, $TranDesc, $username, "DEP", $depamount, $varid);
                         //$audinst->CreateDepositTransactionRecord($tranid, $asycuda, $TranDesc, $username, "DEP", $depamount, $varid);
-                        $depinst->CreateDepositTransactionRecord($tranid, $proforma, $invoiceno, $receiptno, $reciptdate, 'DEP', 'TBA', $varid, $eventid, $gobavj, $gobdate, $prevamount, $curamount, 0, $depamount, $comments, $username);
+                        $depinst->CreateDepositTransactionRecord($tranid, $proforma, $invoiceno, $receiptno, $receiptdate, 'DEP', 'TBA', $varid, $eventid, $gobavj, $gobdate, $prevamount, $curamount, 0, $depamount, $comments, $username);
                         $token = '<br><br><span class="label label-success">Company Id</span> ' . '<span class="label label-info"> ' . $varid . '</span><br><br><br>' .
                                 '<span class="label label-success">Company Name</span> ' . '<span class="label label-info"> ' . $companyname . '</span><br><br><br>' .
                                 '<span class="label label-success">Previous Balance</span> ' . '<span class="label label-info"> ' . '$' . number_format($prevamount, 2, '.', ',') . '</span><br><br><br>' .
@@ -154,7 +154,7 @@ class MakeDepositController extends PermissionController {
                     $companyname = $depinst->CompanyName = $_POST["CompName"];
                     $invoiceno = $proforma = $this->ProformaNo = $depinst->ProformaNumber = $_POST["ProformaNumber"];
                     $receiptno = $this->ReceiptNo = $depinst->ReceiptNumber = $_POST["Receipt"];
-                    $reciptdate = $this->ReceiptDate = $depinst->ReceiptDate = $_POST["ReceiptDate"];
+                    $receiptdate = $this->ReceiptDate = $depinst->ReceiptDate = $_POST["ReceiptDate"];
                     $gobavj = $this->GOBNo = $depinst->GOBAVJ = $_POST["GOBAvj"];
                     $gobdate = $this->GoBDate = $depinst->GOBAVJDate = $_POST["GOBDate"];
                     $depinst->Comments = $comments = $_POST["Comments"];
@@ -180,7 +180,7 @@ class MakeDepositController extends PermissionController {
                             $audinst->CreateUserAuditRecord($tranid, $User, $AudtDesc);
                             $audinst->CreateTransAuditRecord($tranid, $AudtDesc, $User, "DEP", $depamount, $varid);
                             //$audinst->CreateDepositTransactionRecord($tranid, $asycuda, $TranDesc, $username, "DEP", $depamount, $varid);
-                            $depinst->CreateDepositTransactionRecord($tranid, $proforma, $invoiceno, $receiptno, $reciptdate, 'DEP', 'TBA', $varid, $eventid, $gobavj, $gobdate, $prevamount, $curamount, 0, $depamount, $comments, $username);
+                            $depinst->CreateDepositTransactionRecord($tranid, $proforma, $invoiceno, $receiptno, $receiptdate, 'DEP', 'TBA', $varid, $eventid, $gobavj, $gobdate, $prevamount, $curamount, 0, $depamount, $comments, $username);
                             $token = '<br><br><span class="label label-success">Company Id</span> ' . '<span class="label label-info"> ' . $varid . '</span><br><br><br>' .
                                     '<span class="label label-success">Company Name</span> ' . '<span class="label label-info"> ' . $companyname . '</span><br><br><br>' .
                                     '<span class="label label-success">Previous Balance</span> ' . '<span class="label label-info"> ' . '$' . number_format($prevamount, 2, '.', ',') . '</span><br><br><br>' .

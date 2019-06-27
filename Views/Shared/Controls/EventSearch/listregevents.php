@@ -35,7 +35,7 @@ $conn = conn();
 $Id = "Id";
 
 $sql = 'SELECT a.EventId, EventName, CompanyName,c.CurrentBalance, b.EventCost, EventDateStart, 
-    EventDateEnd, a.Comments, c.CompanyId, Division, b.OpperationalSupport, b.PoliceServices,
+    EventDateEnd, a.Comments, a.CompanyId, Division, b.OpperationalSupport, b.PoliceServices,
     b.VATPoliceServices, a.Status ,a.Station
     FROM event a 
     left join proforma b ON a.EventId = b.EventId
@@ -54,7 +54,6 @@ $stmt = $conn->prepare($sql);
 $stmt->execute();
 $EventIds = $stmt->fetchAll();
 //
-
 //$sql = 'SELECT EventId, CompanyId, AssetName, SUM(Value) as Value, SUM(Quantity)as Quantity FROM `eventpreaccount` WHERE CompanyName = "' . $q . '" AND DelFlag="N" GROUP by AssetName';
 //$stmt = $conn->prepare($sql);
 //$stmt->execute();
@@ -109,7 +108,8 @@ if (empty($EventIds)) {
                     <ul class="nav nav-pills nav-stacked" id="pillwrapper" >
 
                         <?php foreach ($EventIds as $EventId): ?>
-                            <input type="hidden" value="<?= $EventId['CurrentBalance']; ?>" id="CompanyBalance" name="CompanyBalance">
+
+                            <input type="hidden" value="<?= ($EventId['CurrentBalance'] = null ? $EventId['CurrentBalance'] : 0); ?>" id="CompanyBalance" name="CompanyBalance">
                             <input type="hidden" value="<?= $EventId['CompanyId']; ?>" id="CompanyId" name="CompanyId">
                             <li class="<?= $EventId['EventId']; ?>">      
                                 <a class="nav-link" id="liEventName" name="<?= $EventId['EventName']; ?>"><?= $EventId['EventName']; ?></a>

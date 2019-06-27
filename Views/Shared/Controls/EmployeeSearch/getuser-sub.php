@@ -19,8 +19,8 @@ if (!empty($result)) {
     foreach ($result as $value) {
         /* $buffer_data['Natregno'] = $_GET["Natregno"] = $empinst->Natregno = $value['Natregno'];
           //$empinst->FirstName = $row['FirstName'];
-          $_GET["RateAmount"] = $empinst->PayRate = $value['RateAmount'];*/
-        $empinst->RateCode = $value['RateCode']; 
+          $_GET["RateAmount"] = $empinst->PayRate = $value['RateAmount']; */
+        $empinst->RateCode = $value['RateCode'];
         $empinst->PayRate = $value['RateAmount'];
         $empinst->Natregno = $varid = $value['Natregno'];
         $empinst->RoleName = $value['RoleName'];
@@ -95,8 +95,18 @@ $conn = NULL;
                 <div class="form-group" id="employee">
                     <label> Hours</label> 
                     <input type="number" id="hours" name="hours" class="form-control" autocomplete="off" placeholder="Enter overtime hours" required>
-
-
+                    <div class="col-md-6">
+                        <!--<label>Passenger ?</label>
+                        <input class="checkbox" type="checkbox" id="passenger" name="passenger" onclick='showpassnum()' >  
+                         Rounded switch -->
+                        <label>Acting ?</label>
+                        <label class="switch" >
+                            <input class="checkbox"  type="checkbox" id="passenger" name="passenger" >
+                            <span class="slider round"></span>
+                        </label> 
+                    </div> 
+      <span class="glyphicon glyphicon-comment"></span><label><strong>Comments</strong></label>
+                                                        <textarea  class="form-control" id="Comments" name="Comments" rows="4" cols="50"></textarea>
                     <input type="hidden" class="form-control" id="EmpName"  name="EmpName" value="<?php echo $Employeename; ?>">
                     <div class="row center-block">
                         <div class="col-xs-3">

@@ -34,7 +34,7 @@ $q = $_GET['q'];
 $conn = conn();
 $Id = "Id";
 
-$sql = 'SELECT EventId, EventName, CompanyName, EventCost, EventDateStart, EventDateEnd, Comments, CompanyId, Division, Station, OperationalSupport, PoliceServices, VATPoliceServices FROM event WHERE CompanyName = "' . $q . '" AND  DelFlg="N" AND Status="Approved"';
+$sql = 'SELECT EventId, EventName, CompanyName, EventDateStart, EventDateEnd, Comments, CompanyId, Division, Station, OperationalSupport, PoliceServices, VATPoliceServices FROM event WHERE CompanyName = "' . $q . '" AND  DelFlg="N" AND Status="Approved"';
 //$sql = 'SELECT `a.EventId,`EventName,`eventCost`,`CompanyId`,`CompanyName`,'$EventDateStart','$EventDateEnd',
 //    `ContactEmail`,`ContactNumber`,`EventDate`,`Comments`, AccountId, AccountName, TranId, TranAmt, b.EventId as "' . $Id . '" 
 //FROM `event` a LEFT JOIN preaccounttransactions b ON a.EventId = b.EventId';
@@ -104,7 +104,7 @@ if (empty($EventIds)) {
                             <li class="<?= $EventId['EventId']; ?>">      
                                 <a class="nav-link" id="liEventName" name="<?= $EventId['EventName']; ?>"><?= $EventId['EventName']; ?></a>
                                 <a class="nav-link" style="display:none" id="liEventId" href="#"><?= $EventId['EventId']; ?></a>
-                                <a class="nav-link" style="display:none" id="liEventCost" value="<?= $EventId['EventCost']; ?>" href="#"><?= $EventId['EventCost']; ?></a>
+                                <!--<a class="nav-link" style="display:none" id="liEventCost" value="<?= $EventId['EventCost']; ?>" href="#"><?= $EventId['EventCost']; ?></a>-->
                                 <a class="nav-link" style="display:none" id="liEventDateStart" href="#"><?= $EventId['EventDateStart']; ?></a>
                                 <a class="nav-link" style="display:none" id="liEventDateEnd" href="#"><?= $EventId['EventDateEnd']; ?></a>
                                 <a class="nav-link" style="display:none" id="liComments" href="#"><?= $EventId['Comments']; ?></a>

@@ -109,7 +109,7 @@ if (empty($EventIds)) {
 
                         <?php foreach ($EventIds as $EventId): ?>
 
-                            <input type="hidden" value="<?= ($EventId['CurrentBalance'] = null ? $EventId['CurrentBalance'] : 0); ?>" id="CompanyBalance" name="CompanyBalance">
+                            <input type="hidden" value="<?= ($EventId['CurrentBalance'] = null ? 0 : $EventId['CurrentBalance'] ); ?>" id="CompanyBalance" name="CompanyBalance">
                             <input type="hidden" value="<?= $EventId['CompanyId']; ?>" id="CompanyId" name="CompanyId">
                             <li class="<?= $EventId['EventId']; ?>">      
                                 <a class="nav-link" id="liEventName" name="<?= $EventId['EventName']; ?>"><?= $EventId['EventName']; ?></a>

@@ -80,6 +80,7 @@ class ComposerStaticInitdbfd59ea50047003c0635f21387c380a
         'Controllers\\AccountDeactivateController' => __DIR__ . '/../..' . '/Controller/Account/Delete.php',
         'Controllers\\AccountEditController' => __DIR__ . '/../..' . '/Controller/Account/Edit.php',
         'Controllers\\AmendPaymentController' => __DIR__ . '/../..' . '/Controller/Payment/Amend.php',
+        'Controllers\\ApproveCreateController' => __DIR__ . '/../..' . '/Controller/Approve/Create.php',
         'Controllers\\BaseController' => __DIR__ . '/../..' . '/Controller/base_template.php',
         'Controllers\\BaseTemplate' => __DIR__ . '/../..' . '/Controller/base_template.php',
         'Controllers\\CompanyCreateController' => __DIR__ . '/../..' . '/Controller/Company/Create.php',

@@ -35,7 +35,7 @@ $conn = conn();
 $Id = "Id";
 
 $sql = 'SELECT a.EventId, EventName, CompanyName, b.EventCost, EventDateStart, 
-    EventDateEnd, Comments, CompanyId, Division, b.OpperationalSupport, b.PoliceServices,
+    EventDateEnd, Comments, CompanyId, Division, b.OperationalSupport, b.PoliceServices,
     b.VATPoliceServices, a.Status ,a.Station
     FROM event a 
     left join proforma b ON a.EventId = b.EventId
@@ -120,7 +120,7 @@ if (empty($EventIds)) {
                             <a class="nav-link" style="display:none" id="liEventDateStart" href="#"><?= $EventId['EventDateStart']; ?></a>
                             <a class="nav-link" style="display:none" id="liEventDateEnd" href="#"><?= $EventId['EventDateEnd']; ?></a>
                             <a class="nav-link" style="display:none" id="liComments" href="#"><?= $EventId['Comments']; ?></a>
-                            <a class="nav-link" style="display:none" id="liOperationalSupport" href="#"><?= $EventId['OpperationalSupport']; ?></a>
+                            <a class="nav-link" style="display:none" id="liOperationalSupport" href="#"><?= $EventId['OperationalSupport']; ?></a>
                             <a class="nav-link" style="display:none" id="liPoliceServices" href="#"><?= $EventId['PoliceServices']; ?></a>
                             <a class="nav-link" style="display:none" id="liVATPoliceServices" href="#"><?= $EventId['VATPoliceServices']; ?></a>
                             <a class="nav-link" style="display:none" id="liStatus" href="#"><?= $EventId['Status']; ?></a>

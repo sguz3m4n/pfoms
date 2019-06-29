@@ -137,11 +137,11 @@ class Event {
         $result_array = $sqlgetevent->fetchAll();
 
         if(empty($result_array)){
-        $sql = "INSERT INTO `proforma` (`EventId`, `EventCost`, `OpperationalSupport`, `PoliceServices`, `VATPoliceServices`,`Status`,`DelFlag`)
+        $sql = "INSERT INTO `proforma` (`EventId`, `EventCost`, `OperationalSupport`, `PoliceServices`, `VATPoliceServices`,`Status`,`DelFlag`)
             VALUES ('$EventId', '$EventCost', '$OppSupport','$PoliceServices','$VATPoliceServices','Registered','N')";
         }
         else{
-            $sql = "Update `proforma` SET `OpperationalSupport` = `OpperationalSupport` + '$OppSupport',"
+            $sql = "Update `proforma` SET `OperationalSupport` = `OperationalSupport` + '$OppSupport',"
                     . "`PoliceServices` = `PoliceServices` + '$PoliceServices',"
                     . " `VATPoliceServices` = `VATPoliceServices` + '$VATPoliceServices',"
                     . "  `EventCost` = `EventCost` + '$EventCost' WHERE `EventId` = '$EventId' ";

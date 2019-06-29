@@ -34,10 +34,8 @@ $q = $_GET['q'];
 $conn = conn();
 $Id = "Id";
 
-$sql = 'SELECT EventId, EventName, CompanyName, EventDateStart, EventDateEnd, Comments, CompanyId, Division, Station, OperationalSupport, PoliceServices, VATPoliceServices FROM event WHERE CompanyName = "' . $q . '" AND  DelFlg="N" AND Status="Approved"';
-//$sql = 'SELECT `a.EventId,`EventName,`eventCost`,`CompanyId`,`CompanyName`,'$EventDateStart','$EventDateEnd',
-//    `ContactEmail`,`ContactNumber`,`EventDate`,`Comments`, AccountId, AccountName, TranId, TranAmt, b.EventId as "' . $Id . '" 
-//FROM `event` a LEFT JOIN preaccounttransactions b ON a.EventId = b.EventId';
+//$sql = 'SELECT EventId, EventName, CompanyName, EventDateStart, EventDateEnd, Comments, CompanyId, Division, Station, OperationalSupport, PoliceServices, VATPoliceServices FROM event WHERE CompanyName = "' . $q . '" AND  DelFlg="N" AND Status="Approved"';
+$sql = 'SELECT e.EventId, EventName, CompanyName, EventDateStart, EventDateEnd, Comments, CompanyId, Division, Station,p.* FROM event e,proforma p WHERE e.eventid=p.eventid AND CompanyName = "' . $q . '" AND  DelFlg="N" AND e.Status="Approved"';
 //$sql = 'SELECT * FROM `event` a LEFT JOIN preaccounttransactions b ON a.EventId = b.EventId';
 
 
@@ -51,10 +49,10 @@ $stmt = $conn->prepare($sql);
 $stmt->execute();
 $result_array = $stmt->fetchAll();
 
-$sqldeposit='SELECT * FROM deposit WHERE companyid=(SELECT Companyid FROM company WHERE CompanyName = "' . $q . '" AND DelFlg="N" )';
-$stmtdep=$conn->prepare($sqldeposit);
+$sqldeposit = 'SELECT * FROM deposit WHERE companyid=(SELECT Companyid FROM company WHERE CompanyName = "' . $q . '" AND DelFlg="N" )';
+$stmtdep = $conn->prepare($sqldeposit);
 $stmt->execute();
-$deposit_arr=$stmtdep->fetchAll();
+$deposit_arr = $stmtdep->fetchAll();
 
 if (empty($EventIds)) {
     ?>
@@ -100,17 +98,17 @@ if (empty($EventIds)) {
                     <ul class="nav nav-pills nav-stacked" id="pillwrapper" >
 
                         <?php foreach ($EventIds as $EventId): ?>
-                            <!--<input type="hidden" value="<?= $EventId['CurrentBalance']; ?>" id="CompanyBalance" name="CompanyBalance">-->
+                                    <!--<input type="hidden" value="<?= $EventId['CurrentBalance']; ?>" id="CompanyBalance" name="CompanyBalance">-->
                             <li class="<?= $EventId['EventId']; ?>">      
                                 <a class="nav-link" id="liEventName" name="<?= $EventId['EventName']; ?>"><?= $EventId['EventName']; ?></a>
                                 <a class="nav-link" style="display:none" id="liEventId" href="#"><?= $EventId['EventId']; ?></a>
-                                <!--<a class="nav-link" style="display:none" id="liEventCost" value="<?= $EventId['EventCost']; ?>" href="#"><?= $EventId['EventCost']; ?></a>-->
+                                <a class="nav-link" style="display:none" id="liEventCost" value="<?= ($EventId['EventCost'] = null ? 0 : $EventId['EventCost'] ); ?>" href="#"><?= ($EventId['EventCost'] = null ? 0 : $EventId['EventCost'] ); ?></a>
                                 <a class="nav-link" style="display:none" id="liEventDateStart" href="#"><?= $EventId['EventDateStart']; ?></a>
                                 <a class="nav-link" style="display:none" id="liEventDateEnd" href="#"><?= $EventId['EventDateEnd']; ?></a>
                                 <a class="nav-link" style="display:none" id="liComments" href="#"><?= $EventId['Comments']; ?></a>
-                                <a class="nav-link" style="display:none" id="liOperationalSupport" href="#"><?= $EventId['OperationalSupport']; ?></a>
-                                <a class="nav-link" style="display:none" id="liPoliceServices" href="#"><?= $EventId['PoliceServices']; ?></a>
-                                <a class="nav-link" style="display:none" id="liVATPoliceServices" href="#"><?= $EventId['VATPoliceServices']; ?></a>
+                                <a class="nav-link" style="display:none" id="liOperationalSupport" href="#"><?= ($EventId['OperationalSupport'] = null ? 0 : $EventId['OperationalSupport'] ); ?></a>
+                                <a class="nav-link" style="display:none" id="liPoliceServices" href="#"><?= ($EventId['PoliceServices'] = null ? 0 : $EventId['PoliceServices'] ); ?></a>
+                                <a class="nav-link" style="display:none" id="liVATPoliceServices" href="#"><?= ($EventId['VATPoliceServices'] = null ? 0 : $EventId['VATPoliceServices'] ); ?></a>
                                 <a class="nav-link" style="display:none" id="liCompanyId" href="#"><?= $EventId['CompanyId']; ?></a>
                                 <a class="nav-link" style="display:none" id="liStation" href="#"><?= $EventId['Station']; ?></a>
                                 <a class="nav-link" style="display:none" id="liDivision" href="#"><?= $EventId['Division']; ?></a>

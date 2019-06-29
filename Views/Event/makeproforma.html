@@ -390,12 +390,14 @@
 
 
                 $(document).on("click", ".pillwrapper li", function () {
-
+     
                     var key = $(this).attr("class");
 
                     var EventId = $("." + key).find('#liEventId').text();
                     var EventName = $("." + key).find('#liEventName').text();
-                    //var EventCost = $("."+key).find('#liEventCost').text();
+                    var EventCost = $("." + key).find('#liEventCost').text();
+                    var OpSupport = $("." + key).find('#liOperationalSupport').text();
+                    var PoliceServ = $("." + key).find('#liPoliceServices').text();
 
                     var EventDateStart = $("." + key).find('#liEventDateStart').text();
                     var EventDateEnd = $("." + key).find('#liEventDateEnd').text();
@@ -416,11 +418,10 @@
                     document.getElementById("lblEventRef").innerHTML = EventId;
                     document.getElementById("CompanyId").value = CompanyId;
                     document.getElementById("CompanyName").value = CompanyName;
-
-
-
-
-
+                    //document.getElementById("eventcost").innerhtml = EventCost;
+                    //$("#eventcost").text(EventCost);
+                    //$("#opsupporttotal").text(OpSupport);
+                    //$("#policeservicestotal").text(PoliceServ);
                 });
 
 

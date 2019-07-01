@@ -62,72 +62,82 @@ if (!empty($result)) {
 $conn = NULL;
 ?>
 <div class="row center-block">
-    <div class="col-md-5">
-        <div class="dashboard-stat dashboard-stat-v2 green" >
-            <div class="visual">
-                <i class="fa fa-comments"></i>
-            </div>
-            <div class="details">
-                <div class="number">
-                    <span data-value="2" id="submitteremployee" style="font-size: xx-large"    data-counter="counterup" ></span>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="dashboard-stat dashboard-stat-v2 green" >
+                <div class="visual">
+                    <i class="fa fa-comments"></i>
                 </div>
-                <div class="desc" id="submitteremployeename"><span class="glyphicon glyphicon-barcode"></span></div>
-                <div class="desc" id=""><?php echo $empinst->RoleName; ?></div>
-            </div>
-        </div>
-        <div class="dashboard-stat dashboard-stat-v2 blue" >
-            <div class="visual">
-                <i class="fa fa-comments"></i>
-            </div>
-            <div class="details">
-                <div class="number">
-                    <span class="glyphicon glyphicon-usd"></span> <span data-value="2" id="submitterrates" style="font-size: xx-large" data-counter="counterup">0</span>
+                <div class="details">
+                    <div class="number">
+                        <span data-value="2" id="submitteremployee" style="font-size:medium"    data-counter="counterup" ></span>
+                    </div>
+                    <div class="desc" id="submitteremployeename"><span class="glyphicon glyphicon-barcode"></span></div>
+                    <div class="desc" id=""><?php echo $empinst->RoleName; ?></div>
                 </div>
-                <div class="desc"> Officer Pay Rate</div>
             </div>
-        </div>
+        </div> 
     </div>
-    <div class="col-md-7">
-        <div class="panel panel-info" id="empinfo">
-
-            <div class="panel-heading"><h4>Police Officer</h4></div>
-            <div class="panel-body">
-                <div class="form-group" id="employee">
-                    <label> Hours</label> 
-                    <input type="number" id="hours" name="hours" class="form-control" autocomplete="off" placeholder="Enter overtime hours" required>
-                    <div class="col-md-6">
-                        <!--<label>Passenger ?</label>
-                        <input class="checkbox" type="checkbox" id="passenger" name="passenger" onclick='showpassnum()' >  
-                         Rounded switch -->
-                        <label>Acting ?</label>
-                        <label class="switch" >
-                            <input class="checkbox"  type="checkbox" id="passenger" name="passenger" >
-                            <span class="slider round"></span>
-                        </label> 
-                    </div> 
-      <span class="glyphicon glyphicon-comment"></span><label><strong>Comments</strong></label>
-                                                        <textarea  class="form-control" id="Comments" name="Comments" rows="4" cols="50"></textarea>
-                    <input type="hidden" class="form-control" id="EmpName"  name="EmpName" value="<?php echo $Employeename; ?>">
-                    <div class="row center-block">
-                        <div class="col-xs-3">
-                            <input type="hidden" class="form-control" id="Natregno"  name="Natregno" value="<?php echo $empinst->Natregno; ?>">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="dashboard-stat dashboard-stat-v2 blue" >
+                <div class="visual">
+                    <i class="fa fa-comments"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        <span class="glyphicon glyphicon-usd" style="font-size:medium" ></span> <span data-value="2" id="submitterrates" style="font-size: xx-large" data-counter="counterup">0</span>
+                    </div>
+                    <div class="desc"> Officer Pay Rate</div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info" id="empinfo">
+                <div class="panel-heading"><h4>Police Officer</h4></div>
+                <div class="panel-body">
+                    <div class="form-group" id="employee">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label> Hours</label> 
+                                <input type="number" id="hours" name="hours" class="form-control" autocomplete="off" placeholder="Enter overtime hours" required>
+                            </div> 
+                            <div class="col-md-6">
+                                <label >Acting ?</label>
+                                <label class="switch" >
+                                    <input class="checkbox"  type="checkbox" id="acting" name="acting" >
+                                    <span class="slider round"></span>
+                                </label>                                                
+                            </div> 
                         </div>
-                        <div class="col-xs-3">
-                            <input type="hidden" class="form-control" id="PayRate"  name="PayRate" value="<?php echo BarcomModel\PayScale::$PayRate; ?>">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label id="lblComments" name="lblComments">Comments</label>
+                                <textarea  class="form-control" id="Comments" name="Comments" rows="4" cols="50"></textarea>
+                            </div>
                         </div>
-                        <div class="col-xs-3">
-                            <input type="hidden" class="form-control" id="RateCode"  name="RateCode" value="<?php echo $empinst->RateCode; ?>">
-                            <input type="hidden" class="form-control" id="ForceNumber"  name="ForceNumber" value="<?php echo $empinst->ForceNumber; ?>">
-                        </div>
-                        <div class="col-xs-3">
-
+                        <div class="row center-block">
+                            <div class="col-xs-3">
+                                <input type="hidden" class="form-control" id="Natregno"  name="Natregno" value="<?php echo $empinst->Natregno; ?>">
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="hidden" class="form-control" id="PayRate"  name="PayRate" value="<?php echo BarcomModel\PayScale::$PayRate; ?>">
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="hidden" class="form-control" id="RateCode"  name="RateCode" value="<?php echo $empinst->RateCode; ?>">
+                                <input type="hidden" class="form-control" id="ForceNumber"  name="ForceNumber" value="<?php echo $empinst->ForceNumber; ?>">
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="hidden" class="form-control" id="EmpName"  name="EmpName" value="<?php echo $Employeename; ?>">
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
-    </div>   
+    </div>
 </div>
 
 

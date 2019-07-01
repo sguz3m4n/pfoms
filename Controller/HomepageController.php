@@ -104,12 +104,7 @@ class Homepage extends LoggedInController {
                                                 { employeemenu }
                                             </ul>
                                         </li>
-                                        <li class="dropdown more-dropdown-sub ">
-                                            <a href="javascript:;"> Event Manager </a>
-                                            <ul class="dropdown-menu">
-                                                { eventmenu }
-                                            </ul>
-                                        </li>
+                                     
                                                                                <li class="dropdown">
                                             <a href="/adminconsole"> Admin Console </a>                                          
                                         </li>
@@ -119,19 +114,13 @@ class Homepage extends LoggedInController {
             $this->datamanager = $datamanager;
         }
 
-        if (in_array($role, $CreateEvent)) {
-            $createitem = '<li><a href="/event/create">Create Event</a></li>';
-            $this->eventmenu = $this->eventmenu . $createitem;
-        }
-
-        if (in_array($role, $EditEvent)) {
-            $edititem = '<li><a href="/event/edit">View/Edit/Delete Event Details</a></li>';
-            $this->eventmenu = $this->eventmenu . $edititem;
-        }
-        
-        if (in_array($role, $MakeProforma)) {
-            $edititem = '<li><a href="/event/makeproforma">Create ProForma</a></li>';
-            $this->eventmenu = $this->eventmenu . $edititem;
+        if (in_array($role, $Reporting)) {
+            $event = ' <li>
+                                  
+                                    <a class="text-uppercase" href="/event/create">Event Manager</a>
+                                </li>'
+            ;
+            $this->menu = $this->menu . $event;
         }
 
         if (in_array($role, $CreateCompany)) {
@@ -194,29 +183,22 @@ class Homepage extends LoggedInController {
                                 </li> ';
             $this->menu = $this->menu . $billitem;
         }
-         if (in_array($role, $BillPayment)) {
+        if (in_array($role, $BillPayment)) {
             $DutySheet = ' <li >
                                     <a class="text-uppercase" href="/createdutysheet">Duty Sheet</a>
                                 </li> ';
             $this->menu = $this->menu . $DutySheet;
         }
-       
-       /* if (in_array($role, $PRNGenerate)) {
-            $prnitem = '<li>
-                                    <a class="text-uppercase" href="/disburseprn">Generate PRN</a>
+
+        if (in_array($role, $PRNGenerate)) {
+            $approve = '<li>
+                                    <a class="text-uppercase" href="/approve">Approve</a>
                                 </li> '
             ;
-            $this->menu = $this->menu . $prnitem;
+            $this->menu = $this->menu . $approve;
         }
 
-        if (in_array($role, $Reporting)) {
-            $prnitem = ' <li>
-                                  
-                                    <a class="text-uppercase" onclick="openNav()">Reports</a>
-                                </li>'
-            ;
-            $this->menu = $this->menu . $prnitem;
-        }*/
+        /**/
         $template->replace('datamanager', $this->datamanager);
         $template->replace('companymenu', $this->companymenu);
         $template->replace('employeemenu', $this->employeemenu);

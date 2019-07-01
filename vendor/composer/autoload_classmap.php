@@ -10,6 +10,7 @@ return array(
     'Controllers\\AccountDeactivateController' => $baseDir . '/Controller/Account/Delete.php',
     'Controllers\\AccountEditController' => $baseDir . '/Controller/Account/Edit.php',
     'Controllers\\AmendPaymentController' => $baseDir . '/Controller/Payment/Amend.php',
+    'Controllers\\ApproveCreateController' => $baseDir . '/Controller/Approve/Create.php',
     'Controllers\\BaseController' => $baseDir . '/Controller/base_template.php',
     'Controllers\\BaseTemplate' => $baseDir . '/Controller/base_template.php',
     'Controllers\\CompanyCreateController' => $baseDir . '/Controller/Company/Create.php',

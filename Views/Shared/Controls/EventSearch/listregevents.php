@@ -34,12 +34,15 @@ $q = $_GET['q'];
 $conn = conn();
 $Id = "Id";
 
-$sql = 'SELECT a.EventId, EventName, CompanyName, b.EventCost, EventDateStart, 
-    EventDateEnd, Comments, CompanyId, Division, b.OpperationalSupport, b.PoliceServices,
+$sql = 'SELECT a.EventId, EventName, CompanyName,c.CurrentBalance, b.EventCost, EventDateStart, 
+    EventDateEnd, a.Comments, a.CompanyId, Division, b.OperationalSupport, b.PoliceServices,
     b.VATPoliceServices, a.Status ,a.Station
     FROM event a 
     left join proforma b ON a.EventId = b.EventId
+    left join deposit c ON c.CompanyId = a.CompanyId
     WHERE a.CompanyName = "' . $q . '" AND a.DelFlg="N" AND a.Status<>"Complete"';
+
+
 //$sql = 'SELECT EventId, EventName, CompanyName, EventCost, EventDateStart, EventDateEnd, Comments, CompanyId, Division, Station, OperationalSupport, PoliceServices, VATPoliceServices FROM event WHERE CompanyName = "' . $q . '" AND  DelFlg="N" AND Status="Approved"';
 //$sql = 'SELECT `a.EventId,`EventName,`eventCost`,`CompanyId`,`CompanyName`,'$EventDateStart','$EventDateEnd',
 //    `ContactEmail`,`ContactNumber`,`EventDate`,`Comments`, AccountId, AccountName, TranId, TranAmt, b.EventId as "' . $Id . '" 
@@ -51,7 +54,6 @@ $stmt = $conn->prepare($sql);
 $stmt->execute();
 $EventIds = $stmt->fetchAll();
 //
-
 //$sql = 'SELECT EventId, CompanyId, AssetName, SUM(Value) as Value, SUM(Quantity)as Quantity FROM `eventpreaccount` WHERE CompanyName = "' . $q . '" AND DelFlag="N" GROUP by AssetName';
 //$stmt = $conn->prepare($sql);
 //$stmt->execute();
@@ -106,7 +108,9 @@ if (empty($EventIds)) {
                     <ul class="nav nav-pills nav-stacked" id="pillwrapper" >
 
                         <?php foreach ($EventIds as $EventId): ?>
-                            <!--<input type="hidden" value="<?= $EventId['CurrentBalance']; ?>" id="CompanyBalance" name="CompanyBalance">-->
+
+                            <input type="hidden" value="<?= ($EventId['CurrentBalance'] = null ? 0 : $EventId['CurrentBalance'] ); ?>" id="CompanyBalance" name="CompanyBalance">
+                            <input type="hidden" value="<?= $EventId['CompanyId']; ?>" id="CompanyId" name="CompanyId">
                             <li class="<?= $EventId['EventId']; ?>">      
                                 <a class="nav-link" id="liEventName" name="<?= $EventId['EventName']; ?>"><?= $EventId['EventName']; ?></a>
                                 <a class="nav-link" style="display:none" id="liEventId" href="#"><?= $EventId['EventId']; ?></a>
@@ -114,7 +118,7 @@ if (empty($EventIds)) {
                                 <a class="nav-link" style="display:none" id="liEventDateStart" href="#"><?= $EventId['EventDateStart']; ?></a>
                                 <a class="nav-link" style="display:none" id="liEventDateEnd" href="#"><?= $EventId['EventDateEnd']; ?></a>
                                 <a class="nav-link" style="display:none" id="liComments" href="#"><?= $EventId['Comments']; ?></a>
-                                <a class="nav-link" style="display:none" id="liOperationalSupport" href="#"><?= $EventId['OpperationalSupport']; ?></a>
+                                <a class="nav-link" style="display:none" id="liOperationalSupport" href="#"><?= $EventId['OperationalSupport']; ?></a>
                                 <a class="nav-link" style="display:none" id="liPoliceServices" href="#"><?= $EventId['PoliceServices']; ?></a>
                                 <a class="nav-link" style="display:none" id="liVATPoliceServices" href="#"><?= $EventId['VATPoliceServices']; ?></a>
                                 <a class="nav-link" style="display:none" id="liCompanyId" href="#"><?= $EventId['CompanyId']; ?></a>

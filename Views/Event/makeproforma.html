@@ -77,8 +77,8 @@
                         if (inputVal == station.options[i].id)
                         {
 
-                           station.options[i].style.display = "inline";
-                           station.options[i].selected = true;
+                            station.options[i].style.display = "inline";
+                            station.options[i].selected = true;
 //Add operations here
                         } else
                         {
@@ -102,38 +102,38 @@
                 });
 
                 $('#Equipment').on('change', function () {
-        $('#OPResourceCount').val(1);
-                     $('#OSHoursCount').val(1);
-                                
-        var inputVal = 0;
+                    $('#OPResourceCount').val(1);
+                    $('#OSHoursCount').val(1);
+
+                    var inputVal = 0;
                     inputVal = $('#Equipment :selected').attr('value');
                     inputVal = parseFloat(inputVal).toFixed(2);
                     var OPResource = $('#Equipment :selected').text();
-                    var OSHoursCount = $('#OSHoursCount').val();;
-                    
-                    
+                    var OSHoursCount = $('#OSHoursCount').val();
+                    ;
+
+
                     var count = $('#OPResourceCount').val();
-                    if (OPResource == 'Document Examination' || OPResource == 'Ballistic Examination' 
+                    if (OPResource == 'Document Examination' || OPResource == 'Ballistic Examination'
                             || OPResource == 'Jet Ski' || OPResource == 'Boats'
                             || OPResource == 'Canine' || OPResource == 'Horse'
                             || OPResource == 'Light Towers' || OPResource == 'Tow Truck'
-                            || OPResource == 'Crash Barriers'){
-                        
+                            || OPResource == 'Crash Barriers') {
+
                         document.getElementById('lblHours').style.display = "";
                         document.getElementById('OSHoursCount').style.display = "";
-                       dailyRate = true;
-                    }
-                    else
+                        dailyRate = true;
+                    } else
                     {
-                         document.getElementById('lblHours').style.display = "none";
+                        document.getElementById('lblHours').style.display = "none";
                         document.getElementById('OSHoursCount').style.display = "none";
                         dailyRate = false;
                     }
                     if (count !== '')
                     {
-                        
+
                         var total = count * (inputVal);
-                        if(dailyRate == true){
+                        if (dailyRate == true) {
                             total = OSHoursCount * total;
                         }
                         $('#EquipmentAmount').text(total.toFixed(2));
@@ -146,11 +146,11 @@
                 $('#OPResourceCount, #OSHoursCount').on('change click', function () {
                     var count = $('#OPResourceCount').val();
                     var inputVal = $('#Equipment :selected').attr('value');
-                     var OSHoursCount = $('#OSHoursCount').val();
+                    var OSHoursCount = $('#OSHoursCount').val();
                     if (inputVal !== '' && count !== '')
                     {
                         var total = count * (inputVal);
-                        if(dailyRate == true){
+                        if (dailyRate == true) {
                             total = OSHoursCount * total;
                         }
                         $('#EquipmentAmount').text(total.toFixed(2));
@@ -168,7 +168,8 @@
                     OperationalSupportTotal = $('#EquipmentAmount').text();
                     var pillcontainersupport = document.getElementById('pillcontainersupport');
                     var pillwrappersupport = document.getElementById('pillwrappersupport');
-                    var hour = $('#OSHoursCount').val();;
+                    var hour = $('#OSHoursCount').val();
+                    ;
 
 
                     //create instance of list elements
@@ -182,17 +183,16 @@
                     var pillanchor = document.createElement("a");
                     pillanchor.setAttribute("data-preactotal", OperationalSupportTotal);
                     pillanchor.setAttribute("style", "bold");
-                   
-        //if have hourly rate
-if (dailyRate == true){
-    hour = $('#OSHoursCount').val();
-            pillanchor.appendChild(document.createTextNode("Resource- " + inputVal + " x " + equipcount +" x "+ hour+"hr(s)" +": $" + OperationalSupportTotal));    
-}
-        else
-        {
-            hour = 0; 
-            pillanchor.appendChild(document.createTextNode("Resource- " + inputVal + " x " + equipcount +": $" + OperationalSupportTotal));
-        }
+
+                    //if have hourly rate
+                    if (dailyRate == true) {
+                        hour = $('#OSHoursCount').val();
+                        pillanchor.appendChild(document.createTextNode("Resource- " + inputVal + " x " + equipcount + " x " + hour + "hr(s)" + ": $" + OperationalSupportTotal));
+                    } else
+                    {
+                        hour = 0;
+                        pillanchor.appendChild(document.createTextNode("Resource- " + inputVal + " x " + equipcount + ": $" + OperationalSupportTotal));
+                    }
 
                     pillanchor.appendChild(removeicon);
 
@@ -220,10 +220,10 @@ if (dailyRate == true){
                 });
 
                 $('#Rank').on('change', function () {
-        
+
                     $('#ResourceCount').val(1);
                     $('#RSHoursCount').val(1);
-        var inputVal = 0;
+                    var inputVal = 0;
                     inputVal = $('#Rank :selected').attr('value');
                     inputVal = parseFloat(inputVal).toFixed(2);
                     var count = $('#ResourceCount').val();
@@ -238,7 +238,7 @@ if (dailyRate == true){
                     var vatVal = document.getElementById("VATDBval").value;
                     var vatCalc = (total * parseFloat(vatVal)).toFixed(2);
                     //
-        
+
 //VATPoliceServices = 
                     //$("#VATPoliceServices").val(vatCalc);
                     //var VATPoliceServices = document.getElementById("VATPoliceServices").value;
@@ -258,14 +258,14 @@ if (dailyRate == true){
                         $('#ResourceAmount').text(0);
                     }
                 });
-                
-                
+
+
                 $('#AddResource').on('click', function () {
                     //alert("hello");
                     var acctrec = [];
                     var inputVal = $('#Rank :selected').text();
                     var rankcount = $('#ResourceCount').val();
-                     var rshours = $('#RSHoursCount').val();
+                    var rshours = $('#RSHoursCount').val();
                     ResourceTotal = $('#ResourceAmount').text();
                     var pillcontainersupport = document.getElementById('pillcontainersupport');
                     var pillwrappersupport = document.getElementById('pillwrappersupport');
@@ -281,7 +281,7 @@ if (dailyRate == true){
                     var pillanchor = document.createElement("a");
                     pillanchor.setAttribute("data-preactotal", ResourceTotal);
                     pillanchor.setAttribute("style", "bold");
-                    pillanchor.appendChild(document.createTextNode("Rank- " + inputVal + " x " + rankcount +" x "+ rshours +"hr(s)"+ ": $" + ResourceTotal));
+                    pillanchor.appendChild(document.createTextNode("Rank- " + inputVal + " x " + rankcount + " x " + rshours + "hr(s)" + ": $" + ResourceTotal));
 
                     pillanchor.appendChild(removeicon);
 
@@ -375,7 +375,7 @@ if (dailyRate == true){
                                 xmlhttp.onreadystatechange = function () {
                                         if (this.readyState == 4 && this.status == 200) {
                                                 document.getElementById("txtHintcomp").innerHTML = this.responseText;
-                                $("#submittercompany").text($("#CompId").val());
+                                $("#submittercompany").text($("#CompanyId").val());
                                 //$("#submitterprevbalance").text($("#PreviousBalance").val());
                                 $("#submitterbalance").text($("#CompanyBalance").val());
                                         }
@@ -389,40 +389,41 @@ if (dailyRate == true){
 
 
 
-$(document).on("click", ".pillwrapper li", function () {
-   
+                $(document).on("click", ".pillwrapper li", function () {
+     
                     var key = $(this).attr("class");
 
-        var EventId = $("."+key).find('#liEventId').text();
-        var EventName = $("."+key).find('#liEventName').text();
-            //var EventCost = $("."+key).find('#liEventCost').text();
-           
-        var EventDateStart = $("."+key).find('#liEventDateStart').text();
-        var EventDateEnd = $("."+key).find('#liEventDateEnd').text();
-        
-     
-        var Station = $("."+key).find('#liStation').text();
-        var Division = $("."+key).find('#liDivision').text();
-        var CompanyId = $("."+key).find('#liCompanyId').text();
-        
-        var CompanyName = document.getElementById("compName").innerHTML; 
-         
-         document.getElementById("Division").value = Division;
-    document.getElementById("Station").value = Station;
-    document.getElementById("EventName").value = EventName;
-    
-    document.getElementById("EventDateStart").value = EventDateStart;
-    document.getElementById("EventDateEnd").value = EventDateEnd;
-    document.getElementById("lblEventRef").innerHTML = EventId;
-    document.getElementById("CompanyId").value = CompanyId;
-    document.getElementById("CompanyName").value = CompanyName;
-    
+                    var EventId = $("." + key).find('#liEventId').text();
+                    var EventName = $("." + key).find('#liEventName').text();
+                    var EventCost = $("." + key).find('#liEventCost').text();
+                    var OpSupport = $("." + key).find('#liOperationalSupport').text();
+                    var PoliceServ = $("." + key).find('#liPoliceServices').text();
+
+                    var EventDateStart = $("." + key).find('#liEventDateStart').text();
+                    var EventDateEnd = $("." + key).find('#liEventDateEnd').text();
 
 
+                    var Station = $("." + key).find('#liStation').text();
+                    var Division = $("." + key).find('#liDivision').text();
+                    var CompanyId = $("." + key).find('#liCompanyId').text();
 
+                    var CompanyName = document.getElementById("compName").innerHTML;
 
+                    document.getElementById("Division").value = Division;
+                    document.getElementById("Station").value = Station;
+                    document.getElementById("EventName").value = EventName;
+
+                    document.getElementById("EventDateStart").value = EventDateStart;
+                    document.getElementById("EventDateEnd").value = EventDateEnd;
+                    document.getElementById("lblEventRef").innerHTML = EventId;
+                    document.getElementById("CompanyId").value = CompanyId;
+                    document.getElementById("CompanyName").value = CompanyName;
+                    //document.getElementById("eventcost").innerhtml = EventCost;
+                    //$("#eventcost").text(EventCost);
+                    //$("#opsupporttotal").text(OpSupport);
+                    //$("#policeservicestotal").text(PoliceServ);
                 });
-                
+
 
                 $("#btnCreateEvent").click(function (e) {
 //need to add validation that all fields are there 
@@ -457,9 +458,9 @@ $(document).on("click", ".pillwrapper li", function () {
                             {
                                 preaccountPS = parseFloat(preaccountPS).toFixed(2) - parseFloat(accountarr[i][1]);
                                 var vatVal = document.getElementById("VATDBval").value;
-                                 
-                                        var vatTot = (parseFloat(accountarr[i][1]) * parseFloat(vatVal)).toFixed(2);
-                                                var subTot = parseFloat(accountarr[i][1]) +  parseFloat(vatTot);
+
+                                var vatTot = (parseFloat(accountarr[i][1]) * parseFloat(vatVal)).toFixed(2);
+                                var subTot = parseFloat(accountarr[i][1]) + parseFloat(vatTot);
                                 preaccountVAT = parseFloat(preaccountVAT).toFixed(2) - (parseFloat(accountarr[i][1]) * parseFloat(vatVal)).toFixed(2);
                                 $("#policeservicestotal").text(preaccountPS.toFixed(2));
                                 $("#VATPoliceServices").text(preaccountVAT.toFixed(2));
@@ -542,7 +543,7 @@ $(document).on("click", ".pillwrapper li", function () {
                                         <i class="icon-home"></i> Home 
                                     </a>      
                                 </li>
-                                 <li>
+                                <li>
                                     <a class="text-uppercase" href="/event/create"><i class="glyphicon glyphicon-pencil"></i>Create Event</a>
                                 </li>
                                 <li>
@@ -712,7 +713,7 @@ $(document).on("click", ".pillwrapper li", function () {
                                                         <input type="text" class="form-control" id="EventDateStart" name="EventDateStart" placeholder="YYYY-MM-DD" readonly="">
                                                         <label>Event End Date</label>
                                                         <input type="text" class="form-control" id="EventDateEnd" name="EventDateEnd" placeholder="YYYY-MM-DD" readonly="">
-                                                        
+
                                                         <div><input id="paylist" name="paylist" class="form-control" type="hidden" ></div>
 
                                                         <!--                                                        <input type="hidden"  class="form-control" id="EventCost" name="EventCost"  required value="{ EventCost }" >  -->
@@ -734,7 +735,7 @@ $(document).on("click", ".pillwrapper li", function () {
                                                 <div class="col-md-3" >
 
                                                     <input type="hidden" class="form-control" id="EventId" name="EventId"  >
-                                                    
+
                                                     <input type="hidden" class="form-control" id="CompanyName" name="CompanyName"  >
                                                     <input type="hidden" class="form-control" id="CompanyId" name="CompanyId"  >
                                                     <input type="hidden" class="form-control" id="hdnDivisionId" name="hdnDivisionId"  >
@@ -803,11 +804,11 @@ $(document).on("click", ".pillwrapper li", function () {
                                                             <option>Select Equipment</option>
                                                             { Equipment }
                                                         </select>
-                                                     
+
                                                         <label id="lblRSCount"><strong>Resource Count</strong></label>
                                                         <input type="number"  class="form-control" id="OPResourceCount" name="OPResourceCount" min="1" value="1" required  > 
 
-                                                          <label id="lblHours"><strong>Hours</strong></label>
+                                                        <label id="lblHours"><strong>Hours</strong></label>
                                                         <input type="number"  class="form-control" id="OSHoursCount" name="OSHoursCount" min="1" value="1" required  >     
 
                                                     </div>

@@ -4,6 +4,7 @@ include '../../../../dbconfig.php';
 include '../../../../Classes/Employee.php';
 include '../../../../Classes/Payment.php';
 
+
 $q = $_GET['q'][0];
 $StartDate = $_GET['InspectionDateStart'][0];
 $conn = conn();
@@ -14,7 +15,10 @@ $stmt->execute();
 $result = $stmt->fetchAll();
 
 $empinst = new BarcomModel\Employee();
+
 $PayRate;
+
+$roles = $empinst->GetRoles();
 if (!empty($result)) {
     foreach ($result as $value) {
         /* $buffer_data['Natregno'] = $_GET["Natregno"] = $empinst->Natregno = $value['Natregno'];
@@ -96,21 +100,40 @@ $conn = NULL;
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-info" id="empinfo">
-                <div class="panel-heading"><h4>Police Officer</h4></div>
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input type="number" id="hours" name="hours" class="form-control" autocomplete="off" placeholder="Hours" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label >Acting ?</label>
+                        </div>
+                        <div class="col-md-4"> 
+                            <label class="switch" >
+                                <input class="checkbox"  type="checkbox" id="acting" name="acting" >
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
                 <div class="panel-body">
                     <div class="form-group" id="employee">
                         <div class="row">
-                            <div class="col-md-6">
-                                <label> Hours</label> 
-                                <input type="number" id="hours" name="hours" class="form-control" autocomplete="off" placeholder="Enter overtime hours" required>
-                            </div> 
-                            <div class="col-md-6">
-                                <label >Acting ?</label>
-                                <label class="switch" >
-                                    <input class="checkbox"  type="checkbox" id="acting" name="acting" >
-                                    <span class="slider round"></span>
-                                </label>                                                
-                            </div> 
+                            <div class="col-md-12">
+                                <label id="lblPost" name="lblPost">Post</label>
+                                <select name="RoleName" class="form-control" id="RoleName" onchange="myFunction()">
+                                    <option></option>
+                                    <?php echo $empinst->GetRoles(); ?>
+                                </select>
+                                <input type="hidden" name="RateCode" id="RateCode"   />
+                                <script>
+                                    function myFunction() {
+                                        //alert("Hello! I am an alert box!!");
+                                        var mylist = document.getElementById("RoleName");
+                                        document.getElementById("RateCode").value = mylist.options[mylist.selectedIndex].id;
+                                    }
+                                </script>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">

@@ -63,8 +63,10 @@ $conn = NULL;
                     <div class="form-group" id="equipment">
                         <div class="row">
                             <div class="col-md-6">
-                                <label> Hours</label> 
-                                <input type="number" id="hours" name="hours" class="form-control" autocomplete="off" placeholder="Enter overtime hours" required>
+                                <label> Resources</label> 
+                                <input type="number" id="opsuppamt" name="opsuppamt" class="form-control" autocomplete="off" placeholder="Enter resource amount" required>
+                            </div>  <div class="col-md-6">
+                             
                             </div>
                         </div>
                         <div class="row center-block">

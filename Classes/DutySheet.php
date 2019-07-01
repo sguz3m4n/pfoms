@@ -20,6 +20,9 @@ class DutySheet {
     public $EventId;
     public $CompanyId;
     public $Natregno;
+    public $Acting;
+    public $ActingRateCode;
+    public $ActingPayRate;
     public $ForceNumber;
     public $RateCode;
     public $OfficerName;
@@ -36,9 +39,6 @@ class DutySheet {
     public $RecEnteredBy;
     public $auditok;
 
-    
-   
-
     //Method to calcuate payment based on overtime hours worked
     function OTEarned($hours, $rate) {
         $earnings = $rate * $hours;
@@ -46,36 +46,34 @@ class DutySheet {
         return $earnings;
     }
 
-    
- function GetSelectedDutySheet($companyId) {
+    function GetSelectedDutySheet($companyId) {
         $conn = conn();
         $sqlDutySheet = 'SELECT DutySheetId, EventId, EventName, OvertimeAmount, DateOfDuty, DispatchTime, ArrivalTime, DismissalTime, ReturnTime, '
-        . 'HoursEngaged FROM dutysheet WHERE CompanyId = "' . $companyId . '" AND DelFlag="N" AND Status="Active"';
-$stmtDutySheet = $conn->prepare($sqlDutySheet);
-$stmtDutySheet->execute();
-$result_DutySheet = $stmtDutySheet->fetchAll();
+                . 'HoursEngaged FROM dutysheet WHERE CompanyId = "' . $companyId . '" AND DelFlag="N" AND Status="Active"';
+        $stmtDutySheet = $conn->prepare($sqlDutySheet);
+        $stmtDutySheet->execute();
+        $result_DutySheet = $stmtDutySheet->fetchAll();
 //
 //        $sql = 'SELECT * FROM payment as A JOIN company as B ON A.CompanyId = B.CompanyId '
 //                . 'JOIN employee as C ON A.natregno = C.natregno WHERE ';
 //        $sql = $sql . implode(' ', $args);
-
         //if ($stmt = $conn->prepare($sql)) {
-            // Attempt to execute the prepared statement
-          //  if ($stmt->execute()) {
-            //    $result = $stmt->fetchAll();
-                // Check number of rows in the result set
-                if (!empty($result_DutySheet)) {
-                    return $result_DutySheet;
-             //   }
-            } else {
-                return array();
-            }
+        // Attempt to execute the prepared statement
+        //  if ($stmt->execute()) {
+        //    $result = $stmt->fetchAll();
+        // Check number of rows in the result set
+        if (!empty($result_DutySheet)) {
+            return $result_DutySheet;
+            //   }
+        } else {
+            return array();
         }
+    }
+
     //}
     //Method to create Duty Sheet record in database
-  
-    function CreateDutySheet($DutySheetId, $EventId, $EventName, $CompanyId, $OvertimeAmount, $DateOfDuty,
-            $DispatchTime, $ArrivalTime, $DismissalTime,$ReturnTime,$HoursEngaged,$RecEnteredBy) {
+
+    function CreateDutySheet($DutySheetId, $EventId, $EventName, $CompanyId, $OvertimeAmount, $DateOfDuty, $DispatchTime, $ArrivalTime, $DismissalTime, $ReturnTime, $HoursEngaged, $RecEnteredBy) {
 
         $conn = conn();
         $sql = "INSERT INTO `dutysheet` (`DutySheetId`, `EventId`, `EventName`, `CompanyId`, `OvertimeAmount`, `DateOfDuty`, `DispatchTime`,
@@ -84,36 +82,31 @@ $result_DutySheet = $stmtDutySheet->fetchAll();
         ('$DutySheetId', '$EventId','$EventName', '$CompanyId', '$OvertimeAmount', '$DateOfDuty', '$DispatchTime', '$ArrivalTime', '$DismissalTime', 
         '$ReturnTime','$HoursEngaged', '$RecEnteredBy', NOW(),'Active','N') ";
 
-            if ($conn->exec($sql)) {
-                $this->auditok = 1;
-            } else {
-                $this->auditok = 0;
-            }
+        if ($conn->exec($sql)) {
+            $this->auditok = 1;
+        } else {
+            $this->auditok = 0;
+        }
         $conn = NULL;
     }
-    
-    
-     //Method to create Duty Sheet preaccounts records in database
-    function CreateDSPA($DutySheetId, $EventId, $CompanyId, $ForceNumber, $Natregno, $OfficerName,
-             $Hours, $RateCode,$PayRate) {
+
+    //Method to create Duty Sheet preaccounts records in database
+    function CreateDSPA($DutySheetId, $EventId, $CompanyId, $ForceNumber, $Natregno, $OfficerName, $Hours, $RateCode, $PayRate, $Acting, $ActingRateCode, $ActingPayRate ) {
 
         $conn = conn();
         $sql = "INSERT INTO `dutysheetpreaccount` (`DutySheetId`, `EventId`, `CompanyId`, `ForceNumber`, `Natregno`, `OfficerName`, 
-          `Hours`, `RateCode`, `PayRate`, `Status`, `DelFlag`) VALUES 
+          `Hours`, `RateCode`, `PayRate`,`Acting`, `Status`, `DelFlag`) VALUES 
         ('$DutySheetId', '$EventId', '$CompanyId', '$ForceNumber', '$Natregno', '$OfficerName',"
-                . " '$Hours','$RateCode', '$PayRate','Active','N') ";
+                . " '$Hours','$RateCode', '$PayRate','$Acting','$ActingRateCode','$ActingPayRate','Active','N') ";
 
-            if ($conn->exec($sql)) {
-                $this->auditok = 1;
-            } else {
-                $this->auditok = 0;
-            }
+        if ($conn->exec($sql)) {
+            $this->auditok = 1;
+        } else {
+            $this->auditok = 0;
+        }
         $conn = NULL;
     }
 
-    
-
-  
     function GetPayRate($transid) {
         $result = "";
         $conn = conn();
@@ -154,6 +147,4 @@ $result_DutySheet = $stmtDutySheet->fetchAll();
         return $varschema . $vardatestamp;
     }
 
-   
 }
-

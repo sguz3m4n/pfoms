@@ -16,7 +16,7 @@
             .slider {
                 position: absolute;
                 cursor: pointer;
-                top: 0;
+                top: -5px;
                 left: 10px;
                 right: 0;
                 bottom: 0;
@@ -186,12 +186,9 @@
                     pillanchor.appendChild(removeicon);
                     var equiprec = new Array();
                     equiprec.push(document.getElementById("ItemName").value);
-                    equiprec.push(document.getElementById("hours").value);
+                    equiprec.push(document.getElementById("opsuppamt").value);
                     equiprec.push(document.getElementById("UnitCost").value);
-//                    equiprec.push(document.getElementById("PayRate").value);
-//                    equiprec.push(document.getElementById("RateCode").value);
-//                    equiprec.push(document.getElementById("ForceNumber").value);
-//                    equiprec.push(isacting);
+
 
                     equiparr.push(equiprec);
 
@@ -261,6 +258,9 @@
                                 $("#addofficer").show();
                                 $("#Comments").hide();
                                 $("#lblComments").hide();
+                                $("#RoleName").hide();
+                                $("#Post").hide();
+                                $("#lblPost").hide();
                                 document.getElementById('hours').value = document.getElementById('HoursEngaged').value;
                                         }
                                 };
@@ -314,14 +314,18 @@
                 $(document).on("click", "#acting", function () {
                     if ($("#acting").is(":checked"))
                     {
-                        isacting = 'on';
+                        isacting = 'on'; $("#lblComments").show();
                         $("#Comments").show();
+                        $("#Post").show();
+                        $("#lblPost").show();$("#RoleName").show();
                     } else
                     if (!$("#acting").is(":checked"))
                     {
                         isacting = 'off';
                         $("#Comments").val("");
-                        $("#Comments").hide();
+                        $("#Comments").hide();  $("#lblComments").hide();
+                        $("#Post").hide();
+                        $("#lblPost").hide();$("#RoleName").hide();
                     }
                 });
                 //Add the information capture panel to the form
@@ -489,9 +493,8 @@
                                 xmlhttp.send();
                         }
                     $(this).parent(".result").empty();
-                    //alert('test');
-                });
 
+                });
 
                 $(document).on("click", ".pillwrapper li", function () {
 
@@ -501,8 +504,6 @@
                         $("#adddetails").show();
                         CreatedutySheet = true;
                     }
-                    //$("#dutySheet").show();
-
 
                     var EventId = $("." + key).find('#liEventId').text();
                     var EventName = $("." + key).find('#liEventName').text();
@@ -644,28 +645,45 @@
                     var key = this.id.toString().trim();
                     PopulatePanelInfo(key);
                     $("#hdnoffarr").val(JSON.stringify(offcrarr));
+                    $("#hdnequiparr").val(JSON.stringify(equiparr));
                 });
 
                 function PopulatePanelInfo(key)
                 {
                     var EmpName = document.getElementById("EmpName");
                     var Natregno = document.getElementById("Natregno");
-                    var hours = document.getElementById("hours");
+                    var offcrhours = document.getElementById("hours");
 
                     var PayRate = document.getElementById("PayRate");
                     var RateCode = document.getElementById("RateCode");
                     var ForceNumber = document.getElementById("ForceNumber");
+
+                    var equiphours = document.getElementById("opsupphours");
+                    var equipid = document.getElementById("EquipmentId");
+                    var unitcost = document.getElementById("UnitCost");
+                    var itemname = document.getElementById("ItemName");
                     for (i = 0; i < offcrarr.length; i++) {
 
                         if (offcrarr[i][1] === key)
                         {
                             EmpName.value = offcrarr[i][0].toString();
                             Natregno.value = offcrarr[i][1].toString();
-                            hours.value = offcrarr[i][2].toString();
+                            offcrhours.value = offcrarr[i][2].toString();
                             PayRate.value = offcrarr[i][3].toString();
                             RateCode.value = offcrarr[i][4].toString();
                             ForceNumber.value = offcrarr[i][5].toString();
                             isacting = offcrarr[i][6].toString();
+                        }
+                    }
+
+                    for (i = 0; i < equiparr.length; i++) {
+
+                        if (equiparr[i][1] === key)
+                        {
+                            equiphours.value = equiparr[i][0].toString();
+                            equipid.value = equiparr[i][1].toString();
+                            unitcost.value = equiparr[i][2].toString();
+                            itemname.value = equiparr[i][3].toString();
                         }
                     }
                     ToggleControl();
@@ -689,6 +707,9 @@
                         $("#acting").prop("checked", true);
                         $("#Comments").show();
                         $("#lblComments").show();
+                        $("#Post").show();
+                        $("#lblPost").show();
+                        $("#RoleName").show();
                     } else
                     if (isacting == "off")
                     {
@@ -696,6 +717,9 @@
                         $("#Comments").val("");
                         $("#Comments").hide();
                         $("#lblComments").hide();
+                        $("#Post").hide();
+                        $("#lblPost").hide();
+                        $("#RoleName").hide();
                     }
                 }
                 function UpdateInfo(key)
@@ -923,7 +947,7 @@
                                             <input type="hidden" name="ReturnTime" id="hdnReturnTime" value="">
                                             <input type="hidden" name="CompID" id="hdnCompID" value="">
                                             <input type="hidden" name="offarr" id="hdnoffarr" value="">
-
+                                            <input type="hidden" name="equiparr" id="hdnequiparr" value="">
                                         </form>
                                     </div>
                                 </div>

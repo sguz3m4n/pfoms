@@ -63,7 +63,7 @@ $result_DutySheet = $stmtDutySheet->fetchAll();
 
 
 // duty sheet officers details
-$sqlDSpreacc = 'SELECT ForceNumber,Natregno,OfficerName, Hours, RateCode, PayRate FROM `dutysheetpreaccount` '
+$sqlDSpreacc = 'SELECT ForceNumber,Natregno,OfficerName, Hours, RateCode, PayRate FROM `dutysheetservices` '
         . 'WHERE CompanyId = "' . $companyId . '" AND DelFlag="N" AND Status="Active"';
 $stmtDSpreacc = $conn->prepare($sqlDSpreacc);
 $stmtDSpreacc->execute();

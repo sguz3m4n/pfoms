@@ -151,8 +151,9 @@
 
                     $(".offcrpillwrapper li").on("click", function () {
                         //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
+
                         var key = this.id.toString().trim();
-                        PopulatePanelInfo(key);
+                        PopulateOffcrPanelInfo(key);
                     });
 
                     $(".offcrpillwrapper li").on("dblclick", function () {
@@ -181,14 +182,16 @@
 
                     //dynamically create functions
                     var pillanchor = document.createElement("a");
-                    pillanchor.appendChild(document.createTextNode($("#ItemName").text().toUpperCase()));
+//                    pillanchor.appendChild(document.createTextNode($("#ItemName").value));
+                    pillanchor.appendChild(document.createTextNode(document.getElementById("ItemName").value.toUpperCase()));
 
                     pillanchor.appendChild(removeicon);
                     var equiprec = new Array();
+                    equiprec.push(document.getElementById("ItemId").value);
                     equiprec.push(document.getElementById("ItemName").value);
                     equiprec.push(document.getElementById("opsuppamt").value);
                     equiprec.push(document.getElementById("UnitCost").value);
-
+                    equiprec.push(document.getElementById("unitmeasurement").value);
 
                     equiparr.push(equiprec);
 
@@ -199,7 +202,7 @@
                     $(".equippillwrapper li").on("click", function () {
                         //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
                         var key = this.id.toString().trim();
-                        PopulatePanelInfo(key);
+                        PopulateOpSuppPanelInfo(key);
                     });
 
                     $(".equippillwrapper li").on("dblclick", function () {
@@ -314,18 +317,22 @@
                 $(document).on("click", "#acting", function () {
                     if ($("#acting").is(":checked"))
                     {
-                        isacting = 'on'; $("#lblComments").show();
+                        isacting = 'on';
+                        $("#lblComments").show();
                         $("#Comments").show();
                         $("#Post").show();
-                        $("#lblPost").show();$("#RoleName").show();
+                        $("#lblPost").show();
+                        $("#RoleName").show();
                     } else
                     if (!$("#acting").is(":checked"))
                     {
                         isacting = 'off';
                         $("#Comments").val("");
-                        $("#Comments").hide();  $("#lblComments").hide();
+                        $("#Comments").hide();
+                        $("#lblComments").hide();
                         $("#Post").hide();
-                        $("#lblPost").hide();$("#RoleName").hide();
+                        $("#lblPost").hide();
+                        $("#RoleName").hide();
                     }
                 });
                 //Add the information capture panel to the form
@@ -529,8 +536,8 @@
                     document.getElementById("DetailsVATPoliceServices").innerHTML = "$" + VATPoliceServices;
                     document.getElementById("DetailsOperationalSupport").innerHTML = "$" + OperationalSupport;
 
-                    document.getElementById("hdnEventId").value = EventId;
-                    document.getElementById("hdnEventName").value = EventName;
+                    document.getElementById("EventId").value = EventId;
+                    document.getElementById("EventName").value = EventName;
 
                     document.getElementById("lblEventRef").innerHTML = EventId;
 
@@ -565,8 +572,8 @@
                         $('#TimeDispatchmins').val("0" + TimeDispatchmins);
                     }
 
-                    document.getElementById("hdnDispatchTime").value = $('#TimeDispatchhrs').val() + ':' + $('#TimeDispatchmins').val();
-
+                    document.getElementById("DispatchTime").value = $('#TimeDispatchhrs').val() + ':' + $('#TimeDispatchmins').val();
+                    CalculateHoursEnagaged();
                 });
 
                 $('#TimeArrivalhrs, #TimeArrivalmins').on('change click input', function () {
@@ -589,7 +596,7 @@
                     {
                         $('#TimeArrivalmins').val("0" + TimeArrivalmins);
                     }
-                    document.getElementById("hdnArrivalTime").value = $('#TimeArrivalhrs').val() + ':' + $('#TimeArrivalmins').val();
+                    document.getElementById("ArrivalTime").value = $('#TimeArrivalhrs').val() + ':' + $('#TimeArrivalmins').val();
                 });
 
                 $('#TimeDismissalhrs, #TimeDismissalmins').on('change click input', function () {
@@ -612,7 +619,7 @@
                     {
                         $('#TimeDismissalmins').val("0" + TimeDismissalmins);
                     }
-                    document.getElementById("hdnDismissalTime").value = $('#TimeDismissalhrs').val() + ':' + $('#TimeDismissalmins').val();
+                    document.getElementById("DismissalTime").value = $('#TimeDismissalhrs').val() + ':' + $('#TimeDismissalmins').val();
                 });
 
                 $('#TimeReturnhrs, #TimeReturnmins').on('change click input', function () {
@@ -636,32 +643,28 @@
                         $('#TimeReturnmins').val("0" + TimeReturnmins);
                     }
 
-                    document.getElementById("hdnReturnTime").value = $('#TimeReturnhrs').val() + ':' + $('#TimeReturnmins').val();
-
+                    document.getElementById("ReturnTime").value = $('#TimeReturnhrs').val() + ':' + $('#TimeReturnmins').val();
+                    CalculateHoursEnagaged();
                 });
 
                 $("#paymentform").submit(function () {
 
                     var key = this.id.toString().trim();
-                    PopulatePanelInfo(key);
+                    PopulateOffcrPanelInfo(key);
+                    PopulateOpSuppPanelInfo(key);
                     $("#hdnoffarr").val(JSON.stringify(offcrarr));
                     $("#hdnequiparr").val(JSON.stringify(equiparr));
                 });
 
-                function PopulatePanelInfo(key)
+                function PopulateOffcrPanelInfo(key)
                 {
                     var EmpName = document.getElementById("EmpName");
                     var Natregno = document.getElementById("Natregno");
                     var offcrhours = document.getElementById("hours");
-
                     var PayRate = document.getElementById("PayRate");
                     var RateCode = document.getElementById("RateCode");
                     var ForceNumber = document.getElementById("ForceNumber");
 
-                    var equiphours = document.getElementById("opsupphours");
-                    var equipid = document.getElementById("EquipmentId");
-                    var unitcost = document.getElementById("UnitCost");
-                    var itemname = document.getElementById("ItemName");
                     for (i = 0; i < offcrarr.length; i++) {
 
                         if (offcrarr[i][1] === key)
@@ -676,18 +679,47 @@
                         }
                     }
 
+                    ToggleControl();
+
+                    $("#submitteremployee").text($("#Natregno").val());
+                    $("#submitteremployeename").text($("#EmpName").val());
+                    $("#submitterforcenumber").text($("#ForceNumber").val());
+                    $("#submitterrates").text($("#PayRate").val());
+                }
+
+                function PopulateOpSuppPanelInfo(key)
+                {
+                    var opsuppamt = document.getElementById("opsuppamt");
+                    var equipid = document.getElementById("ItemId");
+                    var unitcost = document.getElementById("UnitCost");
+                    var itemname = document.getElementById("ItemName");
+                    var unitmeasurement = document.getElementById("unitmeasurement");
+
                     for (i = 0; i < equiparr.length; i++) {
 
-                        if (equiparr[i][1] === key)
+                        if (equiparr[i][0] === key)
                         {
-                            equiphours.value = equiparr[i][0].toString();
-                            equipid.value = equiparr[i][1].toString();
-                            unitcost.value = equiparr[i][2].toString();
-                            itemname.value = equiparr[i][3].toString();
+                            equipid.value = equiparr[i][0].toString();
+                            itemname.value = equiparr[i][1].toString();
+                            opsuppamt.value = equiparr[i][2].toString();
+                            unitcost.value = equiparr[i][3].toString();
+                            unitmeasurement.value = equiparr[i][4].toString();
+
+//                            equiprec.push(document.getElementById("ItemId").value);
+//                            equiprec.push(document.getElementById("ItemName").value);
+//                            equiprec.push(document.getElementById("opsuppamt").value);
+//                            equiprec.push(document.getElementById("UnitCost").value);
+//                            equiprec.push(document.getElementById("unitmeasurement").value);
                         }
                     }
                     ToggleControl();
+
+//                    $("#submitterrates").text($("#UnitCost").val());
+//                    $("#submittername").text($("#ItemName").val());
+////                    $("#toUpperCase()").val($("#ForceNumber").val());
+//                    $("#submitterunitmeasurement").text($("#unitmeasurement").val());
                 }
+
                 function RemoveInfo(key)
                 {
                     var indextoremove;
@@ -749,7 +781,34 @@
                         }
                     }
                 }
+                function CalculateHoursEnagaged()
+                {
+                    var dispatchtime = document.getElementById("DispatchTime").value;
+                    var returntime = document.getElementById("ReturnTime").value;
+                    var b = toDate(dispatchtime, "h:m");
+                    var c = toDate(returntime, "h:m");
+                    var hours = Math.abs((parseTime(c.toLocaleTimeString()) - parseTime(b.toLocaleTimeString())) / 60);
 
+//                    alert(hours);
+                    $('#HoursEngaged').val(hours); 
+                    $('#hours').val(hours);
+                }
+
+                function toDate(dStr, format) {
+                    var now = new Date();
+                    if (format == "h:m") {
+                        now.setHours(dStr.substr(0, dStr.indexOf(":")));
+                        now.setMinutes(dStr.substr(dStr.indexOf(":") + 1));
+                        now.setSeconds(0);
+                        return now;
+                    } else
+                        return "Invalid Format";
+                }
+
+                function parseTime(s) {
+                    var c = s.split(':');
+                    return parseInt(c[0]) * 60 + parseInt(c[1]);
+                }
             });
 
         </script>         
@@ -884,10 +943,10 @@
                                                     <div id="dutySheet" class="col-md-12 panel-info" style="display: none">
                                                         <div class="row center-block">
                                                             <div class="col-md-3">
-                                                                <label><i class="glyphicon glyphicon-calendar"></i>Date of Duty</label>       
+                                                                <label style="color: #00B0E8"><i class="glyphicon glyphicon-calendar"></i>Date of Duty</label>       
                                                                 <input type="text" class="form-control" name="DateOfDuty" id="DateOfDuty" required="" readonly="" >  
                                                                 <label style="color: #00B0E8"><i class="glyphicon glyphicon-calendar"></i>Hours Engaged</label>
-                                                                <input type="number" class="form-control" name="HoursEngaged" id="HoursEngaged" required="" min="1" max="24">
+                                                                <input type="number" class="form-control" name="HoursEngaged" id="HoursEngaged" readonly >
                                                             </div> 
                                                             <div class="col-md-2">
                                                                 <label style="color: #00B0E8"><i class="glyphicon glyphicon-time"></i>Dispatch </label>
@@ -939,12 +998,12 @@
 
                                                 </div>
                                             </div>
-                                            <input type="hidden" name="EventName" id="hdnEventName" value="">
-                                            <input type="hidden" name="EventId" id="hdnEventId" value="">
-                                            <input type="hidden" name="DispatchTime" id="hdnDispatchTime" value="">
-                                            <input type="hidden" name="ArrivalTime" id="hdnArrivalTime" value="">
-                                            <input type="hidden" name="DismissalTime" id="hdnDismissalTime" value="">
-                                            <input type="hidden" name="ReturnTime" id="hdnReturnTime" value="">
+                                            <input type="hidden" name="EventName" id="EventName" value="">
+                                            <input type="hidden" name="EventId" id="EventId" value="">
+                                            <input type="hidden" name="DispatchTime" id="DispatchTime" >
+                                            <input type="hidden" name="ArrivalTime" id="ArrivalTime">
+                                            <input type="hidden" name="DismissalTime" id="DismissalTime">
+                                            <input type="hidden" name="ReturnTime" id="ReturnTime" >
                                             <input type="hidden" name="CompID" id="hdnCompID" value="">
                                             <input type="hidden" name="offarr" id="hdnoffarr" value="">
                                             <input type="hidden" name="equiparr" id="hdnequiparr" value="">

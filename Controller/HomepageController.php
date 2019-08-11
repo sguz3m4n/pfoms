@@ -185,7 +185,7 @@ class Homepage extends LoggedInController {
         }
         if (in_array($role, $BillPayment)) {
             $DutySheet = ' <li >
-                                    <a class="text-uppercase" href="/createdutysheet">Duty Sheet</a>
+                                    <a class="text-uppercase" href="/createdutysheet">Private OT</a>
                                 </li> ';
             $this->menu = $this->menu . $DutySheet;
         }

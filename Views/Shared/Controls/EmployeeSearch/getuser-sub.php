@@ -77,7 +77,8 @@ $conn = NULL;
                         <span data-value="2" id="submitteremployee" style="font-size:medium"    data-counter="counterup" ></span>
                     </div>
                     <div class="desc" id="submitteremployeename"><span class="glyphicon glyphicon-barcode"></span></div>
-                    <div class="desc" id=""><?php echo $empinst->RoleName; ?></div>
+                    <div class="desc" id="submitterforcenumber"><?php echo $empinst->ForceNumber; ?></div>
+                    <div class="desc" id="submitterrolename"><?php echo $empinst->RoleName; ?></div>
                 </div>
             </div>
         </div> 
@@ -103,7 +104,7 @@ $conn = NULL;
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-md-4">
-                            <input type="number" id="hours" name="hours" class="form-control" autocomplete="off" placeholder="Hours" required>
+                            <input type="number" id="hours" name="hours" class="form-control"  placeholder="Hours" >
                         </div>
                         <div class="col-md-4">
                             <label >Acting ?</label>

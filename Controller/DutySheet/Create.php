@@ -14,7 +14,6 @@ require 'Classes/DutySheet.php';
 require 'Classes/Audit.php';
 require 'Classes/Employee.php';
 require 'Controller/base_template.php';
-
 static $eventnameerr = "";
 static $eventnamewrapper = "";
 
@@ -24,26 +23,33 @@ class CreateDutySheetController extends PermissionController {
         $this->setRoles(['Manager', 'Administrator', 'Super User']);
     }
 
-    public $DutySheetId;
-    public $EventId;
-    public $EventName;
-    public $CompanyId;
-    public $Natregno;
-    public $ForceNumber;
-    public $RateCode;
-    public $OfficerName;
-    public $PayRate;
-    public $OvertimeAmount;
-    public $DateOfDuty;
-    public $DispatchTime;
-    public $ArrivalTime;
-    public $DismissalTime;
-    public $ReturnTime;
-    public $TotalHoursWorked;
-    public $RecEnteredBy;
-    public $Hours;
-    public $RecModifiedBy;
-    public $OfficerArray;
+    private $DutySheetId;
+    private $EventId;
+    private $EventName;
+    private $CompanyId;
+    private $Natregno;
+    private $ForceNumber;
+    private $RateCode;
+    private $OfficerName;
+    private $PayRate;
+    private $OvertimeAmount;
+    private $DateOfDuty;
+    private $DispatchTime;
+    private $ArrivalTime;
+    private $DismissalTime;
+    private $ReturnTime;
+    private $TotalHoursWorked;
+    private $RecEnteredBy;
+    private $Hours;
+    private $RecModifiedBy;
+    private $OfficerArray;
+    private $ResourceId;
+    private $ResourceCount;
+    private $ResourceRate;
+    private $ActingRateCode;
+    private $ActingPayRate;
+    private $Comments;
+    private $Status;
 
     function show($params) {
 
@@ -70,29 +76,45 @@ class CreateDutySheetController extends PermissionController {
             $dutysheetinst->RecEnteredBy = $RecEnteredBy = $username;
 
             $DutySheetId = $audinst->GenerateTimestamp('DYST');
-
+//            $dutysheetinst->CreateDutySheet($DutySheetId, $EventId, $CompanyId, $DateOfDuty, $DispatchTime, $ArrivalTime, $DismissalTime, $ReturnTime, $HoursEngaged, $RecEnteredBy);
             //Duty sheet preaccount 
             $OfficerArray = json_decode($_POST['offarr'], TRUE);
             $EquipmentArray = json_decode($_POST['equiparr'], TRUE);
 
-            foreach ($OfficerArray as $officer) {
+            if ($OfficerArray != NULL) {
+                foreach ($OfficerArray as $officer) {
 
-                $dutysheetinst->OfficerName = $OfficerName = $officer[0];
-                $dutysheetinst->Natregno = $Natregno = $officer[1];
-                $dutysheetinst->Hours = $Hours = $officer[2];
-                $dutysheetinst->PayRate = $PayRate = $officer[3];
-                $dutysheetinst->RateCode = $RateCode = $officer[4];
-                $dutysheetinst->ForceNumber = $ForceNumber = $officer[5];
-//                $dutysheetinst->Acting = $Acting = $officer[6];
-                $dutysheetinst->Acting = $Acting = 'N';
-                $dutysheetinst->CreateDSPA($DutySheetId, $EventId, $CompanyId, $ForceNumber, $Natregno, $OfficerName, $Hours, $RateCode, $PayRate, $Acting);
+                    $dutysheetinst->OfficerName = $OfficerName = $officer[0];
+                    $dutysheetinst->Natregno = $Natregno = $officer[1];
+                    $dutysheetinst->Hours = $Hours = $officer[2];
+                    $dutysheetinst->PayRate = $PayRate = $officer[3];
+                    $dutysheetinst->RateCode = $RateCode = $officer[4];
+                    $dutysheetinst->ForceNumber = $ForceNumber = $officer[5];
+//                    $dutysheetinst->Acting = $Acting = $officer[6];
+                    $dutysheetinst->Acting = $Acting = 'N';
+                    $dutysheetinst->ActingPayRate = $ActingPayRate = $officer[3];
+                    $dutysheetinst->ActingRateCode = $ActingRateCode = $officer[4];
+                    $dutysheetinst->Comments = $Comments = $officer[5];
+                    $dutysheetinst->Status = $Status = $officer[6];
+                    $dutysheetinst->CreateDSPA($DutySheetId, $ForceNumber, $Natregno, $OfficerName, $Hours, $RateCode, $PayRate, $Acting, $ActingRateCode, $ActingPayRate, $Comments, $Status);
 
-                $dutysheetinst->OvertimeAmount = $OvertimeAmount = ($Hours * $PayRate) + $OvertimeAmount;
+//                    $dutysheetinst->OvertimeAmount = $OvertimeAmount = ($Hours * $PayRate) + $OvertimeAmount;
+                }
+            }
+
+            if ($EquipmentArray) {
+                foreach ($EquipmentArray as $equipment) {
+                    $dutysheetinst->ResourceId = $ResourceId = $equipment[0];
+                    $dutysheetinst->ResourceCount = $ResourceCount = $equipment[2];
+                    $dutysheetinst->ResourceRate = $ResourceRate = $equipment[3];
+                    $dutysheetinst->CreateOPSUP($DutySheetId, $ResourceId, $ResourceCount, $ResourceRate);
+                }
             }
 
 
 
-            $dutysheetinst->CreateDutySheet($DutySheetId, $EventId, $EventName, $CompanyId, $OvertimeAmount, $DateOfDuty, $DispatchTime, $ArrivalTime, $DismissalTime, $ReturnTime, $HoursEngaged, $RecEnteredBy);
+
+//            $dutysheetinst->CreateDutySheet($DutySheetId, $EventId, $EventName, $CompanyId, $OvertimeAmount, $DateOfDuty, $DispatchTime, $ArrivalTime, $DismissalTime, $ReturnTime, $HoursEngaged, $RecEnteredBy);
             //if validation succeeds then commit info to database
             if ($dutysheetinst->auditok == 1) {
                 $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');

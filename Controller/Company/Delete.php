@@ -24,8 +24,8 @@ class CompanyDeactivateController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-delete'])) {
-            $compinst = new \BarcomModel\Company();
-            $audinst = new \BarcomModel\Audit();
+            $compinst = new \PfomModel\Company();
+            $audinst = new \PfomModel\Audit();
 
             $TIN= $_POST['TIN'];
             //Check to see if the record already exists            

@@ -14,7 +14,7 @@ $stmt = $conn->prepare($sql);
 $stmt->execute();
 $result = $stmt->fetchAll();
 
-$empinst = new BarcomModel\Employee();
+$empinst = new PfomModel\Employee();
 
 $PayRate;
 
@@ -31,7 +31,7 @@ if (!empty($result)) {
         $empinst->ForceNumber = $value['ForceNumber'];
         $Employeename = $value['FirstName'] . ' ' . $value['LastName'];
         //$EndDate = $_GET['InspectionDateEnd'];
-        $test = new \BarcomModel\PayScale();
+        $test = new \PfomModel\PayScale();
         //$test->IsRange($StartDate, $EndDate);
         //If date selected isnt a range
         // if (!$test->IsRange($StartDate, $EndDate)) {
@@ -147,7 +147,7 @@ $conn = NULL;
                                 <input type="hidden" class="form-control" id="Natregno"  name="Natregno" value="<?php echo $empinst->Natregno; ?>">
                             </div>
                             <div class="col-xs-3">
-                                <input type="hidden" class="form-control" id="PayRate"  name="PayRate" value="<?php echo BarcomModel\PayScale::$PayRate; ?>">
+                                <input type="hidden" class="form-control" id="PayRate"  name="PayRate" value="<?php echo PfomModel\PayScale::$PayRate; ?>">
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" class="form-control" id="RateCode"  name="RateCode" value="<?php echo $empinst->RateCode; ?>">

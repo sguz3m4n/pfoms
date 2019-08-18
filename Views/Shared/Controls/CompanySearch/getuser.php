@@ -6,8 +6,8 @@ include '../../../../Classes/Company.php';
 $q = $_GET['q'];
 $t = $_GET['t'];
 $conn = conn();
-$payinst = new BarcomModel\Payment();
-$compinst = new BarcomModel\Company();
+$payinst = new PfomModel\Payment();
+$compinst = new PfomModel\Company();
 $sqlcomprslt = 'SELECT * FROM `company` comp, `deposit` dep WHERE dep.CompanyId=comp.CompanyId AND comp.CompanyName = "' . $q . '" AND DelFlg="N"';
 
 $stmt1 = $conn->prepare($sqlcomprslt);

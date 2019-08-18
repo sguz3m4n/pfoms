@@ -51,8 +51,8 @@ class AccountCreateController extends PermissionController {
         if (isset($_POST['btn-create'])) {
 //variables for data input 
             $conn = conn();
-            $acctinst = new \BarcomModel\Account();
-            $audinst = new \BarcomModel\Audit();
+            $acctinst = new \PfomModel\Account();
+            $audinst = new \PfomModel\Audit();
             $acctinst->AccountId = $AccountId = $_POST['AccountId'];
             $acctinst->Name = $this->Name = $AccountName = $_POST['AccountName'];
             $acctinst->Type = $this->Type = $Type = $_POST['Type'];
@@ -80,7 +80,7 @@ class AccountCreateController extends PermissionController {
                 }
             } else {
                 //if validation fails do postback with values already entered
-                $model = new \BarcomModel\Account();
+                $model = new \PfomModel\Account();
                 $template = new MasterTemplate();
                 $template->load("Views/Account/account.html");
                 $template->replace("AccountId", $this->AccountId);
@@ -92,7 +92,7 @@ class AccountCreateController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Account();
+            $model = new \PfomModel\Account();
 
             $template = new MasterTemplate();
             $template->load("Views/Account/account.html");

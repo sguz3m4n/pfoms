@@ -48,9 +48,9 @@ class StationEditController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-update'])) {
-            //$compinst = new \BarcomModel\Division();
-            $compinst = new \BarcomModel\Station();
-            $audinst = new \BarcomModel\Audit();
+            //$compinst = new \PfomModel\Division();
+            $compinst = new \PfomModel\Station();
+            $audinst = new \PfomModel\Audit();
 
             //Get Id from browser interface
             $StationId = $_POST['StationId'];
@@ -111,7 +111,7 @@ class StationEditController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Station();
+            $model = new \PfomModel\Station();
             $template = new MasterTemplate();
             $template->load("Views/Station/station_edit.html");
             $template->replace("title", " Create New Division ");

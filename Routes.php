@@ -1,6 +1,7 @@
 <?php
 
 return [
+    
     [['GET', 'POST'], '/adminconsole', ['Controllers\ConsoleController', 'display']],
     [['GET', 'POST'], '/report/{name}/{format}', ['Controllers\ReportController', 'display']],
     [['GET', 'POST'], '/officer', ['Controllers\OfficerPaymentController', 'display']],
@@ -12,7 +13,9 @@ return [
     [['GET', 'POST'], '/event/create', ['Controllers\EventCreateController', 'display']],
     [['GET', 'POST'], '/event/edit', ['Controllers\EventEditController', 'display']],
     [['GET', 'POST'], '/event/view', ['Controllers\EventViewController', 'display']],
-    [['GET', 'POST'], '/event/makeproforma', ['Controllers\MakeProformaController', 'display']],
+    [['GET', 'POST'], '/proforma/create', ['Controllers\MakeProformaController', 'display']],
+    [['GET', 'POST'], '/proforma/edit', ['Controllers\EditProformaController', 'display']],
+    [['GET', 'POST'], '/proforma/amend', ['Controllers\AmendProformaController', 'display']],
     [['GET', 'POST'], '/event/deactivate', ['Controllers\EventDeactivateController', 'display']],
     [['GET', 'POST'], '/admin/account/create', ['Controllers\AccountCreateController', 'display']],
     [['GET', 'POST'], '/admin/equipment/create', ['Controllers\EquipmentCreateController', 'display']],
@@ -46,7 +49,7 @@ return [
     [['GET', 'POST'], '/approve', ['Controllers\ApproveCreateController', 'display']],
     [['GET', 'POST'], '/dutysheet/edit', ['Controllers\EditDutySheetController', 'display']],
     [['GET', 'POST'], '/admin/processpayroll', ['Controllers\PayrollController', 'display']],
-    [['GET', 'POST'], '/tablepymt', ['Controllers\PaymentTableController', 'display']],
+    [['GET', 'POST'], '/proformatablepymt', ['Controllers\ProformaTableController', 'display']],
     [['GET', 'POST'], '/dutysheettablepymt', ['Controllers\DutySheetTableController', 'display']],
     [['GET', 'POST'], '/success', ['Controllers\SuccessController', 'display']],
     [['GET'], '/unlockpymt', ['Controllers\PaymentUnlockController', 'display']],

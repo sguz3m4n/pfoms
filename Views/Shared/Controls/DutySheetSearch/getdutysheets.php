@@ -93,7 +93,7 @@ if (empty($result_DutySheet)) {
     }
 
 
-    $dutysheetinst = new BarcomModel\DutySheet();
+    $dutysheetinst = new PfomModel\DutySheet();
     $conn = NULL;
     ?>  
 

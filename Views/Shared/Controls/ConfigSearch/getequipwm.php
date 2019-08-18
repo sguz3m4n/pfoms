@@ -9,7 +9,7 @@ $sql = 'SELECT * FROM config WHERE ItemName = "' . $q . '" AND DelFlg="N"';
 
 $result = $conn->prepare($sql);
 $result->execute();
-$compinst = new BarcomModel\Config();
+$compinst = new PfomModel\Config();
 
 foreach ($result as $value) {
     $compinst->ItemCode = $value['ItemCode'];
@@ -29,7 +29,7 @@ foreach ($result as $value) {
 $conn = NULL;
 
 
-$model = new \BarcomModel\Config();
+$model = new \PfomModel\Config();
 ?>  
 <div class="panel panel-info">
     <div class="panel-heading">

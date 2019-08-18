@@ -45,8 +45,8 @@ class EquipmentCreateController extends PermissionController {
         if (isset($_POST['btn-create'])) {
 //variables for data input 
             $conn = conn();
-            $equipinst = new \BarcomModel\Equipment();
-            $audinst = new \BarcomModel\Audit();
+            $equipinst = new \PfomModel\Equipment();
+            $audinst = new \PfomModel\Audit();
             $this->EquipmentId = $equipinst->EquipmentId = $EquipmentId = $_POST['EquipmentId'];
             $this->ItemName = $equipinst->ItemName = $ItemName = $_POST['ItemName'];
             $this->Category = $equipinst->Category = $Category = $_POST['Category'];
@@ -74,7 +74,7 @@ class EquipmentCreateController extends PermissionController {
                 header("Location:" . "/success?result=$token&header=$token1&args=");
             } else {
                 //if validation fails do postback with values already entered
-                $model = new \BarcomModel\Equipment();
+                $model = new \PfomModel\Equipment();
                 $template = new MasterTemplate();
                 $template->load("Views/Equipment/equipment.html");
                 $template->replace("EquipmentId", $this->EquipmentId);
@@ -83,7 +83,7 @@ class EquipmentCreateController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Equipment();
+            $model = new \PfomModel\Equipment();
 
             $template = new MasterTemplate();
             $template->load("Views/Equipment/equipment.html");

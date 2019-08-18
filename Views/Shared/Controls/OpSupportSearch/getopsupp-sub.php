@@ -11,7 +11,7 @@ $stmt = $conn->prepare($sql);
 $stmt->execute();
 $result = $stmt->fetchAll();
 
-$equipinst = new BarcomModel\Equipment();
+$equipinst = new PfomModel\Equipment();
 $PayRate;
 if (!empty($result)) {
     foreach ($result as $value) {

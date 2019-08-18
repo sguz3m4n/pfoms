@@ -44,8 +44,8 @@ class EventEditController extends PermissionController {
 
         
         if (isset($_POST['btn-update'])) {
-            $eventinst = new \BarcomModel\Event();
-            $audinst = new \BarcomModel\Audit();
+            $eventinst = new \PfomModel\Event();
+            $audinst = new \PfomModel\Audit();
 
             //Get Id from browser interface
             $eventinst->EventId = $EventId = $_POST["EventId"];
@@ -83,7 +83,7 @@ class EventEditController extends PermissionController {
         } 
         else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Company();
+            $model = new \PfomModel\Company();
             //$parishes = $model->GetParishes();
             $template = new MasterTemplate();
             $template->load("Views/Event/event_edit.html");

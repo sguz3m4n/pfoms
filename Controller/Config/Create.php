@@ -49,8 +49,8 @@ class ConfigCreateController extends PermissionController {
         if (isset($_POST['btn-create'])) {
 //variables for data input 
             $conn = conn();
-            $compinst = new \BarcomModel\Config();
-            $audinst = new \BarcomModel\Audit();
+            $compinst = new \PfomModel\Config();
+            $audinst = new \PfomModel\Audit();
             $this->ConfigId = $compid = $compinst->ConfigId = $_POST['ConfigId'];
 
             $this->ItemName = $ItemName = $compinst->ItemName = $_POST['ItemName'];
@@ -90,7 +90,7 @@ class ConfigCreateController extends PermissionController {
                 }
             } else {
                 //if validation fails do postback with values already entered
-                $model = new \BarcomModel\Config();
+                $model = new \PfomModel\Config();
                 $template = new MasterTemplate();
                 $template->load("Views/Config/config.html");
                 $template->replace("ConfigId", $this->ConfigId);
@@ -105,7 +105,7 @@ class ConfigCreateController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Config();
+            $model = new \PfomModel\Config();
 
             $template = new MasterTemplate();
             $template->load("Views/Config/config.html");

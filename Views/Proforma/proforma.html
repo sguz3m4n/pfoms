@@ -166,8 +166,8 @@
                     var inputVal = $('#Equipment :selected').text();
                     var equipcount = $('#OPResourceCount').val();
                     OperationalSupportTotal = $('#EquipmentAmount').text();
-                    var pillcontainer = document.getElementById('pillcontainer');
-                    var pillwrapper = document.getElementById('pillwrapper');
+                    var pillcontainersupport = document.getElementById('pillcontainersupport');
+                    var pillwrappersupport = document.getElementById('pillwrappersupport');
                     var hour = $('#OSHoursCount').val();
                     ;
 
@@ -197,8 +197,8 @@
                     pillanchor.appendChild(removeicon);
 
                     pill.appendChild(pillanchor);
-                    pillwrapper.appendChild(pill);
-                    pillcontainer.appendChild(pillwrapper);
+                    pillwrappersupport.appendChild(pill);
+                    pillcontainersupport.appendChild(pillwrappersupport);
                     PreAccountTotal = parseFloat(PreAccountTotal) + parseFloat(OperationalSupportTotal);
                     preaccountOS = parseFloat(preaccountOS) + parseFloat(OperationalSupportTotal);
                     $("#opsupporttotal").text(preaccountOS.toFixed(2));
@@ -259,7 +259,6 @@
                     }
                 });
 
-
                 $('#AddResource').on('click', function () {
                     //alert("hello");
                     var acctrec = [];
@@ -267,8 +266,8 @@
                     var rankcount = $('#ResourceCount').val();
                     var rshours = $('#RSHoursCount').val();
                     ResourceTotal = $('#ResourceAmount').text();
-                    var pillcontainer = document.getElementById('pillcontainer');
-                    var pillwrapper = document.getElementById('pillwrapper');
+                    var pillcontainersupport = document.getElementById('pillcontainersupport');
+                    var pillwrappersupport = document.getElementById('pillwrappersupport');
 
                     //create instance of list elements
                     var pill = document.createElement("li");
@@ -286,8 +285,8 @@
                     pillanchor.appendChild(removeicon);
 
                     pill.appendChild(pillanchor);
-                    pillwrapper.appendChild(pill);
-                    pillcontainer.appendChild(pillwrapper);
+                    pillwrappersupport.appendChild(pill);
+                    pillcontainersupport.appendChild(pillwrappersupport);
 
                     preaccountPS = parseFloat(preaccountPS) + parseFloat(ResourceTotal);
 
@@ -313,7 +312,7 @@
 
                 });
 
-                $(document).on("dblclick", ".pillwrapper li", function (event) {
+                $(document).on("dblclick", ".pillwrappersupport li", function (event) {
 
                     var key = this.id.toString();
                     var elem = document.getElementById(this.id.toString());
@@ -375,55 +374,64 @@
                                 xmlhttp.onreadystatechange = function () {
                                         if (this.readyState == 4 && this.status == 200) {
                                                 document.getElementById("txtHintcomp").innerHTML = this.responseText;
-                                $("#submittercompany").text($("#CompId").val());
+                                $("#submittercompany").text($("#CompanyId").val());
                                 //$("#submitterprevbalance").text($("#PreviousBalance").val());
                                 $("#submitterbalance").text($("#CompanyBalance").val());
                                         }
                                 };
-                                xmlhttp.open("GET", "/Views/Shared/Controls/CompanySearch/getuser.php?q=" + $test + "&t=" + $type, true);
+                                xmlhttp.open("GET", "../Views/Shared/Controls/EventSearch/listregevents.php?q=" + $test, true);
                                 xmlhttp.send();
                         }
                     $(this).parent(".result").empty();
                     //alert('test');
                 });
 
-//                $("#EventCost").blur(function () {
-////need to add validation that it is a number
-//                    var CostOfEvent = document.getElementById("EventCost").value;
-//                    $("#eventcost").text(parseFloat(CostOfEvent).toFixed(2));
-//                });
+                $(document).on("click", ".pillwrapper li", function () {
+
+                    var key = $(this).attr("class");
+
+                    var EventId = $("." + key).find('#liEventId').text();
+                    var EventName = $("." + key).find('#liEventName').text();
+                    var EventCost = $("." + key).find('#liEventCost').text();
+                    var OpSupport = $("." + key).find('#liOperationalSupport').text();
+                    var PoliceServ = $("." + key).find('#liPoliceServices').text();
+
+                    var EventDateStart = $("." + key).find('#liEventDateStart').text();
+                    var EventDateEnd = $("." + key).find('#liEventDateEnd').text();
+
+
+                    var Station = $("." + key).find('#liStation').text();
+                    var Division = $("." + key).find('#liDivision').text();
+                    var CompanyId = $("." + key).find('#liCompanyId').text();
+
+                    var CompanyName = document.getElementById("compName").innerHTML;
+
+                    document.getElementById("Division").value = Division;
+                    document.getElementById("Station").value = Station;
+                    document.getElementById("EventName").value = EventName;
+
+                    document.getElementById("EventDateStart").value = EventDateStart;
+                    document.getElementById("EventDateEnd").value = EventDateEnd;
+                    document.getElementById("lblEventRef").innerHTML = EventId;
+                    document.getElementById("CompanyId").value = CompanyId;
+                    document.getElementById("CompanyName").value = CompanyName;
+                    //document.getElementById("eventcost").innerhtml = EventCost;
+                    //$("#eventcost").text(EventCost);
+                    //$("#opsupporttotal").text(OpSupport);
+                    //$("#policeservicestotal").text(PoliceServ);
+                });
 
                 $("#btnCreateEvent").click(function (e) {
 //need to add validation that all fields are there 
-//                    $("#hdnEventCost").val(PreAccountTotal.toFixed(2));
-//                    $("#hdnOperationalSupport").val(preaccountOS.toFixed(2));
-//                    $("#hdnPoliceServices").val(preaccountPS.toFixed(2));
-//                    $("#hdnVATPoliceServices").val(preaccountVAT.toFixed(2));
+                    $("#hdnEventCost").val(PreAccountTotal.toFixed(2));
+                    $("#hdnOperationalSupport").val(preaccountOS.toFixed(2));
+                    $("#hdnPoliceServices").val(preaccountPS.toFixed(2));
+                    $("#hdnVATPoliceServices").val(preaccountVAT.toFixed(2));
 
                     var divid = document.getElementById("lblEventRef").innerHTML;
-                    var stationName = document.getElementById("Station").value;
-//  var compname = document.getElementById('searchcomp').value;
-//             $('#hdnCompanyName').val(compname);       
-                    // var divid = document.getElementById("EventId").value;
                     $('#hdnDivisionId').val(divid.substring(0, 4));
-                    $('#hdnStation').val(stationName);
-
-// $('#lblEventRef').text(eventid);
                     $('#EventId').val(divid);
-                    // var subaccounts = document.getElementById("pillwrapper")
-                    //for (i = 0; i < accountarr.length; i++) {
-                    // $('#hdnAsset').val(JSON.stringify(accountarr));
-
-                    //}
-//                    var EventDate = document.getElementById("datepicker").value;
-//                    try {
-//                        var oppSupportVal = document.getElementById("CompName").value;
-//                    } catch (err) {
-                    //                    e.preventDefault();
-                    //alert(test);
-//                    }
-
-
+                    $('#hdnAsset').val(JSON.stringify(accountarr));
 
                 });
 
@@ -532,10 +540,10 @@
                                     </a>      
                                 </li>
                                 <li>
-                                    <a class="text-uppercase" href="/event/edit"><i class="glyphicon glyphicon-eye-open"></i>View &nbsp; <i class="glyphicon glyphicon-pencil"></i>Edit Event</a>
+                                    <a class="text-uppercase" href="/event/create"><i class="glyphicon glyphicon-pencil"></i>Create Event</a>
                                 </li>
                                 <li>
-                                    <a class="text-uppercase" href="/proforma/create"><i class="glyphicon glyphicon-eye-open"></i>Create ProForma</a>
+                                    <a class="text-uppercase" href="/event/edit"><i class="glyphicon glyphicon-pencil"></i>View/Delete Event</a>
                                 </li>
                                 <li>
                                     <a class="text-uppercase" href="/proforma/edit"><i class="glyphicon glyphicon-eye-open"></i>View &nbsp; <i class="glyphicon glyphicon-pencil"></i>Edit Proforma</a>
@@ -545,7 +553,7 @@
                     </div>                
                 </nav>
             </header>
-            <div class="container-fluid">
+            <div class="container-fluid" >
                 <div class="page-content">
                     <div class="page-content-row">
                         <div class="col-md-3">
@@ -564,71 +572,59 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--                                <div class="col-xs-12">
-                                                                    <div class="dashboard-stat dashboard-stat-v2 purple" >
-                                                                        <div class="visual">
-                                                                            <i class="fa fa-comments"></i>
-                                                                        </div>
-                                                                        <div class="details">
-                                                                            <div class="number">
-                                                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="policeservicestotal" style="font-size: xx-large" >0</span>
-                                
-                                                                            </div>
-                                                                            <div class="desc"> Police Services Total </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="dashboard-stat dashboard-stat-v2 purple" >
-                                                                        <div class="visual">
-                                                                            <i class="fa fa-comments"></i>
-                                                                        </div>
-                                                                        <div class="details">
-                                                                            <div class="number">
-                                                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="VATPoliceServices" style="font-size: xx-large" >0</span>
-                                
-                                                                            </div>
-                                                                            <div class="desc"> Vat Total </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-xs-12">
-                                                                    <div class="dashboard-stat dashboard-stat-v2 yellow" >
-                                                                        <div class="visual">
-                                                                            <i class="fa fa-comments"></i>
-                                                                        </div>
-                                                                        <div class="details">
-                                                                            <div class="number">
-                                                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="opsupporttotal" style="font-size: xx-large" >0</span>
-                                                                            </div>
-                                                                            <div class="desc"> Op Support Total </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-xs-12">
-                                                                    <div class="dashboard-stat dashboard-stat-v2 red" >
-                                                                        <div class="visual">
-                                                                            <i class="fa fa-comments"></i>
-                                                                        </div>
-                                                                        <div class="details">
-                                                                            <div class="number">
-                                                                                <span class="glyphicon glyphicon-usd"></span><span  id="eventcost" style="font-size: xx-large" ></span>
-                                                                            </div>
-                                                                            <div class="desc"> Event Cost </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>-->
                                 <div class="col-xs-12">
-                                    <div class="dashboard-stat dashboard-stat-v2 blue">
+                                    <div class="dashboard-stat dashboard-stat-v2 purple" >
                                         <div class="visual">
                                             <i class="fa fa-comments"></i>
                                         </div>
                                         <div class="details">
                                             <div class="number">
-                                                <span class="glyphicon glyphicon-usd"></span><span data-value="2" id="submitterbalance" style="font-size: xx-large"  data-counter="counterup"></span>
+                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="policeservicestotal" style="font-size: xx-large" >0</span>
+
                                             </div>
-                                            <div class="desc"> Company Balance </div>
+                                            <div class="desc"> Police Services Total </div>
+                                        </div>
+                                    </div>
+                                    <div class="dashboard-stat dashboard-stat-v2 purple" >
+                                        <div class="visual">
+                                            <i class="fa fa-comments"></i>
+                                        </div>
+                                        <div class="details">
+                                            <div class="number">
+                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="VATPoliceServices" style="font-size: xx-large" >0</span>
+
+                                            </div>
+                                            <div class="desc"> Vat Total </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-xs-12">
+                                    <div class="dashboard-stat dashboard-stat-v2 yellow" >
+                                        <div class="visual">
+                                            <i class="fa fa-comments"></i>
+                                        </div>
+                                        <div class="details">
+                                            <div class="number">
+                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="opsupporttotal" style="font-size: xx-large" >0</span>
+                                            </div>
+                                            <div class="desc"> Op Support Total </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="dashboard-stat dashboard-stat-v2 red" >
+                                        <div class="visual">
+                                            <i class="fa fa-comments"></i>
+                                        </div>
+                                        <div class="details">
+                                            <div class="number">
+                                                <span class="glyphicon glyphicon-usd"></span><span  id="eventcost" style="font-size: xx-large" ></span>
+                                            </div>
+                                            <div class="desc"> Event Cost </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <center>
                                     <a class="btn btn-outline blue" href="../../index.php">back to main page</a>    
                                 </center>
@@ -639,13 +635,13 @@
                                 <div class="panel panel-info" >
                                     <div class="panel-heading">
                                         <center>
-                                            <h3><label id="lblEventRef" class="label label-info">{ lblEventRef }</label>&nbsp;&nbsp; &nbsp;<label id="lblEventFormNum" style="display:none" class="label label-info" ></label></h3>
+                                            <h3><label id="lblEventRef" class="label label-info"></label></h3>
                                         </center>
                                     </div>
                                 </div>
                                 <div class="portlet box blue">
                                     <div class="portlet-title">
-                                        <div class="caption"><em class="fa fa-group"></em><h4>Create Event</h4></div>
+                                        <div class="caption"><em class="fa fa-group"></em><h4>Create ProForma</h4></div>
                                         <div class="tools">
                                             <a title="" class="collapse" href="javascript:;" data-original-title=""> </a>
                                         </div>
@@ -665,58 +661,46 @@
                                                         <a href="/company/create" id="" class="btn btn-default blue">Create Company</a>
                                                     </div>
                                                 </div>
-                                                <div class="row center-block">
-                                                    <!--                                                    <div class="col-md-3" >                                                 
-                                                                                                            <div class="row">
-                                                                                                                <div class="col-xs-4" style="font-size: large">
-                                                                                                                    <a id="addrank" class="btn btn-default green" data-toggle="modal" data-target="#myModal">Police Services <i class="glyphicon glyphicon-plus"></i>
-                                                                                                                    </a>
-                                                                                                                </div>  
-                                                                                                            </div>
-                                                                                                            <br>
-                                                                                                            <div class="row">
-                                                                                                                <div class="col-xs-4" style="font-size: large">
-                                                                                                                    <a id="addopsupport" class="btn btn-default green" data-toggle="modal" data-target="#myModal2">Operational Support <i class="glyphicon glyphicon-plus"></i>
-                                                                                                                    </a>
-                                                                                                                </div>  
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <div class="col-md-5" >
-                                                                                                            <br>
-                                                    
-                                                                                                            <div class="pillwrapper" id="pillcontainer">
-                                                                                                                <ul class="nav nav-pills nav-stacked" id="pillwrapper">                                   
-                                                                                                                </ul>   
-                                                                                                            </div>
-                                                                                                        </div>-->
-                                                    <div class="col-md-4" >
+                                                <div class="row center-block"> 
+                                                    <div class="col-md-3" >                                                 
+                                                        <div class="row">
+                                                            <div class="col-xs-4" style="font-size: large">
+                                                                <a id="addrank" class="btn btn-default green" data-toggle="modal" data-target="#myModal">Police Services <i class="glyphicon glyphicon-plus"></i>
+                                                                </a>
+                                                            </div>  
+                                                        </div>
+                                                        <br>
+                                                        <div class="row">
+                                                            <div class="col-xs-4" style="font-size: large">
+                                                                <a id="addopsupport" class="btn btn-default green" data-toggle="modal" data-target="#myModal2">Operational Support <i class="glyphicon glyphicon-plus"></i>
+                                                                </a>
+                                                            </div>  
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5" >
+                                                        <br>
+
+                                                        <div class="pillwrappersupport" id="pillcontainersupport">
+                                                            <ul class="nav nav-pills nav-stacked" id="pillwrappersupport">                                   
+                                                            </ul>   
+                                                        </div>
                                                     </div>
                                                     <div class="col-md-4" >
                                                         <br>
-                                                        <label>Select Division</label>
-                                                        <select class="form-control" id="Division">
+                                                        <label>Division</label>
+                                                        <input type="text"  class="form-control" id="Division" name="Division" placeholder="Select Event" readonly="">  
 
-                                                            { Divisions }
-                                                        </select>
-                                                        <label>Select Station</label>
-                                                        <select class="form-control" id="Station">
+                                                        <label>Station</label>
+                                                        <input type="text"  class="form-control" id="Station" name="Station" placeholder="Select Event" readonly="">  
 
-                                                            { Stations }
-                                                        </select>
                                                         <label>Event Name</label>
-                                                        <input type="text"  class="form-control" id="EventName" name="EventName" autocomplete="off" required value="{ EventName }" placeholder="Enter company event">  
+                                                        <input type="text"  class="form-control" id="EventName" name="EventName" value=" " placeholder="Select Event" readonly="">  
 
                                                         <label>Event Start Date</label>
-                                                        <input type="text" class="form-control" name="EventDateStart" placeholder="YYYY-MM-DD" autocomplete="off"  id="datepicker" required >
+                                                        <input type="text" class="form-control" id="EventDateStart" name="EventDateStart" placeholder="YYYY-MM-DD" readonly="">
                                                         <label>Event End Date</label>
-                                                        <input type="text" class="form-control" name="EventDateEnd" placeholder="YYYY-MM-DD" autocomplete="off"  id="datepicker2" required >
-                                                        <script>
-                                                            $(function () {
-                                                                $("#datepicker").datepicker({dateFormat: 'yy-mm-dd'});
-                                                                $("#datepicker2").datepicker({
-                                                                    dateFormat: 'yy-mm-dd            '});
-                                                            });
-                                                        </script>
+                                                        <input type="text" class="form-control" id="EventDateEnd" name="EventDateEnd" placeholder="YYYY-MM-DD" readonly="">
+
                                                         <div><input id="paylist" name="paylist" class="form-control" type="hidden" ></div>
 
                                                         <!--                                                        <input type="hidden"  class="form-control" id="EventCost" name="EventCost"  required value="{ EventCost }" >  -->
@@ -738,89 +722,91 @@
                                                 <div class="col-md-3" >
 
                                                     <input type="hidden" class="form-control" id="EventId" name="EventId"  >
+
+                                                    <input type="hidden" class="form-control" id="CompanyName" name="CompanyName"  >
+                                                    <input type="hidden" class="form-control" id="CompanyId" name="CompanyId"  >
                                                     <input type="hidden" class="form-control" id="hdnDivisionId" name="hdnDivisionId"  >
-                                                    <input type="hidden" class="form-control" id="hdnStation" name="hdnStation"  >
-                                                    <!--<input type="hidden" class="form-control" id="hdnEventCost" name="hdnEventCost"  >-->
-                                                    <!--                                                    <input type="hidden" class="form-control" id="hdnOperationalSupport" name="hdnOperationalSupport"  >
-                                                                                                        <input type="hidden" class="form-control" id="hdnPoliceServices" name="hdnPoliceServices"  >
-                                                                                                        <input type="hidden" class="form-control" id="hdnVATPoliceServices" name="hdnVATPoliceServices"  >
-                                                                                                        <input type="hidden" class="form-control" id="hdnAsset" name="hdnAsset" value="" >
-                                                                                                        <input type="hidden" class="form-control" id="VATDBval" name="VATDBval" value="{ VATDBval }" >-->
+                                                    <input type="hidden" class="form-control" id="hdnEventCost" name="hdnEventCost"  >
+                                                    <input type="hidden" class="form-control" id="hdnOperationalSupport" name="hdnOperationalSupport"  >
+                                                    <input type="hidden" class="form-control" id="hdnPoliceServices" name="hdnPoliceServices"  >
+                                                    <input type="hidden" class="form-control" id="hdnVATPoliceServices" name="hdnVATPoliceServices"  >
+                                                    <input type="hidden" class="form-control" id="hdnAsset" name="hdnAsset" value="" >
+                                                    <input type="hidden" class="form-control" id="VATDBval" name="VATDBval" value="{ VATDBval }" >
 
                                                 </div>
                                             </div>  
                                             <br>
                                             <center>
-                                                <button type="submit" name="btn-create" class="btn btn-default blue" id="btnCreateEvent">Create Event</button>    
+                                                <button type="submit" name="btn-create" class="btn btn-default blue" id="btnCreateEvent">Create Pro Forma</button>    
                                             </center>
                                             <br>
                                         </form> 
-                                        <!--                                        <div class="modal" id="myModal">
-                                                                                    <div class="modal-dialog">
-                                                                                        <div class="modal-content">
-                                        
-                                                                                             Modal Header 
-                                                                                            <div class="modal-header">
-                                                                                                <h4 class="modal-title">Select Police Service Resource</h4>
-                                                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                                            </div>
-                                        
-                                                                                             Modal body 
-                                                                                            <div class="modal-body">                                                                                                               
-                                                                                                <label><strong>Select Officer Rank</strong></label>
-                                                                                                <select name="Rank" class="form-control" id="Rank" style="width:auto" >
-                                                                                                    <option>Select Rank</option>
-                                                                                                    { RoleRates }
-                                                                                                </select>
-                                                                                                <label><strong>Resource Count</strong></label>
-                                                                                                <input type="number"  class="form-control" id="ResourceCount" name="ResourceCount" min="1" value="1" required  >     
-                                        
-                                                                                                <label><strong>Hours</strong></label>
-                                                                                                <input type="number"  class="form-control" id="RSHoursCount" name="RSHoursCount" min="1" value="1" required  >     
-                                        
-                                                                                            </div>
-                                                                                             Modal footer 
-                                                                                            <div class="modal-footer">
-                                                                                                <label id="ResourceAmount" >0</label>
-                                                                                                <button type="button" class="btn btn-info" id="AddResource" data-enter="modal">Add Resources</button>
-                                                                                            </div>                                            
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="modal" id="myModal2">
-                                                                                    <div class="modal-dialog">
-                                                                                        <div class="modal-content">
-                                        
-                                                                                             Modal Header 
-                                                                                            <div class="modal-header">
-                                                                                                <h4 class="modal-title">Select Operational Support Resource</h4>
-                                                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                                            </div>
-                                        
-                                                                                             Modal body 
-                                                                                            <div class="modal-body">
-                                        
-                                                                                                <label><strong>Select Equipment</strong></label>
-                                                                                                <select name="Equipment" class="form-control" id="Equipment" style="width:auto" >
-                                                                                                    <option>Select Equipment</option>
-                                                                                                    { Equipment }
-                                                                                                </select>
-                                                                                             
-                                                                                                <label id="lblRSCount"><strong>Resource Count</strong></label>
-                                                                                                <input type="number"  class="form-control" id="OPResourceCount" name="OPResourceCount" min="1" value="1" required  > 
-                                        
-                                                                                                  <label id="lblHours"><strong>Hours</strong></label>
-                                                                                                <input type="number"  class="form-control" id="OSHoursCount" name="OSHoursCount" min="1" value="1" required  >     
-                                        
-                                                                                            </div>
-                                                                                             Modal footer 
-                                                                                            <div class="modal-footer">
-                                                                                                <label id="EquipmentAmount" >0</label>
-                                                                                                <button type="button" class="btn btn-info" id="AddEquipment" data-enter="modal">Add Op Support</button>
-                                                                                            </div>                                            
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>-->
+                                        <div class="modal" id="myModal">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Select Police Service Resource</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body">                                                                                                               
+                                                        <label><strong>Select Officer Rank</strong></label>
+                                                        <select name="Rank" class="form-control" id="Rank" style="width:auto" >
+                                                            <option>Select Rank</option>
+                                                            { RoleRates }
+                                                        </select>
+                                                        <label><strong>Resource Count</strong></label>
+                                                        <input type="number"  class="form-control" id="ResourceCount" name="ResourceCount" min="1" value="1" required  >     
+
+                                                        <label><strong>Hours</strong></label>
+                                                        <input type="number"  class="form-control" id="RSHoursCount" name="RSHoursCount" min="1" value="1" required  >     
+
+                                                    </div>
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+                                                        <label id="ResourceAmount" >0</label>
+                                                        <button type="button" class="btn btn-info" id="AddResource" data-enter="modal">Add Resources</button>
+                                                    </div>                                            
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal" id="myModal2">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Select Operational Support Resource</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body">
+
+                                                        <label><strong>Select Equipment</strong></label>
+                                                        <select name="Equipment" class="form-control" id="Equipment" style="width:auto" >
+                                                            <option>Select Equipment</option>
+                                                            { Equipment }
+                                                        </select>
+
+                                                        <label id="lblRSCount"><strong>Resource Count</strong></label>
+                                                        <input type="number"  class="form-control" id="OPResourceCount" name="OPResourceCount" min="1" value="1" required  > 
+
+                                                        <label id="lblHours"><strong>Hours</strong></label>
+                                                        <input type="number"  class="form-control" id="OSHoursCount" name="OSHoursCount" min="1" value="1" required  >     
+
+                                                    </div>
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+                                                        <label id="EquipmentAmount" >0</label>
+                                                        <button type="button" class="btn btn-info" id="AddEquipment" data-enter="modal">Add Op Support</button>
+                                                    </div>                                            
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
 

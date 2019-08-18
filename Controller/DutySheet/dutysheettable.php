@@ -21,7 +21,7 @@ class DutySheetTableController extends MakePaymentController {
         $unlock = $canUnlock == 1 ? "<th>Unlock</th>" : "";
         $table = "";
 
-        $pymtinst = new \BarcomModel\Payment();
+        $pymtinst = new \PfomModel\Payment();
         $filterBy = array();
 
         if (isset($_REQUEST['compname'])) {

@@ -20,7 +20,7 @@ class CreateAdminUserController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-create'])) {
-            $usrinst = new \BarcomModel\UserModule();
+            $usrinst = new \PfomModel\UserModule();
             $Natregno = $usrinst->Natregno = $_POST['Natregno'];
             $username = $usrinst->UserName = $_POST['UserName'];
             $usrinst->Password = $_POST['Password'];
@@ -52,7 +52,7 @@ class CreateAdminUserController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\UserModule();
+            $model = new \PfomModel\UserModule();
 
             foreach ($model->SystemRoles as $value) {
                 $test = $value;

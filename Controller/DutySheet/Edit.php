@@ -45,8 +45,8 @@ $username = $_SESSION["login_user"];
 
 
 if (isset($_POST['btn-update'])) {
-$eventinst = new \BarcomModel\Event();
-$audinst = new \BarcomModel\Audit();
+$eventinst = new \PfomModel\Event();
+$audinst = new \PfomModel\Audit();
 
 //Get Id from browser interface
 $eventinst->EventId = $EventId = $_POST["EventId"];
@@ -83,7 +83,7 @@ header("Location:" . "/success?result=$token&header=$token1&args=");
 }
 else
 if (isset($_GET)) {
-$model = new \BarcomModel\Company();
+$model = new \PfomModel\Company();
 //$parishes = $model->GetParishes();
 $template = new MasterTemplate();
 $template->load("Views/DutySHeet/dutysheet_edit.html");
@@ -105,7 +105,7 @@ $template->publish();
 //    
 //    function show($params) {
 ////GetSelectedDutySheet 
-//$dutysheetinst = new \BarcomModel\DutySheet();
+//$dutysheetinst = new \PfomModel\DutySheet();
 //
 //
 //$EventId = $_REQUEST['GEventId'];
@@ -150,7 +150,7 @@ $template->publish();
 //        $unlock = $canUnlock == 1 ? "<th>Unlock</th>" : "";
 //        $table = "";
 //
-//        $pymtinst = new \BarcomModel\DutySheet();
+//        $pymtinst = new \PfomModel\DutySheet();
 //        $filterBy = array();
 //        if (isset($_REQUEST['compname'])) {
 //            $filterBy['companyName'] = "B.CompanyName='" . $_REQUEST['compname'] . "'";

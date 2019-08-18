@@ -40,8 +40,8 @@ class EquipmentEditController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-update'])) {
-            $equipinst = new \BarcomModel\Equipment();
-            $audinst = new \BarcomModel\Audit();
+            $equipinst = new \PfomModel\Equipment();
+            $audinst = new \PfomModel\Audit();
 
             //Get Id from browser interface
             $EquipmentId = $_POST['EquipmentId'];
@@ -90,7 +90,7 @@ class EquipmentEditController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Equipment();
+            $model = new \PfomModel\Equipment();
             $template = new MasterTemplate();
             $template->load("Views/Equipment/equipment_edit.html");
             $template->replace("title", " Create New Equipment ");

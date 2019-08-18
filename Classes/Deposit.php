@@ -8,7 +8,7 @@
   2019
  */
 
-namespace BarcomModel;
+namespace PfomModel;
 
 class Deposit {
 

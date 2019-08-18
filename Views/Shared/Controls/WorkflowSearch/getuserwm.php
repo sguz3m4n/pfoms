@@ -9,7 +9,7 @@ $sql = 'SELECT * FROM workflow WHERE RoleName = "' . $q . '" AND DelFlg="N"';
 
 $result = $conn->prepare($sql);
 $result->execute();
-$compinst = new BarcomModel\Workflow();
+$compinst = new PfomModel\Workflow();
 
 foreach ($result as $value) {
     $compinst->RoleId = $value['RoleId'];
@@ -28,7 +28,7 @@ foreach ($result as $value) {
 $conn = NULL;
 
 
-$model = new \BarcomModel\Workflow();
+$model = new \PfomModel\Workflow();
 $parishes = $model->GetParishes();
 ?>  
 <div class="panel panel-info">

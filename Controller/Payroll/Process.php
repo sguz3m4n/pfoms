@@ -23,7 +23,7 @@ class PayrollController extends PermissionController {
     private $National_Id;
 
     function show($params) {
-        $payrollinst = new \BarcomModel\Payroll();
+        $payrollinst = new \PfomModel\Payroll();
         $User = $payrollinst->User = $_SESSION["login_user"];
         $this->National_Id = $_SESSION['NatReg'];
 
@@ -33,7 +33,7 @@ class PayrollController extends PermissionController {
             $payrollinst->ProcessPayments();
             if ($payrollinst->auditok == 1) {
 
-                $audinst = new \BarcomModel\Audit();
+                $audinst = new \PfomModel\Audit();
 
                 $tranid = $audinst->TranId = $audinst->GenerateTimestamp('PYRL');
                 $AudtDesc = 'Payroll for ' . $payrollinst->BatchId;

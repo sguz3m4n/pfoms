@@ -9,7 +9,7 @@ class PasswordController extends PermissionController {
 
     function show($params) {
         $error = NULL;
-        $audinst = new \BarcomModel\Audit();
+        $audinst = new \PfomModel\Audit();
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $conn = conn();
             $password = $_POST['password'];

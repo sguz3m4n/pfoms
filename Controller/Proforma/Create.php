@@ -10,32 +10,28 @@
 
 namespace Controllers;
 
-
 require 'Classes/Company.php';
 require 'Classes/Equipment.php';
 require 'Classes/Audit.php';
 require 'Classes/PreAccount.php';
 require 'Classes/Division.php';
 require 'Classes/Event.php';
+require 'Classes/Proforma.php';
 require 'Controller/base_template.php';
 
-
-
 class MakeProformaController extends PermissionController {
-    /* function __construct() {
-      $this->setRoles(['Human Resource Clerk', 'Manager', 'Administrator', 'Super User']);
-      }
 
-     */
+    function __construct() {
+        $this->setRoles(['Human Resource Clerk', 'Manager', 'Administrator', 'Super User']);
+    }
 
     private $EventId = "";
-    
     private $CompanyId = "";
     private $CompanyName = "";
     //private $ContactName = "";
     //private $ContactNumber = "";
     //private $ContactEmail = "";
-    
+
     private $EventCost = "";
     private $Comments = "";
     private $RecEntered = "";
@@ -43,15 +39,14 @@ class MakeProformaController extends PermissionController {
     private $OperationalSupport = "";
     private $PoliceServices = "";
     private $VATPoliceServices = "";
-
     private $Assets = "";
     private $AssetName = "";
     private $Quantity = "";
     private $Value = "";
-     private $Hours = "";
-    
+    private $Hours = "";
     private $assetsbreakdown;
     private $arrbreakdown;
+
 //private $MyPaymentsRecords;
 
     function show($params) {
@@ -77,13 +72,12 @@ class MakeProformaController extends PermissionController {
 
         if (isset($_POST['btn-create'])) {
 
-            $eventinst = new \BarcomModel\Event();
-//$companyinst = new \BarcomModel\Company();
-//$preaccount = new \BarcomModel\PreAccount();
-            $audinst = new \BarcomModel\Audit();
+            $eventinst = new \PfomModel\Event();
+//$companyinst = new \PfomModel\Company();
+//$preaccount = new \PfomModel\PreAccount();
+            $audinst = new \PfomModel\Audit();
 //$this->MyPaymentsRecords = $pymntrecs = json_decode($_POST['paylist'], TRUE);
 //(isset($_POST['CompId']) ? $this->CompId = $varid = $refinst->CompanyId = $_POST['CompId'] : $this->CompId = $varid = $refinst->CompanyId = "");
-
 //            $eventinst->EventName = $EventName = $_POST["EventName"];
 //            $eventinst->EventDateStart = $EventDateStart = $_POST["EventDateStart"];
 //            $eventinst->EventDateEnd = $EventDateEnd = $_POST["EventDateEnd"];
@@ -92,7 +86,6 @@ class MakeProformaController extends PermissionController {
             $eventinst->EventId = $EventId = $_POST["EventId"];
             $eventinst->EventName = $EventName = $_POST["EventName"];
             //$eventinst->Division = $Division = $_POST["hdnDivisionId"];
-
             //$eventinst->DelFlg = $DelFlg = "N";
             $eventinst->RecEntered = $RecEntered = "";
             $eventinst->RecEnteredBy = $RecEnteredBy = $username;
@@ -105,38 +98,33 @@ class MakeProformaController extends PermissionController {
             $eventinst->CompanyName = $CompanyName = $_POST["CompanyName"];
             //$eventinst->ContactName = $ContactName = $_POST["ContactName"];
             //$eventinst->ContactNumber = $ContactNumber = $_POST["PhoneNumber"];
-           // $eventinst->ContactEmail = $ContactEmail = $_POST["Email"];
- // $eventinst->Assets = $Assets = ($_POST["hdnAsset"]);
-  $eventinst->Assets = $Assets = json_decode($_POST['hdnAsset'], TRUE);
+            // $eventinst->ContactEmail = $ContactEmail = $_POST["Email"];
+            // $eventinst->Assets = $Assets = ($_POST["hdnAsset"]);
+            $eventinst->Assets = $Assets = json_decode($_POST['hdnAsset'], TRUE);
 
-       
-               foreach($Assets as $Asset)
-  {
-           
-            
-            $eventinst->AssetName = $AssetName = $Asset[2];
-            $eventinst->Value = $Value = $Asset[1];
-            $eventinst->Quantity = $Quantity = $Asset[3];
-            $eventinst->Hours = $Hours = $Asset[4];
-            if ($Hours == '0')
-                { 
-                $Hours = '1';
-                        
+
+            foreach ($Assets as $Asset) {
+
+
+                $eventinst->AssetName = $AssetName = $Asset[2];
+                $eventinst->Value = $Value = $Asset[1];
+                $eventinst->Quantity = $Quantity = $Asset[3];
+                $eventinst->Hours = $Hours = $Asset[4];
+                if ($Hours == '0') {
+                    $Hours = '1';
                 }
-              
-       $eventinst->CreateEventPreAccount($EventId, $AssetName, $Quantity,$Hours, $Value, $CompanyName, $CompanyId);        
-   
-              
-  }
 
-  $eventinst->CreateUpdateProforma($EventId, $EventCost, $OperationalSupport, $PoliceServices,$VATPoliceServices, $RecEnteredBy);
-  //need to find out how to log them
-  $TimeStamp = $audinst->GenerateTimestamp('TS');
-  $TransId = $audinst->GenerateTimestamp('TID');
-  
-  $eventinst->CreateProformaTransaction($EventId, $OperationalSupport, $PoliceServices,$VATPoliceServices, $RecEnteredBy,$TimeStamp,$TransId);
- 
-  
+                $eventinst->CreateEventPreAccount($EventId, $AssetName, $Quantity, $Hours, $Value, $CompanyName, $CompanyId);
+            }
+
+            $eventinst->CreateUpdateProforma($EventId, $EventCost, $OperationalSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy);
+            //need to find out how to log them
+            $TimeStamp = $audinst->GenerateTimestamp('TS');
+            $TransId = $audinst->GenerateTimestamp('TID');
+
+            $eventinst->CreateProformaTransaction($EventId, $OperationalSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy, $TimeStamp, $TransId);
+
+
 
 // //if validation succeeds then log audit record to database
             if ($eventinst->auditok == 1) {
@@ -152,15 +140,15 @@ class MakeProformaController extends PermissionController {
         } else
         if (isset($_GET)) {
             //$EventId='UNASSIGNED';
-           /* $division = $_GET['division'];
-            if ($division != NULL) {
-            
-            }*/
+            /* $division = $_GET['division'];
+              if ($division != NULL) {
+
+              } */
 
 
-            $model = new \BarcomModel\Event();
-            $divmodel = new \BarcomModel\Division ();
-            $equipmodel = new \BarcomModel\Equipment ();
+            $model = new \PfomModel\Event();
+            $divmodel = new \PfomModel\Division ();
+            $equipmodel = new \PfomModel\Equipment ();
             $divisions = $divmodel->GetDivisions();
             $rolerates = $model->GetRoleRates();
             $equipment = $equipmodel->GetEquipmentItems();
@@ -168,27 +156,27 @@ class MakeProformaController extends PermissionController {
 //$preaccounts = $model->GetPreAccounts();
             $VAT = $model->getVat();
 //put prefix from division drop down id here
- //$EventId = $model->GenerateTimestamp('BDIV');
+            //$EventId = $model->GenerateTimestamp('BDIV');
             $template = new MasterTemplate();
-            $template->load("Views/Event/makeproforma.html");
+            $template->load("Views/Proforma/proforma.html");
 //$template->replace("accounts", $preaccounts);
-           // $template->replace("EventName", "");
-           // $template->replace("Deposit", "");
+            // $template->replace("EventName", "");
+            // $template->replace("Deposit", "");
             //$template->replace("CompanyName", "");
-           // $template->replace("ContactName", "");
+            // $template->replace("ContactName", "");
             //$template->replace("ContactNumber", "");
             //$template->replace("ContactEmail", "");
             //$template->replace("EventDate", "");
             //$template->replace("EventCost", "");
-           // $template->replace("lblEventRef", "");
-           // $template->replace("OperationalSupport", "0.00");
+            // $template->replace("lblEventRef", "");
+            // $template->replace("OperationalSupport", "0.00");
             //$template->replace("PoliceServices", "0.00");
-           // $template->replace("VATPoliceServices", "0.00");
+            // $template->replace("VATPoliceServices", "0.00");
             $template->replace("VATDBval", $VAT);
             $template->replace("Divisions", $divisions);
             $template->replace("RoleRates", $rolerates);
             $template->replace("Equipment", $equipment);
-                        //$template->replace("Stations", $stations);
+            //$template->replace("Stations", $stations);
             $template->publish();
         }
     }

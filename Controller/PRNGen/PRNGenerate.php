@@ -30,8 +30,8 @@ class DisburseController extends PermissionController {
 
         $username = $_SESSION["login_user"];
 
-        $prninst = new \BarcomModel\PreReqNum();
-        $audinst = new \BarcomModel\Audit();
+        $prninst = new \PfomModel\PreReqNum();
+        $audinst = new \PfomModel\Audit();
 
 
         if (isset($_POST['btn-create'])) {
@@ -44,7 +44,7 @@ class DisburseController extends PermissionController {
             $tranid = $prninst->GenerateTimestamp();
 
             for ($i = 0; $i < $RequestCount; $i++) {
-                $prn = new \BarcomModel\PreReqNum();
+                $prn = new \PfomModel\PreReqNum();
                 $prnid = $_SESSION['prnlist'][$i];
                 $prn->CreatePRNManager($tranid, $prnid, $User);
                 $this->prnslist = $this->prnslist . '<br><span class="label label-info"> ' . $prnid . '</span><br>';
@@ -85,8 +85,8 @@ class EditPRNController extends DisburseController {
     }
    
     function show($params) {
-        $prninst = new \BarcomModel\PreReqNum();
-        $audinst = new \BarcomModel\Audit();
+        $prninst = new \PfomModel\PreReqNum();
+        $audinst = new \PfomModel\Audit();
 
         if (isset($_POST['submit'])) {
             $User =  $_SESSION["login_user"];
@@ -145,7 +145,7 @@ class PRNTableController extends DisburseController {
        $unlock = $canUnlock==1?"<th>Unlock</th>":"";
        $table = "";
        
-       $pymtinst = new \BarcomModel\PreReqNum();
+       $pymtinst = new \PfomModel\PreReqNum();
        $filterBy = array();
  
         if (isset($_REQUEST['compname'])) {
@@ -202,7 +202,7 @@ class PRNUnlockController extends DisburseController {
     }
 
     function show($params) {
-        $prninst = new \BarcomModel\PreReqNum();
+        $prninst = new \PfomModel\PreReqNum();
         $rn = $_REQUEST['id'];
         $unlocked = $prninst->ChangePRNStatus($rn);
         if($unlocked) {

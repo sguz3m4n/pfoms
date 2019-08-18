@@ -57,8 +57,8 @@ class CreateDutySheetController extends PermissionController {
 
 
         if (isset($_POST['btn-create'])) {
-            $dutysheetinst = new \BarcomModel\DutySheet();
-            $audinst = new \BarcomModel\Audit();
+            $dutysheetinst = new \PfomModel\DutySheet();
+            $audinst = new \PfomModel\Audit();
 
             //Get Id from browser interface
             $dutysheetinst->EventId = $EventId = $_POST["EventId"];
@@ -129,7 +129,7 @@ class CreateDutySheetController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Employee();
+            $model = new \PfomModel\Employee();
 //            $roles = $model->GetRoles();
             $template = new MasterTemplate();
             $template->load("Views/DutySHeet/dutysheet.html");

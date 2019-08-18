@@ -62,7 +62,7 @@ class EmployeeCreateController extends PermissionController {
 
     //Validation Engine will execute any validation on the fields in the interface
     function ValidationEngine($elements) {
-        $empinst = new \BarcomModel\Employee();
+        $empinst = new \PfomModel\Employee();
         foreach ($elements as $value) {
             if ($value == "Natregno") {
                 if ((strlen($this->Natregno) < 10) || (strlen($this->Natregno) > 10)) {
@@ -106,9 +106,9 @@ class EmployeeCreateController extends PermissionController {
 
         if (isset($_POST['btn-create'])) {
             //variables for data input 
-            $empinst = new \BarcomModel\Employee();
-            $audinst = new \BarcomModel\Audit();
-            $bankaccount = new \BarcomModel\BankAccount();
+            $empinst = new \PfomModel\Employee();
+            $audinst = new \PfomModel\Audit();
+            $bankaccount = new \PfomModel\BankAccount();
             //ternary operator example
             (isset($_POST['Natregno']) ? $this->Natregno = $empid = $empinst->Natregno = $_POST['Natregno'] : $this->Natregno = $empid = $empinst->Natregno = "");
             $this->MyPaymentsRecords = $pymntrecs = json_decode($_POST['accountlist'], TRUE);
@@ -171,7 +171,7 @@ class EmployeeCreateController extends PermissionController {
                 }
             } else {
                 //if validation fails do postback with values already entered 
-                $model = new \BarcomModel\Employee();
+                $model = new \PfomModel\Employee();
                 $roles = $model->GetRoles();
                 $parishes = $model->GetParishes();
                 $template = new MasterTemplate();
@@ -207,7 +207,7 @@ class EmployeeCreateController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Employee();
+            $model = new \PfomModel\Employee();
             $roles = $model->GetRoles();
             $parishes = $model->GetParishes();
             $actives = $model->CountActive();

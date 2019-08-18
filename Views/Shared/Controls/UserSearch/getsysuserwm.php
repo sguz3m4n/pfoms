@@ -11,7 +11,7 @@ $sql = "SELECT * FROM users WHERE username='" . $q . "'";
 
 $result = $conn->prepare($sql);
 $result->execute();
-$usrinst = new BarcomModel\UserModule();
+$usrinst = new PfomModel\UserModule();
 $Natreg;
 $Username;
 $Firstname;

@@ -72,7 +72,7 @@ if (empty($EventIds)) {
         <?php
     }
 
-    $eventinst = new BarcomModel\Event();
+    $eventinst = new PfomModel\Event();
     $conn = NULL;
     ?>  
 

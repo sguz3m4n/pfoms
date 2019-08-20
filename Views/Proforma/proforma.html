@@ -51,21 +51,17 @@
                 .sidenav a {font-size: 18px;}
             }
         </style>
-
         <script type="text/javascript">
             $(document).ready(function () {
                 var PreAccountTotal = 0;
-
                 var preaccountOS = 0;
                 var preaccountPS = 0;
                 var preaccountVAT = 0;
-
                 var ResourceTotal = 0;
                 var OperationalSupportTotal = 0;
                 var accountcount = 0;
                 var accountarr = [];
-                var acctid;
-                var dailyRate;
+                var rate;
 
                 $('#Division').on('change', function () {
                     //alert($('#Division :selected').attr('id'));
@@ -122,18 +118,17 @@
 
                         document.getElementById('lblHours').style.display = "";
                         document.getElementById('OSHoursCount').style.display = "";
-                        dailyRate = true;
+                        rate = true;
                     } else
                     {
                         document.getElementById('lblHours').style.display = "none";
                         document.getElementById('OSHoursCount').style.display = "none";
-                        dailyRate = false;
+                        rate = false;
                     }
                     if (count !== '')
                     {
-
                         var total = count * (inputVal);
-                        if (dailyRate == true) {
+                        if (rate == true) {
                             total = OSHoursCount * total;
                         }
                         $('#EquipmentAmount').text(total.toFixed(2));
@@ -150,7 +145,7 @@
                     if (inputVal !== '' && count !== '')
                     {
                         var total = count * (inputVal);
-                        if (dailyRate == true) {
+                        if (rate == true) {
                             total = OSHoursCount * total;
                         }
                         $('#EquipmentAmount').text(total.toFixed(2));
@@ -163,14 +158,13 @@
                 $('#AddEquipment').on('click', function () {
                     //alert("hello");
                     var acctrec = [];
-                    var inputVal = $('#Equipment :selected').text();
+                    var equipname = $('#Equipment :selected').text();
+                    var equiprate = $('#Equipment :selected').val();
                     var equipcount = $('#OPResourceCount').val();
                     OperationalSupportTotal = $('#EquipmentAmount').text();
                     var pillcontainersupport = document.getElementById('pillcontainersupport');
                     var pillwrappersupport = document.getElementById('pillwrappersupport');
                     var hour = $('#OSHoursCount').val();
-                    ;
-
 
                     //create instance of list elements
                     var pill = document.createElement("li");
@@ -185,13 +179,13 @@
                     pillanchor.setAttribute("style", "bold");
 
                     //if have hourly rate
-                    if (dailyRate == true) {
+                    if (rate == true) {
                         hour = $('#OSHoursCount').val();
-                        pillanchor.appendChild(document.createTextNode("Resource- " + inputVal + " x " + equipcount + " x " + hour + "hr(s)" + ": $" + OperationalSupportTotal));
+                        pillanchor.appendChild(document.createTextNode("Resource- " + equipname + " x " + equipcount + " x " + hour + "hr(s)" + ": $" + OperationalSupportTotal));
                     } else
                     {
                         hour = 0;
-                        pillanchor.appendChild(document.createTextNode("Resource- " + inputVal + " x " + equipcount + ": $" + OperationalSupportTotal));
+                        pillanchor.appendChild(document.createTextNode("Resource- " + equipname + " x " + equipcount + ": $" + OperationalSupportTotal));
                     }
 
                     pillanchor.appendChild(removeicon);
@@ -206,15 +200,15 @@
 
                     $("#preaccttotal").text(PreAccountTotal.toFixed(2));
                     acctrec.push("preaccount" + accountcount);
-                    // acctrec.push(acctid);
                     acctrec.push(OperationalSupportTotal);
-                    acctrec.push(inputVal);
+                    acctrec.push(equipname);
+                    acctrec.push(equiprate);
                     acctrec.push(equipcount);
                     acctrec.push(hour);
-                    // acctrec.push(document.getElementById("AccountNumber").value);
+                    acctrec.push('OppSupp')
+
                     accountarr.push(acctrec);
-                    //alert(acctrec[3]);
-                    //CalculateTotal(Number(depositvalue));
+
                     accountcount++;
 
                 });
@@ -235,13 +229,7 @@
                     {
                         $('#ResourceAmount').text(0);
                     }
-                    var vatVal = document.getElementById("VATDBval").value;
-                    var vatCalc = (total * parseFloat(vatVal)).toFixed(2);
-                    //
 
-//VATPoliceServices = 
-                    //$("#VATPoliceServices").val(vatCalc);
-                    //var VATPoliceServices = document.getElementById("VATPoliceServices").value;
                 });
 
                 $('#ResourceCount, #RSHoursCount').on('change click', function () {
@@ -262,7 +250,8 @@
                 $('#AddResource').on('click', function () {
                     //alert("hello");
                     var acctrec = [];
-                    var inputVal = $('#Rank :selected').text();
+                    var rankname = $('#Rank :selected').text();
+                    var rankrate = $('#Rank :selected').val();
                     var rankcount = $('#ResourceCount').val();
                     var rshours = $('#RSHoursCount').val();
                     ResourceTotal = $('#ResourceAmount').text();
@@ -280,7 +269,7 @@
                     var pillanchor = document.createElement("a");
                     pillanchor.setAttribute("data-preactotal", ResourceTotal);
                     pillanchor.setAttribute("style", "bold");
-                    pillanchor.appendChild(document.createTextNode("Rank- " + inputVal + " x " + rankcount + " x " + rshours + "hr(s)" + ": $" + ResourceTotal));
+                    pillanchor.appendChild(document.createTextNode("Rank- " + rankname + " x " + rankcount + " x " + rshours + "hr(s)" + ": $" + ResourceTotal));
 
                     pillanchor.appendChild(removeicon);
 
@@ -299,15 +288,15 @@
                     $("#eventcost").text(PreAccountTotal.toFixed(2));
                     $("#VATPoliceServices").text(preaccountVAT.toFixed(2));
                     acctrec.push("preaccount" + accountcount);
-                    //acctrec.push(acctid);
+
                     acctrec.push(ResourceTotal);
-                    acctrec.push(inputVal);
+                    acctrec.push(rankname);
+                    acctrec.push(rankrate);
                     acctrec.push(rankcount);
                     acctrec.push(rshours);
-                    // acctrec.push(document.getElementById("AccountNumber").value);
+                    acctrec.push('PolServ');
                     accountarr.push(acctrec);
-                    //alert(acctrec[3]);
-                    //CalculateTotal(Number(depositvalue));
+
                     accountcount++;
 
                 });
@@ -820,13 +809,3 @@
         { foot }
     </body>
 </html>
-<!--  <br>
-                                                                                                             <i class="glyphicon glyphicon-usd"></i><label> Police Services</label>
-                                                                                                             <input type="text"  class="form-control" id="PoliceServices" name="PoliceServices" autocomplete="off"  value="{ PoliceServices }" placeholder="0.00">  
-                                                     
-                                                                                          <i class="glyphicon glyphicon-usd"></i><label> VAT</label>
-                                                                                                             <input type="text"  class="form-control" id="VATPoliceServices" name="VATPoliceServices" autocomplete="off"  value="{ VATPoliceServices }" placeholder="0.00" readonly>  
-                                                     
-                                                                                          <i class="glyphicon glyphicon-usd"></i><label> Operational Support</label>
-                                                                                                             <input type="text"  class="form-control" id="OperationalSupport" name="OperationalSupport" autocomplete="off"  value="{ OperationalSupport }" placeholder="0.00">  
--->

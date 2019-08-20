@@ -28,17 +28,12 @@ class MakeProformaController extends PermissionController {
     private $EventId = "";
     private $CompanyId = "";
     private $CompanyName = "";
-    //private $ContactName = "";
-    //private $ContactNumber = "";
-    //private $ContactEmail = "";
-
-    private $EventCost = "";
     private $Comments = "";
     private $RecEntered = "";
     private $RecEnteredBy = "";
     private $OperationalSupport = "";
     private $PoliceServices = "";
-    private $VATPoliceServices = "";
+    private $VATPoliceServices;
     private $Assets = "";
     private $AssetName = "";
     private $Quantity = "";
@@ -52,82 +47,72 @@ class MakeProformaController extends PermissionController {
     function show($params) {
         $username = $_SESSION["login_user"];
 
-//Validation Engine will execute any validation on the fields in the interface
-//    function ValidationEngine($elements) {
-//        
-//            if ($EventDate == "") {
-//                if (strlen($this->CompanyId) < 7) {
-//                    $compiderr = "Company Id is invalid length";
-//                    $_SESSION['$compidwrapper'] = '<span style="color:red" >' . " * " . $compiderr . '</span>';
-//                    $this->CompanyIdIsValid = 0;
-//                } else {
-//                    $this->CompanyIdIsValid = 1;
-//                    $_SESSION['$compidwrapper'] = NULL;
-//                }
-//            }
-//        
-//    }
-
-
-
         if (isset($_POST['btn-create'])) {
 
             $eventinst = new \PfomModel\Event();
-//$companyinst = new \PfomModel\Company();
-//$preaccount = new \PfomModel\PreAccount();
+            $profinst = new \PfomModel\Proforma();
             $audinst = new \PfomModel\Audit();
-//$this->MyPaymentsRecords = $pymntrecs = json_decode($_POST['paylist'], TRUE);
-//(isset($_POST['CompId']) ? $this->CompId = $varid = $refinst->CompanyId = $_POST['CompId'] : $this->CompId = $varid = $refinst->CompanyId = "");
-//            $eventinst->EventName = $EventName = $_POST["EventName"];
-//            $eventinst->EventDateStart = $EventDateStart = $_POST["EventDateStart"];
-//            $eventinst->EventDateEnd = $EventDateEnd = $_POST["EventDateEnd"];
+
+            $eventinst->EventDateStart = $EventDateStart = $_POST["EventDateStart"];
+            $eventinst->EventDateEnd = $EventDateEnd = $_POST["EventDateEnd"];
             $eventinst->EventCost = $EventCost = $_POST["hdnEventCost"];
             $eventinst->Comments = $Comments = $_POST["Comments"];
             $eventinst->EventId = $EventId = $_POST["EventId"];
             $eventinst->EventName = $EventName = $_POST["EventName"];
-            //$eventinst->Division = $Division = $_POST["hdnDivisionId"];
+            $eventinst->Division = $Division = $_POST["Division"];
+            $eventinst->Station = $Station = $_POST["Station"];
             //$eventinst->DelFlg = $DelFlg = "N";
             $eventinst->RecEntered = $RecEntered = "";
             $eventinst->RecEnteredBy = $RecEnteredBy = $username;
-            $eventinst->OperationalSupport = $OperationalSupport = $_POST["hdnOperationalSupport"];
-            $eventinst->PoliceServices = $PoliceServices = $_POST["hdnPoliceServices"];
-            $eventinst->VATPoliceServices = $VATPoliceServices = $_POST["hdnVATPoliceServices"];
+            $PoliceServices = 0;
+            $VATPoliceServices = 0;
+            $OperationalSupport = 0;
+//            $eventinst->PoliceServices = $PoliceServices = $_POST["hdnPoliceServices"];
+//            $eventinst->VATPoliceServices = $VATPoliceServices = $_POST["hdnVATPoliceServices"];
+//            $eventinst->OperationalSupport = $OperationalSupport = $_POST["hdnOperationalSupport"];
 
-//all coming from Company/getuser 
             $eventinst->CompanyId = $CompanyId = $_POST["CompanyId"];
             $eventinst->CompanyName = $CompanyName = $_POST["CompanyName"];
-            //$eventinst->ContactName = $ContactName = $_POST["ContactName"];
-            //$eventinst->ContactNumber = $ContactNumber = $_POST["PhoneNumber"];
-            // $eventinst->ContactEmail = $ContactEmail = $_POST["Email"];
-            // $eventinst->Assets = $Assets = ($_POST["hdnAsset"]);
             $eventinst->Assets = $Assets = json_decode($_POST['hdnAsset'], TRUE);
+            $ContactEmail = '';
+            $ContactName = '';
+            $ContactNumber = '';
 
-
+//            $eventinst->CreatedteEvent($EventId, $EventName, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDateStart, $EventDateEnd, $Comments, $RecEnteredBy, $Division, $Station);
+            $TransId = $audinst->GenerateTimestamp('TID');
             foreach ($Assets as $Asset) {
 
-
-                $eventinst->AssetName = $AssetName = $Asset[2];
                 $eventinst->Value = $Value = $Asset[1];
-                $eventinst->Quantity = $Quantity = $Asset[3];
-                $eventinst->Hours = $Hours = $Asset[4];
-                if ($Hours == '0') {
-                    $Hours = '1';
+                $eventinst->AssetName = $AssetName = $Asset[2];
+                $eventinst->Rate = $Rate = $Asset[3];
+                $eventinst->Quantity = $Quantity = $Asset[4];
+                $eventinst->Hours = $Hours = $Asset[5];
+                $Type = $Asset[6];
+                $profinst->CreateProformaDetails($TransId, $AssetName, $Quantity, $Hours, $Value, $Rate);
+                $Oppsupp;
+                $FixOppsupp;
+                $PolServ;
+                $ValueAddTax;
+                if ($Hours == '') {
+                    $FixOppsupp = $profinst->CalculateOpsupportFixed($Quantity, $Rate);
+                    $OperationalSupport = $OperationalSupport + $FixOppsupp;
+                } else {
+                    if ($Type == 'PolServ') {
+                        $PolServ = $profinst->CalculatePoliceServices($Quantity, $Hours, $Rate);
+                        $PoliceServices = $PoliceServices + $PolServ;
+                    } else
+                    if ($Type == 'OppSupp') {
+                        $Oppsupp = $profinst->CalculateOpsupportVariable($Quantity, $Hours, $Rate);
+                        $OperationalSupport = $OperationalSupport + $Oppsupp;
+                    }
                 }
-
-                $eventinst->CreateEventPreAccount($EventId, $AssetName, $Quantity, $Hours, $Value, $CompanyName, $CompanyId);
             }
-
-            $eventinst->CreateUpdateProforma($EventId, $EventCost, $OperationalSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy);
-            //need to find out how to log them
-            $TimeStamp = $audinst->GenerateTimestamp('TS');
-            $TransId = $audinst->GenerateTimestamp('TID');
-
-            $eventinst->CreateProformaTransaction($EventId, $OperationalSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy, $TimeStamp, $TransId);
-
-
-
+            $VATPoliceServices = $profinst->CalcutlateVat($PoliceServices, 0.1750);
+            $profinst->CreateProformaTransaction($TransId, $EventId, $OperationalSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy);
+            $EventCost = $OperationalSupport + $PoliceServices + $VATPoliceServices;
+            $profinst->CreateUpdateProforma($EventId, $EventCost, $OperationalSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy);
 // //if validation succeeds then log audit record to database
-            if ($eventinst->auditok == 1) {
+            if ($profinst->auditok == 1) {
                 $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');
                 $TranDesc = 'Created new Event Name: ' . $EventName . ' Event ID: ' . $EventId;
                 $User = $username;
@@ -139,13 +124,6 @@ class MakeProformaController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            //$EventId='UNASSIGNED';
-            /* $division = $_GET['division'];
-              if ($division != NULL) {
-
-              } */
-
-
             $model = new \PfomModel\Event();
             $divmodel = new \PfomModel\Division ();
             $equipmodel = new \PfomModel\Equipment ();
@@ -153,25 +131,11 @@ class MakeProformaController extends PermissionController {
             $rolerates = $model->GetRoleRates();
             $equipment = $equipmodel->GetEquipmentItems();
             $stations = $model->GetListOfStations();
-//$preaccounts = $model->GetPreAccounts();
             $VAT = $model->getVat();
 //put prefix from division drop down id here
             //$EventId = $model->GenerateTimestamp('BDIV');
             $template = new MasterTemplate();
             $template->load("Views/Proforma/proforma.html");
-//$template->replace("accounts", $preaccounts);
-            // $template->replace("EventName", "");
-            // $template->replace("Deposit", "");
-            //$template->replace("CompanyName", "");
-            // $template->replace("ContactName", "");
-            //$template->replace("ContactNumber", "");
-            //$template->replace("ContactEmail", "");
-            //$template->replace("EventDate", "");
-            //$template->replace("EventCost", "");
-            // $template->replace("lblEventRef", "");
-            // $template->replace("OperationalSupport", "0.00");
-            //$template->replace("PoliceServices", "0.00");
-            // $template->replace("VATPoliceServices", "0.00");
             $template->replace("VATDBval", $VAT);
             $template->replace("Divisions", $divisions);
             $template->replace("RoleRates", $rolerates);

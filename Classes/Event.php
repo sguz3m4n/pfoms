@@ -29,6 +29,7 @@ class Event {
     public $RecModified;
     public $RecModifiedBy;
     public $Status;
+    public $Station;
     public $DelFlg;
     public $OperationalSupport = "";
     public $PoliceServices = "";
@@ -36,6 +37,7 @@ class Event {
     public $AssetName = "";
     public $Quantity = "";
     public $Value = "";
+    public $Rate;
 
     function GetListOfStations() {
         $result = "";
@@ -58,18 +60,18 @@ class Event {
         $conn = NULL;
     }
 
-    function CreateEventPreAccount($EventId, $AssetName, $Quantity, $Hours, $Value, $CompanyName, $CompanyId) {
-
-        $conn = conn();
-        $sql = "INSERT INTO `eventpreaccount` (`EventId`, `AssetName`, `Quantity`, `Hours`, `Value`,`CompanyName`,`CompanyId`,`DelFlag`)
-            VALUES ('$EventId', '$AssetName', '$Quantity','$Hours', '$Value','$CompanyName','$CompanyId','N')";
-
-        if ($conn->exec($sql)) {
-            $this->auditok = 1;
-        } else {
-            $this->auditok = 0;
-        }
-    }
+//    function CreateEventPreAccount($EventId, $AssetName, $Quantity, $Hours, $Value, $CompanyName, $CompanyId) {
+//
+//        $conn = conn();
+//        $sql = "INSERT INTO `eventpreaccount` (`EventId`, `AssetName`, `Quantity`, `Hours`, `Value`,`CompanyName`,`CompanyId`,`DelFlag`)
+//            VALUES ('$EventId', '$AssetName', '$Quantity','$Hours', '$Value','$CompanyName','$CompanyId','N')";
+//
+//        if ($conn->exec($sql)) {
+//            $this->auditok = 1;
+//        } else {
+//            $this->auditok = 0;
+//        }
+//    }
 
     function GetPreAccounts() {
         $result = "";

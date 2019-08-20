@@ -2,6 +2,76 @@
 <html>
     <head>
         { head }
+        <style>
+            .modal-header, h4.mdl, .close {
+                background-color: #5cb85c;
+                color:white !important;
+                text-align: center;
+                font-size: 30px;
+            }
+            .modal-footer {
+                background-color: #f9f9f9;
+            }
+            /* The switch - the box around the slider */
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 80px;
+                height: 55px;
+            }
+
+            /* Hide default HTML checkbox */
+            .switch input {display:none;}
+
+            /* The slider */
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 10px;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+            input:checked + .slider {
+                background-color: #2196F3;
+            }
+
+            input:focus + .slider {
+                box-shadow: 0 0 1px #2196F3;
+            }
+
+            input:checked + .slider:before {
+                -webkit-transform: translateX(26px);
+                -ms-transform: translateX(26px);
+                transform: translateX(26px);
+            }
+
+            /* Rounded sliders */
+            .slider.round {
+                border-radius: 34px;
+            }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }  
+
+        </style>
         <script type="text/javascript">
             $(document).ready(function () {
                 $('#submitpaymenttable').hide();
@@ -473,77 +543,6 @@
 
             });
         </script>
-
-        <style>
-            .modal-header, h4.mdl, .close {
-                background-color: #5cb85c;
-                color:white !important;
-                text-align: center;
-                font-size: 30px;
-            }
-            .modal-footer {
-                background-color: #f9f9f9;
-            }
-            /* The switch - the box around the slider */
-            .switch {
-                position: relative;
-                display: inline-block;
-                width: 80px;
-                height: 55px;
-            }
-
-            /* Hide default HTML checkbox */
-            .switch input {display:none;}
-
-            /* The slider */
-            .slider {
-                position: absolute;
-                cursor: pointer;
-                top: 0;
-                left: 10px;
-                right: 0;
-                bottom: 0;
-                background-color: #ccc;
-                -webkit-transition: .4s;
-                transition: .4s;
-            }
-
-            .slider:before {
-                position: absolute;
-                content: "";
-                height: 26px;
-                width: 26px;
-                left: 4px;
-                bottom: 4px;
-                background-color: white;
-                -webkit-transition: .4s;
-                transition: .4s;
-            }
-
-            input:checked + .slider {
-                background-color: #2196F3;
-            }
-
-            input:focus + .slider {
-                box-shadow: 0 0 1px #2196F3;
-            }
-
-            input:checked + .slider:before {
-                -webkit-transform: translateX(26px);
-                -ms-transform: translateX(26px);
-                transform: translateX(26px);
-            }
-
-            /* Rounded sliders */
-            .slider.round {
-                border-radius: 34px;
-            }
-
-            .slider.round:before {
-                border-radius: 50%;
-            }  
-
-        </style>
     </head>
     <body>
         <div class="wrapper">
@@ -739,6 +738,73 @@
                                         </form> 
                                         <div class="modal fade" id="myModal" role="dialog"></div>
                                         <div class="modal fade" id="myModalAmend" role="dialog"></div>
+                                        <div class="modal" id="officermodal">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Select Police Service Resource</h4>
+                                                        
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body">                                                                                                               
+                                                        <label><strong>Select Officer Rank</strong></label>
+                                                        <select name="Rank" class="form-control" id="Rank" style="width:auto" >
+                                                            <option>Select Rank</option>
+                                                            { RoleRates }
+                                                        </select>
+                                                        <label><strong>Resource Count</strong></label>
+                                                        <input type="number"  class="form-control" id="ResourceCount" name="ResourceCount" min="1" value="1" required  >     
+
+                                                        <label><strong>Hours</strong></label>
+                                                        <input type="number"  class="form-control" id="RSHoursCount" name="RSHoursCount" min="1" value="1" required  >     
+
+                                                    </div>
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+                                                        <label id="ResourceAmount" >0</label>
+                                                        <button type="button" class="btn btn-info" id="AddResource" data-enter="modal">Add Resources</button>
+                                                    </div>                                            
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal" id="supportmodal">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Select Operational Support Resource</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body">
+
+                                                        <label><strong>Select Equipment</strong></label>
+                                                        <select name="Equipment" class="form-control" id="Equipment" style="width:auto" >
+                                                            <option>Select Equipment</option>
+                                                            { Equipment }
+                                                        </select>
+
+                                                        <label id="lblRSCount"><strong>Resource Count</strong></label>
+                                                        <input type="number"  class="form-control" id="OPResourceCount" name="OPResourceCount" min="1" value="1" required  > 
+
+                                                        <label id="lblHours"><strong>Hours</strong></label>
+                                                        <input type="number"  class="form-control" id="OSHoursCount" name="OSHoursCount" min="1" value="1" required  >     
+
+                                                    </div>
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+                                                        <label id="EquipmentAmount" >0</label>
+                                                        <button type="button" class="btn btn-info" id="AddEquipment" data-enter="modal">Add Op Support</button>
+                                                    </div>                                            
+                                                </div>
+                                            </div>
+                                        </div>
 
                                     </div>
                                 </div>

@@ -28,109 +28,58 @@ class EditProformaController extends MakeProformaController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['update'])) {
-//            $varhaspx = 'off';
-//            $varhassubs = 'off';
-//            $empinst = new \PfomModel\Employee();
-//            $payinst = new \PfomModel\Payment();
-//            $depinst = new \PfomModel\Deposit();
-//            $audinst = new \PfomModel\Audit();
-//
-//            $tranid = $payinst->TranId = $_POST["transid"];
-//            $compid = $this->CompId = $payinst->CompanyId = $_POST['compid'];
-//            $this->EmpId = $natregno = $payinst->OfficerId = $_POST['natregno'];
-//            $employeeDetails = $empinst->GetEmployee($natregno);
-//            $payinst->PayRate = $payrate = $employeeDetails[0]["RateAmount"];
-//            $employeename = $employeeDetails[0]["FirstName"] . ' ' . $employeeDetails[0]["LastName"];
-//
-//            $payinst->RateCode = $employeeDetails[0]["RateCode"];
-//            $compbal = $this->CompanyBalance = $_POST['compbal'];
-//            $companyname = $payinst->CompanyName = $_POST["compname"];
-//
-//            $varhours = $payinst->HoursWorked = $_POST['hours'];
-//            $vardistance = $payinst->Distance = $_POST['distance'];
-//            $refundamt = $_POST['refund'];
-//
-//            if (isset($_POST['passengers'])) {
-//                ($_POST['passengers'] === "on" ? $varhaspx = "on" : $varhaspx);
-//            }
-//            if (isset($_POST['subsistence'])) {
-//                ($_POST['subsistence'] === "on" ? $varhassubs = "on" : $varhassubs);
-//            }
-//            if ($varhours != NULL) {
-//                $this->OTEarned = $payinst->OvertimeAmount = $varOTEarned = $payinst->OTEarned($varhours, $payrate);
-//            }
-//
-//            //CALCULATE SUBSISTENCE AMOUNT OR NOT- CURRENT VALUE IS $25.00
-//            if ($varhassubs === 'on') {
-//                $varhassubs = TRUE;
-//                $payinst->Subsistence = "Y";
-//                $payinst->SubsistenceAmount = $varSubsistenceEarned = number_format($_POST['subamt'], 2, '.', '');
-//                //$payinst->SubsistenceAmount = $varSubsistenceEarned = number_format($payinst->SubsistenceEarned($varhassubs), 2, '.', '');
-//            } else {
-//                $payinst->Subsistence = "N";
-//                $varSubsistenceEarned = $payinst->SubsistenceAmount = number_format(0, 2, '.', '');
-//            }
-//            //CALCULATE DISTANCE VALUE OR NOT 
-//            if ($vardistance != NULL) {
-//                if ($varhaspx === 'on') {
-//                    $varhaspx = TRUE;
-//                    $payinst->Passengers = "Y";
-//                    $this->PassNum = $payinst->NumberPx = $_POST['passnum'];
-//                    // $subsidy = $this->PassSubsidy = 0.00;
-//                    /* if ($this->PassNum == 1) {
-//                      $this->PassSubsidy = 2.19;
-//                      }
-//                      if ($this->PassNum > 1) {
-//                      $this->PassSubsidy = 2.28;
-//                      } */
-//                } else {
-//                    $varhaspx = FALSE;
-//                    $payinst->Passengers = "N";
-//                    $this->PassNum = $payinst->NumberPx = 0;
-//                    $this->PassSubsidy = 0.00;
-//                }
-//                $payinst->TravelAmount = $varTravelEarned = number_format($payinst->DistanceEarned($vardistance, $varhaspx), 2, '.', '');
-//            } else {
-//                $payinst->TravelAmount = number_format(0, 2, '.', '');
-//                $payinst->Distance = number_format(0, 2, '.', '');
-//                $varTravelEarned = number_format(0, 2, '.', '');
-//                $this->PassNum = $payinst->NumberPx = 0;
-//                $this->PassSubsidy = 0.00;
-//            }
-//
-//            $this->TotalAmountEarned = $payinst->TotalAmount = $total = $varTravelEarned + $varSubsistenceEarned + $varOTEarned + $this->PassSubsidy;
-//            $this->GrandTotal = $this->TotalAmountEarned + $this->GrandTotal;
-//
-//            $validateme = ["CompanyBalance", "Sufficient"];
-//            $this->ValidationEngine($validateme);
-            if (($this->CompanyBalanceIsValid) && ($this->IsSufficient)) {
-                //Reverse payment already made
-                $depinst->PreviousBalance = $compbal;
-                $this->NewCompBal = $compbal + ($refundamt * 2);
-                //Reverse payment already made
-                $payinst->UpdatePaymentTransaction($tranid);
-                $AudtDesc = 'Update Payment for ' . $compid . ' Amt ' . $total;
-                #$TranDesc = 'Update Payment to ' . $compid . ' Amt ' . $total;
-                $User = $username;
-                if ($payinst->auditok == 1) {
-                    //Reverse payment already made
-                    $depinst->ReturnMakePayment($this->NewCompBal, $refundamt, $this->GrandTotal, $compid);
-                    //$depinst->MakePayment($depinst->CompanyBalance, $total, $compid);
-                    //Reverse payment already made
-                    $audinst->UpdateUserAuditRecord($tranid, $User, $AudtDesc);
-                    $audinst->UpdateTransAuditRecord($tranid, $AudtDesc, $User, "PMT", $total, $compid);
 
-                    $token = '<br><br><span class="label label-success">Company Id</span> ' . '<span class="label label-info"> ' . $this->CompId . '</span><br><br><br>' .
-                            '<span class="label label-success">Company Name</span> ' . '<span class="label label-info"> ' . $companyname . '</span><br><br><br>' .
-                            '<span class="label label-success">Employee Name</span> ' . '<span class="label label-info"> ' . $employeename . '</span><br><br><br>' .
-                            '<span class="label label-success">Employee Id</span> ' . '<span class="label label-info"> ' . $natregno . '</span><br><br><br>' .
-                            '<span class="label label-success">Travel Amount</span> ' . '<span class="label label-info"> ' . $varTravelEarned . '</span><br><br><br>' .
-                            '<span class="label label-success">Subsistence Amount</span> ' . '<span class="label label-info"> ' . $varSubsistenceEarned . '</span><br><br><br>' .
-                            '<span class="label label-success">Overtime Amount</span> ' . '<span class="label label-info"> ' . $varOTEarned . '</span><br><br><br>' .
-                            // '<span class="label label-success">Subsidy Amount</span> ' . '<span class="label label-info"> ' . $subsidy . '</span><br><br><br>' .
-                            '<span class="label label-success">Total Amount</span> ' . '<span class="label label-info"> ' . $total . '</span><br><br><br>';
+            if (isset($_POST['btn-create'])) {
 
-                    $token1 = 'Record Successfully Edited <br>' . 'Company Name: ' . $companyname . '<br>Total Amount: ' . '$' . number_format($this->GrandTotal, 2, '.', '');
+                $eventinst = new \PfomModel\Event();
+                $audinst = new \PfomModel\Audit();
+                $eventinst->EventCost = $EventCost = $_POST["hdnEventCost"];
+                $eventinst->Comments = $Comments = $_POST["Comments"];
+                $eventinst->EventId = $EventId = $_POST["EventId"];
+                $eventinst->EventName = $EventName = $_POST["EventName"];
+                $eventinst->RecEntered = $RecEntered = "";
+                $eventinst->RecEnteredBy = $RecEnteredBy = $username;
+                $eventinst->OperationalSupport = $OperationalSupport = $_POST["hdnOperationalSupport"];
+                $eventinst->PoliceServices = $PoliceServices = $_POST["hdnPoliceServices"];
+                $eventinst->VATPoliceServices = $VATPoliceServices = $_POST["hdnVATPoliceServices"];
+
+                //all coming from Company/getuser 
+                $eventinst->CompanyId = $CompanyId = $_POST["CompanyId"];
+                $eventinst->CompanyName = $CompanyName = $_POST["CompanyName"];
+                $eventinst->Assets = $Assets = json_decode($_POST['hdnAsset'], TRUE);
+
+
+                foreach ($Assets as $Asset) {
+
+                    $eventinst->AssetName = $AssetName = $Asset[2];
+                    $eventinst->Value = $Value = $Asset[1];
+                    $eventinst->Quantity = $Quantity = $Asset[3];
+                    $eventinst->Hours = $Hours = $Asset[4];
+                    if ($Hours == '0') {
+                        $Hours = '1';
+                    }
+
+                    $eventinst->CreateEventPreAccount($EventId, $AssetName, $Quantity, $Hours, $Value, $CompanyName, $CompanyId);
+                }
+
+                $eventinst->CreateUpdateProforma($EventId, $EventCost, $OperationalSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy);
+                //need to find out how to log them
+                $TimeStamp = $audinst->GenerateTimestamp('TS');
+                $TransId = $audinst->GenerateTimestamp('TID');
+
+                $eventinst->CreateProformaTransaction($EventId, $OperationalSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy, $TimeStamp, $TransId);
+
+
+
+// //if validation succeeds then log audit record to database
+                if ($eventinst->auditok == 1) {
+                    $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');
+                    $TranDesc = 'Created new Event Name: ' . $EventName . ' Event ID: ' . $EventId;
+                    $User = $username;
+                    $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
+                    $token = '<br><br><span class="label label-success">Event Name</span> ' . '<span class="label label-info"> ' . $EventName . '</span><br><br><br>' .
+                            '<span class="label label-success">Event Id</span> ' . '<span class="label label-info">' . $EventId . '</span><br>';
+                    $token1 = 'Record Successfully Created';
                     header("Location:" . "/success?result=$token&header=$token1&args=");
                 }
             } else {
@@ -142,13 +91,14 @@ class EditProformaController extends MakeProformaController {
                 $template->publish();
             }
         } else
+
         if (isset($_GET)) {
 
             $template = new MasterTemplate();
             $template->load("Views/Proforma/proforma_edit.html");
-//            $template->replace("title", "Create New Bill Payment");
-//            $template->replace("val_CompanyBalance", "");
-//            $template->replace("val_Insufficient", "");
+            $model = new \PfomModel\Event();
+            $rolerates = $model->GetRoleRates();
+            $template->replace("RoleRates", $rolerates);
             $template->publish();
         }
     }
@@ -184,16 +134,19 @@ class ProformaTableController extends MakeProformaController {
 //                            $buttonCode = $buttonCode . $unlockButton;
 //                        }
 //                    } else {
-                        $rowClass = "class='danger'";
-                        $buttonCode = "<td><button type='button' class='btn btn-info btn-sm edit' data-toggle='modal' id=" . $value["EventId"] . ">Edit</button></td>";
-                        $AmendButton = "<td><button type='button' class='btn btn-info btn-sm amend' data-toggle='modal' id=" . $value["EventId"] . ">Amend</button></td>";
-//                        $AmendButton = "<td><button type='button' class='btn btn-info btn-sm amend'  id=" . $value["EventId"] . ">Amend</button></td>";
+                    $rowClass = "class='danger'";
+                    $EditButton = "<td><button type='button' class='btn btn-info btn-sm edit' data-toggle='modal' id=" . $value["EventId"] . ">Edit</button></td>";
+                    $OfficerAmend = "<td><button type='button' class='btn btn-info btn-sm amend' data-toggle='modal' data-target='#officermodal' id=" . $value["EventId"] . ">Amend</button></td>";
+                    $SupportAmend = "<td><button type='button' class='btn btn-info btn-sm amend' data-toggle='modal' data-target='#supportmodal' id=" . $value["EventId"] . ">Amend</button></td>";
 //                    }
 
                     $table = $table . "<tr" . $rowClass . "><td>" . $value["EventId"] . "</td><td>" . $value["EventName"] . "</td>"
                             . "<td>" . $value["EventCost"] . "</td><td>" . $value["ContactName"] . "</td><td>" . $value["ContactEmail"] . "</td><td>" . $value["ContactNumber"] . "</td>"
                             . "<td>" . $value["EventDateStart"] . "</td><td>" . $value["EventDateEnd"] . "</td>"
-                            . $buttonCode . $AmendButton . "</tr>";
+                            . $EditButton .
+                            $OfficerAmend .
+                            $SupportAmend .
+                            "</tr>";
                 }
             }
             $template = new BaseTemplate();
@@ -202,6 +155,8 @@ class ProformaTableController extends MakeProformaController {
             $template->replace("table", $table);
             $template->publish();
         }
-}}
+    }
+
+}
 
 ?>

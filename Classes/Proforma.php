@@ -82,10 +82,15 @@ class Proforma {
     }
 
     function GetListProforma($eventid) {
-          $result = "";
+        $result = "";
         $conn = conn();
-        $stmt = $conn->prepare("SELECT * FROM `proforma` as pro,`proformatransaction` as trans,`event` as event WHERE pro.EventId=+trans.EventId AND event.EventId=+pro.EventId And pro.Eventid='" . $_REQUEST['eventid'] . "' AND pro.delflag='N';");
-        
+        $stmt = $conn->prepare("SELECT * FROM `proforma` as pro,"
+                . "`proformatransaction` as trans,"
+                . "`event` as event WHERE "
+                . "pro.EventId=+trans.EventId AND "
+                . "event.EventId=+pro.EventId AND "
+                . "pro.Eventid='" . $_REQUEST['eventid'] . "' AND pro.delflag='N';");
+
         $stmt->execute();
         $result_array = $stmt->fetchAll();
 //        $result = "<option id=' ' >" . " " . "</option>";
@@ -94,7 +99,7 @@ class Proforma {
 //            $result .= "<option id='$PRNNo' >" . $value['PRNumber'] . "</option>";
 //        }
         return $result_array;
-        $conn = NULL;   
+        $conn = NULL;
     }
 
     function CreateUpdateProforma($EventId, $EventCost, $OppSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy) {
@@ -120,17 +125,60 @@ class Proforma {
         }
     }
 
-    function CreateProformaTransaction($EventId, $OppSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy, $TransId) {
+    function CreateProformaDetails($TransId, $AssetName, $Quantity, $Hours, $Value, $Rate) {
 
         $conn = conn();
-        $sql = "Insert Into `proformatransaction` (`EventId`,  `OppSupport`, `PoliceServices`, `PoliceServicesVat`,`RecEnteredBy`,`TimeStamp`,`TransId`)
-            VALUES ('$EventId', '$OppSupport','$PoliceServices','$VATPoliceServices','$RecEnteredBy',NOW(), '$TransId')";
+        $sql = "INSERT INTO `proformadetails` (`TransId`, `AssetName`, `Quantity`, `Hours`,`Rate`, `Value`)
+            VALUES ('$TransId', '$AssetName', '$Quantity','$Hours','$Rate','$Value')";
 
         if ($conn->exec($sql)) {
             $this->auditok = 1;
         } else {
             $this->auditok = 0;
         }
+    }
+
+    function CreateProformaTransaction($TransId, $EventId, $OppSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy) {
+
+        $conn = conn();
+        $sql = "INSERT INTO `proformatransaction`(`TransId`, `EventId`, `PoliceServicesVat`, `OppSupport`, `PoliceServices`, `TimeStamp`, `RecEnteredBy`) VALUES"
+                . " ('$TransId','$EventId','$VATPoliceServices', '$OppSupport','$PoliceServices',NOW(),'$RecEnteredBy')";
+
+        if ($conn->exec($sql)) {
+            $this->auditok = 1;
+        } else {
+            $this->auditok = 0;
+        }
+    }
+
+    function CalcutlateVat($policeservices, $vatrate) {
+        $totalvat = $policeservices * $vatrate;
+        $totalvat = number_format($totalvat, 2, '.', '');
+        return $totalvat;
+    }
+
+    function CalculatePoliceServices($quantity, $hours, $rate) {
+        $totalcost = $quantity * $hours * $rate;
+        $totalcost = number_format($totalcost, 2, '.', '');
+        return $totalcost;
+    }
+
+    function CalculateOpsupportFixed($quantity, $rate) {
+        $totalcost = $quantity * $rate;
+        $totalcost = number_format($totalcost, 2, '.', '');
+        return $totalcost;
+    }
+
+    function CalculateOpsupportVariable($quantity, $hours, $rate) {
+        $totalcost = $quantity * $hours * $rate;
+        $totalcost = number_format($totalcost, 2, '.', '');
+        return $totalcost;
+    }
+
+    function EventCost($policeservice, $opsupport, $vat) {
+        $totalcost = $policeservice + $opsupport + $vat;
+        $totalcost = number_format($totalcost, 2, '.', '');
+        return $totalcost;
     }
 
 }

@@ -3,13 +3,17 @@
 include '../../../../dbconfig.php';
 require '../../../../Classes/Proforma.php';
 $conn = conn();
-$sql = "SELECT event.EventId,event.Division,event.Station,preacct.AssetName,preacct.Quantity,preacct.Hours,preacct.Value FROM `eventpreaccount` as preacct,`event` as event,`proforma` as proforma
-WHERE preacct.EventId=+event.EventId AND 
-event.EventId=+proforma.EventId AND 
+$sql = "SELECT proforma.EventCost,proforma.VATPoliceServices,proforma.PoliceServices,proforma.OperationalSupport,details.AssetName,details.Quantity,details.Hours,details.Value FROM `proforma` as proforma,`event` as event,`proformatransaction` as trans,`proformadetails` as details
+WHERE proforma.EventId=event.EventId AND
+trans.EventId=event.EventId AND
+trans.TransId=trans.TransId AND
 event.EventId='" . $_REQUEST['id'] . "' AND
-event.Delflg='N';";
+event.Status='Registered';";
 
-//$compinst = new \PfomModel\Payment();
+
+
+
+
 $compbalance;
 $assetlisting = '';
 if ($stmt = $conn->prepare($sql)) {
@@ -19,7 +23,7 @@ if ($stmt = $conn->prepare($sql)) {
 // Check number of rows in the result set
         if (!empty($result)) {
             $action = "/editpayment";
-            $Eventid = $result[0]['EventId'];
+            $Eventid = $_REQUEST['id'] ;
             foreach ($result as $value) {
                 $assetlisting = $assetlisting . '<div class="form-group col-xs-6">
                           <label for="assetname"><span class="glyphicon glyphicon-user"></span>Asset Name</label>
@@ -32,10 +36,10 @@ if ($stmt = $conn->prepare($sql)) {
                         <div class="form-group col-xs-3">
                           <label for="hours"><span class="glyphicon glyphicon-bullhorn"></span>Hours</label>
                           <input type="number" min="0" class="form-control" id="hours" name="hours" placeholder="Hours Worked" value="' . $value['Hours'] . '">
-                        </div>';
+                          <label>' . $value['Value'] . '</label>                        
+</div>';
             }
 
-//}
             echo
 
             '<div class="modal-dialog">

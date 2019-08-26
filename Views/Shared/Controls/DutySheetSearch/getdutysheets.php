@@ -32,42 +32,34 @@ include '../../../../dbconfig.php';
 include '../../../../Classes/DutySheet.php';
 $q = $_GET['q'];
 $conn = conn();
-$Id = "Id";
 
-//$sql = 'SELECT EventId, EventName, CompanyName, EventCost, EventDateStart, EventDateEnd, Comments, CompanyId, Division, OperationalSupport, PoliceServices, VATPoliceServices FROM event WHERE CompanyName = "' . $q . '" AND DelFlg="N" AND Status="Approved"';
-//$sql = 'SELECT `a.EventId,`EventName,`eventCost`,`CompanyId`,`CompanyName`,'$EventDateStart','$EventDateEnd',
-//    `ContactEmail`,`ContactNumber`,`EventDate`,`Comments`, AccountId, AccountName, TranId, TranAmt, b.EventId as "' . $Id . '" 
-//FROM `event` a LEFT JOIN preaccounttransactions b ON a.EventId = b.EventId';
-//$sql = 'SELECT * FROM `event` a LEFT JOIN preaccounttransactions b ON a.EventId = b.EventId';
-
+//$sql = "SELECT * FROM `dutysheetevent` as dutysheet, `company` AS company WHERE
+//dutysheet.CompanyId=company.CompanyId AND
+//dutysheet.CompanyId='" . $q . "' AND
+//dutysheet.Delflg='N';";
+//$Compstmt = $conn->prepare($sql);
+//$Compstmt->execute();
+//$Comp_array = $Compstmt->fetchAll();
 //
-//$stmt = $conn->prepare($sql);
-//$stmt->execute();
-//$EventIds = $stmt->fetchAll();
-//
-//Get Company ID
-$sql = 'SELECT CompanyId FROM `company` WHERE CompanyName = "' . $q . '" AND DelFlg="N"';
-$Compstmt = $conn->prepare($sql);
-$Compstmt->execute();
-$Comp_array = $Compstmt->fetchAll();
-
-foreach ($Comp_array as $Comp_value) {
-$companyId = $Comp_value['CompanyId'];
-}
+//foreach ($Comp_array as $Comp_value) {
+//    $companyId = $Comp_value['CompanyId'];
+//}
 //Get all dutysheets for company
-$sqlDutySheet = 'SELECT DutySheetId, EventId, EventName, OvertimeAmount, DateOfDuty, DispatchTime, ArrivalTime, DismissalTime, ReturnTime, '
-        . 'HoursEngaged FROM dutysheet WHERE CompanyId = "' . $companyId . '" AND DelFlag="N" AND Status="Active"';
+$sqlDutySheet =  "SELECT * FROM `dutysheetevent` as dutysheet, `company` AS company WHERE
+dutysheet.CompanyId=company.CompanyId AND
+company.CompanyName='" . $q . "' AND
+dutysheet.Delflg='N';";
 $stmtDutySheet = $conn->prepare($sqlDutySheet);
 $stmtDutySheet->execute();
 $result_DutySheet = $stmtDutySheet->fetchAll();
 
 
 // duty sheet officers details
-$sqlDSpreacc = 'SELECT ForceNumber,Natregno,OfficerName, Hours, RateCode, PayRate FROM `dutysheetservices` '
-        . 'WHERE CompanyId = "' . $companyId . '" AND DelFlag="N" AND Status="Active"';
-$stmtDSpreacc = $conn->prepare($sqlDSpreacc);
-$stmtDSpreacc->execute();
-$result_DSpreaccarray = $stmtDSpreacc->fetchAll();
+//$sqlDSpreacc = 'SELECT ForceNumber,Natregno,OfficerName, Hours, RateCode, PayRate FROM `dutysheetservices` '
+//        . 'WHERE CompanyId = "' . $companyId . '" AND DelFlag="N" AND Status="Active"';
+//$stmtDSpreacc = $conn->prepare($sqlDSpreacc);
+//$stmtDSpreacc->execute();
+//$result_DSpreaccarray = $stmtDSpreacc->fetchAll();
 //
 //        foreach ($result_array as $value) {
 //            
@@ -100,22 +92,22 @@ if (empty($result_DutySheet)) {
 
 <div class="panel panel-info">
     <div class="panel-heading" >
-        
-        
+
+
         <div class="eventList" id="HaveDutySheets">
-             <center>                                                                                                                           
-            <h3> 
-                <span class="label label-info">List of Active DutySheets for:</span> 
-                <span class="label label-info"><?php echo $q; ?></span> 
-               
-            </h3>  
-        </center>
+            <center>                                                                                                                           
+                <h3> 
+                    <span class="label label-info">List of Active DutySheets for:</span> 
+                    <span class="label label-info"><?php echo $q; ?></span> 
+
+                </h3>  
+            </center>
             <div>
                 <center>
-                 <button id="btnShowDutySheets" type="button" class="btn btn-info" data-toggle="collapse" data-target="#ListOfApprovedDutySheets,#divDutySheetDetails">Hide DutySheets</button>
+                    <button id="btnShowDutySheets" type="button" class="btn btn-info" data-toggle="collapse" data-target="#ListOfApprovedDutySheets,#divDutySheetDetails">Hide DutySheets</button>
                 </center>
-                   
-                </div> 
+
+            </div> 
             <div class="col-md-6 collapse in" id ="ListOfApprovedDutySheets">
                 <br>
                 <div class="pillwrapper" id="pillcontainer">
@@ -134,29 +126,29 @@ if (empty($result_DutySheet)) {
                                 <a class="nav-link" style="display:none" id="liArrivalTime" href="#"><?= $DutySheetId['ArrivalTime']; ?></a>
                                 <a class="nav-link" style="display:none" id="liDismissalTime" href="#"><?= $DutySheetId['DismissalTime']; ?></a>
                                 <a class="nav-link" style="display:none" id="liReturnTime" href="#"><?= $DutySheetId['ReturnTime']; ?></a>
-                               
-                                  <?php foreach ($result_DSpreaccarray as $DSPA): ?>
-                                <a class="nav-link" style="display:none" id="liForceNumber" href="#"><?= $DSPA['ForceNumber']; ?></a>
-                                <a class="nav-link" style="display:none" id="liNatregno" href="#"><?= $DSPA['Natregno']; ?></a>
-                                <a class="nav-link" style="display:none" id="liOfficerName" href="#"><?= $DSPA['OfficerName']; ?></a>
-                                <a class="nav-link" style="display:none" id="liHours" href="#"><?= $DSPA['Hours']; ?></a>
-                                <a class="nav-link" style="display:none" id="liRateCode" href="#"><?= $DSPA['RateCode']; ?></a>
-                                <a class="nav-link" style="display:none" id="liPayRate" href="#"><?= $DSPA['PayRate']; ?></a>
-                                <?php endforeach; ?>                                
+
+<!--                                <?php foreach ($result_DSpreaccarray as $DSPA): ?>
+                                    <a class="nav-link" style="display:none" id="liForceNumber" href="#"><?= $DSPA['ForceNumber']; ?></a>
+                                    <a class="nav-link" style="display:none" id="liNatregno" href="#"><?= $DSPA['Natregno']; ?></a>
+                                    <a class="nav-link" style="display:none" id="liOfficerName" href="#"><?= $DSPA['OfficerName']; ?></a>
+                                    <a class="nav-link" style="display:none" id="liHours" href="#"><?= $DSPA['Hours']; ?></a>
+                                    <a class="nav-link" style="display:none" id="liRateCode" href="#"><?= $DSPA['RateCode']; ?></a>
+                                    <a class="nav-link" style="display:none" id="liPayRate" href="#"><?= $DSPA['PayRate']; ?></a>
+                                <?php endforeach; ?>                                -->
                             </li>
                             <br>
                         <?php endforeach; ?>
                     </ul>   
                 </div>
 
-<!--                <form action="/event/deactivate" method="post" style="display:none" id="formDeleteDutySheet">
-
-                    <input type="hidden" name="DutySheetName" id="hdnDutySheetName" value="">
-                    <input type="hidden" name="DutySheetId" id="hdnDutySheetId" value="">
-                    <center>
-                    <button type="submit" class="btn btn-danger" name="btn-delete" id="btnDelete"><strong>Delete DutySheet</strong></button> 
-                    </center>
-                </form>-->
+                <!--                <form action="/event/deactivate" method="post" style="display:none" id="formDeleteDutySheet">
+                
+                                    <input type="hidden" name="DutySheetName" id="hdnDutySheetName" value="">
+                                    <input type="hidden" name="DutySheetId" id="hdnDutySheetId" value="">
+                                    <center>
+                                    <button type="submit" class="btn btn-danger" name="btn-delete" id="btnDelete"><strong>Delete DutySheet</strong></button> 
+                                    </center>
+                                </form>-->
             </div>
             <div class="col-md-6 collapse in" style="display:none" id="divDutySheetDetails"><br>
                 <center>                                                                                                                           
@@ -190,13 +182,13 @@ if (empty($result_DutySheet)) {
                         <label id="DetailsHoursEngaged" name="DetailsHoursEngaged"></label>  
                         <br>
                         <label>Officers: </label>
-<!--                        <label id="DetailsForceNumber" name="DetailsForceNumber"></label>  
-                        <br>
-                        <label id="DetailsOfficerName" name="DetailsOfficerName"></label>
-                        <br>
-                        <label id="DetailsForceNumber" name="DetailsForceNumber"></label>
-                        <br>
-                        <label id="DetailsRateCode" name="DetailsRateCode"></label>
+                        <!--                        <label id="DetailsForceNumber" name="DetailsForceNumber"></label>  
+                                                <br>
+                                                <label id="DetailsOfficerName" name="DetailsOfficerName"></label>
+                                                <br>
+                                                <label id="DetailsForceNumber" name="DetailsForceNumber"></label>
+                                                <br>
+                                                <label id="DetailsRateCode" name="DetailsRateCode"></label>
                         -->
                     </li>
                 </ul>
@@ -204,19 +196,19 @@ if (empty($result_DutySheet)) {
         </div>
         <div class="eventList" id="NoDutySheets">
             <center>
-            <h3> 
-                <span class="label label-info">No Active events for:</span> 
-                <span class="label label-info"><?php echo $q; ?></span>           
-            </h3> 
-            
-        </center>
+                <h3> 
+                    <span class="label label-info">No Active events for:</span> 
+                    <span class="label label-info"><?php echo $q; ?></span>           
+                </h3> 
+
+            </center>
         </div>
-       
-        
+
+
     </div>
-    
+
 </div>
- 
+
 
 
 

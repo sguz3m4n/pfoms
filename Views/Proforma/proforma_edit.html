@@ -88,7 +88,23 @@
                 var accountarr = [];
                 var acctid;
                 var dailyRate;
-
+                // Get all the inputs into an array...
+//                var $inputs = $('#proformaedit :input');
+//
+//                // An array of just the ids...
+//                var ids = {};
+//
+//                $inputs.each(function (index)
+//                {
+//                    // For debugging purposes...
+//                    alert(index + ': ' + $(this).attr('id'));
+//
+//                    ids[$(this).attr('name')] = $(this).attr('id');
+//                });
+                $('#update').on('click', function () {
+                    alert('hello');
+                });
+                
                 $('#Division').on('change', function () {
                     //alert($('#Division :selected').attr('id'));
                     var inputVal = $('#Division :selected').attr('id');
@@ -280,7 +296,12 @@
                         $('#ResourceAmount').text(0);
                     }
                 });
+                
+                $('#update').on('click', function () {
 
+                    alert('hello');
+                });
+                
                 $('#AddResource').on('click', function () {
                     //alert("hello");
                     var acctrec = [];
@@ -465,7 +486,7 @@
                 });
 
                 $(document).on("click", ".edit", function (e) {
-                    $.get("/Views/Shared/Controls/ComboSearch/payment-modal.php?id=" + e.target.id).done(function (data) {
+                    $.get("/Views/Shared/Controls/ComboSearch/proforma-modal.php?id=" + e.target.id).done(function (data) {
                         $("#myModal").html(data).modal();
 
                     });
@@ -498,7 +519,7 @@
                         resultDiv.html(data);
                     });
                 }
-
+         
                 function RemoveInfo(key, accountToDelete) {
                     var indextoremove;
 
@@ -698,44 +719,37 @@
                                 <div class="portlet box blue">
                                     <div class="portlet-title">
                                         <div class="caption"><em class="fa fa-group"></em><h4>Edit ProForma</h4></div>
-
                                     </div>
                                     <div class="portlet-body form">
-                                        <form  method="post"  action="" id="#" > 
-                                            <div class="container-fluid">
-                                                <div class="row center-block">
-                                                    <div class="col-md-2" ></div>
-                                                    <div class="col-md-8" >
-                                                        <?php
-                                                        include 'Views/Shared/Controls/CompanySearch/search-form.php';
-                                                        ?>                                                            
-                                                    </div>
+                                        <div class="container-fluid">
+                                            <div class="row center-block">
+                                                <div class="col-md-2" ></div>
+                                                <div class="col-md-8" >
+                                                    <?php
+                                                    include 'Views/Shared/Controls/CompanySearch/search-form.php';
+                                                    ?>                                                            
+                                                </div>
+                                                <div class="col-md-2" >
+                                                    <br>
+                                                    <a href="/company/create" id="" class="btn btn-default blue">Create Company</a>
+                                                </div>
+                                                <div class="col-xs-12 row text-center">
+                                                    <div id="submitpaymenttable" class="btn btn-info btn-md">Show Results</div>
+                                                </div>
+                                                <div class="col-xs-12 row">
+                                                    <div class="table-responsive">
+                                                        <table class="table" id="paymenttable">
 
-                                                    <div class="col-md-2" >
-                                                        <br>
-                                                        <a href="/company/create" id="" class="btn btn-default blue">Create Company</a>
-                                                    </div>
-                                                    <div class="col-xs-12 row text-center">
-                                                        <div id="submitpaymenttable" class="btn btn-info btn-md">Show Results</div>
-                                                    </div>
-                                                    <div class="col-xs-12 row">
-                                                        <div class="table-responsive">
-                                                            <table class="table" id="paymenttable">
-
-                                                            </table>
-                                                        </div>
+                                                        </table>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3" >
+                                            </div>
+                                            <div class="col-md-3" >
 
-
-
-                                                </div>
-                                            </div>  
-                                            <br>
-
-                                            <br>
-                                        </form> 
+                                            </div>
+                                        </div>  
+                                        <br>
+                                        <br>            
                                         <div class="modal fade" id="myModal" role="dialog"></div>
                                         <div class="modal fade" id="myModalAmend" role="dialog"></div>
                                         <div class="modal" id="officermodal">
@@ -745,7 +759,7 @@
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
                                                         <h4 class="modal-title">Select Police Service Resource</h4>
-                                                        
+
                                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                     </div>
 

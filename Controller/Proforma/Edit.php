@@ -2,15 +2,13 @@
 
 /*
   Developed by Kitji Studios
-  Development Team: Shayne Marshall, Frederick Masterton Chandler
-  Property of Barbados Customs and Excise Department 2017
+  Development Team: Shayne Marshall, Frederick Masterton Chandler, Kamar Durant
+  Property of Barbados Royal Barbados  Force
   Consultation and Analysis by Data Processing Department
-  October 2017
+  2019
  */
 
 namespace Controllers;
-
-//require 'Create.php';
 
 class EditProformaController extends MakeProformaController {
 
@@ -28,66 +26,77 @@ class EditProformaController extends MakeProformaController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['update'])) {
+            $id = $_REQUEST['id'];
 
-            if (isset($_POST['btn-create'])) {
-
-                $eventinst = new \PfomModel\Event();
-                $audinst = new \PfomModel\Audit();
-                $eventinst->EventCost = $EventCost = $_POST["hdnEventCost"];
-                $eventinst->Comments = $Comments = $_POST["Comments"];
-                $eventinst->EventId = $EventId = $_POST["EventId"];
-                $eventinst->EventName = $EventName = $_POST["EventName"];
-                $eventinst->RecEntered = $RecEntered = "";
-                $eventinst->RecEnteredBy = $RecEnteredBy = $username;
-                $eventinst->OperationalSupport = $OperationalSupport = $_POST["hdnOperationalSupport"];
-                $eventinst->PoliceServices = $PoliceServices = $_POST["hdnPoliceServices"];
-                $eventinst->VATPoliceServices = $VATPoliceServices = $_POST["hdnVATPoliceServices"];
-
-                //all coming from Company/getuser 
-                $eventinst->CompanyId = $CompanyId = $_POST["CompanyId"];
-                $eventinst->CompanyName = $CompanyName = $_POST["CompanyName"];
-                $eventinst->Assets = $Assets = json_decode($_POST['hdnAsset'], TRUE);
-
-
-                foreach ($Assets as $Asset) {
-
-                    $eventinst->AssetName = $AssetName = $Asset[2];
-                    $eventinst->Value = $Value = $Asset[1];
-                    $eventinst->Quantity = $Quantity = $Asset[3];
-                    $eventinst->Hours = $Hours = $Asset[4];
-                    if ($Hours == '0') {
-                        $Hours = '1';
-                    }
-
-                    $eventinst->CreateEventPreAccount($EventId, $AssetName, $Quantity, $Hours, $Value, $CompanyName, $CompanyId);
+            $eventinst = new \PfomModel\Event();
+            $audinst = new \PfomModel\Audit();
+            $profinst = new \PfomModel\Proforma();
+            $eventinst->Value = $Value = $_POST['value'];
+            $eventinst->AssetName = $AssetName = $_POST['assetname'];
+            $eventinst->Rate = $Rate = $_POST['rate'];
+            $eventinst->Quantity = $Quantity = $_POST['quantity'];
+            isset($_POST['hours']) ? $eventinst->Hours = $Hours = $_POST['hours'] : $eventinst->Hours = $Hours = 0;
+            $eventinst->EventId = $EventId = $_POST['eventid'];
+            $PoliceServices = $_POST['polserv'];
+            $OperationalSupport = $_POST['opssupp'];
+            $VatPolServices = $_POST['vatpolserv'];
+            $CurrentCost = $_POST['eventcost'];
+            $EventCost = 0;
+            $Type = $_POST['type'];
+            $Vat = $eventinst->GetVat();
+            if ($Hours == 0) {
+                $FixOppsupp = $profinst->CalculateOpsupportFixed($Quantity, $Rate);
+                $FixOppsupp >= $Value ? $CostAdjust = (abs($Value - $FixOppsupp)) * -1 : $CostAdjust = $FixOppsupp ;
+                $OperationalSupport = $FixOppsupp;
+                $profinst->UpdateProformaDetails($id, $Quantity, $Hours, $OperationalSupport, $Rate, $Type);
+//                $EventCost = $profinst->EventCost($PoliceServices, $OperationalSupport, $VatPolServices);
+                $EventCost = $CurrentCost + $CostAdjust;
+                $profinst->UpdateProforma($EventId, $EventCost, $OperationalSupport, $PoliceServices, $VatPolServices, $username);
+            } else {
+                if ($Type == 'PLCSRV') {
+                    $PolServ = $profinst->CalculatePoliceServices($Quantity, $Hours, $Rate);
+                    $PolServ >= $Value ? $CostAdjust = (abs($Value - $PolServ)) * -1 : $CostAdjust = $PolServ ;
+                    $PoliceServices = $PolServ;
+                    $profinst->UpdateProformaDetails($id, $Quantity, $Hours, $PoliceServices, $Rate, $Type);
+                    $VATPoliceServices = $profinst->CalcutlateVat($PoliceServices, $Vat);
+//                    $EventCost = $profinst->EventCost($PoliceServices, $OperationalSupport, $VatPolServices);
+                    $EventCost = $CurrentCost + $CostAdjust;
+                    $profinst->UpdateProforma($EventId, $EventCost, $OperationalSupport, $PoliceServices, $VATPoliceServices, $username);
+                } else
+                if ($Type == 'OPPSPP') {
+                    $Oppsupp = $profinst->CalculateOpsupportVariable($Quantity, $Hours, $Rate);
+                    $Oppsupp >= $Value ? $CostAdjust = (abs($Value - $Oppsupp)) * -1 : $CostAdjust = $Oppsupp ;
+                    $OperationalSupport = $Oppsupp;
+                    $profinst->UpdateProformaDetails($id, $Quantity, $Hours, $OperationalSupport, $Rate, $Type);
+//                    $EventCost = $profinst->EventCost($PoliceServices, $OperationalSupport, $VatPolServices);
+                    $EventCost = $CurrentCost + $CostAdjust;
+                    $profinst->UpdateProforma($EventId, $EventCost, $OperationalSupport, $PoliceServices, $VatPolServices, $username);
                 }
-
-                $eventinst->CreateUpdateProforma($EventId, $EventCost, $OperationalSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy);
-                //need to find out how to log them
-                $TimeStamp = $audinst->GenerateTimestamp('TS');
-                $TransId = $audinst->GenerateTimestamp('TID');
-
-                $eventinst->CreateProformaTransaction($EventId, $OperationalSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy, $TimeStamp, $TransId);
+            }
 
 
 
-// //if validation succeeds then log audit record to database
-                if ($eventinst->auditok == 1) {
-                    $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');
-                    $TranDesc = 'Created new Event Name: ' . $EventName . ' Event ID: ' . $EventId;
-                    $User = $username;
-                    $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
-                    $token = '<br><br><span class="label label-success">Event Name</span> ' . '<span class="label label-info"> ' . $EventName . '</span><br><br><br>' .
-                            '<span class="label label-success">Event Id</span> ' . '<span class="label label-info">' . $EventId . '</span><br>';
-                    $token1 = 'Record Successfully Created';
-                    header("Location:" . "/success?result=$token&header=$token1&args=");
-                }
+//            $profinst->UpdateProforma($Cost, $OppSupport, $PoliceServices, $VATPoliceServices, $user)
+//                $eventinst->CreateUpdateProforma($EventId, $EventCost, $OperationalSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy);
+//                //need to find out how to log them
+//                $TimeStamp = $audinst->GenerateTimestamp('TS');
+//                $TransId = $audinst->GenerateTimestamp('TID');
+
+            if ($profinst->auditok == 1) {
+                $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');
+                $TranDesc = 'Edit proforma detail: ' . $id . ' Event ID: ' . $EventId;
+                $User = $username;
+                $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
+                $token = '<br><br><span class="label label-success">Event Name</span> ' . '<span class="label label-info"> ' . $id . '</span><br><br><br>' .
+                        '<span class="label label-success">Proforma Id</span> ' . '<span class="label label-info">' . $EventId . '</span><br>';
+                $token1 = 'Record Successfully Created';
+                header("Location:" . "/success?result=$token&header=$token1&args=");
             } else {
                 $template = new MasterTemplate();
-                $template->load("Views/Payment/edit.html");
-                $template->replace("title", "Create New Bill Payment");
-                $template->replace("val_CompanyBalance", $_SESSION['$companybalwrapper']);
-                $template->replace("val_Insufficient", $_SESSION['$insuffwrapper']);
+                $template->load("Views/Proforma/proforma_edit.html");
+                $model = new \PfomModel\Event();
+                $rolerates = $model->GetRoleRates();
+                $template->replace("RoleRates", $rolerates);
                 $template->publish();
             }
         } else
@@ -110,11 +119,11 @@ class ProformaTableController extends MakeProformaController {
     function show($params) {
         $roles = $_SESSION["user_roles"];
         $canUnlock = in_array($roles, array('Administrator', 'Manager', 'Super User')) ? true : false;
-        $unlock = $canUnlock == 1 ? "<th>Unlock</th>" : "";
+//        $unlock = $canUnlock == 1 ? "<th>Unlock</th>" : "";
         $table = "";
 
 //        $pymtinst = new \BarcomModel\Payment();
-        $filterBy = array();
+//        $filterBy = array();
 
         if (isset($_REQUEST['eventid'])) {
             $eventid = $_REQUEST['eventid'];

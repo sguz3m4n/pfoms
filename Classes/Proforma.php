@@ -84,12 +84,10 @@ class Proforma {
     function GetListProforma($eventid) {
         $result = "";
         $conn = conn();
-        $stmt = $conn->prepare("SELECT * FROM `proforma` as pro,"
-                . "`proformatransaction` as trans,"
+        $stmt = $conn->prepare("SELECT * FROM `proforma` as proforma,"
                 . "`event` as event WHERE "
-                . "pro.EventId=+trans.EventId AND "
-                . "event.EventId=+pro.EventId AND "
-                . "pro.Eventid='" . $_REQUEST['eventid'] . "' AND pro.delflag='N';");
+                . "event.EventId=+proforma.EventId AND "
+                . "proforma.Eventid='" . $_REQUEST['eventid'] . "' AND proforma.DelFlg='N';");
 
         $stmt->execute();
         $result_array = $stmt->fetchAll();
@@ -102,34 +100,11 @@ class Proforma {
         $conn = NULL;
     }
 
-    function CreateUpdateProforma($EventId, $EventCost, $OppSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy) {
+    function UpdateProforma($EventId, $Cost, $OppSupport, $PoliceServices, $VATPoliceServices, $user) {
 
         $conn = conn();
-        $sqlgetevent = $conn->prepare("SELECT * FROM proforma where `EventId` = '$EventId' and DelFlag ='N';");
-        $sqlgetevent->execute();
-        $result_array = $sqlgetevent->fetchAll();
-
-        if (empty($result_array)) {
-            $sql = "INSERT INTO `proforma` (`EventId`, `EventCost`, `OperationalSupport`, `PoliceServices`, `VATPoliceServices`,`Status`,`DelFlag`)
-            VALUES ('$EventId', '$EventCost', '$OppSupport','$PoliceServices','$VATPoliceServices','Registered','N')";
-        } else {
-            $sql = "Update `proforma` SET `OperationalSupport` = `OperationalSupport` + '$OppSupport',"
-                    . "`PoliceServices` = `PoliceServices` + '$PoliceServices',"
-                    . " `VATPoliceServices` = `VATPoliceServices` + '$VATPoliceServices',"
-                    . "  `EventCost` = `EventCost` + '$EventCost' WHERE `EventId` = '$EventId' ";
-        }
-        if ($conn->exec($sql)) {
-            $this->auditok = 1;
-        } else {
-            $this->auditok = 0;
-        }
-    }
-
-    function CreateProformaDetails($TransId, $AssetName, $Quantity, $Hours, $Value, $Rate) {
-
-        $conn = conn();
-        $sql = "INSERT INTO `proformadetails` (`TransId`, `AssetName`, `Quantity`, `Hours`,`Rate`, `Value`)
-            VALUES ('$TransId', '$AssetName', '$Quantity','$Hours','$Rate','$Value')";
+        $sql = "UPDATE `proforma` SET `EventCost`='$Cost',`OperationalSupport`='$OppSupport',`PoliceServices`='$PoliceServices',`VATPoliceServices`='$VATPoliceServices',"
+                . "`Status`='Updated',`TimeStamp`=NOW(),`RecmodifiedBy`='$user' WHERE`EventId`='$EventId'";
 
         if ($conn->exec($sql)) {
             $this->auditok = 1;
@@ -138,11 +113,35 @@ class Proforma {
         }
     }
 
-    function CreateProformaTransaction($TransId, $EventId, $OppSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy) {
+    function CreateProforma($TransId, $EventId, $Cost, $OppSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy, $user) {
 
         $conn = conn();
-        $sql = "INSERT INTO `proformatransaction`(`TransId`, `EventId`, `PoliceServicesVat`, `OppSupport`, `PoliceServices`, `TimeStamp`, `RecEnteredBy`) VALUES"
-                . " ('$TransId','$EventId','$VATPoliceServices', '$OppSupport','$PoliceServices',NOW(),'$RecEnteredBy')";
+        $sql = "INSERT INTO `proforma`(`EventId`, `TransId`, `EventCost`, `OperationalSupport`, `PoliceServices`, `VATPoliceServices`, `Status`, `ApprovedBy`, `DelFlg`, `TimeStamp`, `RecEnteredBy`, `RecmodifiedBy`) VALUES"
+                . " ('$EventId','$TransId','$Cost','$OppSupport','$PoliceServices','$VATPoliceServices','Status','$user','N', NOW(),'$RecEnteredBy','')";
+
+        if ($conn->exec($sql)) {
+            $this->auditok = 1;
+        } else {
+            $this->auditok = 0;
+        }
+    }
+
+    function UpdateProformaDetails($Id, $Quantity, $Hours, $Value, $Rate, $Type) {
+        $conn = conn();
+        $sql = "UPDATE `proformadetails` SET `Quantity`='$Quantity',`Hours`='$Hours',`Value`='$Value',`Rate`='$Rate' WHERE `Id`='$Id'";
+
+        if ($conn->exec($sql)) {
+            $this->auditok = 1;
+        } else {
+            $this->auditok = 0;
+        }
+    }
+
+    function CreateProformaDetails($TransId, $AssetName, $Quantity, $Hours, $Value, $Rate, $Type) {
+
+        $conn = conn();
+        $sql = "INSERT INTO `proformadetails` (`TransId`, `AssetName`, `Quantity`, `Hours`, `Value`, `Rate`, `Type`)
+            VALUES ('$TransId', '$AssetName', '$Quantity','$Hours','$Value','$Rate','$Type')";
 
         if ($conn->exec($sql)) {
             $this->auditok = 1;

@@ -23,7 +23,7 @@ return array(
     'Controllers\\CreateAdminUserController' => $baseDir . '/Controller/Admin/CreateUser.php',
     'Controllers\\CreateDutySheetController' => $baseDir . '/Controller/DutySheet/Create.php',
     'Controllers\\DisburseController' => $baseDir . '/Controller/PRNGen/PRNGenerate.php',
-    'Controllers\\DutySheetTableController' => $baseDir . '/Controller/DutySheet/dutysheettable.php',
+    'Controllers\\DutySheetTableController' => $baseDir . '/Controller/DutySheet/Edit.php',
     'Controllers\\EditAdminUserController' => $baseDir . '/Controller/Admin/EditUser.php',
     'Controllers\\EditDutySheetController' => $baseDir . '/Controller/DutySheet/Edit.php',
     'Controllers\\EditPRNController' => $baseDir . '/Controller/PRNGen/PRNGenerate.php',

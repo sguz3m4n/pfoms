@@ -76,7 +76,7 @@ class CreateDutySheetController extends PermissionController {
             $dutysheetinst->RecEnteredBy = $RecEnteredBy = $username;
 
             $DutySheetId = $audinst->GenerateTimestamp('DYST');
-//            $dutysheetinst->CreateDutySheet($DutySheetId, $EventId, $CompanyId, $DateOfDuty, $DispatchTime, $ArrivalTime, $DismissalTime, $ReturnTime, $HoursEngaged, $RecEnteredBy);
+            $dutysheetinst->CreateDutySheet($DutySheetId, $EventId, $CompanyId, $DateOfDuty, $DispatchTime, $ArrivalTime, $DismissalTime, $ReturnTime, $HoursEngaged, $RecEnteredBy);
             //Duty sheet preaccount 
             $OfficerArray = json_decode($_POST['offarr'], TRUE);
             $EquipmentArray = json_decode($_POST['equiparr'], TRUE);
@@ -98,7 +98,7 @@ class CreateDutySheetController extends PermissionController {
                     $dutysheetinst->Status = $Status = $officer[6];
                     $dutysheetinst->CreateDSPA($DutySheetId, $ForceNumber, $Natregno, $OfficerName, $Hours, $RateCode, $PayRate, $Acting, $ActingRateCode, $ActingPayRate, $Comments, $Status);
 
-//                    $dutysheetinst->OvertimeAmount = $OvertimeAmount = ($Hours * $PayRate) + $OvertimeAmount;
+                    $dutysheetinst->OvertimeAmount = $OvertimeAmount = ($Hours * $PayRate) + $OvertimeAmount;
                 }
             }
 

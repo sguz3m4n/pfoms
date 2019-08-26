@@ -7,222 +7,24 @@
             var offcrcount = 0;
             var offcrarr = [];
             var CreatedutySheet = false;
-            var GEventId ="";
+            var GEventId = "";
+
             $(document).ready(function () {
+                $('#submitpaymenttable').hide();
+                var PreAccountTotal = 0;
+                var selectedkey;
 
-//                var submitcontainer = document.getElementById("submitcontrol");
-//                var submitcontrol = document.createElement("button");
-//                submitcontrol.innerHTML = "Create Duty Sheet";
-//                submitcontrol.style.display = "none";
-//                submitcontrol.setAttribute("type", "submit");
-//                submitcontrol.setAttribute("id", "btn-create");
-//                submitcontrol.setAttribute("name", "btn-create");
-//                submitcontrol.setAttribute("class", "btn btn-default blue");
-//
-//                submitcontainer.appendChild(submitcontrol);
-//
-//                var addcontainer = document.getElementById("addcontrols");
-//                var adddetails = document.createElement("a");
-//                //adddetails.style.display = "none";
-//                adddetails.innerHTML = "Create Duty Sheet";
-//                adddetails.setAttribute("id", "adddetails");
-//                adddetails.setAttribute("class", "btn btn-default blue");
-//                adddetails.style.display = "none";
-//                addcontainer.appendChild(adddetails);
-//
-//                var addofficer = document.createElement("a");
-//                addofficer.style.display = "none";
-//                addofficer.innerHTML = "Officer  ";
-//                addofficer.setAttribute("id", "addofficer");
-//                addofficer.setAttribute("class", "btn btn-default white");
-//                var i = document.createElement("i");
-//                i.setAttribute("class", "glyphicon glyphicon-plus");
-//
-//                addofficer.appendChild(i);
-//                addcontainer.appendChild(addofficer);
+                var preaccountOS = 0;
+                var preaccountPS = 0;
+                var preaccountVAT = 0;
 
-                $(document).on("click", "#addofficer", function () {
-//alert('hello');
-                    var pillcontainer = document.getElementById('offcrpillcontainer');
-                    var pillwrapper = document.getElementById('offcrpillwrapper');
+                var ResourceTotal = 0;
+                var OperationalSupportTotal = 0;
+                var accountcount = 0;
+                var accountarr = [];
+                var acctid;
+                var dailyRate;
 
-                    //create instance of list elements
-                    var pill = document.createElement("li");
-                    var removeicon = document.createElement("span");
-                    removeicon.setAttribute("class", "glyphicon glyphicon-minus");
-                    //pill.setAttribute("id", "officerpill" + offcrcount);
-                    pill.setAttribute("id", $("#Natregno").val());
-
-                    //dynamically create functions
-                    var pillanchor = document.createElement("a");
-                    pillanchor.appendChild(document.createTextNode(document.getElementById("EmpName").value));
-                    pillanchor.appendChild(removeicon);
-                    var offcrrec = new Array();
-                    offcrrec.push(document.getElementById("EmpName").value);
-                    offcrrec.push(document.getElementById("Natregno").value);
-                    offcrrec.push(document.getElementById("hours").value);
-                    offcrrec.push(document.getElementById("PayRate").value);
-                    offcrrec.push(document.getElementById("RateCode").value);
-
-                    offcrarr.push(offcrrec);
-
-                    pill.appendChild(pillanchor);
-                    pillwrapper.appendChild(pill);
-                    pillcontainer.appendChild(pillwrapper);
-
-                    $(".pillwrapper li").on("click", function () {
-                        //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
-                        var key = this.id.toString().trim();
-                        //PopulatePanelInfo(key);
-                    });
-
-                    $(".pillwrapper li").on("dblclick", function () {
-                        //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
-
-                        var key = this.id.toString().trim();
-
-                        var elem = document.getElementById(this.id.toString());
-                        elem.parentNode.removeChild(elem);
-                        //RemoveInfo(key);
-
-                    });
-
-                });
-
-//show events button
-//$('#btnShowEvents').on('click', function () {
-                $(document).on("click", "#btnShowEvents", function () {
-                    var btnshowevents = document.getElementById("btnShowEvents").innerHTML;
-
-                    if (btnshowevents == "Show Events") {
-                        document.getElementById("btnShowEvents").innerHTML = "Hide Events";
-                    } else {
-                        document.getElementById("btnShowEvents").innerHTML = "Show Events";
-                    }
-                    //document.getElementById("btnShowEvents").innerHTML = "Show Events";
-
-                });
-//
-// $('#HoursEngaged').on('change click', function () {
-//                    var hrsWorked = $('#HoursEngaged').val();
-////                    var inputVal = $('#Equipment :selected').attr('value');
-////                     var OSHoursCount = $('#OSHoursCount').val();
-////                    if (inputVal !== '' && count !== '')
-////                    {
-////                        var total = count * (inputVal);
-////                        if(dailyRate == true){
-////                            total = OSHoursCount * total;
-////                        }
-////                        $('#EquipmentAmount').text(total.toFixed(2));
-////                    } else
-////                    {
-////                        $('#EquipmentAmount').text(0);
-////                    }
-//                });
-
-                // Set search input value on click of result item Employee ONLY
-                $(document).on("click", ".result p", function () {
-                    $(this).parents(".search-boxemp1").find('input[type="text"]').val($(this).text());
-                    $test = document.getElementById('searchemp1').value;
-
-                    if ($test == "") {
-                                document.getElementById("txtHint").innerHTML = "";
-                                return;
-                        } else {
-                                if (window.XMLHttpRequest) {
-                                        // code for IE7+, Firefox, Chrome, Opera, Safari
-                                        xmlhttp = new XMLHttpRequest();
-                                } else {
-                                        // code for IE6, IE5
-                                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                                }
-                                xmlhttp.onreadystatechange = function () {
-                                        if (this.readyState == 4 && this.status == 200) {
-
-                                 document.getElementById("txtHint").innerHTML = this.responseText;
-                                $("#submitteremployee").text($("#Natregno").val());
-                                $("#submitteremployeename").text($("#EmpName").val());
-                                $("#submitterrates").text($("#PayRate").val());
-                                $("#btn-create").show();
-                                $("#addofficer").show();
-                                $("#subsamt").hide();
-                                $("#passnum").hide();
-                                        }
-                                };
-                                xmlhttp.open("GET", "/Views/Shared/Controls/EmployeeSearch/getuser-sub.php?q[]=" + $test + "&InspectionDateStart[]=" + $("#InspectionDateStart").val(), true);
-                                xmlhttp.send();
-
-
-                        }
-                    $(this).parent(".result").empty();
-                });
-
-                //Add the information capture panel to the form
-//                $(document).on("click", "#adddetails", function () {
-//                    count = 1;
-//
-//                    $("#dutySheet").show();
-//                    $("#adddetails").hide();
-//                    //create dynamic instance of payment
-//                    var container = document.getElementById('container');
-//                    container.setAttribute("class", "col-xs-12");
-//
-//                    //create instances of div wrappers
-//                    var divmid = document.createElement("div");
-//                    var divsearch = document.createElement("div");
-//                    var divhint = document.createElement("div");
-//
-//                    //set attributes for div wrappers for bootstrap styling
-//                    divhint.setAttribute("class", "result");
-//                    divhint.setAttribute("id", "txtHint");
-//                    divsearch.setAttribute("class", "search-boxemp" + count)
-//                    divmid.setAttribute("class", "col-xs-12");
-//
-//                    //create officer text control
-//                    var offcrinput = document.createElement("input");
-//                    offcrinput.name = "officerid" + count;
-//                    offcrinput.setAttribute("class", "form-control");
-//                    offcrinput.setAttribute("id", "searchemp" + count);
-//                    offcrinput.setAttribute("type", "text");
-//                    offcrinput.setAttribute("autocomplete", "off");
-//                    offcrinput.setAttribute("placeholder", "Search employee name or force number...");
-//
-//                    offcrinput.onkeyup = function () {
-//                        /* Get input value on change */
-//                        var inputVal = $(this).val();
-//                        var resultDropdown = $(this).siblings(".result");
-//                        var isnum = /[0-9]/;
-//                        var isalpha = /[a-zA-Z]/;
-//
-//                        if (inputVal.length)
-//                        {
-//                            if (isalpha.test(inputVal))
-//                            {
-//                                $.get("/Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
-//                                    // Display the returned data in browser
-//                                    resultDropdown.html(data);
-//                                });
-//                            } else
-//                            if (isnum.test(inputVal))
-//                            {
-//                                $.get("/Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "forcenumber", {term: inputVal}).done(function (data) {
-//                                    // Display the returned data in browser
-//                                    resultDropdown.html(data);
-//                                });
-//                            }
-//                            $("#adddetails").hide();
-//                        } else {
-//                            resultDropdown.empty();
-//                        }
-//                    }
-//
-//                    //start wrapping and adding
-//                    divsearch.appendChild(offcrinput);
-//                    divhint.appendChild(document.createElement("p"));
-//                    divsearch.appendChild(divhint);
-//                    divmid.appendChild(divsearch);
-//                    container.appendChild(divmid);
-//                });
 
                 $('.search-boxcomp input[type="text"]').on("keyup input", function () {
                     /* Get input value on change */
@@ -230,18 +32,17 @@
                     var resultDropdown = $(this).siblings(".resultcomp");
                     var isnum = /[0-9]/;
                     var isalpha = /[a-zA-Z]/;
-
                     if (inputVal.length) {
                         if (isalpha.test(inputVal))
                         {
-                            $.get("../Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
+                            $.get("/Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
                                 // Display the returned data in browser
                                 resultDropdown.html(data);
                             });
                         } else
                         if (isnum.test(inputVal))
                         {
-                            $.get("../Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "companyid", {term: inputVal}).done(function (data) {
+                            $.get("/Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "companyid", {term: inputVal}).done(function (data) {
                                 // Display the returned data in browser
                                 resultDropdown.html(data);
                             });
@@ -252,46 +53,11 @@
                     }
                 });
 
-                $(document).on("click", "#submitpaymenttable", function () {
-                    paymentTable();
-                });
-
-                function paymentTable() {
-//                    var startDate = ($('#inspection-start').val()).replace('Start Date', '');
-//                    var endDate = ($('#inspection-end').val()).replace('End Date', '');
-//                    var employee = $('#searchemp').val();
-                    var company = $('#searchcomp').val();
-                    var isnum = /[0-9]/;
-                    var isalpha = /[a-zA-Z]/;
-
-                    var resultDiv = $('#paymenttable');
-
-                    var payload = {};
-//                    if (endDate != '') {
-//                        payload['enddate'] = endDate;
-//                    }
-//                    if (startDate != '') {
-//                        payload['startdate'] = startDate;
-//                    }
-//                    if (GEventId != '') {
-//                        payload['GEventId'] = GEventId;
-//                    }
-                       if (company != '') {
-                        payload['compname'] = company;
-                    }
-//                    if (employee != '') {
-//                        payload['empid'] = employee;
-//                    }
-
-                    $.get("/dutysheettablepymt?", payload).done(function (data) {
-                        resultDiv.html(data);
-                    });
-                }
-
                 // Set search input value on click of result item
                 $(document).on("click", ".resultcomp p", function () {
                     $(this).parents(".search-boxcomp").find('input[type="text"]').val($(this).text());
                     $test = document.getElementById('searchcomp').value;
+                    $type = 'REF';
                     if ($test == "") {
                                 document.getElementById("txtHintcomp").innerHTML = "";
                                 return;
@@ -306,151 +72,100 @@
                                 xmlhttp.onreadystatechange = function () {
                                         if (this.readyState == 4 && this.status == 200) {
                                                 document.getElementById("txtHintcomp").innerHTML = this.responseText;
-                                           $('input#EventDate').datepicker({dateFormat: 'yy-mm-dd'});
+                                $("#submittercompany").text($("#CompanyId").val());
+                                //$("#submitterprevbalance").text($("#PreviousBalance").val());
+                                $("#submitterbalance").text($("#CompanyBalance").val());
                                         }
                                 };
-                        $('input#DateOfBirth').datepicker({dateFormat: 'yy-mm-dd'});
                                 xmlhttp.open("GET", "../Views/Shared/Controls/DutySheetSearch/getdutysheets.php?q=" + $test, true);
                                 xmlhttp.send();
                         }
                     $(this).parent(".result").empty();
+
                     //alert('test');
                 });
 
-                $(document).on("click", ".pillwrapper li", function () {
+                $("#btnCreateEvent").click(function (e) {
+//need to add validation that all fields are there 
+                    $("#hdnEventCost").val(PreAccountTotal.toFixed(2));
+                    $("#hdnOperationalSupport").val(preaccountOS.toFixed(2));
+                    $("#hdnPoliceServices").val(preaccountPS.toFixed(2));
+                    $("#hdnVATPoliceServices").val(preaccountVAT.toFixed(2));
 
-                    var key = $(this).attr("class");
-
-//                    if (CreatedutySheet === false){
-//                    $("#adddetails").show();
-//                    CreatedutySheet = true;
-//                }
-                    //$("#dutySheet").show();
-
-                    var DutySheetId = $("." + key).find('#liDutySheetId').text();
-                    var EventId = $("." + key).find('#liEventId').text();
-                    
-                    //Global event id
-                    GEventId = EventId;
-                    var EventName = $("." + key).find('#liEventName').text();
-                    var DateOfDuty = $("." + key).find('#liDateOfDuty').text();
-
-                    var DispatchTime = $("." + key).find('#liDispatchTime').text();
-                    var ArrivalTime = $("." + key).find('#liArrivalTime').text();
-
-                    var DismissalTime = $("." + key).find('#liDismissalTime').text();
-                    var ReturnTime = $("." + key).find('#liReturnTime').text();
-                    var HoursEngaged = $("." + key).find('#liHoursEngaged').text();
-                    var ForceNumber = $("." + key).find('#liForceNumber').text();
-                    var OfficerName = $("." + key).find('#liOfficerName').text();
-                    var Hours = $("." + key).find('#liHours').text();
-                    var PayRate = $("." + key).find('#liPayRate').text();
-                    var RateCode = $("." + key).find('#liRateCode').text();
-
-
-                    // $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
-
-
-
-                    document.getElementById("DetailsEventName").innerHTML = EventName;
-                    document.getElementById("DetailsDateOfDuty").innerHTML = DateOfDuty;
-                    document.getElementById("DetailsDispatchTime").innerHTML = DispatchTime;
-                    document.getElementById("DetailsArrivalTime").innerHTML = ArrivalTime;
-                    document.getElementById("DetailsDismissalTime").innerHTML = DismissalTime;
-                    document.getElementById("DetailsReturnTime").innerHTML = ReturnTime;
-                    document.getElementById("DetailsHoursEngaged").innerHTML = HoursEngaged;
-
-//                    document.getElementById("hdnEventId").value = EventId;
-//                    document.getElementById("hdnEventName").value = EventName;
-//                    
-                    //document.getElementById("lblEventRef").innerHTML = EventId;
-
-
-                    //document.getElementById("adddetails").style.display = "show";
-                    document.getElementById("divDutySheetDetails").style.display = "";
-                    // document.getElementById("formDeleteEvent").style.display = "";
-                    //document.getElementById("DetailsOperationalSupport").innerHTML = "$" + OperationalSupport;
-
-
+                    var divid = document.getElementById("lblEventRef").innerHTML;
+                    $('#hdnDivisionId').val(divid.substring(0, 4));
+                    $('#EventId').val(divid);
+                    $('#hdnAsset').val(JSON.stringify(accountarr));
 
                 });
 
-                function PopulatePanelInfo(key)
-                {
-                    var EmpName = document.getElementById("EmpName");
-                    var Natregno = document.getElementById("Natregno");
-                    var hours = document.getElementById("hours");
-                    var distance = document.getElementById("distance");
-                    var passnum = document.getElementById("passnum");
-                    var subsamt = document.getElementById("subsamt");
-                    var PayRate = document.getElementById("PayRate");
-                    var RateCode = document.getElementById("RateCode");
-                    for (i = 0; i < offcrarr.length; i++) {
+                $(document).on("click", ".edit", function (e) {
+                    $.get("/Views/Shared/Controls/ComboSearch/dutysheet-modal.php?id=" + e.target.id).done(function (data) {
+                        $("#myModal").html(data).modal();
 
-                        if (offcrarr[i][1] === key)
-                        {
-                            EmpName.value = offcrarr[i][0].toString();
-                            Natregno.value = offcrarr[i][1].toString();
-                            hours.value = offcrarr[i][2].toString();
-                            distance.value = offcrarr[i][3].toString();
-                            passnum.value = offcrarr[i][4].toString();
-                            subsamt.value = offcrarr[i][5].toString();
-                            PayRate.value = offcrarr[i][6].toString();
-                            RateCode.value = offcrarr[i][7].toString();
-                            haspx = offcrarr[i][8].toString();
-                            hassubs = offcrarr[i][9].toString();
-                        }
-                    }
+                    });
+                });
+                $(document).on("click", ".pillwrapper li", function () {
+//                    alert('hello');
+                    var key = $(this).attr("class");
+//
+                    var DutysheetId = $("." + key).find('#liDutySheetId').text();
+                    selectedkey = DutysheetId;
+//                    var EventName = $("." + key).find('#liEventName').text();
+//                    var EventCost = $("." + key).find('#liEventCost').text();
+//                    var OpSupport = $("." + key).find('#liOperationalSupport').text();
+//                    var PoliceServ = $("." + key).find('#liPoliceServices').text();
+//
+//                    var EventDateStart = $("." + key).find('#liEventDateStart').text();
+//                    var EventDateEnd = $("." + key).find('#liEventDateEnd').text();
+//
+//
+//                    var Station = $("." + key).find('#liStation').text();
+//                    var Division = $("." + key).find('#liDivision').text();
+//                    var CompanyId = $("." + key).find('#liCompanyId').text();
+//
+//                    var CompanyName = document.getElementById("compName").innerHTML;
+//
+////                    document.getElementById("Division").value = Division;
+////                    document.getElementById("Station").value = Station;
+////                    document.getElementById("EventName").value = EventName;
+////
+////                    document.getElementById("EventDateStart").value = EventDateStart;
+////                    document.getElementById("EventDateEnd").value = EventDateEnd;
+                    document.getElementById("lblEventRef").innerHTML = DutysheetId;
+////                    document.getElementById("CompanyId").value = CompanyId;
+////                    document.getElementById("CompanyName").value = CompanyName;
+//                    //document.getElementById("eventcost").innerhtml = EventCost;
+//                    //$("#eventcost").text(EventCost);
+//                    //$("#opsupporttotal").text(OpSupport);
+//                    //$("#policeservicestotal").text(PoliceServ);
+                    $('#submitpaymenttable').show();
+                });
 
-                    ToggleControl();
+                $(document).on("click", "#submitpaymenttable", function () {
+                    paymentTable();
+                });
 
-                    $("#submitteremployee").text($("#Natregno").val());
-                    $("#submitteremployeename").text($("#EmpName").val());
-                    $("#submitterrates").text($("#PayRate").val());
-                }
+                $(document).on("click", ".edit", function (e) {
+                    $.get("/Views/Shared/Controls/ComboSearch/payment-modal.php?id=" + e.target.id).done(function (data) {
+                        $("#myModal").html(data).modal();
 
-                function RemoveInfo(key) {
-                    var indextoremove;
-                    for (i = 0; i < offcrarr.length; i++) {
+                    });
+                });
 
-                        if (offcrarr[i][1] === key)
-                        {
-                            indextoremove = i;
-                        }
-                    }
-                    offcrarr.splice(indextoremove, 1);
-                }
+                function paymentTable() {
 
-                function UpdateInfo(key) {
+                    var resultDiv = $('#paymenttable');
 
-                    for (i = 0; i < offcrarr.length; i++) {
+                    var payload = {};
 
-                        if (offcrarr[i][1] === key)
-                        {
-                            var EmpName = document.getElementById("EmpName");
-                            var Natregno = document.getElementById("Natregno");
-                            var hours = document.getElementById("hours");
-                            var distance = document.getElementById("distance");
-                            var passnum = document.getElementById("passnum");
-                            var subsamt = document.getElementById("subsamt");
-                            var PayRate = document.getElementById("PayRate");
-                            var RateCode = document.getElementById("RateCode");
-                            var HasPx = document.getElementById("passenger");
-                            var HasSub = document.getElementById("subsistence");
-                            offcrarr[i][0] = EmpName.value;
-                            offcrarr[i][1] = Natregno.value;
-                            offcrarr[i][2] = hours.value;
-                            offcrarr[i][3] = distance.value;
-                            offcrarr[i][4] = passnum.value;
-                            offcrarr[i][5] = subsamt.value;
-                            offcrarr[i][6] = PayRate.value;
-                            offcrarr[i][7] = RateCode.value;
-                            offcrarr[i][8] = haspx;
-                            offcrarr[i][9] = hassubs;
-
-                            ToggleControl();
-                        }
-                    }
+                    payload['dutysheetid'] = selectedkey;
+                    $.get("/dutysheettablepymt?", payload).done(function (data) {
+                        resultDiv.html(data);
+                    });
+//                    $.get("/dutysheettablepymt?", payload).done(function (data) {
+//                        resultDiv.html(data);
+//                    });
                 }
 
             });
@@ -541,46 +256,128 @@
                             </div>
                         </div>
                         <div class="col-md-9">
-                            <div class="panel panel-info">
-                                <div id ="divEventRef" class="panel-heading" style="display: none">
-                                    <center>
-                                        <h3><label id="lblEventRef" class="label label-info"></label>&nbsp;&nbsp; &nbsp;<label id="lblEventFormNum" style="display:none" class="label label-info" ></label></h3>
-                                    </center>
-                                </div>
+                            <div class="page-content-col-8">
+                                <div class="panel panel-info" >
+                                    <div class="panel-heading">
+                                        <center>
+                                            <h3><label id="lblEventRef" class="label label-info"></label></h3>
+                                        </center>
+                                    </div>
+                                    <div class="portlet box blue">
+                                        <div class="portlet-title">
+                                            <div class="caption"><em class="fa fa-group"></em><h4>Edit Duty Sheet</h4></div>
+                                        </div>
+                                        <div class="portlet-body form">
+                                            <form  method="post"  action="" id="#" > 
+                                                <div class="container-fluid">
+                                                    <div class="row center-block">
+                                                        <div class="col-md-2" ></div>
+                                                        <div class="col-md-8" >
+                                                            <?php
+                                                            include 'Views/Shared/Controls/CompanySearch/search-form.php';
+                                                            ?>                                                            
+                                                        </div>
 
-                                  <div class="panel-heading blue"><header>Select Company</header></div>
-                                  <div class="panel-body"> <?php
-                                    include 'Views/Shared/Controls/CompanySearch/search-form.php';
-                                    ?>
+                                                        <div class="col-md-2" >
+
+                                                        </div>
+                                                        <div class="col-xs-12 row text-center">
+                                                            <div id="submitpaymenttable" class="btn btn-info btn-md">Show Results</div>
+                                                        </div>
+                                                        <div class="col-xs-12 row">
+                                                            <div class="table-responsive">
+                                                                <table class="table" id="paymenttable">
+
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3" >
+
+
+
+                                                    </div>
+                                                </div>  
+                                                <br>
+
+                                                <br>
+                                            </form> 
+                                            <div class="modal fade" id="myModal" role="dialog"></div>
+                                            <div class="modal fade" id="myModalAmend" role="dialog"></div>
+                                            <div class="modal" id="officermodal">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+
+                                                        <!-- Modal Header -->
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Select Police Service Resource</h4>
+
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+
+                                                        <!-- Modal body -->
+                                                        <div class="modal-body">                                                                                                               
+                                                            <label><strong>Select Officer Rank</strong></label>
+                                                            <select name="Rank" class="form-control" id="Rank" style="width:auto" >
+                                                                <option>Select Rank</option>
+                                                                { RoleRates }
+                                                            </select>
+                                                            <label><strong>Resource Count</strong></label>
+                                                            <input type="number"  class="form-control" id="ResourceCount" name="ResourceCount" min="1" value="1" required  >     
+
+                                                            <label><strong>Hours</strong></label>
+                                                            <input type="number"  class="form-control" id="RSHoursCount" name="RSHoursCount" min="1" value="1" required  >     
+
+                                                        </div>
+                                                        <!-- Modal footer -->
+                                                        <div class="modal-footer">
+                                                            <label id="ResourceAmount" >0</label>
+                                                            <button type="button" class="btn btn-info" id="AddResource" data-enter="modal">Add Resources</button>
+                                                        </div>                                            
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal" id="supportmodal">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+
+                                                        <!-- Modal Header -->
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Select Operational Support Resource</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+
+                                                        <!-- Modal body -->
+                                                        <div class="modal-body">
+
+                                                            <label><strong>Select Equipment</strong></label>
+                                                            <select name="Equipment" class="form-control" id="Equipment" style="width:auto" >
+                                                                <option>Select Equipment</option>
+                                                                { Equipment }
+                                                            </select>
+
+                                                            <label id="lblRSCount"><strong>Resource Count</strong></label>
+                                                            <input type="number"  class="form-control" id="OPResourceCount" name="OPResourceCount" min="1" value="1" required  > 
+
+                                                            <label id="lblHours"><strong>Hours</strong></label>
+                                                            <input type="number"  class="form-control" id="OSHoursCount" name="OSHoursCount" min="1" value="1" required  >     
+
+                                                        </div>
+                                                        <!-- Modal footer -->
+                                                        <div class="modal-footer">
+                                                            <label id="EquipmentAmount" >0</label>
+                                                            <button type="button" class="btn btn-info" id="AddEquipment" data-enter="modal">Add Op Support</button>
+                                                        </div>                                            
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-xs-4" style="font-size: large">
-                                { val_CompanyName }      <br>   
                             </div>
                         </div>
-                        <!--                        <form action="/event/deactivate" method="post">
-                        
-                                    <input type="hidden" name="EventId" id="hdnEventId" value="">
-                                    <button type="button" class="btn btn-danger btn-default pull-right col-xs-3" name="btn-delete" id="btnDelete"><strong>Delete Event</strong></button> 
-                              </form>-->
-                    </div>
-
-                </div>
-
-
-                <div class="col-xs-12 row text-center">
-                    <input id="submitpaymenttable" class="btn btn-info btn-md" value="Show Results">
-                </div>
-                <div class="col-xs-12 row">
-                    <div class="table-responsive">
-                        <table class="table" id="paymenttable">
-
-                        </table>
                     </div>
                 </div>
-            </div>
-
-
-            { foot } 
-    </body>
-</html>
+                </body>
+                </html>

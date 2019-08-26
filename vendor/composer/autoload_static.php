@@ -93,7 +93,7 @@ class ComposerStaticInitdbfd59ea50047003c0635f21387c380a
         'Controllers\\CreateAdminUserController' => __DIR__ . '/../..' . '/Controller/Admin/CreateUser.php',
         'Controllers\\CreateDutySheetController' => __DIR__ . '/../..' . '/Controller/DutySheet/Create.php',
         'Controllers\\DisburseController' => __DIR__ . '/../..' . '/Controller/PRNGen/PRNGenerate.php',
-        'Controllers\\DutySheetTableController' => __DIR__ . '/../..' . '/Controller/DutySheet/dutysheettable.php',
+        'Controllers\\DutySheetTableController' => __DIR__ . '/../..' . '/Controller/DutySheet/Edit.php',
         'Controllers\\EditAdminUserController' => __DIR__ . '/../..' . '/Controller/Admin/EditUser.php',
         'Controllers\\EditDutySheetController' => __DIR__ . '/../..' . '/Controller/DutySheet/Edit.php',
         'Controllers\\EditPRNController' => __DIR__ . '/../..' . '/Controller/PRNGen/PRNGenerate.php',

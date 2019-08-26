@@ -88,29 +88,31 @@ class MakeProformaController extends PermissionController {
                 $eventinst->Quantity = $Quantity = $Asset[4];
                 $eventinst->Hours = $Hours = $Asset[5];
                 $Type = $Asset[6];
-                $profinst->CreateProformaDetails($TransId, $AssetName, $Quantity, $Hours, $Value, $Rate);
+                $profinst->CreateProformaDetails($TransId, $AssetName, $Quantity, $Hours, $Value, $Rate, $Type);
                 $Oppsupp;
                 $FixOppsupp;
                 $PolServ;
-                $ValueAddTax;
+                $ValueAddTax = $eventinst->GetVat();
                 if ($Hours == '') {
                     $FixOppsupp = $profinst->CalculateOpsupportFixed($Quantity, $Rate);
                     $OperationalSupport = $OperationalSupport + $FixOppsupp;
                 } else {
-                    if ($Type == 'PolServ') {
+                    if ($Type == 'PLCSRV') {
                         $PolServ = $profinst->CalculatePoliceServices($Quantity, $Hours, $Rate);
                         $PoliceServices = $PoliceServices + $PolServ;
                     } else
-                    if ($Type == 'OppSupp') {
+                    if ($Type == 'OPPSPP') {
                         $Oppsupp = $profinst->CalculateOpsupportVariable($Quantity, $Hours, $Rate);
                         $OperationalSupport = $OperationalSupport + $Oppsupp;
                     }
                 }
             }
-            $VATPoliceServices = $profinst->CalcutlateVat($PoliceServices, 0.1750);
-            $profinst->CreateProformaTransaction($TransId, $EventId, $OperationalSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy);
+            $VATPoliceServices = $profinst->CalcutlateVat($PoliceServices, $ValueAddTax);
             $EventCost = $OperationalSupport + $PoliceServices + $VATPoliceServices;
-            $profinst->CreateUpdateProforma($EventId, $EventCost, $OperationalSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy);
+            $profinst->CreateProforma($TransId, $EventId, $EventCost, $OperationalSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy, $username);
+
+
+//            $profinst->CreateUpdateProforma($EventId, $EventCost, $OperationalSupport, $PoliceServices, $VATPoliceServices, $RecEnteredBy);
 // //if validation succeeds then log audit record to database
             if ($profinst->auditok == 1) {
                 $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');

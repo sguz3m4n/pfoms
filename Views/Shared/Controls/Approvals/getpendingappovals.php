@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <?php
-include '../../../../dbconfig.php';
-include '../../../../Classes/Event.php';
-include '../../../../Classes/Approve.php';
+include 'dbconfig.php';
+require  '../../../../Classes/Event.php';
+require '../../../../Classes/Approve.php';
 //$q = $_GET['q'];
 
 $conn = conn();
@@ -10,8 +10,8 @@ $conn = conn();
 $sql = "SELECT event.`EventId`,`EventName`,`CompanyName`,`ContactName`,`ContactEmail`,`ContactNumber`,`EventDateStart`,`EventDateEnd`,proforma.EventCOst "
         . "FROM`event` as event ,`proforma` as proforma WHERE "
         . "event.EventId=proforma.EventId AND "
-        . "event.Status='Approved' AND "
-        . "event.DelFlg='N' ";
+        . "event.Status!='Approved' AND "
+        . "event.DelFlg='N'";
 
 $result = $conn->prepare($sql);
 $result->execute();

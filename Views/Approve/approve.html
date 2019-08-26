@@ -1,93 +1,110 @@
-<html lang="en-US">
+<!DOCTYPE html>
+<html>
     <head>
         { head }
+        <style>
+            .sidenav {
+                height: 100%;
+                width: 0;
+                position: fixed;
+                z-index: 1;
+                top: 50px;
+                left: 0;
+                background-color: #111;
+                overflow-x: hidden;
+                overflow-y: hidden;
+                transition: 0.5s;
+                padding-top: 60px;
+            }
+
+            .sidenav a {
+                padding: 8px 8px 8px 20px;
+                text-decoration: none;
+                font-size: 18px;
+                color: #818181;
+                display: block;
+                transition: 0.3s;
+            }
+
+            .sidenav a:hover {
+                color: #f1f1f1;
+            }
+            .sidenav tr:hover {
+                color: #f1f1f1;
+            }
+
+            .sidenav .closebtn {
+                position: absolute;
+                top: 50px;
+                right: 25px;
+                font-size: 25px;
+                margin-left: 50px;
+            }
+
+            #main {
+                transition: margin-left .5s;
+                padding: 16px;
+            }
+
+            @media screen and (max-height: 450px) {
+                .sidenav {padding-top: 15px;}
+                .sidenav a {font-size: 18px;}
+            }
+        </style>
+
         <script type="text/javascript">
             $(document).ready(function () {
-                var contactcount = 0;
-                var contactarr = [];
 
-                $('#AddContact').on('click', function () {
-                    //alert("hello");
-                    var contactrec = [];
-                    var contactemail = $('#ContactEmail').val();
-                    var contactname = $('#ContactName').val();
-                    var contactnumber = $('#ContactNumber').val();
-                    contactrec.push(contactname);
-                    contactrec.push(contactemail);
-                    contactrec.push(contactnumber);
-                    var pillcontainer = document.getElementById('pillcontainer');
-                    var pillwrapper = document.getElementById('pillwrapper');
-
-                    //create instance of list elements
-                    var pill = document.createElement("li");
-                    pill.setAttribute("id", "contactcount" + contactcount);
-
-                    var removeicon = document.createElement("span");
-                    removeicon.setAttribute("class", "glyphicon glyphicon-minus");
-
-                    //dynamically create functions
-                    var pillanchor = document.createElement("a");
-                    //pillanchor.setAttribute("data-preactotal", OperationalSupportTotal);
-                    pillanchor.setAttribute("style", "bold");
-                    pillanchor.appendChild(document.createTextNode("Contact- " + contactname + " Email " + contactemail + "Contact #" + contactnumber));
-                    //<a href="mailto:webmaster@example.com">Jon Doe</a>
-
-                    pillanchor.appendChild(removeicon);
-
-                    pill.appendChild(pillanchor);
-                    pillwrapper.appendChild(pill);
-                    pillcontainer.appendChild(pillwrapper);
-                    //contactrec.push("preaccount" + contactcount);
-                    // acctrec.push(acctid);
-                    //acctrec.push(OperationalSupportTotal);
-                    // acctrec.push(document.getElementById("AccountNumber").value);
-                    contactarr.push(contactrec);
-
-                    contactcount++;
-
-                });
-
+//                alert('hello');
                 $(document).on("dblclick", ".pillwrapper li", function (event) {
 
                     var key = this.id.toString();
                     var elem = document.getElementById(this.id.toString());
-                    elem.parentNode.removeChild(elem);
-                    RemoveInfo(key);
 
-                });
-
-                //Send the populated array to the controller
-                $("#companyform").submit(function () {
-                    //TogglePRNControl();
-                    //var key = this.id.toString().trim();
-                    //PopulatePanelInfo(key);
-                    $("#contactlist").val(JSON.stringify(contactarr));
-                });
-                function RemoveInfo(key) {
-                    var indextoremove;
-
-                    for (i = 0; i < contactarr.length; i++) {
-                        // alert(accountarr[i][0]);
-
-                        if (contactarr[i][0] === key)
-                        {
-                            alert(contactarr[i][1]);
-                            // PreAccountTotal = PreAccountTotal - parseFloat(accountarr[i][1]);
-                            indextoremove = i;
-                        }
+                    var preAccountValToDelete = 'OS';
+                    var accountType = elem.innerText;
+                    accountType = accountType.substring(0, 4);
+                    if (accountType == 'Rank')
+                    {
+                        preAccountValToDelete = 'PS'
                     }
-                    contactarr.splice(indextoremove, 1);
-                    //$("#eventcost").text(PreAccountTotal.toFixed(2));
-                    /* for (x = 0; x < accountarr.length; x++) {
-                     
-                     alert(accountarr[x][0] + accountarr[x][1]);
-                     }*/
-                    //alert(accountarr);
-                }
+                    elem.parentNode.removeChild(elem);
+                    RemoveInfo(key, preAccountValToDelete);
+
+                });
+
+                $('.search-boxcomp input[type="text"]').on("keyup input", function () {
+                    /* Get input value on change */
+                    var inputVal = $(this).val();
+                    var resultDropdown = $(this).siblings(".resultcomp");
+                    var isnum = /[0-9]/;
+                    var isalpha = /[a-zA-Z]/;
+                    if (inputVal.length) {
+                        if (isalpha.test(inputVal))
+                        {
+                            $.get("/Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
+                                // Display the returned data in browser
+                                resultDropdown.html(data);
+                            });
+                        } else
+                        if (isnum.test(inputVal))
+                        {
+                            $.get("/Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "companyid", {term: inputVal}).done(function (data) {
+                                // Display the returned data in browser
+                                resultDropdown.html(data);
+                            });
+                        }
+
+                    } else {
+                        resultDropdown.empty();
+                    }
+                });
+
             });
         </script>
+
     </head>
-    <body class="">
+    <body>
         <div class="wrapper">
             <header class="page-header">
                 <nav class="navbar mega-menu" role="navigation">
@@ -112,12 +129,12 @@
                                     </button>
                                     <ul class="dropdown-menu-v2" role="menu">
                                         <li>
-                                            <a href="/changepassword">
+                                            <a href="changepassword">
                                                 <i class="icon-user"></i> Change Password
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="/logout">
+                                            <a href="logout">
                                                 <i class="icon-key"></i> Log Out 
                                             </a>
                                         </li>
@@ -138,7 +155,13 @@
                                     </a>      
                                 </li>
                                 <li>
-                                    <a class="text-uppercase" href="/company/edit"><i class="glyphicon glyphicon-eye-open"></i>View &nbsp; <i class="glyphicon glyphicon-pencil"></i>Edit Company</a>
+                                    <a class="text-uppercase" href="/event/edit"><i class="glyphicon glyphicon-eye-open"></i>View &nbsp; <i class="glyphicon glyphicon-pencil"></i>Edit Event</a>
+                                </li>
+                                <li>
+                                    <a class="text-uppercase" href="/proforma/create"><i class="glyphicon glyphicon-eye-open"></i>Create ProForma</a>
+                                </li>
+                                <li>
+                                    <a class="text-uppercase" href="/proforma/edit"><i class="glyphicon glyphicon-eye-open"></i>View &nbsp; <i class="glyphicon glyphicon-pencil"></i>Edit Proforma</a>
                                 </li>
                             </ul>
                         </div>                      
@@ -150,63 +173,81 @@
                     <div class="page-content-row">
                         <div class="col-md-3">
                             <div class="page-sidebar">
-                                <div class=" col-xs-12">
-                                    <div class="dashboard-stat dashboard-stat-v2 blue" >
+
+                                <div class="col-xs-12">
+                                    <div class="dashboard-stat dashboard-stat-v2 green">
                                         <div class="visual">
                                             <i class="fa fa-comments"></i>
                                         </div>
                                         <div class="details">
                                             <div class="number">
-                                                <span data-value="2" id="submittercompany" style="font-size: xx-large"  data-counter="counterup" class="glyphicon glyphicon-signal"></span>
+                                                <span data-value="2" id="submittercompany" style="font-size: xx-large"  data-counter="counterup"></span>
                                             </div>
-                                            <br>
-                                            <div class="desc"> Previous Step </div>
+                                            <div class="desc"> Company ID </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-12">
-                                    <div class="dashboard-stat dashboard-stat-v2 purple" >
+                                    <div class="dashboard-stat dashboard-stat-v2 blue">
                                         <div class="visual">
                                             <i class="fa fa-comments"></i>
                                         </div>
                                         <div class="details">
                                             <div class="number">
-                                                <span data-value="2" id="submittercompany" style="font-size: xx-large"  data-counter="counterup" class="glyphicon glyphicon-signal"></span>
+                                                <span class="glyphicon glyphicon-usd"></span><span data-value="2" id="submitterbalance" style="font-size: xx-large"  data-counter="counterup"></span>
                                             </div>
-                                            <br>
-                                            <div class="desc"> Next Step</div>
+                                            <div class="desc"> Company Balance </div>
                                         </div>
                                     </div>
                                 </div>
                                 <center>
                                     <a class="btn btn-outline blue" href="../../index.php">back to main page</a>    
                                 </center>
-                            </div>   
+                            </div> 
                         </div>
                         <div class="col-md-9">
                             <div class="page-content-col-8">
+                                <div class="panel panel-info" >
+                                 
+                                </div>
                                 <div class="portlet box blue">
                                     <div class="portlet-title">
-                                        <div class="caption"><em class="fa fa-group"></em><h4>Enter Company Details</h4></div>
+                                        <div class="caption"><em class="fa fa-group"></em><h4>Pending Approvals</h4></div>
                                         <div class="tools">
                                             <a title="" class="collapse" href="javascript:;" data-original-title=""> </a>
                                         </div>
                                     </div>
                                     <div class="portlet-body form">
-                                        
-                                        <form method="post" action="">
-                                            <input type="text" id="EventId" name="EventId"/>
-                                            <button type="submit" name="btn-approve" id="btn-approve" class="btn btn-default blue">Approve</button>
-                                        </form>
-
-                                        <br>
+                                        <form  method="post"  action="" id="paymentform" > 
+                                            <div class="container-fluid">
+                                                <div class="row center-block">
+                                                    <div class="col-md-2" ></div>
+                                                    <div class="col-md-3" >
+                                                        <?php
+                                                        include 'Views/Shared/Controls/Approvals/backend-search.php';
+                                                        ?>                                                            
+                                                    </div>
+                                                    <div class="col-md-2" >
+                                                        <br>
+                                                      
+                                                    </div>
+                                                </div>
+                                            </div>  
+                                            <br>
+                                            <center>
+                                                <button type="submit" name="btn-create" class="btn btn-default blue" id="btnCreateEvent">Approve</button>    
+                                            </center>
+                                            <br>
+                                        </form> 
                                     </div>
+
+
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </div> 
+            </div>            
         </div>
         { foot }
     </body>

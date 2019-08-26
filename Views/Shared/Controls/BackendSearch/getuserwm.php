@@ -10,7 +10,7 @@ $sql = "SELECT * FROM employee WHERE CONCAT_WS(' ',FirstName,LastName) = '" . $q
 
 $result = $conn->prepare($sql);
 $result->execute();
-$empinst = new BarcomModel\Employee();
+$empinst = new PfomModel\Employee();
 //$result = mysqli_query($conn, $sql);
 //while ($row = mysqli_fetch_array($result)) 
 foreach ($result as $value) {
@@ -50,7 +50,7 @@ foreach ($result as $value) {
 }
 $conn = NULL;
 
-$model = new \BarcomModel\Employee();
+$model = new \PfomModel\Employee();
 $roles = $model->GetRoles();
 $parishes = $model->GetParishes();
 ?> 

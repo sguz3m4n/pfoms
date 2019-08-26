@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        { head }
+        <style>
+            .sidenav {
+                height: 100%;
+                width: 0;
+                position: fixed;
+                z-index: 1;
+                top: 50px;
+                left: 0;
+                background-color: #111;
+                overflow-x: hidden;
+                overflow-y: hidden;
+                transition: 0.5s;
+                padding-top: 60px;
+            }
+
+            .sidenav a {
+                padding: 8px 8px 8px 20px;
+                text-decoration: none;
+                font-size: 18px;
+                color: #818181;
+                display: block;
+                transition: 0.3s;
+            }
+
+            .sidenav a:hover {
+                color: #f1f1f1;
+            }
+            .sidenav tr:hover {
+                color: #f1f1f1;
+            }
+
+            .sidenav .closebtn {
+                position: absolute;
+                top: 50px;
+                right: 25px;
+                font-size: 25px;
+                margin-left: 50px;
+            }
+
+            #main {
+                transition: margin-left .5s;
+                padding: 16px;
+            }
+
+            @media screen and (max-height: 450px) {
+                .sidenav {padding-top: 15px;}
+                .sidenav a {font-size: 18px;}
+            }
+        </style>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var PreAccountTotal = 0;
+                var preaccountOS = 0;
+                var preaccountPS = 0;
+                var preaccountVAT = 0;
+                var ResourceTotal = 0;
+                var OperationalSupportTotal = 0;
+                var accountcount = 0;
+                var accountarr = [];
+                var rate;
+
+                $('#Division').on('change', function () {
+                    //alert($('#Division :selected').attr('id'));
+                    var inputVal = $('#Division :selected').attr('id');
+                    // alert(inputVal);
+                    var station = document.getElementById("Station");
+                    for (i = 0; i < station.options.length; i++) {
+
+                        if (inputVal == station.options[i].id)
+                        {
+
+                            station.options[i].style.display = "inline";
+                            station.options[i].selected = true;
+//Add operations here
+                        } else
+                        {
+                            station.options[i].style.display = "none";
+                        }
+                    }
+                    var timestamp = new Date();
+                    var date = timestamp.getDate().toString();
+                    var month = (timestamp.getMonth() + 1).toString();
+                    var year = timestamp.getFullYear().toString();
+                    var hours = timestamp.getHours().toString();
+                    var minutes = timestamp.getMinutes().toString();
+                    var seconds = timestamp.getSeconds().toString();
+
+                    var eventid = inputVal + year + month + date + hours + minutes + seconds;// + hours  
+                    // var divId = eventid.substring(0, 4);
+                    //alert(test);
+                    $('#lblEventRef').text(eventid);
+                    // $('#EventId').val(eventid);
+
+                });
+
+                $('#Equipment').on('change', function () {
+                    $('#OPResourceCount').val(1);
+                    $('#OSHoursCount').val(1);
+
+                    var inputVal = 0;
+                    inputVal = $('#Equipment :selected').attr('value');
+                    inputVal = parseFloat(inputVal).toFixed(2);
+                    var OPResource = $('#Equipment :selected').text();
+                    var OSHoursCount = $('#OSHoursCount').val();
+                    ;
+
+
+                    var count = $('#OPResourceCount').val();
+                    if (OPResource == 'Document Examination' || OPResource == 'Ballistic Examination'
+                            || OPResource == 'Jet Ski' || OPResource == 'Boats'
+                            || OPResource == 'Canine' || OPResource == 'Horse'
+                            || OPResource == 'Light Towers' || OPResource == 'Tow Truck'
+                            || OPResource == 'Crash Barriers') {
+
+                        document.getElementById('lblHours').style.display = "";
+                        document.getElementById('OSHoursCount').style.display = "";
+                        rate = true;
+                    } else
+                    {
+                        document.getElementById('lblHours').style.display = "none";
+                        document.getElementById('OSHoursCount').style.display = "none";
+                        rate = false;
+                    }
+                    if (count !== '')
+                    {
+                        var total = count * (inputVal);
+                        if (rate == true) {
+                            total = OSHoursCount * total;
+                        }
+                        $('#EquipmentAmount').text(total.toFixed(2));
+                    } else
+                    {
+                        $('#EquipmentAmount').text(0);
+                    }
+                });
+
+                $('#OPResourceCount, #OSHoursCount').on('change click', function () {
+                    var count = $('#OPResourceCount').val();
+                    var inputVal = $('#Equipment :selected').attr('value');
+                    var OSHoursCount = $('#OSHoursCount').val();
+                    if (inputVal !== '' && count !== '')
+                    {
+                        var total = count * (inputVal);
+                        if (rate == true) {
+                            total = OSHoursCount * total;
+                        }
+                        $('#EquipmentAmount').text(total.toFixed(2));
+                    } else
+                    {
+                        $('#EquipmentAmount').text(0);
+                    }
+                });
+
+                $('#AddEquipment').on('click', function () {
+                    //alert("hello");
+                    var acctrec = [];
+                    var equipname = $('#Equipment :selected').text();
+                    var equiprate = $('#Equipment :selected').val();
+                    var equipcount = $('#OPResourceCount').val();
+                    OperationalSupportTotal = $('#EquipmentAmount').text();
+                    var pillcontainersupport = document.getElementById('pillcontainersupport');
+                    var pillwrappersupport = document.getElementById('pillwrappersupport');
+                    var hour = $('#OSHoursCount').val();
+
+                    //create instance of list elements
+                    var pill = document.createElement("li");
+                    pill.setAttribute("id", "preaccount" + accountcount);
+
+                    var removeicon = document.createElement("span");
+                    removeicon.setAttribute("class", "glyphicon glyphicon-minus");
+
+                    //dynamically create functions
+                    var pillanchor = document.createElement("a");
+                    pillanchor.setAttribute("data-preactotal", OperationalSupportTotal);
+                    pillanchor.setAttribute("style", "bold");
+
+                    //if have hourly rate
+                    if (rate == true) {
+                        hour = $('#OSHoursCount').val();
+                        pillanchor.appendChild(document.createTextNode("Resource- " + equipname + " x " + equipcount + " x " + hour + "hr(s)" + ": $" + OperationalSupportTotal));
+                    } else
+                    {
+                        hour = 0;
+                        pillanchor.appendChild(document.createTextNode("Resource- " + equipname + " x " + equipcount + ": $" + OperationalSupportTotal));
+                    }
+
+                    pillanchor.appendChild(removeicon);
+
+                    pill.appendChild(pillanchor);
+                    pillwrappersupport.appendChild(pill);
+                    pillcontainersupport.appendChild(pillwrappersupport);
+                    PreAccountTotal = parseFloat(PreAccountTotal) + parseFloat(OperationalSupportTotal);
+                    preaccountOS = parseFloat(preaccountOS) + parseFloat(OperationalSupportTotal);
+                    $("#opsupporttotal").text(preaccountOS.toFixed(2));
+                    $("#eventcost").text(PreAccountTotal.toFixed(2));
+
+                    $("#preaccttotal").text(PreAccountTotal.toFixed(2));
+                    acctrec.push("preaccount" + accountcount);
+                    acctrec.push(OperationalSupportTotal);
+                    acctrec.push(equipname);
+                    acctrec.push(equiprate);
+                    acctrec.push(equipcount);
+                    acctrec.push(hour);
+                    acctrec.push('OPPSPP')
+
+                    accountarr.push(acctrec);
+
+                    accountcount++;
+
+                });
+
+                $('#Rank').on('change', function () {
+
+                    $('#ResourceCount').val(1);
+                    $('#RSHoursCount').val(1);
+                    var inputVal = 0;
+                    inputVal = $('#Rank :selected').attr('value');
+                    inputVal = parseFloat(inputVal).toFixed(2);
+                    var count = $('#ResourceCount').val();
+                    if (count !== '')
+                    {
+                        var total = count * (inputVal);
+                        $('#ResourceAmount').text(total.toFixed(2));
+                    } else
+                    {
+                        $('#ResourceAmount').text(0);
+                    }
+
+                });
+
+                $('#ResourceCount, #RSHoursCount').on('change click', function () {
+                    var count = $('#ResourceCount').val();
+                    var RSHoursCount = $('#RSHoursCount').val();
+                    var inputVal = $('#Rank :selected').attr('value');
+                    if (inputVal !== '' && count !== '')
+                    {
+                        var subtotal = count * (inputVal);
+                        var total = subtotal * (RSHoursCount);
+                        $('#ResourceAmount').text(total.toFixed(2));
+                    } else
+                    {
+                        $('#ResourceAmount').text(0);
+                    }
+                });
+
+                $('#AddResource').on('click', function () {
+                    //alert("hello");
+                    var acctrec = [];
+                    var rankname = $('#Rank :selected').text();
+                    var rankrate = $('#Rank :selected').val();
+                    var rankcount = $('#ResourceCount').val();
+                    var rshours = $('#RSHoursCount').val();
+                    ResourceTotal = $('#ResourceAmount').text();
+                    var pillcontainersupport = document.getElementById('pillcontainersupport');
+                    var pillwrappersupport = document.getElementById('pillwrappersupport');
+
+                    //create instance of list elements
+                    var pill = document.createElement("li");
+                    pill.setAttribute("id", "preaccount" + accountcount);
+
+                    var removeicon = document.createElement("span");
+                    removeicon.setAttribute("class", "glyphicon glyphicon-minus");
+
+                    //dynamically create functions
+                    var pillanchor = document.createElement("a");
+                    pillanchor.setAttribute("data-preactotal", ResourceTotal);
+                    pillanchor.setAttribute("style", "bold");
+                    pillanchor.appendChild(document.createTextNode("Rank- " + rankname + " x " + rankcount + " x " + rshours + "hr(s)" + ": $" + ResourceTotal));
+
+                    pillanchor.appendChild(removeicon);
+
+                    pill.appendChild(pillanchor);
+                    pillwrappersupport.appendChild(pill);
+                    pillcontainersupport.appendChild(pillwrappersupport);
+
+                    preaccountPS = parseFloat(preaccountPS) + parseFloat(ResourceTotal);
+
+                    $("#policeservicestotal").text(preaccountPS.toFixed(2));
+
+                    var vatVal = document.getElementById("VATDBval").value;
+                    var vatCalc = (parseFloat(ResourceTotal) * parseFloat(vatVal)).toFixed(2);
+                    preaccountVAT = parseFloat(preaccountVAT) + parseFloat(vatCalc);
+                    PreAccountTotal = parseFloat(PreAccountTotal) + parseFloat(ResourceTotal) + parseFloat(vatCalc);
+                    $("#eventcost").text(PreAccountTotal.toFixed(2));
+                    $("#VATPoliceServices").text(preaccountVAT.toFixed(2));
+                    acctrec.push("preaccount" + accountcount);
+
+                    acctrec.push(ResourceTotal);
+                    acctrec.push(rankname);
+                    acctrec.push(rankrate);
+                    acctrec.push(rankcount);
+                    acctrec.push(rshours);
+                    acctrec.push('PLCSRV');
+                    accountarr.push(acctrec);
+
+                    accountcount++;
+
+                });
+
+                $(document).on("dblclick", ".pillwrappersupport li", function (event) {
+
+                    var key = this.id.toString();
+                    var elem = document.getElementById(this.id.toString());
+
+                    var preAccountValToDelete = 'OS';
+                    var accountType = elem.innerText;
+                    accountType = accountType.substring(0, 4);
+                    if (accountType == 'Rank')
+                    {
+                        preAccountValToDelete = 'PS'
+                    }
+                    elem.parentNode.removeChild(elem);
+                    RemoveInfo(key, preAccountValToDelete);
+
+                });
+
+                $('.search-boxcomp input[type="text"]').on("keyup input", function () {
+                    /* Get input value on change */
+                    var inputVal = $(this).val();
+                    var resultDropdown = $(this).siblings(".resultcomp");
+                    var isnum = /[0-9]/;
+                    var isalpha = /[a-zA-Z]/;
+                    if (inputVal.length) {
+                        if (isalpha.test(inputVal))
+                        {
+                            $.get("/Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
+                                // Display the returned data in browser
+                                resultDropdown.html(data);
+                            });
+                        } else
+                        if (isnum.test(inputVal))
+                        {
+                            $.get("/Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "companyid", {term: inputVal}).done(function (data) {
+                                // Display the returned data in browser
+                                resultDropdown.html(data);
+                            });
+                        }
+
+                    } else {
+                        resultDropdown.empty();
+                    }
+                });
+                // Set search input value on click of result item
+                $(document).on("click", ".resultcomp p", function () {
+                    $(this).parents(".search-boxcomp").find('input[type="text"]').val($(this).text());
+                    $test = document.getElementById('searchcomp').value;
+                    $type = 'REF';
+                    if ($test == "") {
+                                document.getElementById("txtHintcomp").innerHTML = "";
+                                return;
+                        } else {
+                                if (window.XMLHttpRequest) {
+                                        // code for IE7+, Firefox, Chrome, Opera, Safari
+                                        xmlhttp = new XMLHttpRequest();
+                                } else {
+                                        // code for IE6, IE5
+                                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                                }
+                                xmlhttp.onreadystatechange = function () {
+                                        if (this.readyState == 4 && this.status == 200) {
+                                                document.getElementById("txtHintcomp").innerHTML = this.responseText;
+                                $("#submittercompany").text($("#CompanyId").val());
+                                //$("#submitterprevbalance").text($("#PreviousBalance").val());
+                                $("#submitterbalance").text($("#CompanyBalance").val());
+                                        }
+                                };
+                                xmlhttp.open("GET", "../Views/Shared/Controls/EventSearch/listregevents.php?q=" + $test, true);
+                                xmlhttp.send();
+                        }
+                    $(this).parent(".result").empty();
+                    //alert('test');
+                });
+
+                $(document).on("click", ".pillwrapper li", function () {
+
+                    var key = $(this).attr("class");
+
+                    var EventId = $("." + key).find('#liEventId').text();
+                    var EventName = $("." + key).find('#liEventName').text();
+                    var EventCost = $("." + key).find('#liEventCost').text();
+                    var OpSupport = $("." + key).find('#liOperationalSupport').text();
+                    var PoliceServ = $("." + key).find('#liPoliceServices').text();
+
+                    var EventDateStart = $("." + key).find('#liEventDateStart').text();
+                    var EventDateEnd = $("." + key).find('#liEventDateEnd').text();
+
+
+                    var Station = $("." + key).find('#liStation').text();
+                    var Division = $("." + key).find('#liDivision').text();
+                    var CompanyId = $("." + key).find('#liCompanyId').text();
+
+                    var CompanyName = document.getElementById("compName").innerHTML;
+
+                    document.getElementById("Division").value = Division;
+                    document.getElementById("Station").value = Station;
+                    document.getElementById("EventName").value = EventName;
+
+                    document.getElementById("EventDateStart").value = EventDateStart;
+                    document.getElementById("EventDateEnd").value = EventDateEnd;
+                    document.getElementById("lblEventRef").innerHTML = EventId;
+                    document.getElementById("CompanyId").value = CompanyId;
+                    document.getElementById("CompanyName").value = CompanyName;
+                    //document.getElementById("eventcost").innerhtml = EventCost;
+                    //$("#eventcost").text(EventCost);
+                    //$("#opsupporttotal").text(OpSupport);
+                    //$("#policeservicestotal").text(PoliceServ);
+                });
+
+                $("#btnCreateEvent").click(function (e) {
+//need to add validation that all fields are there 
+                    $("#hdnEventCost").val(PreAccountTotal.toFixed(2));
+                    $("#hdnOperationalSupport").val(preaccountOS.toFixed(2));
+                    $("#hdnPoliceServices").val(preaccountPS.toFixed(2));
+                    $("#hdnVATPoliceServices").val(preaccountVAT.toFixed(2));
+
+                    var divid = document.getElementById("lblEventRef").innerHTML;
+                    $('#hdnDivisionId').val(divid.substring(0, 4));
+                    $('#EventId').val(divid);
+                    $('#hdnAsset').val(JSON.stringify(accountarr));
+
+                });
+
+                function RemoveInfo(key, accountToDelete) {
+                    var indextoremove;
+
+                    for (i = 0; i < accountarr.length; i++) {
+                        // alert(accountarr[i][0]);
+
+                        if (accountarr[i][0] === key)
+                        {
+                            //alert(accountarr[i][1]);
+
+                            if (accountToDelete == "OS")
+                            {
+                                preaccountOS = preaccountOS - parseFloat(accountarr[i][1]);
+                                $("#opsupporttotal").text(preaccountOS.toFixed(2));
+                                PreAccountTotal = PreAccountTotal - parseFloat(accountarr[i][1]);
+                            } else
+                            {
+                                preaccountPS = parseFloat(preaccountPS).toFixed(2) - parseFloat(accountarr[i][1]);
+                                var vatVal = document.getElementById("VATDBval").value;
+
+                                var vatTot = (parseFloat(accountarr[i][1]) * parseFloat(vatVal)).toFixed(2);
+                                var subTot = parseFloat(accountarr[i][1]) + parseFloat(vatTot);
+                                preaccountVAT = parseFloat(preaccountVAT).toFixed(2) - (parseFloat(accountarr[i][1]) * parseFloat(vatVal)).toFixed(2);
+                                $("#policeservicestotal").text(preaccountPS.toFixed(2));
+                                $("#VATPoliceServices").text(preaccountVAT.toFixed(2));
+                                PreAccountTotal = parseFloat(PreAccountTotal).toFixed(2) - parseFloat(subTot);
+                            }
+
+                            indextoremove = i;
+
+                        }
+                    }
+                    accountarr.splice(indextoremove, 1);
+                    $("#eventcost").text(PreAccountTotal.toFixed(2));
+
+                    /* for (x = 0; x < accountarr.length; x++) {
+                     
+                     alert(accountarr[x][0] + accountarr[x][1]);
+                     }*/
+                    //alert(            accountarr);
+                }
+
+            });
+        </script>
+        <script>
+            function ShowSummary() {
+                document.getElementById("mySidenav").style.width = "350px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+        </script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <header class="page-header">
+                <nav class="navbar mega-menu" role="navigation">
+                    <div class="container-fluid">
+                        <div class="clearfix navbar-fixed-top">
+                            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="toggle-icon">
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </span>
+                            </button>
+                            <a class="page-logo" id="index" href="/index.php">
+                                <img src="../assets/global/img/customs logo no back.png" alt="" height="400"/>                          
+                                <img src="../assets/global/img/OVERTIME-APP-LOGO.png" alt=""/>
+                            </a>
+                            <div class="topbar-actions">
+                                <div class="btn-group-img btn-group">
+                                    <button class="btn btn-sm md-skip dropdown-toggle" type="button" data-toggle="dropdown" data-close-others="true" data-hover="dropdown">
+                                        <span>Hi,<?php echo $_SESSION['firstname']; ?></span>
+                                    </button>
+                                    <ul class="dropdown-menu-v2" role="menu">
+                                        <li>
+                                            <a href="changepassword">
+                                                <i class="icon-user"></i> Change Password
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="logout">
+                                                <i class="icon-key"></i> Log Out 
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="">
+                                                <i class="icon-briefcase"></i> <?php echo $_SESSION['user_roles']; ?>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>                        
+                        </div>                       
+                        <div class="nav-collapse collapse navbar-collapse navbar-responsive-collapse"  >
+                            <ul class="nav navbar-nav" >
+                                <li class="dropdown dropdown-fw dropdown-fw-disabled active open selected">
+                                    <a class="text-uppercase" href="/index.php">
+                                        <i class="icon-home"></i> Home 
+                                    </a>      
+                                </li>
+                                <li>
+                                    <a class="text-uppercase" href="/event/create"><i class="glyphicon glyphicon-pencil"></i>Create Event</a>
+                                </li>
+                                <li>
+                                    <a class="text-uppercase" href="/event/edit"><i class="glyphicon glyphicon-pencil"></i>View/Delete Event</a>
+                                </li>
+                                <li>
+                                    <a class="text-uppercase" href="/proforma/edit"><i class="glyphicon glyphicon-eye-open"></i>View &nbsp; <i class="glyphicon glyphicon-pencil"></i>Edit Proforma</a>
+                                </li>
+                            </ul>
+                        </div>                      
+                    </div>                
+                </nav>
+            </header>
+            <div class="container-fluid" >
+                <div class="page-content">
+                    <div class="page-content-row">
+                        <div class="col-md-3">
+                            <div class="page-sidebar">
+
+                                <div class="col-xs-12">
+                                    <div class="dashboard-stat dashboard-stat-v2 green">
+                                        <div class="visual">
+                                            <i class="fa fa-comments"></i>
+                                        </div>
+                                        <div class="details">
+                                            <div class="number">
+                                                <span data-value="2" id="submittercompany" style="font-size: xx-large"  data-counter="counterup"></span>
+                                            </div>
+                                            <div class="desc"> Company ID </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="dashboard-stat dashboard-stat-v2 purple" >
+                                        <div class="visual">
+                                            <i class="fa fa-comments"></i>
+                                        </div>
+                                        <div class="details">
+                                            <div class="number">
+                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="policeservicestotal" style="font-size: xx-large" >0</span>
+
+                                            </div>
+                                            <div class="desc"> Police Services Total </div>
+                                        </div>
+                                    </div>
+                                    <div class="dashboard-stat dashboard-stat-v2 purple" >
+                                        <div class="visual">
+                                            <i class="fa fa-comments"></i>
+                                        </div>
+                                        <div class="details">
+                                            <div class="number">
+                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="VATPoliceServices" style="font-size: xx-large" >0</span>
+
+                                            </div>
+                                            <div class="desc"> Vat Total </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="dashboard-stat dashboard-stat-v2 yellow" >
+                                        <div class="visual">
+                                            <i class="fa fa-comments"></i>
+                                        </div>
+                                        <div class="details">
+                                            <div class="number">
+                                                <span class="glyphicon glyphicon-usd" style="font-size:smaller"></span><span  id="opsupporttotal" style="font-size: xx-large" >0</span>
+                                            </div>
+                                            <div class="desc"> Op Support Total </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="dashboard-stat dashboard-stat-v2 red" >
+                                        <div class="visual">
+                                            <i class="fa fa-comments"></i>
+                                        </div>
+                                        <div class="details">
+                                            <div class="number">
+                                                <span class="glyphicon glyphicon-usd"></span><span  id="eventcost" style="font-size: xx-large" ></span>
+                                            </div>
+                                            <div class="desc"> Event Cost </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <center>
+                                    <a class="btn btn-outline blue" href="../../index.php">back to main page</a>    
+                                </center>
+                            </div> 
+                        </div>
+                        <div class="col-md-9">
+                            <div class="page-content-col-8">
+                                <div class="panel panel-info" >
+                                    <div class="panel-heading">
+                                        <center>
+                                            <h3><label id="lblEventRef" class="label label-info"></label></h3>
+                                        </center>
+                                    </div>
+                                </div>
+                                <div class="portlet box blue">
+                                    <div class="portlet-title">
+                                        <div class="caption"><em class="fa fa-group"></em><h4>Create ProForma</h4></div>
+                                        <div class="tools">
+                                            <a title="" class="collapse" href="javascript:;" data-original-title=""> </a>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body form">
+                                        <form  method="post"  action="" id="paymentform" > 
+                                            <div class="container-fluid">
+                                                <div class="row center-block">
+                                                    <div class="col-md-2" ></div>
+                                                    <div class="col-md-8" >
+                                                        <?php
+                                                        include 'Views/Shared/Controls/CompanySearch/search-form.php';
+                                                        ?>                                                            
+                                                    </div>
+                                                    <div class="col-md-2" >
+                                                        <br>
+                                                        <a href="/company/create" id="" class="btn btn-default blue">Create Company</a>
+                                                    </div>
+                                                </div>
+                                                <div class="row center-block"> 
+                                                    <div class="col-md-3" >                                                 
+                                                        <div class="row">
+                                                            <div class="col-xs-4" style="font-size: large">
+                                                                <a id="addrank" class="btn btn-default green" data-toggle="modal" data-target="#myModal">Police Services <i class="glyphicon glyphicon-plus"></i>
+                                                                </a>
+                                                            </div>  
+                                                        </div>
+                                                        <br>
+                                                        <div class="row">
+                                                            <div class="col-xs-4" style="font-size: large">
+                                                                <a id="addopsupport" class="btn btn-default green" data-toggle="modal" data-target="#myModal2">Operational Support <i class="glyphicon glyphicon-plus"></i>
+                                                                </a>
+                                                            </div>  
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5" >
+                                                        <br>
+
+                                                        <div class="pillwrappersupport" id="pillcontainersupport">
+                                                            <ul class="nav nav-pills nav-stacked" id="pillwrappersupport">                                   
+                                                            </ul>   
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4" >
+                                                        <br>
+                                                        <label>Division</label>
+                                                        <input type="text"  class="form-control" id="Division" name="Division" placeholder="Select Event" readonly="">  
+
+                                                        <label>Station</label>
+                                                        <input type="text"  class="form-control" id="Station" name="Station" placeholder="Select Event" readonly="">  
+
+                                                        <label>Event Name</label>
+                                                        <input type="text"  class="form-control" id="EventName" name="EventName" value=" " placeholder="Select Event" readonly="">  
+
+                                                        <label>Event Start Date</label>
+                                                        <input type="text" class="form-control" id="EventDateStart" name="EventDateStart" placeholder="YYYY-MM-DD" readonly="">
+                                                        <label>Event End Date</label>
+                                                        <input type="text" class="form-control" id="EventDateEnd" name="EventDateEnd" placeholder="YYYY-MM-DD" readonly="">
+
+                                                        <div><input id="paylist" name="paylist" class="form-control" type="hidden" ></div>
+
+                                                        <!--                                                        <input type="hidden"  class="form-control" id="EventCost" name="EventCost"  required value="{ EventCost }" >  -->
+
+                                                    </div> 
+                                                </div>
+                                                <div>
+
+                                                    <center>
+                                                        <br>
+                                                        <i class="glyphicon glyphicon-comment"></i><label> Comments</label>
+                                                    </center>
+                                                    <div class="col-md-4"></div>
+                                                    <div class="col-md-4">
+                                                        <textarea  class="form-control" id="Comments" name="Comments" rows="4" cols="12"></textarea>
+                                                    </div>
+                                                    <div class="col-md-4"></div>
+                                                </div>
+                                                <div class="col-md-3" >
+
+                                                    <input type="hidden" class="form-control" id="EventId" name="EventId"  >
+
+                                                    <input type="hidden" class="form-control" id="CompanyName" name="CompanyName"  >
+                                                    <input type="hidden" class="form-control" id="CompanyId" name="CompanyId"  >
+                                                    <input type="hidden" class="form-control" id="hdnDivisionId" name="hdnDivisionId"  >
+                                                    <input type="hidden" class="form-control" id="hdnEventCost" name="hdnEventCost"  >
+                                                    <input type="hidden" class="form-control" id="hdnOperationalSupport" name="hdnOperationalSupport"  >
+                                                    <input type="hidden" class="form-control" id="hdnPoliceServices" name="hdnPoliceServices"  >
+                                                    <input type="hidden" class="form-control" id="hdnVATPoliceServices" name="hdnVATPoliceServices"  >
+                                                    <input type="hidden" class="form-control" id="hdnAsset" name="hdnAsset" value="" >
+                                                    <input type="hidden" class="form-control" id="VATDBval" name="VATDBval" value="{ VATDBval }" >
+
+                                                </div>
+                                            </div>  
+                                            <br>
+                                            <center>
+                                                <button type="submit" name="btn-create" class="btn btn-default blue" id="btnCreateEvent">Create Pro Forma</button>    
+                                            </center>
+                                            <br>
+                                        </form> 
+                                        <div class="modal" id="myModal">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Select Police Service Resource</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body">                                                                                                               
+                                                        <label><strong>Select Officer Rank</strong></label>
+                                                        <select name="Rank" class="form-control" id="Rank" style="width:auto" >
+                                                            <option>Select Rank</option>
+                                                            { RoleRates }
+                                                        </select>
+                                                        <label><strong>Resource Count</strong></label>
+                                                        <input type="number"  class="form-control" id="ResourceCount" name="ResourceCount" min="1" value="1" required  >     
+
+                                                        <label><strong>Hours</strong></label>
+                                                        <input type="number"  class="form-control" id="RSHoursCount" name="RSHoursCount" min="1" value="1" required  >     
+
+                                                    </div>
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+                                                        <label id="ResourceAmount" >0</label>
+                                                        <button type="button" class="btn btn-info" id="AddResource" data-enter="modal">Add Resources</button>
+                                                    </div>                                            
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal" id="myModal2">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Select Operational Support Resource</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body">
+
+                                                        <label><strong>Select Equipment</strong></label>
+                                                        <select name="Equipment" class="form-control" id="Equipment" style="width:auto" >
+                                                            <option>Select Equipment</option>
+                                                            { Equipment }
+                                                        </select>
+
+                                                        <label id="lblRSCount"><strong>Resource Count</strong></label>
+                                                        <input type="number"  class="form-control" id="OPResourceCount" name="OPResourceCount" min="1" value="1" required  > 
+
+                                                        <label id="lblHours"><strong>Hours</strong></label>
+                                                        <input type="number"  class="form-control" id="OSHoursCount" name="OSHoursCount" min="1" value="1" required  >     
+
+                                                    </div>
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+                                                        <label id="EquipmentAmount" >0</label>
+                                                        <button type="button" class="btn btn-info" id="AddEquipment" data-enter="modal">Add Op Support</button>
+                                                    </div>                                            
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>            
+        </div>
+        { foot }
+    </body>
+</html>

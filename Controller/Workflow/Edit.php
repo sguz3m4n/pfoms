@@ -40,8 +40,8 @@ class WorkflowEditController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-update'])) {
-            $compinst = new \BarcomModel\Workflow();
-            $audinst = new \BarcomModel\Audit();
+            $compinst = new \PfomModel\Workflow();
+            $audinst = new \PfomModel\Audit();
 
             //Get Id from browser interface
             $WorkflowId = $_POST['WorkflowId'];
@@ -89,7 +89,7 @@ class WorkflowEditController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Workflow();
+            $model = new \PfomModel\Workflow();
             $template = new MasterTemplate();
             $template->load("Views/Workflow/workflow_edit.html");
             $template->replace("title", " Create New Workflow ");

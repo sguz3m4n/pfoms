@@ -11,7 +11,7 @@ $stmt = $conn->prepare($sql);
 $stmt->execute();
 $result = $stmt->fetchAll();
 
-$compinst = new \BarcomModel\Payment();
+$compinst = new \PfomModel\Payment();
 
 $BillFormNo = $compinst->GenerateTimestamp('RFN');
 $BillRefNo = $compinst->GenerateTimestamp("");

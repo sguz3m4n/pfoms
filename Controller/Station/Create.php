@@ -47,8 +47,8 @@ class StationCreateController extends PermissionController {
         if (isset($_POST['btn-create'])) {
 //variables for data input 
             $conn = conn();
-            $compinst = new \BarcomModel\Station();
-            $audinst = new \BarcomModel\Audit();
+            $compinst = new \PfomModel\Station();
+            $audinst = new \PfomModel\Audit();
             $this->DivisionId = $DivisionId = $compinst->DivisionId = $_POST['DivisionId'];
             $this->DivisionName = $compinst->DivisionName = $DivisionName = $_POST['DivisionName'];
             $this->MyDivisionRecords = $stationrecs = json_decode($_POST['stationlist'], TRUE);
@@ -89,7 +89,7 @@ class StationCreateController extends PermissionController {
                 }
             } else {
                 //if validation fails do postback with values already entered
-                $model = new \BarcomModel\Station();
+                $model = new \PfomModel\Station();
                 $template = new MasterTemplate();
                 $template->load("Views/Station/station.html");
                 $template->replace("DivisionId", $this->DivisionId);
@@ -99,7 +99,7 @@ class StationCreateController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Station();
+            $model = new \PfomModel\Station();
 
             $template = new MasterTemplate();
             $template->load("Views/Station/station.html");

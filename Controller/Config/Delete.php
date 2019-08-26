@@ -24,8 +24,8 @@ class ConfigDeactivateController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-delete'])) {
-            $compinst = new \BarcomModel\Config();
-            $audinst = new \BarcomModel\Audit();
+            $compinst = new \PfomModel\Config();
+            $audinst = new \PfomModel\Audit();
             $ItemCode = $_POST['ItemCode'];
             //Check to see if the record already exists            
             //If it does execute delete

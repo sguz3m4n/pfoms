@@ -15,8 +15,8 @@ class EditPRNController extends DisburseController {
     }
 
     function show($params) {
-        $prninst = new \BarcomModel\PreReqNum();
-        $audinst = new \BarcomModel\Audit();
+        $prninst = new \PfomModel\PreReqNum();
+        $audinst = new \PfomModel\Audit();
 
         if (isset($_POST['submit'])) {
             $User = $_SESSION["login_user"];
@@ -30,7 +30,7 @@ class EditPRNController extends DisburseController {
             $tranid = $_POST['TranId'];
             $newtranid = $audinst->TranId = $audinst->GenerateTimestamp('PRN');
             $prnid = $_POST['PRNumber'];
-            //$prn = new \BarcomModel\PreReqNum();
+            //$prn = new \PfomModel\PreReqNum();
             //$prnid = $_SESSION['prnlist'][$i];
             $prninst->UpdatePRNTransaction($tranid, $UpdateCount, $User);
             $prninst->CreatePRNTransaction($newtranid, NULL, $User);

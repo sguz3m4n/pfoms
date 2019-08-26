@@ -24,8 +24,8 @@ class EquipmentDeactivateController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-delete'])) {
-            $compinst = new \BarcomModel\Equipment();
-            $audinst = new \BarcomModel\Audit();
+            $compinst = new \PfomModel\Equipment();
+            $audinst = new \PfomModel\Audit();
 
             $TIN= $_POST['EquipmentId'];
             //Check to see if the record already exists            

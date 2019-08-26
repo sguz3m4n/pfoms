@@ -21,7 +21,7 @@ class ManagePOTController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-create'])) {
-            $potins = new \BarcomModel\ManagePOT();
+            $potins = new \PfomModel\ManagePOT();
             $role = $potins->RoleCode = $_POST['RoleCode'];
             $rolename = $potins->RoleName = $_POST['RoleName'];
             $code = $potins->RateCode = $_POST['RateCode'];
@@ -38,7 +38,7 @@ class ManagePOTController extends PermissionController {
                 header("Location:" . "/success?result=$token&header=$token1&args=");
             } else {
                 if (isset($_GET)) {
-                    $model = new \BarcomModel\ManagePOT();
+                    $model = new \PfomModel\ManagePOT();
                     $ratecode = $model->GetRateCode();
                     $template = new MasterTemplate();
                     $template->load("Views/Admin/overtime.html");
@@ -48,7 +48,7 @@ class ManagePOTController extends PermissionController {
             }
         } else
         if (isset($_POST['btn-update'])) {
-            $potins = new \BarcomModel\ManagePOT();
+            $potins = new \PfomModel\ManagePOT();
             $code = $potins->RateCode = $_POST['RateCode'];
             if ($potins->IfExists($potins->RateCode)) {
                 $rate = $potins->RateAmount = $_POST['RateAmount'];
@@ -64,7 +64,7 @@ class ManagePOTController extends PermissionController {
         }
         else
                  if (isset($_GET)) {
-                    $model = new \BarcomModel\ManagePOT();
+                    $model = new \PfomModel\ManagePOT();
                     $ratecode = $model->GetRateCode();
                     $template = new MasterTemplate();
                     $template->load("Views/Admin/overtime.html");

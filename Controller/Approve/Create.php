@@ -20,13 +20,13 @@ class ApproveCreateController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-approve'])) {
-            $approveinst= new \BarcomModel\Approve();
+            $approveinst= new \PfomModel\Approve();
             
             $EventId = $_POST['EventId'];
             $approveinst->ApproveIt($EventId);
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Approve();
+            $model = new \PfomModel\Approve();
 
             $template = new MasterTemplate();
             $template->load("Views/Approve/approve.html");

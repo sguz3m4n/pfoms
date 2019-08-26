@@ -1,6 +1,6 @@
 <?php
 
-namespace BarcomModel;
+namespace PfomModel;
 
 require 'Classes/Account.php';
 /*

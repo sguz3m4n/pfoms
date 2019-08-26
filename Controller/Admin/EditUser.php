@@ -21,7 +21,7 @@ class EditAdminUserController extends PermissionController {
 
 
         if (isset($_POST['btn-update'])) {
-            $usrinst = new \BarcomModel\UserModule();
+            $usrinst = new \PfomModel\UserModule();
             $usrinst->Natregno = $_POST['Natregno'];
             if ($usrinst->IfExists($usrinst->Natregno)) {
                 $username = $usrinst->UserName = $_POST['UserName'];
@@ -44,7 +44,7 @@ class EditAdminUserController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\UserModule();
+            $model = new \PfomModel\UserModule();
 
             foreach ($model->SystemRoles as $value) {
                 $test = $value;

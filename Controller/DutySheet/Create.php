@@ -57,8 +57,8 @@ class CreateDutySheetController extends PermissionController {
 
 
         if (isset($_POST['btn-create'])) {
-            $dutysheetinst = new \BarcomModel\DutySheet();
-            $audinst = new \BarcomModel\Audit();
+            $dutysheetinst = new \PfomModel\DutySheet();
+            $audinst = new \PfomModel\Audit();
 
             //Get Id from browser interface
             $dutysheetinst->EventId = $EventId = $_POST["EventId"];
@@ -76,7 +76,7 @@ class CreateDutySheetController extends PermissionController {
             $dutysheetinst->RecEnteredBy = $RecEnteredBy = $username;
 
             $DutySheetId = $audinst->GenerateTimestamp('DYST');
-//            $dutysheetinst->CreateDutySheet($DutySheetId, $EventId, $CompanyId, $DateOfDuty, $DispatchTime, $ArrivalTime, $DismissalTime, $ReturnTime, $HoursEngaged, $RecEnteredBy);
+            $dutysheetinst->CreateDutySheet($DutySheetId, $EventId, $CompanyId, $DateOfDuty, $DispatchTime, $ArrivalTime, $DismissalTime, $ReturnTime, $HoursEngaged, $RecEnteredBy);
             //Duty sheet preaccount 
             $OfficerArray = json_decode($_POST['offarr'], TRUE);
             $EquipmentArray = json_decode($_POST['equiparr'], TRUE);
@@ -98,7 +98,7 @@ class CreateDutySheetController extends PermissionController {
                     $dutysheetinst->Status = $Status = $officer[6];
                     $dutysheetinst->CreateDSPA($DutySheetId, $ForceNumber, $Natregno, $OfficerName, $Hours, $RateCode, $PayRate, $Acting, $ActingRateCode, $ActingPayRate, $Comments, $Status);
 
-//                    $dutysheetinst->OvertimeAmount = $OvertimeAmount = ($Hours * $PayRate) + $OvertimeAmount;
+                    $dutysheetinst->OvertimeAmount = $OvertimeAmount = ($Hours * $PayRate) + $OvertimeAmount;
                 }
             }
 
@@ -129,7 +129,7 @@ class CreateDutySheetController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Employee();
+            $model = new \PfomModel\Employee();
 //            $roles = $model->GetRoles();
             $template = new MasterTemplate();
             $template->load("Views/DutySHeet/dutysheet.html");

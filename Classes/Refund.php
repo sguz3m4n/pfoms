@@ -1,6 +1,6 @@
 <?php
 
-namespace BarcomModel;
+namespace PfomModel;
 
 /*
   Developed by Kitji Studios

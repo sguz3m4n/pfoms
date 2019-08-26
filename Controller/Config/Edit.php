@@ -43,8 +43,8 @@ class ConfigEditController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-update'])) {
-            $compinst = new \BarcomModel\Config();
-            $audinst = new \BarcomModel\Audit();
+            $compinst = new \PfomModel\Config();
+            $audinst = new \PfomModel\Audit();
 
             //Get Id from browser interface
             $ItemCode = $_POST['ItemCode'];
@@ -95,7 +95,7 @@ class ConfigEditController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Config();
+            $model = new \PfomModel\Config();
             $template = new MasterTemplate();
             $template->load("Views/Config/config_edit.html");
             $template->replace("title", " Create New Config ");

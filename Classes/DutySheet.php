@@ -1,6 +1,6 @@
 <?php
 
-namespace BarcomModel;
+namespace PfomModel;
 
 /*
   Developed by Kitji Studios
@@ -49,6 +49,22 @@ class DutySheet {
         $earnings = $rate * $hours;
         $earnings = number_format($earnings, 2, '.', '');
         return $earnings;
+    }
+
+    function GetListDutySheet($dutysheetid) {
+        $result = "";
+        $conn = conn();
+        $stmt = $conn->prepare("SELECT company.CompanyName, dutysheet.* FROM `dutysheetevent` as dutysheet,`company` as company WHERE company.CompanyId=dutysheet.CompanyId AND dutysheet.DutySheetId='" . $_REQUEST['dutysheetid'] . "' AND dutysheet.DelFlg='N';");
+
+        $stmt->execute();
+        $result_array = $stmt->fetchAll();
+//        $result = "<option id=' ' >" . " " . "</option>";
+//        foreach ($result_array as $value) {
+//            $PRNNo = $value['PRNumber'];
+//            $result .= "<option id='$PRNNo' >" . $value['PRNumber'] . "</option>";
+//        }
+        return $result_array;
+        $conn = NULL;
     }
 
     //Method to create Duty Sheet preaccounts records in database

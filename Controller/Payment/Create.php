@@ -76,7 +76,7 @@ class MakePaymentController extends PermissionController {
 
     //Validation Engine will execute any validation on the fields in the interface
     function ValidationEngine($elements) {
-        $pymnt = new \BarcomModel\Payment();
+        $pymnt = new \PfomModel\Payment();
         $_SESSION['$PRNwrapper'] = NULL;
         $_SESSION['$companybalwrapper'] = NULL;
         $_SESSION['$selfidwrapper'] = NULL;
@@ -136,7 +136,7 @@ class MakePaymentController extends PermissionController {
     function show($params) {
         $username = $_SESSION["login_user"];
         $this->National_Id = $_SESSION['NatReg'];
-        $test = new \BarcomModel\PayScale();
+        $test = new \PfomModel\PayScale();
         if (isset($_POST['btn-create'])) {
 
             $this->MyPaymentsRecords = $pymntrecs = json_decode($_POST['paylist'], TRUE);
@@ -144,7 +144,7 @@ class MakePaymentController extends PermissionController {
             $varhassubs = 'off';
             $count = 0;
 
-            $employee = new \BarcomModel\Employee();
+            $employee = new \PfomModel\Employee();
             $this->BillRef = $_POST['BillRef'];
 
             if ($_POST['PRNNo'] == "") {
@@ -170,8 +170,8 @@ class MakePaymentController extends PermissionController {
                 //foreach loop to iterate through all array elements
                 foreach ($pymntrecs as $value) {
 
-                    $indvemployee = new \BarcomModel\Employee();
-                    $indvpymtinst = new \BarcomModel\Payment();
+                    $indvemployee = new \PfomModel\Employee();
+                    $indvpymtinst = new \PfomModel\Payment();
 
                     $companyname = $_POST['CompName'];
                     $employeename = $value[0];
@@ -270,8 +270,8 @@ class MakePaymentController extends PermissionController {
 
                         if ($indvpymtinst->auditok == 1) {
 
-                            $depinst = new \BarcomModel\Deposit();
-                            $audinst = new \BarcomModel\Audit();
+                            $depinst = new \PfomModel\Deposit();
+                            $audinst = new \PfomModel\Audit();
 
                             $depinst->ReEnteredBy = $username;
 
@@ -285,7 +285,7 @@ class MakePaymentController extends PermissionController {
                             $audinst->CreateTransAuditRecord($tranid, $AudtDesc, $User, "PMT", $total, $varid);
 
                             if ($this->IsPRN) {
-                                $pymt = new \BarcomModel\Payment();
+                                $pymt = new \PfomModel\Payment();
                                 $pymt->PRNSetter($this->PRN, $User);
                             }
                             $depinst->MakePayment($this->CompanyBalance, $this->GrandTotal, $this->CompId);
@@ -355,7 +355,7 @@ class OfficerPaymentController extends MakePaymentController {
     }
 
     /* function Validation($elements) {
-      $pymnt = new \BarcomModel\Payment();
+      $pymnt = new \PfomModel\Payment();
       $errors = " ";
       foreach ($elements as $value) {
       if ($value == "PRNNo") {
@@ -391,13 +391,13 @@ class OfficerPaymentController extends MakePaymentController {
         $varhaspx = 'off';
         $varhassubs = 'off';
 
-        $employee = new \BarcomModel\Employee();
+        $employee = new \PfomModel\Employee();
         $employeeDetails = $employee->GetEmployee($natregno);
         $alerts = "";
 
         if (isset($_POST["btn-create"])) {
-            $payment = new \BarcomModel\Payment();
-            $audit = new \BarcomModel\Audit();
+            $payment = new \PfomModel\Payment();
+            $audit = new \PfomModel\Audit();
 
             //$payment->CompanyName = $_POST["CompName"];
             $payment->InspectionDate = $payment->StartDate = $_POST["InspectionDateStart"];

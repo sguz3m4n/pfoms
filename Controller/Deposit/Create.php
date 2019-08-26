@@ -85,8 +85,8 @@ class MakeDepositController extends PermissionController {
         if (isset($_POST['btn-create'])) {
             //$this->MyPreAccountRecords = $pymntrecs = json_decode($_POST['paylist'], TRUE);
             //variables for data input 
-            $depinst = new \BarcomModel\Deposit();
-            $audinst = new \BarcomModel\Audit();
+            $depinst = new \PfomModel\Deposit();
+            $audinst = new \PfomModel\Audit();
             //ternary operator to see if post variable has been set or not
             (isset($_POST['CompanyId']) ? $this->CompId = $varid = $depinst->CompanyId = $_POST['CompId'] : $this->CompId = $varid = $depinst->CompanyId = "");
             if ($varid != "") {

@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        { head }
+        <style>
+            /* The switch - the box around the slider */
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 80px;
+                height: 55px;
+            }
+            /* Hide default HTML checkbox */
+            .switch input {display:none;}
+            /* The slider */
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 10px;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+            input:checked + .slider {
+                background-color: #2196F3;
+            }
+            input:focus + .slider {
+                box-shadow: 0 0 1px #2196F3;
+            }
+            input:checked + .slider:before {
+                -webkit-transform: translateX(26px);
+                -ms-transform: translateX(26px);
+                transform: translateX(26px);
+            }
+            /* Rounded sliders */
+            .slider.round {
+                border-radius: 34px;
+            }
+            .slider.round:before {
+                border-radius: 50%;
+            }   
+        </style>
+
+        <script type="text/javascript">
+            var offcrcount = 0;
+            var offcrarr = [];
+            var equipcount = 0;
+            var equiparr = [];
+            var CreatedutySheet = false;
+            var isacting = 'off';
+
+            $(document).ready(function () {
+
+                var submitcontainer = document.getElementById("submitcontrol");
+                var submitcontrol = document.createElement("button");
+                submitcontrol.innerHTML = "Create Flexi-Duty Sheet";
+                submitcontrol.style.display = "none";
+                submitcontrol.setAttribute("type", "submit");
+                submitcontrol.setAttribute("id", "btn-create");
+                submitcontrol.setAttribute("name", "btn-create");
+                submitcontrol.setAttribute("class", "btn btn-default blue");
+
+                submitcontainer.appendChild(submitcontrol);
+
+                var addcontainer = document.getElementById("addcontrols");
+                var adddetails = document.createElement("a");
+                //adddetails.style.display = "none";
+                adddetails.innerHTML = "Add Officers to Duty Sheet";
+                adddetails.setAttribute("id", "adddetails");
+                adddetails.setAttribute("class", "btn btn-default blue");
+                adddetails.style.display = "none";
+                addcontainer.appendChild(adddetails);
+
+                var addofficer = document.createElement("a");
+                addofficer.style.display = "none";
+                addofficer.innerHTML = "Officer  ";
+                addofficer.setAttribute("id", "addofficer");
+                addofficer.setAttribute("class", "btn btn-default blue");
+                var i = document.createElement("i");
+                i.setAttribute("class", "glyphicon glyphicon-plus");
+
+                var addequipment = document.createElement("a");
+                addequipment.style.display = "none";
+                addequipment.innerHTML = "Resource  ";
+                addequipment.setAttribute("id", "addequipment");
+                addequipment.setAttribute("class", "btn btn-default green");
+                var i2 = document.createElement("i");
+                i2.setAttribute("class", "glyphicon glyphicon-plus");
+
+                addofficer.appendChild(i);
+                addequipment.appendChild(i2);
+                addcontainer.appendChild(addofficer);
+                addcontainer.appendChild(addequipment);
+
+                //Update array info with panel info
+                $(document).on("mouseleave", "#empinfo", function () {
+                    if (offcrarr.length > 0)
+                    {
+                        var key = $("#Natregno").val();
+                        ToggleControl();
+                        UpdateInfo(key);
+                    } else
+                    {
+                    }
+                });
+
+                $(document).on("click", "#addofficer", function () {
+                    var pillcontainer = document.getElementById('offcrpillcontainer');
+                    var pillwrapper = document.getElementById('offcrpillwrapper');
+
+                    //create instance of list elements
+                    var pill = document.createElement("li");
+                    var removeicon = document.createElement("span");
+                    removeicon.setAttribute("class", "glyphicon glyphicon-minus");
+                    //pill.setAttribute("id", "officerpill" + offcrcount);
+                    pill.setAttribute("id", $("#Natregno").val());
+
+                    //dynamically create functions
+                    var pillanchor = document.createElement("a");
+                    pillanchor.appendChild(document.createTextNode(document.getElementById("EmpName").value));
+                    pillanchor.setAttribute("class", "btn-default blue");
+                    pillanchor.appendChild(removeicon);
+                    var offcrrec = new Array();
+                    offcrrec.push(document.getElementById("EmpName").value);
+                    offcrrec.push(document.getElementById("Natregno").value);
+                    offcrrec.push(document.getElementById("hours").value);
+                    offcrrec.push(document.getElementById("PayRate").value);
+                    offcrrec.push(document.getElementById("RateCode").value);
+                    offcrrec.push(document.getElementById("ForceNumber").value);
+                    offcrrec.push(isacting);
+
+                    offcrarr.push(offcrrec);
+
+                    pill.appendChild(pillanchor);
+                    pillwrapper.appendChild(pill);
+                    pillcontainer.appendChild(pillwrapper);
+
+                    $(".offcrpillwrapper li").on("click", function () {
+                        //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
+                        var key = this.id.toString().trim();
+                        PopulatePanelInfo(key);
+                    });
+
+                    $(".offcrpillwrapper li").on("dblclick", function () {
+                        //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
+
+                        var key = this.id.toString().trim();
+
+                        var elem = document.getElementById(this.id.toString());
+                        elem.parentNode.removeChild(elem);
+                        RemoveInfo(key);
+
+                    });
+
+                });
+
+                $(document).on("click", "#addequipment", function () {
+                    var pillcontainer = document.getElementById('equippillcontainer');
+                    var pillwrapper = document.getElementById('equippillwrapper');
+
+                    //create instance of list elements
+                    var pill = document.createElement("li");
+                    var removeicon = document.createElement("span");
+                    removeicon.setAttribute("class", "glyphicon glyphicon-minus");
+                    //pill.setAttribute("id", "officerpill" + offcrcount);
+                    pill.setAttribute("id", $("#ItemId").val());
+
+                    //dynamically create functions
+                    var pillanchor = document.createElement("a");
+                    pillanchor.appendChild(document.createTextNode($("#ItemName").text().toUpperCase()));
+
+                    pillanchor.appendChild(removeicon);
+                    var equiprec = new Array();
+                    equiprec.push(document.getElementById("ItemName").value);
+                    equiprec.push(document.getElementById("hours").value);
+                    equiprec.push(document.getElementById("UnitCost").value);
+//                    equiprec.push(document.getElementById("PayRate").value);
+//                    equiprec.push(document.getElementById("RateCode").value);
+//                    equiprec.push(document.getElementById("ForceNumber").value);
+//                    equiprec.push(isacting);
+
+                    equiparr.push(equiprec);
+
+                    pill.appendChild(pillanchor);
+                    pillwrapper.appendChild(pill);
+                    pillcontainer.appendChild(pillwrapper);
+
+                    $(".equippillwrapper li").on("click", function () {
+                        //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
+                        var key = this.id.toString().trim();
+                        PopulatePanelInfo(key);
+                    });
+
+                    $(".equippillwrapper li").on("dblclick", function () {
+                        //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
+
+                        var key = this.id.toString().trim();
+
+                        var elem = document.getElementById(this.id.toString());
+                        elem.parentNode.removeChild(elem);
+                        RemoveInfo(key);
+
+                    });
+
+                });
+
+                $(document).on("click", "#btnShowEvents", function () {
+                    var btnshowevents = document.getElementById("btnShowEvents").innerHTML;
+
+                    if (btnshowevents == "Show Events") {
+                        document.getElementById("btnShowEvents").innerHTML = "Hide Events";
+                    } else {
+                        document.getElementById("btnShowEvents").innerHTML = "Show Events";
+                    }
+                    //document.getElementById("btnShowEvents").innerHTML = "Show Events";
+
+                });
+
+                // Set search input value on click of result item Employee ONLY
+                $(document).on("click", ".result p", function () {
+                    $(this).parents(".search-boxemp1").find('input[type="text"]').val($(this).text());
+                    $test = document.getElementById('searchemp1').value;
+
+                    if ($test == "")
+                    {
+                                document.getElementById("txtHint").innerHTML = "";
+                                return;
+                        } else
+                    {
+                                if (window.XMLHttpRequest)
+                        {
+                                        // code for IE7+, Firefox, Chrome, Opera, Safari
+                                        xmlhttp = new XMLHttpRequest();
+                                } else {
+                                        // code for IE6, IE5
+                                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                                }
+                                xmlhttp.onreadystatechange = function () {
+                                        if (this.readyState == 4 && this.status == 200)
+                            {
+
+                                 document.getElementById("txtHint").innerHTML = this.responseText;
+                                $("#submitteremployee").text($("#Natregno").val());
+                                $("#submitteremployeename").text($("#EmpName").val());
+                                $("#submitterrates").text($("#PayRate").val());
+                                $("#btn-create").show();
+                                $("#addofficer").show();
+                                $("#Comments").hide();
+                                $("#lblComments").hide();
+                                document.getElementById('hours').value = document.getElementById('HoursEngaged').value;
+                                        }
+                                };
+                                xmlhttp.open("GET", "/Views/Shared/Controls/EmployeeSearch/getuser-sub.php?q[]=" + $test + "&InspectionDateStart[]=" + $("#InspectionDateStart").val(), true);
+                                xmlhttp.send();
+                        }
+                    $(this).parent(".result").empty();
+                });
+
+                // Set search input value on click of result item Employee ONLY
+                $(document).on("click", ".resultequip p", function () {
+                    //alert('hello');
+                    $(this).parents(".search-boxequip").find('input[type="text"]').val($(this).text());
+                    $test = document.getElementById('searchequip').value;
+
+                    if ($test == "")
+                    {
+                                document.getElementById("txtHintops").innerHTML = "";
+                                return;
+                        } else
+                    {
+                                if (window.XMLHttpRequest)
+                        {
+                                        // code for IE7+, Firefox, Chrome, Opera, Safari
+                                        xmlhttp = new XMLHttpRequest();
+                                } else {
+                                        // code for IE6, IE5
+                                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                                }
+                                xmlhttp.onreadystatechange = function () {
+                                        if (this.readyState == 4 && this.status == 200)
+                            {
+
+                                 document.getElementById("txtHintops").innerHTML = this.responseText;
+//                                $("#submitteremployee").text($("#Natregno").val());
+//                                $("#submitteremployeename").text($("#EmpName").val());
+//                                $("#submitterrates").text($("#PayRate").val());
+//                                $("#btn-create").show();
+                                $("#addequipment").show();
+//                                $("#Comments").hide();
+//                                $("#lblComments").hide();
+//                                document.getElementById('hours').value = document.getElementById('HoursEngaged').value;
+                                        }
+                                };
+                                xmlhttp.open("GET", "/Views/Shared/Controls/OpSupportSearch/getopsupp-sub.php?q=" + $test, true);
+                                xmlhttp.send();
+                        }
+                    $(this).parent(".resultequip").empty();
+                });
+                //Toggle on and off Passenger option
+                $(document).on("click", "#acting", function () {
+                    if ($("#acting").is(":checked"))
+                    {
+                        isacting = 'on';
+                        $("#Comments").show();
+                    } else
+                    if (!$("#acting").is(":checked"))
+                    {
+                        isacting = 'off';
+                        $("#Comments").val("");
+                        $("#Comments").hide();
+                    }
+                });
+                
+                
+                //Add the information capture panel to the form
+                $(document).on("click", "#adddetails", function () {
+                    count = 1;
+
+                    $("#dutySheet").show();
+                    $("#adddetails").hide();
+                    //create dynamic instance of payment
+                    var container = document.getElementById('container');
+                    container.setAttribute("class", "col-xs-12");
+                   // var container2 = document.getElementById('container2');
+                   // container2.setAttribute("class", "col-xs-6");
+
+                    //create instances of div wrappers
+                    var divmid = document.createElement("div");
+                   // var divmid2 = document.createElement("div");
+                    var divsearch = document.createElement("div");
+                  //  var divsearch2 = document.createElement("div");
+                    var divhint = document.createElement("div");
+                  //  var divhint2 = document.createElement("div");
+
+                    //set attributes for div wrappers for bootstrap styling
+                    divhint.setAttribute("class", "result");
+                    divhint.setAttribute("id", "txtHint");
+                   // divhint2.setAttribute("class", "resultequip");
+                   // divhint2.setAttribute("id", "txtHintops");
+                   divsearch.setAttribute("class", "search-boxemp" + count)
+                   // divsearch2.setAttribute("class", "search-boxequip")
+                    divmid.setAttribute("class", "col-xs-12");
+                   // divmid2.setAttribute("class", "col-xs-12");
+                    //create officer text control
+                    var offcrinput = document.createElement("input");
+                    offcrinput.name = "officerid" + count;
+                    offcrinput.setAttribute("class", "form-control");
+                    offcrinput.setAttribute("id", "searchemp" + count);
+                    offcrinput.setAttribute("type", "text");
+                    offcrinput.setAttribute("autocomplete", "off");
+                    offcrinput.setAttribute("placeholder", "Search employee name or force number...");
+
+                    //create officer text control
+//                    var equipinput = document.createElement("input");
+//                    equipinput.name = "equipid";
+//                    equipinput.setAttribute("class", "form-control");
+//                    equipinput.setAttribute("id", "searchequip");
+//                    equipinput.setAttribute("type", "text");
+//                    equipinput.setAttribute("autocomplete", "off");
+//                    equipinput.setAttribute("placeholder", "Search equipment name..");
+
+                    offcrinput.onkeyup = function () {
+                        /* Get input value on change */
+                        var inputVal = $(this).val();
+                        var resultDropdown = $(this).siblings(".result");
+                        var isnum = /[0-9]/;
+                        var isalpha = /[a-zA-Z]/;
+
+                        if (inputVal.length)
+                        {
+                            if (isalpha.test(inputVal))
+                            {
+                                $.get("/Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
+                                    // Display the returned data in browser
+                                    resultDropdown.html(data);
+                                });
+                            } else
+                            if (isnum.test(inputVal))
+                            {
+                                $.get("/Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "forcenumber", {term: inputVal}).done(function (data) {
+                                    // Display the returned data in browser
+                                    resultDropdown.html(data);
+                                });
+                            }
+                            $("#adddetails").hide();
+                        } else {
+                            resultDropdown.empty();
+                        }
+                    }
+
+//                    equipinput.onkeyup = function () {
+//
+//                        /* Get input value on change */
+//                        var inputVal2 = $(this).val();
+//                        var resultDropdown2 = $(this).siblings(".resultequip");
+//                        var isalpha = /[a-zA-Z]/;
+//
+//                        if (inputVal2.length)
+//                        {
+//                            if (isalpha.test(inputVal2))
+//                            { //alert('hello');
+//                                $.get("/Views/Shared/Controls/OpSupportSearch/backend-search.php?type=" + "name", {term: inputVal2}).done(function (data) {
+//                                    // Display the returned data in browser
+//                                    resultDropdown2.html(data);
+//                                });
+//                            }
+//                            $("#adddetails2").hide();
+//                        } else {
+//                            resultDropdown2.empty();
+//                        }
+//                    }
+
+                    //start wrapping and adding
+                    divsearch.appendChild(offcrinput);
+                   // divsearch2.appendChild(equipinput);
+                    divhint.appendChild(document.createElement("p"));
+                   // divhint2.appendChild(document.createElement("p"));
+                    divsearch.appendChild(divhint);
+                  //  divsearch2.appendChild(divhint2);
+                    divmid.appendChild(divsearch);
+                  //  divmid2.appendChild(divsearch2);
+                    container.appendChild(divmid);
+                 //   container2.appendChild(divmid2);
+                });
+
+//                $('.search-boxcomp input[type="text"]').on("keyup input", function () {
+//                    /* Get input value on change */
+//                    var inputVal = $(this).val();
+//                    var resultDropdown = $(this).siblings(".resultcomp");
+//                    var isnum = /[0-9]/;
+//                    var isalpha = /[a-zA-Z]/;
+//
+//                    if (inputVal.length) {
+//                        if (isalpha.test(inputVal))
+//                        {
+//                            $.get("../Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
+//                                // Display the returned data in browser
+//                                resultDropdown.html(data);
+//                            });
+//                        } else
+//                        if (isnum.test(inputVal))
+//                        {
+//                            $.get("../Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "companyid", {term: inputVal}).done(function (data) {
+//                                // Display the returned data in browser
+//                                resultDropdown.html(data);
+//                            });
+//                        }
+//
+//                    } else {
+//                        resultDropdown.empty();
+//                    }
+//                });
+
+                // Set search input value on click of result item
+//                $(document).on("click", ".resultcomp p", function () {
+//                    $(this).parents(".search-boxcomp").find('input[type="text"]').val($(this).text());
+//                    $test = document.getElementById('searchcomp').value;
+//                    if ($test == "") {
+//                                document.getElementById("txtHintcomp").innerHTML = "";
+//                                return;
+//                        } else {
+//                                if (window.XMLHttpRequest) {
+//                                        // code for IE7+, Firefox, Chrome, Opera, Safari
+//                                        xmlhttp = new XMLHttpRequest();
+//                                } else {
+//                                        // code for IE6, IE5
+//                                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+//                                }
+//                                xmlhttp.onreadystatechange = function () {
+//                                        if (this.readyState == 4 && this.status == 200) {
+//                                                document.getElementById("txtHintcomp").innerHTML = this.responseText;
+//                                           $('input#EventDate').datepicker({dateFormat: 'yy-mm-dd'});
+//                                        }
+//                                };
+//                        $('input#DateOfBirth').datepicker({dateFormat: 'yy-mm-dd'});
+//                                xmlhttp.open("GET", "../Views/Shared/Controls/EventSearch/listapprovedevents.php?q=" + $test, true);
+//                                xmlhttp.send();
+//                        }
+//                    $(this).parent(".result").empty();
+//                    //alert('test');
+//                });
+
+
+                $(document).on("click", ".pillwrapper li", function () {
+
+                    var key = $(this).attr("class");
+
+                    if (CreatedutySheet === false) {
+                        $("#adddetails").show();
+                        CreatedutySheet = true;
+                    }
+                    //$("#dutySheet").show();
+
+
+                    var EventId = $("." + key).find('#liEventId').text();
+                    var EventName = $("." + key).find('#liEventName').text();
+                    var EventCost = $("." + key).find('#liEventCost').text();
+
+                    var EventDateStart = $("." + key).find('#liEventDateStart').text();
+                    var EventDateEnd = $("." + key).find('#liEventDateEnd').text();
+
+                    var PoliceServices = $("." + key).find('#liPoliceServices').text();
+                    var VATPoliceServices = $("." + key).find('#liVATPoliceServices').text();
+                    var OperationalSupport = $("." + key).find('#liOperationalSupport').text();
+                    var CompID = $("." + key).find('#liCompanyId').text();
+
+                    // $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
+                    if (EventDateEnd !== "")
+                    {
+                        document.getElementById("DetailsEventDateEnd").innerHTML = EventDateEnd;
+                    }
+                    document.getElementById("DetailsEventName").innerHTML = EventName;
+                    document.getElementById("DetailsEventDateStart").innerHTML = EventDateStart;
+                    document.getElementById("DetailsEventCost").innerHTML = "$" + EventCost;
+                    document.getElementById("DetailsPoliceServices").innerHTML = "$" + PoliceServices;
+                    document.getElementById("DetailsVATPoliceServices").innerHTML = "$" + VATPoliceServices;
+                    document.getElementById("DetailsOperationalSupport").innerHTML = "$" + OperationalSupport;
+
+                    document.getElementById("hdnEventId").value = EventId;
+                    document.getElementById("hdnEventName").value = EventName;
+
+                    document.getElementById("lblEventRef").innerHTML = EventId;
+
+                    document.getElementById("hdnCompID").value = CompID;
+                    //document.getElementById("adddetails").style.display = "show";
+                    document.getElementById("divEventDetails").style.display = "";
+                    // document.getElementById("formDeleteEvent").style.display = "";
+                    document.getElementById("DateOfDuty").value = EventDateStart;
+
+
+
+                });
+
+                $('#commencedhrs, #commencedmins').on('change click input', function () {
+                    var commencedhrs = $('#commencedhrs').val();
+
+                    if (commencedhrs.length >= 2)
+                    {
+                        $('#commencedhrs').val(commencedhrs.slice(0, 2))
+                    } else if ((commencedhrs.length === 1))
+                    {
+                        $('#commencedhrs').val("0" + commencedhrs);
+                    }
+
+                    var commencedmins = $('#commencedmins').val();
+
+                    if (commencedmins.length >= 2)
+                    {
+                        $('#commencedmins').val(commencedmins.slice(0, 2))
+                    } else if ((commencedmins.length === 1))
+                    {
+                        $('#commencedmins').val("0" + commencedmins);
+                    }
+
+                    document.getElementById("hdnTimeDutyCommenced").value = $('#commencedhrs').val() + ':' + $('#commencedmins').val();
+
+                });
+                
+                
+
+                $('#DDcommencedhrs, #DDcommencedmins').on('change click input', function () {
+                    var DDcommencedhrs = $('#DDcommencedhrs').val();
+
+                    if (DDcommencedhrs.length >= 2)
+                    {
+                        $('#DDcommencedhrs').val(DDcommencedhrs.slice(0, 2))
+                    } else if ((DDcommencedhrs.length === 1))
+                    {
+                        $('#DDcommencedhrs').val("0" + DDcommencedhrs);
+                    }
+
+                    var DDcommencedmins = $('#DDcommencedmins').val();
+
+                    if (DDcommencedmins.length >= 2)
+                    {
+                        $('#DDcommencedmins').val(DDcommencedmins.slice(0, 2))
+                    } else if ((DDcommencedmins.length === 1))
+                    {
+                        $('#DDcommencedmins').val("0" + DDcommencedmins);
+                    }
+                    document.getElementById("hdnTimeDutyCommencedDiaryNo").value = $('#DDcommencedhrs').val() + ':' + $('#DDcommencedmins').val();
+                });
+
+                $('#ceasedhrs, #ceasedmins').on('change click input', function () {
+                    var ceasedhrs = $('#ceasedhrs').val();
+
+                    if (ceasedhrs.length >= 2)
+                    {
+                        $('#ceasedhrs').val(ceasedhrs.slice(0, 2))
+                    } else if ((ceasedhrs.length === 1))
+                    {
+                        $('#ceasedhrs').val("0" + ceasedhrs);
+                    }
+
+                    var ceasedmins = $('#ceasedmins').val();
+
+                    if (ceasedmins.length >= 2)
+                    {
+                        $('#ceasedmins').val(ceasedmins.slice(0, 2))
+                    } else if ((ceasedmins.length === 1))
+                    {
+                        $('#ceasedmins').val("0" + ceasedmins);
+                    }
+                    document.getElementById("hdnTimeDutyCeased").value = $('#ceasedhrs').val() + ':' + $('#ceasedmins').val();
+                });
+
+                $('#DDceasedhrs, #DDceasedmins').on('change click input', function () {
+                    var DDceasedhrs = $('#DDceasedhrs').val();
+
+                    if (DDceasedhrs.length >= 2)
+                    {
+                        $('#DDceasedhrs').val(DDceasedhrs.slice(0, 2))
+                    } else if ((DDceasedhrs.length === 1))
+                    {
+                        $('#DDceasedhrs').val("0" + DDceasedhrs);
+                    }
+
+                    var DDceasedmins = $('#DDceasedmins').val();
+
+                    if (DDceasedmins.length >= 2)
+                    {
+                        $('#DDceasedmins').val(DDceasedmins.slice(0, 2))
+                    } else if ((DDceasedmins.length === 1))
+                    {
+                        $('#DDceasedmins').val("0" + DDceasedmins);
+                    }
+
+                    document.getElementById("hdnTimeDutyCeasedDiaryNo").value = $('#DDceasedhrs').val() + ':' + $('#DDceasedmins').val();
+
+                });
+
+$('#Division').on('change', function () {
+                    //alert($('#Division :selected').attr('id'));
+                    var inputVal = $('#Division :selected').attr('id');
+                    // alert(inputVal);
+                    var station = document.getElementById("Station");
+                    for (i = 0; i < station.options.length; i++) {
+
+                        if (inputVal === station.options[i].id)
+                        {
+
+                           station.options[i].style.display = "inline";
+                           station.options[i].selected = true;
+//Add operations here
+                        } else
+                        {
+                            station.options[i].style.display = "none";
+                        }
+                    }
+                    });
+                    
+                $("#Flexiform").submit(function () {
+
+ var stationName = document.getElementById("Station").value;
+                    $('#hdnDivisionId').val(divid.substring(0, 4));
+                    $('#hdnStation').val(stationName);
+                    
+                    var key = this.id.toString().trim();
+                    PopulatePanelInfo(key);
+                    $("#hdnoffarr").val(JSON.stringify(offcrarr));
+                });
+
+                function PopulatePanelInfo(key)
+                {
+                    var EmpName = document.getElementById("EmpName");
+                    var Natregno = document.getElementById("Natregno");
+                    var hours = document.getElementById("hours");
+
+                    var PayRate = document.getElementById("PayRate");
+                    var RateCode = document.getElementById("RateCode");
+                    var ForceNumber = document.getElementById("ForceNumber");
+                    for (i = 0; i < offcrarr.length; i++) {
+
+                        if (offcrarr[i][1] === key)
+                        {
+                            EmpName.value = offcrarr[i][0].toString();
+                            Natregno.value = offcrarr[i][1].toString();
+                            hours.value = offcrarr[i][2].toString();
+                            PayRate.value = offcrarr[i][3].toString();
+                            RateCode.value = offcrarr[i][4].toString();
+                            ForceNumber.value = offcrarr[i][5].toString();
+                            isacting = offcrarr[i][6].toString();
+                        }
+                    }
+                    ToggleControl();
+                }
+                function RemoveInfo(key)
+                {
+                    var indextoremove;
+                    for (i = 0; i < offcrarr.length; i++) {
+
+                        if (offcrarr[i][1] === key)
+                        {
+                            indextoremove = i;
+                        }
+                    }
+                    offcrarr.splice(indextoremove, 1);
+                }
+                function ToggleControl()
+                {
+                    if (isacting == "on")
+                    {
+                        $("#acting").prop("checked", true);
+                        $("#Comments").show();
+                        $("#lblComments").show();
+                    } else
+                    if (isacting == "off")
+                    {
+                        $("#acting").prop("checked", false);
+                        $("#Comments").val("");
+                        $("#Comments").hide();
+                        $("#lblComments").hide();
+                    }
+                }
+                function UpdateInfo(key)
+                {
+
+                    for (i = 0; i < offcrarr.length; i++) {
+
+                        if (offcrarr[i][1] === key)
+                        {
+                            var EmpName = document.getElementById("EmpName");
+                            var Natregno = document.getElementById("Natregno");
+                            var hours = document.getElementById("hours");
+                            var PayRate = document.getElementById("PayRate");
+                            var RateCode = document.getElementById("RateCode");
+                            var ForceNumber = document.getElementById("ForceNumber");
+//                            var IsActing = document.getElementById("acting");
+
+                            offcrarr[i][0] = EmpName.value;
+                            offcrarr[i][1] = Natregno.value;
+                            offcrarr[i][2] = hours.value;
+                            offcrarr[i][3] = PayRate.value;
+                            offcrarr[i][4] = RateCode.value;
+                            offcrarr[i][5] = ForceNumber.value;
+                            offcrarr[i][6] = isacting;
+
+                            ToggleControl();
+                        }
+                    }
+                }
+                
+                $("#btn-create").show();
+               // $("#addofficer").show();
+                $("#adddetails").show();
+
+            });
+
+        </script>         
+    </head>
+    <body>
+        <div class="wrapper">
+            <header class="page-header">
+                <nav class="navbar mega-menu" role="navigation">
+                    <div class="container-fluid">
+                        <div class="clearfix navbar-fixed-top">
+                            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="toggle-icon">
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </span>
+                            </button>
+                            <a class="page-logo" id="index" href="/index.php">
+                                <img src="../assets/global/img/customs logo no back.png" alt="" height="400"/>                          
+                                <img src="../assets/global/img/OVERTIME-APP-LOGO.png" alt=""/>
+                            </a>
+                            <div class="topbar-actions">
+                                <div class="btn-group-img btn-group">
+                                    <button class="btn btn-sm md-skip dropdown-toggle" type="button" data-toggle="dropdown" data-close-others="true" data-hover="dropdown">
+                                        <span>Hi,<?php echo $_SESSION['firstname']; ?></span>
+                                    </button>
+                                    <ul class="dropdown-menu-v2" role="menu">
+                                        <li>
+                                            <a href="/changepassword">
+                                                <i class="icon-user"></i> Change Password
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/logout">
+                                                <i class="icon-key"></i> Log Out 
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="">
+                                                <i class="icon-briefcase"></i> <?php echo $_SESSION['user_roles']; ?>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>                        
+                        </div>                       
+                        <div class="nav-collapse collapse navbar-collapse navbar-responsive-collapse"  >
+                            <ul class="nav navbar-nav" >
+                                <li class="dropdown dropdown-fw dropdown-fw-disabled active open selected">
+                                    <a class="text-uppercase" href="/index.php">
+                                        <i class="icon-home"></i> Home 
+                                    </a>      
+                                </li>
+                                <li>
+                                    <a class="text-uppercase" href="/flexidutysheet/edit"><i class="glyphicon glyphicon-pencil"></i>View/Edit Flexi Duty Sheet</a>
+                                </li>
+                            </ul>
+                        </div>                      
+                    </div>                
+                </nav>
+            </header>
+            <div class="container-fluid">
+                <div class="page-content">
+                    <div class="page-content-row">
+                        <div class="col-md-3">
+                            <div class="page-sidebar">
+
+                                <center>
+                                    <a class="btn btn-outline blue" href="../../index.php">back to main page</a>    
+                                </center>
+                                <div class="offcrpillwrapper" id="offcrpillcontainer">
+                                    <ul class="nav nav-pills nav-stacked" id="offcrpillwrapper" >                                   
+                                    </ul>   
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="page-content-col-8"> 
+                                <div class="panel panel-info" >
+                                    <div class="panel-heading">
+                                        <center>
+                                            <h3><label id="lblEventRef" class="label label-info"></label>&nbsp;&nbsp; &nbsp;<label id="lblBillFormNum" style="display:none" class="label label-info" ></label></h3>
+                                        </center>
+                                    </div>
+                                </div>
+                                <div class="portlet box blue">
+                                    <div class="portlet-title">
+                                        <div class="caption"><em class="fa fa-group"></em>Create Flexi Duty Sheet</div>
+                                        <div class="tools">
+                                            <a title="" class="collapse" href="javascript:;" data-original-title=""> </a>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body form">
+                                        <form method="post" action="" id="Flexiform"  >
+                                            <div class="form-body">
+                                                <div class="row center-block">  
+<!--                                                    <div class="col-xs-12">                                                        
+                                                        <?php
+                                                        include 'Views/Shared/Controls/CompanySearch/search-form.php';
+                                                        ?>                                                     
+                                                    </div>-->
+<div id="flexidutySheet" class="col-md-12 panel-info">
+    <div class="col-md-4 panel-info">
+<label>Select Division</label>
+                                                        <select class="form-control" id="Division">
+
+                                                            { Divisions }
+                                                        </select>
+ <label><i class="glyphicon glyphicon-calendar"></i>Date of Duty</label>
+                                                        <input type="text" class="form-control" name="DateOfDuty" placeholder="YYYY-MM-DD" autocomplete="off"  id="datepicker" required >
+                                                        <script>
+                                                            $(function () {
+                                                                $("#datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+                                                               
+                                                            });
+                                                        </script>
+                                                        
+                                                       
+                                                      
+    </div>
+    <div class="col-md-4 panel-info">
+                                                        <label>Select Station</label>
+                                                        <select class="form-control" id="Station">
+
+                                                            { Stations }
+                                                        </select>
+                                                        <label><i class="glyphicon glyphicon-time"></i>Hours Engaged</label>
+                                                                <input type="number" class="form-control" name="HoursEngaged" id="HoursEngaged" required="" min="1" max="24">
+    </div>
+                                                        <div class="col-md-4 panel-info">
+                                                            <label>Shift</label>
+                                                            <input type="text" class="form-control" name="Shift" id="Shift">  
+                                                             <label>Type of Duty</label>
+                                                            <input type="text" class="form-control" name="TypeOfDuty" id="TypeOfDuty">  
+                                                        </div>
+    
+    
+                                                       
+</div>
+                                                        
+                                                        
+                                                    <div class="form-row">
+             
+                                                            <div class="col-md-6 ">
+                                                                <br>
+                                                          <center>       <label><i class="glyphicon glyphicon-time"></i>Time Duty commenced</label>
+                                                                 <input style="display: inline-block;width:60px;" type="number" class="form-control" name="commencedhrs" id="commencedhrs" min="0" max="23" placeholder="23" >:
+                                                                <input style="display: inline-block;width:60px;" type="number" class="form-control" name="commencedmins" id="commencedmins" min="0" max="59" step="5" placeholder="00" ></center>
+</div>
+                                                              <div class="col-md-6">
+                                                                  <br>
+                                                                   <center>       <label><i class="glyphicon glyphicon-time"></i>Daily Diary #</label>
+                                                                 <input style="display: inline-block;width:60px;" type="number" class="form-control" name="DDcommencedhrs" id="DDcommencedhrs" min="0" max="23" placeholder="23" >:
+                                                                <input style="display: inline-block;width:60px;" type="number" class="form-control" name="DDcommencedmins" id="DDcommencedmins" min="0" max="59" step="5" placeholder="00" ></center>
+
+                                                               
+                                                            </div>
+                                                    </div>
+ 
+                                                    <div class="form-row">
+           
+
+                                                            <div class="col-md-6 ">
+                                                                <br>
+                                                          <center>       <label><i class="glyphicon glyphicon-time"></i>Time Duty ceased</label>
+                                                                 <input style="display: inline-block;width:60px;" type="number" class="form-control" name="ceasedhrs" id="ceasedhrs" min="0" max="23" placeholder="23" >:
+                                                                <input style="display: inline-block;width:60px;" type="number" class="form-control" name="ceasedmins" id="ceasedmins" min="0" max="59" step="5" placeholder="00" ></center>
+</div>
+                                                              <div class="col-md-6">
+                                                                  <br>
+                                                                   <center>       <label><i class="glyphicon glyphicon-time"></i>Daily Diary #</label>
+                                                                 <input style="display: inline-block;width:60px;" type="number" class="form-control" name="DDceasedhrs" id="DDceasedhrs" min="0" max="23" placeholder="23" >:
+                                                                <input style="display: inline-block;width:60px;" type="number" class="form-control" name="DDceasedmins" id="DDceasedmins" min="0" max="59" step="5" placeholder="00" ></center>
+
+                                                               
+                                                            </div>
+                                                    </div>
+
+
+
+
+                                                    </div>
+                                                </div>  
+
+
+                                                <div class="row center-block">
+                                                    <br>
+                                                    <center id="addcontrols">                                                                                                                           
+
+                                                    </center>
+                                                    <br>
+                                                    
+                                                    <div id='container'> 
+
+                                                    </div>   
+                                                    
+
+                                                </div>
+                                            
+                                            <div id="flexidutySheetcriteria" class="col-md-12 panel-info">
+    <br> <center> <label><strong>Criteria</strong></label><br>
+                                               <label>All duties performed must meet one or more of the following set of criteria. Check the appropriate
+                                                box and provide brief details of the duties performed</label>
+    <br>
+  
+    1. <input type="checkbox"  id="EOSDE" value="Y">   Extension of shift duty (emergency)<br>
+    2. <input type="checkbox"  id="EOSDNE" value="Y">   Extension of shift duty (non-emergency)<br>
+    3. <input type="checkbox" id="EHTPI" value="Y">   Extra hours to pursue investigations<br>
+    4. <input type="checkbox"  id="EOWOOSD" value="Y">   Execution of warrant outside of shift duty<br>
+    5. <input type="checkbox"  id="CAOD" value="Y">   Court attendance (off duty)<br>
+    6. <input type="checkbox"  id="CADO" value="Y">   Court attendance (day off)<br></center>
+    
+     <div>
+
+                                                    <center>
+                                                        <br>
+                                                        <i class="glyphicon glyphicon-comment"></i><label> Brief Details</label>
+                                                    </center>
+                                                    <div class="col-md-3"></div>
+                                                    <div class="col-md-6">
+                                                        <textarea  class="form-control" id="Details" name="Details" rows="5" cols="12"></textarea>
+                                                    </div>
+                                                    <div class="col-md-3"></div>
+                                                </div>
+    
+                                                
+                                                
+                                                
+                                            </div>
+                                            
+                                                <center id="submitcontrol">   
+                                                    
+                                                    <div id="flexidutySheetcertification" class="col-md-12 panel-info">
+    <br> <center> <label><strong>Certification</strong></label><br>
+        <label><strong><i>I hereby certify that these claims are made in accordance with the hours worked; are true to the best of my knowledge
+        and fall within one or more of the categories outlined in Memorandum Ref: MP6306/22/5 Volumne 1 from the Ministry of the Civil
+        Service. I also certify that none of these claims are in respect of CID personnel, Court Prosecutors or Driver/ Orderlies
+        who are in receipt of a duty allowance.</i></strong></label><br><br>
+</div>
+                                                   
+                                                </center>
+     <br>
+                                                <div class="col-xs-12" style="font-size: medium">
+
+                                                </div>
+                                            
+                                            </div>
+                                            <input type="hidden" name="EventName" id="hdnEventName" value="">
+                                            <input type="hidden" name="TimeDutyCommenced" id="hdnTimeDutyCommenced" value="">
+                                            <input type="hidden" name="TimeDutyCeased" id="hdnTimeDutyCeased" value="">
+                                            <input type="hidden" name="TimeDutyCommencedDiaryNo" id="hdnTimeDutyCommencedDiaryNo" value="">
+                                            <input type="hidden" name="TimeDutyCeasedDiaryNo" id="hdnTimeDutyCeasedDiaryNo" value="">
+                                            <input type="hidden" name="offarr" id="hdnoffarr" value="">
+                                            <input type="hidden" class="form-control" id="hdnDivisionId" name="hdnDivisionId"  >
+                                                    <input type="hidden" class="form-control" id="hdnStation" name="hdnStation"  >
+<!--                                            <input type="hidden" name="EOSDE" id="hdnEOSDE" value="">
+                                            <input type="hidden" name="EOSDNE" id="hdnEOSDNE" value="">
+                                            <input type="hidden" name="EHTPI" id="hdnEHTPI" value="">
+                                            <input type="hidden" name="EOWOOSD" id="hdnEOWOOSD" value="">
+                                            <input type="hidden" name="CAOD" id="hdnCAOD" value="">
+                                            <input type="hidden" name="CADO" id="hdnCADO" value="">-->
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        
+            { foot } 
+
+    </body>
+</html>

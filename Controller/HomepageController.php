@@ -21,6 +21,9 @@ class Homepage extends LoggedInController {
     private $eventmenu;
     private $employeemenu;
     private $adminmenu;
+//    private $fleximenu;
+//    private $specopsmenu;
+//    private $courtmenu;
 
     public function show($params) {
         //Get username for display
@@ -79,6 +82,8 @@ class Homepage extends LoggedInController {
 
         $DataManager = array('Human Resource Clerk', 'Manager', 'Administrator', 'Super User', 'Admin');
 
+         $ExtraDuties = array('Payment Clerk', 'Manager', 'Super User', 'Administrator');
+         
         $inherited = new BaseTemplate();
         $inherited->load("Views/content.html");
         $content = $inherited->template;
@@ -197,8 +202,89 @@ class Homepage extends LoggedInController {
             ;
             $this->menu = $this->menu . $approve;
         }
+        
+        if (in_array($role, $ExtraDuties)) {
+           $flexiDS = '<li><a class="text-uppercase" href="/flexi/create">Create Flexi Duty Sheet</a></li>';
+            $this->menu = $this->menu . $flexiDS;
+        }
+        
+        if (in_array($role, $ExtraDuties)) {
+            $SpecOpsDS = '<li><a class="text-uppercase" href="/specops/create">Create Special Ops Duty Sheet</a></li>';
+            $this->menu = $this->menu . $SpecOpsDS;
+       }
+            if (in_array($role, $ExtraDuties)) {
+            $court = '<li><a class="text-uppercase" href="/court/edit">Create Court Form</a></li>';
+          $this->menu = $this->menu . $court;
+      
+        }
+        
+        ////
+//         if (in_array($role, $ExtraDuties)) {
+//            $createitem = '<li><a href="/flexi/create">Create Duty Sheet</a></li>';
+//            $this->fleximenu = $this->fleximenu . $createitem;
+//        }
+//
+//        if (in_array($role, $ExtraDuties)) {
+//            $edititem = '<li><a href="/flexi/edit">View/Edit/Delete Duty Sheet Details</a></li>';
+//            $this->fleximenu = $this->fleximenu . $edititem;
+//        }
+//
+//        if (in_array($role, $ExtraDuties)) {
+//            $createitem = '<li><a href="/specops/create">Create Special Ops Duty Sheet</a></li>';
+//            $this->specopsmenu = $this->specopsmenu . $createitem;
+//        }
+//        if (in_array($role, $ExtraDuties)) {
+//            $createitem = '<li><a href="/specops/edit">View/Edit/Delete Special Ops Duty Sheet Details</a></li>';
+//            $this->specopsmenu = $this->specopsmenu . $edititem;
+//        }
+//
+//        if (in_array($role, $ExtraDuties)) {
+//            $edititem = '<li><a href="/court/edit">Create Court Form</a></li>';
+//            $this->courtmenu = $this->courtmenu . $edititem;
+//        }
+//
+//        if (in_array($role, $ExtraDuties)) {
+//            $createitem = '<li><a href="/court/create">View/Edit/Delete Court Form Details</a></li>';
+//            $this->courtmenu = $this->courtmenu . $createitem;
+//        }
+//
+//        
+//         if (in_array($role, $ExtraDuties)) {
+//               $Extra = '<li class="dropdown dropdown-fw dropdown-fw-disabled">
+//                                    <a class="text-uppercase" href="javascript:;">
+//                                       <i class="glyphicon glyphicon-open-file" style="font-size: 15px"></i>Extra Duties</a>
+//                                    <ul class="dropdown-menu dropdown-menu-fw">
+//                                        <li class="dropdown more-dropdown-sub ">
+//                                            <a href="javascript:;"> Flexible Responsibility </a>
+//                                            <ul class="dropdown-menu">
+//                                                { fleximenu }
+//                                            </ul>
+//                                        </li>
+//                                         <li class="dropdown more-dropdown-sub ">
+//                                            <a href="javascript:;"> Special Operations </a>
+//                                            <ul class="dropdown-menu">
+//                                                { specopsmenu }
+//                                            </ul>
+//                                        </li>
+//                                     
+//                                           <li class="dropdown more-dropdown-sub ">
+//                                            <a href="javascript:;"> Court Form </a>
+//                                            <ul class="dropdown-menu">
+//                                                { courtmenu }
+//                                            </ul>
+//                                        </li>
+//                                    </ul>
+//                                </li>';
+////            $Extra = ' <li >
+////                                    <a class="text-uppercase" href="/createdutysheet">Extra Duties</a>
+////                                </li> ';
+////            $this->menu = $this->menu . $Extra;
+//        }
 
         /**/
+//        $template->replace('fleximenu', $this->fleximenu);
+//        $template->replace('specopsmenu', $this->specopsmenu);
+//        $template->replace('courtmenu', $this->courtmenu);
         $template->replace('datamanager', $this->datamanager);
         $template->replace('companymenu', $this->companymenu);
         $template->replace('employeemenu', $this->employeemenu);

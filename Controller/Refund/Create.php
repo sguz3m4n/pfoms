@@ -66,8 +66,8 @@ class MakeRefundController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-create'])) {
-            $refinst = new \BarcomModel\Refund();
-            $audinst = new \BarcomModel\Audit();
+            $refinst = new \PfomModel\Refund();
+            $audinst = new \PfomModel\Audit();
 
             (isset($_POST['CompId']) ? $this->CompId = $varid = $refinst->CompanyId = $_POST['CompId'] : $this->CompId = $varid = $refinst->CompanyId = "");
 

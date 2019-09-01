@@ -28,10 +28,10 @@ class EditPaymentController extends MakePaymentController {
         if (isset($_POST['update'])) {
             $varhaspx = 'off';
             $varhassubs = 'off';
-            $empinst = new \BarcomModel\Employee();
-            $payinst = new \BarcomModel\Payment();
-            $depinst = new \BarcomModel\Deposit();
-            $audinst = new \BarcomModel\Audit();
+            $empinst = new \PfomModel\Employee();
+            $payinst = new \PfomModel\Payment();
+            $depinst = new \PfomModel\Deposit();
+            $audinst = new \PfomModel\Audit();
 
             $tranid = $payinst->TranId = $_POST["transid"];
             $compid = $this->CompId = $payinst->CompanyId = $_POST['compid'];
@@ -161,7 +161,7 @@ class PaymentTableController extends MakePaymentController {
         $unlock = $canUnlock == 1 ? "<th>Unlock</th>" : "";
         $table = "";
 
-        $pymtinst = new \BarcomModel\Payment();
+        $pymtinst = new \PfomModel\Payment();
         $filterBy = array();
 
         if (isset($_REQUEST['compname'])) {
@@ -224,7 +224,7 @@ class PaymentUnlockController extends MakePaymentController {
     }
 
     function show($params) {
-        $pymtinst = new \BarcomModel\Payment();
+        $pymtinst = new \PfomModel\Payment();
         $rn = $_REQUEST['id'];
         $unlocked = $pymtinst->UnlockPayment($rn);
         if ($unlocked) {

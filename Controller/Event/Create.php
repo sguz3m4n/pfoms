@@ -89,10 +89,10 @@ class EventCreateController extends PermissionController {
 
         if (isset($_POST['btn-create'])) {
 
-            $eventinst = new \BarcomModel\Event();
-//$companyinst = new \BarcomModel\Company();
-//$preaccount = new \BarcomModel\PreAccount();
-            $audinst = new \BarcomModel\Audit();
+            $eventinst = new \PfomModel\Event();
+//$companyinst = new \PfomModel\Company();
+//$preaccount = new \PfomModel\PreAccount();
+            $audinst = new \PfomModel\Audit();
 //$this->MyPaymentsRecords = $pymntrecs = json_decode($_POST['paylist'], TRUE);
 //(isset($_POST['CompId']) ? $this->CompId = $varid = $refinst->CompanyId = $_POST['CompId'] : $this->CompId = $varid = $refinst->CompanyId = "");
 
@@ -194,9 +194,9 @@ class EventCreateController extends PermissionController {
             }*/
 
 
-            $model = new \BarcomModel\Event();
-            $divmodel = new \BarcomModel\Division ();
-            $equipmodel = new \BarcomModel\Equipment ();
+            $model = new \PfomModel\Event();
+            $divmodel = new \PfomModel\Division ();
+            $equipmodel = new \PfomModel\Equipment ();
             $divisions = $divmodel->GetDivisions();
             $rolerates = $model->GetRoleRates();
             $equipment = $equipmodel->GetEquipmentItems();

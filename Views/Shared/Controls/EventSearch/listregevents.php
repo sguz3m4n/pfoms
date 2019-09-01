@@ -42,27 +42,9 @@ $sql = 'SELECT a.EventId, EventName, CompanyName,c.CurrentBalance, b.EventCost, 
     left join deposit c ON c.CompanyId = a.CompanyId
     WHERE a.CompanyName = "' . $q . '" AND a.DelFlg="N" AND a.Status<>"Complete"';
 
-
-//$sql = 'SELECT EventId, EventName, CompanyName, EventCost, EventDateStart, EventDateEnd, Comments, CompanyId, Division, Station, OperationalSupport, PoliceServices, VATPoliceServices FROM event WHERE CompanyName = "' . $q . '" AND  DelFlg="N" AND Status="Approved"';
-//$sql = 'SELECT `a.EventId,`EventName,`eventCost`,`CompanyId`,`CompanyName`,'$EventDateStart','$EventDateEnd',
-//    `ContactEmail`,`ContactNumber`,`EventDate`,`Comments`, AccountId, AccountName, TranId, TranAmt, b.EventId as "' . $Id . '" 
-//FROM `event` a LEFT JOIN preaccounttransactions b ON a.EventId = b.EventId';
-//$sql = 'SELECT * FROM `event` a LEFT JOIN preaccounttransactions b ON a.EventId = b.EventId';
-
-
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $EventIds = $stmt->fetchAll();
-//
-//$sql = 'SELECT EventId, CompanyId, AssetName, SUM(Value) as Value, SUM(Quantity)as Quantity FROM `eventpreaccount` WHERE CompanyName = "' . $q . '" AND DelFlag="N" GROUP by AssetName';
-//$stmt = $conn->prepare($sql);
-//$stmt->execute();
-//$result_array = $stmt->fetchAll();
-//
-//$sqldeposit='SELECT * FROM deposit WHERE companyid=(SELECT Companyid FROM company WHERE CompanyName = "' . $q . '" AND DelFlg="N" )';
-//$stmtdep=$conn->prepare($sqldeposit);
-//$stmt->execute();
-//$deposit_arr=$stmtdep->fetchAll();
 
 if (empty($EventIds)) {
     ?>
@@ -79,7 +61,7 @@ if (empty($EventIds)) {
     }
 
 
-    $eventinst = new BarcomModel\Event();
+    $eventinst = new PfomModel\Event();
     $conn = NULL;
     ?>  
 

@@ -2,7 +2,7 @@
 <html>
     <head>
         { head }
-       
+
         <script type="text/javascript">
             $(document).ready(function () {
                 $('.search-boxcomp input[type="text"]').on("keyup input", function () {
@@ -84,8 +84,8 @@
 //                    $(".eventList").on('click','li',function (){
 //    alert($(this).text());
 //});
- $(document).on("click", ".pillwrapper li", function () {
-   
+                $(document).on("click", ".pillwrapper li", function () {
+
                     var key = $(this).attr("class");
 
 
@@ -100,40 +100,40 @@
 //                    $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
 //                    $(".modal-body #SubmitEventId").val($("."+key).find('#liEventId').text());
 //        
-        var EventId = $("."+key).find('#liEventId').text();
-        var EventName = $("."+key).find('#liEventName').text();
-            var EventCost = $("."+key).find('#liEventCost').text();
-           
-        var EventDateStart = $("."+key).find('#liEventDateStart').text();
-        var EventDateEnd = $("."+key).find('#liEventDateEnd').text();
-        
-        var PoliceServices = $("."+key).find('#liPoliceServices').text();
-        var VATPoliceServices = $("."+key).find('#liVATPoliceServices').text();
-        var OperationalSupport = $("."+key).find('#liOperationalSupport').text();
-         var Status = $("."+key).find('#liStatus').text();
+                    var EventId = $("." + key).find('#liEventId').text();
+                    var EventName = $("." + key).find('#liEventName').text();
+                    var EventCost = $("." + key).find('#liEventCost').text();
 
-       // $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
-        if (EventDateEnd !== "")
-        {
-           document.getElementById("DetailsEventDateEnd").innerHTML = EventDateEnd; 
-        }
-        document.getElementById("DetailsEventName").innerHTML = EventName;
-        document.getElementById("DetailsEventDateStart").innerHTML = EventDateStart;
-        document.getElementById("DetailsEventCost").innerHTML = "$" + EventCost;
-        document.getElementById("DetailsPoliceServices").innerHTML = "$" + PoliceServices;
-        document.getElementById("DetailsVATPoliceServices").innerHTML = "$" + VATPoliceServices;
-        document.getElementById("DetailsOperationalSupport").innerHTML =  "$" + OperationalSupport;
-        document.getElementById("lblEventRef").innerHTML = EventId;
-        
-document.getElementById("hdnEventId").value = EventId;
-document.getElementById("hdnEventName").value = EventName;
+                    var EventDateStart = $("." + key).find('#liEventDateStart').text();
+                    var EventDateEnd = $("." + key).find('#liEventDateEnd').text();
+
+                    var PoliceServices = $("." + key).find('#liPoliceServices').text();
+                    var VATPoliceServices = $("." + key).find('#liVATPoliceServices').text();
+                    var OperationalSupport = $("." + key).find('#liOperationalSupport').text();
+                    var Status = $("." + key).find('#liStatus').text();
+
+                    // $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
+                    if (EventDateEnd !== "")
+                    {
+                        document.getElementById("DetailsEventDateEnd").innerHTML = EventDateEnd;
+                    }
+                    document.getElementById("DetailsEventName").innerHTML = EventName;
+                    document.getElementById("DetailsEventDateStart").innerHTML = EventDateStart;
+                    document.getElementById("DetailsEventCost").innerHTML = "$" + EventCost;
+                    document.getElementById("DetailsPoliceServices").innerHTML = "$" + PoliceServices;
+                    document.getElementById("DetailsVATPoliceServices").innerHTML = "$" + VATPoliceServices;
+                    document.getElementById("DetailsOperationalSupport").innerHTML = "$" + OperationalSupport;
+                    document.getElementById("lblEventRef").innerHTML = EventId;
+
+                    document.getElementById("hdnEventId").value = EventId;
+                    document.getElementById("hdnEventName").value = EventName;
 
 //document.getElementById("SubmitEventId").value = EventId;
 
 //document.getElementById("divEditEvent").style.display = "";
-document.getElementById("divEventDetails").style.display = "";
-document.getElementById("formDeleteEvent").style.display = "";
-document.getElementById("divEventRef").style.display = "";
+                    document.getElementById("divEventDetails").style.display = "";
+                    document.getElementById("formDeleteEvent").style.display = "";
+                    document.getElementById("divEventRef").style.display = "";
 
 //if(Status == 'Registered'){
 //document.getElementById("btnApprove").style.display = "none";
@@ -143,7 +143,7 @@ document.getElementById("divEventRef").style.display = "";
 //}
 
                 });
-                
+
 //                var acc = document.getElementsByClassName("accordion");
 //var i;
 //
@@ -162,8 +162,8 @@ document.getElementById("divEventRef").style.display = "";
 //    }
 //  });
 //}
-                    
-                    //$(document).on("click", "btnDelete", function () {
+
+                //$(document).on("click", "btnDelete", function () {
 //                    $("#btnDelete").click(function (e) {
 ////need to add validation that all fields are there 
 ////                        var oppSupportVal = document.getElementById("OperationalSupport").value;
@@ -242,7 +242,10 @@ document.getElementById("divEventRef").style.display = "";
                                     <a class="text-uppercase" href="/event/create"><i class="glyphicon glyphicon-pencil"></i>Create Event</a>
                                 </li>
                                 <li>
-                                    <a class="text-uppercase" href="/event/makeproforma"><i class="glyphicon glyphicon-eye-open"></i>Create ProForma</a>
+                                    <a class="text-uppercase" href="/proforma/create"><i class="glyphicon glyphicon-eye-open"></i>Create ProForma</a>
+                                </li>
+                                <li>
+                                    <a class="text-uppercase" href="/proforma/edit"><i class="glyphicon glyphicon-eye-open"></i>View &nbsp; <i class="glyphicon glyphicon-pencil"></i>Edit Proforma</a>
                                 </li>
                             </ul>
                         </div>                      
@@ -276,12 +279,12 @@ document.getElementById("divEventRef").style.display = "";
                         </div>
                         <div class="col-md-9">
                             <div class="panel panel-info">
-                                    <div id ="divEventRef" class="panel-heading" style="display: none">
-                                        <center>
-                                            <h3><label id="lblEventRef" class="label label-info"></label>&nbsp;&nbsp; &nbsp;<label id="lblEventFormNum" style="display:none" class="label label-info" ></label></h3>
-                                        </center>
-                                    </div>
-                                
+                                <div id ="divEventRef" class="panel-heading" style="display: none">
+                                    <center>
+                                        <h3><label id="lblEventRef" class="label label-info"></label>&nbsp;&nbsp; &nbsp;<label id="lblEventFormNum" style="display:none" class="label label-info" ></label></h3>
+                                    </center>
+                                </div>
+
                                   <div class="panel-heading blue"><header>Select Company for list of active events</header></div>
                                   <div class="panel-body"> <?php
                                     include 'Views/Shared/Controls/CompanySearch/search-form.php';
@@ -292,77 +295,77 @@ document.getElementById("divEventRef").style.display = "";
                                 { val_CompanyName }      <br>   
                             </div>
                         </div>
-<!--                        <form action="/event/deactivate" method="post">
-
-            <input type="hidden" name="EventId" id="hdnEventId" value="">
-            <button type="button" class="btn btn-danger btn-default pull-right col-xs-3" name="btn-delete" id="btnDelete"><strong>Delete Event</strong></button> 
-      </form>-->
+                        <!--                        <form action="/event/deactivate" method="post">
+                        
+                                    <input type="hidden" name="EventId" id="hdnEventId" value="">
+                                    <button type="button" class="btn btn-danger btn-default pull-right col-xs-3" name="btn-delete" id="btnDelete"><strong>Delete Event</strong></button> 
+                              </form>-->
                     </div>
 
                 </div>
 
 
 
-<!--                <form method="post">
-                <div id="myModal" class="modal fade" role="dialog">
-                    <div class="modal-dialog modal-lg">
-                                         Modal content
-                            <div class="modal-content">
-                            <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">Event Details</h4>
-                                  </div>
-                                  <div class="modal-body">
-                                <div class="col-md-4" >
-                                    <br>
-                                    <input type="hidden" name="EventId" id="SubmitEventId">
-
-                                    <label>Police Services</label>
-                                    <input type="text"  class="form-control" id="PoliceServices" name="PoliceServices" autocomplete="off" >  
-
-                                    <label>VAT</label>
-                                    <input type="text" class="form-control"  id="VATPoliceServices" name="VATPoliceServices" autocomplete="off"  >
-
-                                    <label>Equipment</label>
-                                    <input type="text" class="form-control"  id="OperationalSupport" name="OperationalSupport" autocomplete="off"  >
-
-                                  
-                                    
-                                </div>
-                                <div class="col-md-4" >
-                                    <label>Event Name</label>
-                                    <input type="text"  class="form-control" id="EventName" name="EventName" autocomplete="off" required >  
-
-                                    <label>Event Date</label>
-                                    <input type="text" class="form-control" name="EventDate" placeholder="YYYY-MM-DD" autocomplete="off"  id="EventDate" >
-                                    <script>
-                                        $(function () {
-                                            $("#datepicker").datepicker({dateFormat: 'yy-mm-dd'});
-                                        });
-                                    </script>
-                                    <div><input id="paylist" name="paylist" class="form-control" type="hidden" ></div>
-                                    <i class="glyphicon glyphicon-usd"></i><label> Event Cost</label>
-                                    <input type="text"  class="form-control" id="EventCost" name="EventCost" autocomplete="off" required value="" placeholder="This is coming from Proforma">  
-
-                                    <i class="glyphicon glyphicon-comment"></i><label> Comments</label>
-                                    <textarea  class="form-control" id="Comments" name="Comments" rows="4" cols="50"></textarea>
-                                </div>
-
-                            </div>
-
-                            <div class="modal-footer">
-                                <center>
-                                                                         <button type="submit" class="btn btn-default green" name="btn-update"><strong>Update Event</strong></button> 
-                                </center>
-                                  </div> 
-                                  
-                                                      
-                                
-                              </div>
-                    </div> 
-
-                </div> 
-                    </form>-->
+                <!--                <form method="post">
+                                <div id="myModal" class="modal fade" role="dialog">
+                                    <div class="modal-dialog modal-lg">
+                                                         Modal content
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <h4 class="modal-title">Event Details</h4>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                <div class="col-md-4" >
+                                                    <br>
+                                                    <input type="hidden" name="EventId" id="SubmitEventId">
+                
+                                                    <label>Police Services</label>
+                                                    <input type="text"  class="form-control" id="PoliceServices" name="PoliceServices" autocomplete="off" >  
+                
+                                                    <label>VAT</label>
+                                                    <input type="text" class="form-control"  id="VATPoliceServices" name="VATPoliceServices" autocomplete="off"  >
+                
+                                                    <label>Equipment</label>
+                                                    <input type="text" class="form-control"  id="OperationalSupport" name="OperationalSupport" autocomplete="off"  >
+                
+                                                  
+                                                    
+                                                </div>
+                                                <div class="col-md-4" >
+                                                    <label>Event Name</label>
+                                                    <input type="text"  class="form-control" id="EventName" name="EventName" autocomplete="off" required >  
+                
+                                                    <label>Event Date</label>
+                                                    <input type="text" class="form-control" name="EventDate" placeholder="YYYY-MM-DD" autocomplete="off"  id="EventDate" >
+                                                    <script>
+                                                        $(function () {
+                                                            $("#datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+                                                        });
+                                                    </script>
+                                                    <div><input id="paylist" name="paylist" class="form-control" type="hidden" ></div>
+                                                    <i class="glyphicon glyphicon-usd"></i><label> Event Cost</label>
+                                                    <input type="text"  class="form-control" id="EventCost" name="EventCost" autocomplete="off" required value="" placeholder="This is coming from Proforma">  
+                
+                                                    <i class="glyphicon glyphicon-comment"></i><label> Comments</label>
+                                                    <textarea  class="form-control" id="Comments" name="Comments" rows="4" cols="50"></textarea>
+                                                </div>
+                
+                                            </div>
+                
+                                            <div class="modal-footer">
+                                                <center>
+                                                                                         <button type="submit" class="btn btn-default green" name="btn-update"><strong>Update Event</strong></button> 
+                                                </center>
+                                                  </div> 
+                                                  
+                                                                      
+                                                
+                                              </div>
+                                    </div> 
+                
+                                </div> 
+                                    </form>-->
             </div>
 
 

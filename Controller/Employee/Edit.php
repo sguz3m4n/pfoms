@@ -53,8 +53,8 @@ class EmployeeEditController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-update'])) {
-            $empinst = new \BarcomModel\Employee();
-            $audinst = new \BarcomModel\Audit();
+            $empinst = new \PfomModel\Employee();
+            $audinst = new \PfomModel\Audit();
 
             //Get Id from browser interface
             $Natregno = $_POST['Natregno'];

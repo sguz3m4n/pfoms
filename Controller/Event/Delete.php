@@ -24,8 +24,8 @@ class EventDeactivateController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-delete'])) {
-            $eventinst = new \BarcomModel\Event();
-            $audinst = new \BarcomModel\Audit();
+            $eventinst = new \PfomModel\Event();
+            $audinst = new \PfomModel\Audit();
 
             $EventId = $_POST['EventId'];
             //Check to see if the record already exists            
@@ -50,8 +50,8 @@ class EventDeactivateController extends PermissionController {
            // }
         }
         else if(isset($_POST['btn-submit'])){
-             $eventinst = new \BarcomModel\Event();
-            $audinst = new \BarcomModel\Audit();
+             $eventinst = new \PfomModel\Event();
+            $audinst = new \PfomModel\Audit();
 
             $EventId = $_POST['EventId'];
             //Check to see if the record already exists            

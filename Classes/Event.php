@@ -1,6 +1,6 @@
 <?php
 
-namespace BarcomModel;
+namespace PfomModel;
 
 /*
   Developed by Kitji Studios
@@ -22,62 +22,57 @@ class Event {
     public $ContactEmail;
     public $Division;
     public $EventDateStart;
-        public $EventDateEnd;
+    public $EventDateEnd;
     public $Comments;
     public $RecEntered;
     public $RecEnteredBy;
     public $RecModified;
     public $RecModifiedBy;
     public $Status;
+    public $Station;
     public $DelFlg;
     public $OperationalSupport = "";
     public $PoliceServices = "";
     public $VATPoliceServices = "";
-
-    
     public $AssetName = "";
     public $Quantity = "";
     public $Value = "";
-    
-    function  GetListOfStations(){
-         $result = "";
+    public $Rate;
+
+    function GetListOfStations() {
+        $result = "";
         $conn = conn();
         $stmt = $conn->prepare("SELECT `StationName`, `DivisionId`"
                 . " FROM `station` "
                 . "WHERE DelFlg ='N';");
         $stmt->execute();
         $result_array = $stmt->fetchAll();
-     
+
         foreach ($result_array as $value) {
             $DivCode = $value['DivisionId'];
-            if ($DivCode == "BDIV"){
+            if ($DivCode == "BDIV") {
                 $result .= "<option id='$DivCode' >" . $value['StationName'] . "</option>";
+            } else {
+                $result .= "<option id='$DivCode' style='display:none;' >" . $value['StationName'] . "</option>";
             }
-            else {$result .= "<option id='$DivCode' style='display:none;' >" . $value['StationName'] . "</option>";}
-            
         }
         return $result;
         $conn = NULL;
-     
     }
-    
- 
-    function CreateEventPreAccount($EventId, $AssetName, $Quantity, $Hours, $Value, $CompanyName, $CompanyId) {
 
-        $conn = conn();
-        $sql = "INSERT INTO `eventpreaccount` (`EventId`, `AssetName`, `Quantity`, `Hours`, `Value`,`CompanyName`,`CompanyId`,`DelFlag`)
-            VALUES ('$EventId', '$AssetName', '$Quantity','$Hours', '$Value','$CompanyName','$CompanyId','N')";
+//    function CreateEventPreAccount($EventId, $AssetName, $Quantity, $Hours, $Value, $CompanyName, $CompanyId) {
+//
+//        $conn = conn();
+//        $sql = "INSERT INTO `eventpreaccount` (`EventId`, `AssetName`, `Quantity`, `Hours`, `Value`,`CompanyName`,`CompanyId`,`DelFlag`)
+//            VALUES ('$EventId', '$AssetName', '$Quantity','$Hours', '$Value','$CompanyName','$CompanyId','N')";
+//
+//        if ($conn->exec($sql)) {
+//            $this->auditok = 1;
+//        } else {
+//            $this->auditok = 0;
+//        }
+//    }
 
-        if ($conn->exec($sql)) {
-            $this->auditok = 1;
-        } else {
-            $this->auditok = 0;
-        }
-    }
-    
- 
-    
-    
     function GetPreAccounts() {
         $result = "";
         $conn = conn();
@@ -91,7 +86,6 @@ class Event {
         return $result;
         $conn = NULL;
     }
-
 //    
     function GetRoleRates() {
         $result = "";
@@ -128,49 +122,8 @@ class Event {
 
         return $varschema . $vardatestamp;
     }
-    
-       function CreateUpdateProforma($EventId, $EventCost, $OppSupport, $PoliceServices,$VATPoliceServices, $RecEnteredBy) {
-
-        $conn = conn();
-        $sqlgetevent = $conn->prepare("SELECT * FROM proforma where `EventId` = '$EventId' and DelFlag ='N';");
-        $sqlgetevent->execute();
-        $result_array = $sqlgetevent->fetchAll();
-
-        if(empty($result_array)){
-        $sql = "INSERT INTO `proforma` (`EventId`, `EventCost`, `OperationalSupport`, `PoliceServices`, `VATPoliceServices`,`Status`,`DelFlag`)
-            VALUES ('$EventId', '$EventCost', '$OppSupport','$PoliceServices','$VATPoliceServices','Registered','N')";
-        }
-        else{
-            $sql = "Update `proforma` SET `OperationalSupport` = `OperationalSupport` + '$OppSupport',"
-                    . "`PoliceServices` = `PoliceServices` + '$PoliceServices',"
-                    . " `VATPoliceServices` = `VATPoliceServices` + '$VATPoliceServices',"
-                    . "  `EventCost` = `EventCost` + '$EventCost' WHERE `EventId` = '$EventId' ";
-
-        }
-        if ($conn->exec($sql)) {
-            $this->auditok = 1;
-        } else {
-            $this->auditok = 0;
-        }
-    }
-    
-    function CreateProformaTransaction($EventId, $OppSupport, $PoliceServices,$VATPoliceServices, $RecEnteredBy,$TransId) {
-
-        $conn = conn();
-        $sql = "Insert Into `proformatransaction` (`EventId`,  `OppSupport`, `PoliceServices`, `PoliceServicesVat`,`RecEnteredBy`,`TimeStamp`,`TransId`)
-            VALUES ('$EventId', '$OppSupport','$PoliceServices','$VATPoliceServices','$RecEnteredBy',NOW(), '$TransId')";
-
-        if ($conn->exec($sql)) {
-            $this->auditok = 1;
-        } else {
-            $this->auditok = 0;
-        }
-    }
-
-    function CreateEvent($EventId, $EventName, $CompanyId, $CompanyName,
-         $ContactName, $ContactNumber, $ContactEmail, $EventDateStart, $EventDateEnd, $Comments,
-         $RecEnteredBy, $Division, $station)
-    {
+ 
+    function CreateEvent($EventId, $EventName, $CompanyId, $CompanyName, $ContactName, $ContactNumber, $ContactEmail, $EventDateStart, $EventDateEnd, $Comments, $RecEnteredBy, $Division, $station) {
 
         $conn = conn();
         $sql = "INSERT INTO `event` (`EventId`, `EventName`, `CompanyId`, `CompanyName`, `ContactName`, 
@@ -208,7 +161,7 @@ class Event {
             $this->auditok = 0;
         }
     }
-    
+
     function SubmitEvent($EventId, $UserId) {
         $conn = conn();
         $sql = "UPDATE event SET Status='Registered' WHERE EventId='$EventId'";
@@ -233,5 +186,4 @@ class Event {
 //            $this->auditok = 0;
 //        }
 //    }
-
 }

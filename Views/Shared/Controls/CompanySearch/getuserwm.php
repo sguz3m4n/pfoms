@@ -10,7 +10,7 @@ $sql = 'SELECT * FROM company WHERE CompanyName = "' . $q . '" AND DelFlg="N"';
 
 $result = $conn->prepare($sql);
 $result->execute();
-$compinst = new BarcomModel\Company();
+$compinst = new PfomModel\Company();
 $resultcontact;
 if (!empty($result)) {
     foreach ($result as $value) {
@@ -50,7 +50,7 @@ function AddressBuilder() {
     return;
 }
 
-$model = new \BarcomModel\Company();
+$model = new \PfomModel\Company();
 $parishes = $model->GetParishes();
 ?>  
 <div class="row">

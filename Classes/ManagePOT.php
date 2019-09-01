@@ -7,7 +7,7 @@
   Consultation and Analysis by Data Processing Department
   2019
  */
-namespace BarcomModel;
+namespace PfomModel;
 
 class ManagePOT {
 

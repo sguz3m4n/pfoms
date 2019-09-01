@@ -42,8 +42,8 @@ class AccountEditController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-update'])) {
-            $compinst = new \BarcomModel\Account();
-            $audinst = new \BarcomModel\Audit();
+            $compinst = new \PfomModel\Account();
+            $audinst = new \PfomModel\Audit();
 
             //Get Id from browser interface
             $AccountId = $_POST['AccountId'];
@@ -87,7 +87,7 @@ class AccountEditController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Account();
+            $model = new \PfomModel\Account();
             $template = new MasterTemplate();
             $template->load("Views/Account/account_edit.html");
             $template->replace("title", " Create New Account ");

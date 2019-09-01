@@ -24,8 +24,8 @@ class AccountDeactivateController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-delete'])) {
-            $compinst = new \BarcomModel\Config();
-            $audinst = new \BarcomModel\Audit();
+            $compinst = new \PfomModel\Config();
+            $audinst = new \PfomModel\Audit();
             $ItemCode = $_POST['ItemCode'];
             $ItemName = $_POST['ItemName'];
             //Check to see if the record already exists            

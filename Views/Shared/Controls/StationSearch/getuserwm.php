@@ -9,7 +9,7 @@ $sql = 'SELECT * FROM station WHERE StationName = "' . $q . '" AND DelFlg="N"';
 
 $result = $conn->prepare($sql);
 $result->execute();
-$compinst = new BarcomModel\Station();
+$compinst = new PfomModel\Station();
 
 foreach ($result as $value) {
     $compinst->DivisionId = $value['DivisionId'];

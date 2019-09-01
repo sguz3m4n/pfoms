@@ -8,7 +8,7 @@
   2019
  */
 
-namespace BarcomModel;
+namespace PfomModel;
 require 'Classes/Company.php';
 class Contact extends Company {
 

@@ -11,7 +11,7 @@ $stmt = $conn->prepare($sqlwthdep);
 $stmt->execute();
 $result = $stmt->fetchAll();
 
-$empinst = new BarcomModel\Employee();
+$empinst = new PfomModel\Employee();
 $EmployeeAddress;
 if (!empty($result)) {
     foreach ($result as $value) {

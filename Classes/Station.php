@@ -1,6 +1,6 @@
 <?php
 
-namespace BarcomModel;
+namespace PfomModel;
 require_once 'Division.php';
 /*
   Developed by Kitji Studios

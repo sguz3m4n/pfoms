@@ -11,7 +11,7 @@ $sql = 'SELECT * FROM account WHERE AccountName = "' . $q . '" AND DelFlg="N"';
 $result = $conn->prepare($sql);
 $result->execute();
 
-$compinst = new BarcomModel\Account();
+$compinst = new PfomModel\Account();
 
 foreach ($result as $value) {
 

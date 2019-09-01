@@ -67,8 +67,8 @@ class CompanyCreateController extends PermissionController {
         if (isset($_POST['btn-create'])) {
 //variables for data input 
             $conn = conn();
-            $compinst = new \BarcomModel\Company();
-            $audinst = new \BarcomModel\Audit();
+            $compinst = new \PfomModel\Company();
+            $audinst = new \PfomModel\Audit();
             $this->CompanyId = $compid = $compinst->CompanyId = $_POST['TIN'];
             $this->CaipoId = $caipoid = $compinst->CaipoId = $_POST['CaipoId'];
             $this->TIN = $tin = $compinst->TIN = $_POST['TIN'];
@@ -100,7 +100,7 @@ class CompanyCreateController extends PermissionController {
                     $contactname = $value[0];
                     $contactemail = $value[1];
                     $contactnumber = $value[2];
-                    $contactinst = new \BarcomModel\Contact();
+                    $contactinst = new \PfomModel\Contact();
                     $contactinst->CreateContact($contactname, $contactemail, $contactnumber, $compid);
                 }
             }
@@ -119,7 +119,7 @@ class CompanyCreateController extends PermissionController {
             // } 
             else {
                 //if validation fails do postback with values already entered
-                $model = new \BarcomModel\Company();
+                $model = new \PfomModel\Company();
                 $parishes = $model->GetParishes();
                 $template = new MasterTemplate();
                 $template->load("Views/Company/company.html");
@@ -141,7 +141,7 @@ class CompanyCreateController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Company();
+            $model = new \PfomModel\Company();
             $parishes = $model->GetParishes();
             $activecomp = $model->CountActive();
             $zerobalance = $model->CountZeroBalance();

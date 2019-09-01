@@ -53,8 +53,8 @@ class CompanyEditController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-update'])) {
-            $compinst = new \BarcomModel\Company();
-            $audinst = new \BarcomModel\Audit();
+            $compinst = new \PfomModel\Company();
+            $audinst = new \PfomModel\Audit();
 
             //Get Id from browser interface
             $TIN= $_POST['TIN'];
@@ -110,7 +110,7 @@ class CompanyEditController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Company();
+            $model = new \PfomModel\Company();
             $parishes = $model->GetParishes();
             $template = new MasterTemplate();
             $template->load("Views/Company/company_edit.html");

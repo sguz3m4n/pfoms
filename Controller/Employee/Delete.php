@@ -25,8 +25,8 @@ class EmployeeDeactivateController extends PermissionController {
         $username = $_SESSION["login_user"];
 
         if (isset($_POST['btn-delete'])) {
-            $empinst = new \BarcomModel\Employee();
-            $audinst = new \BarcomModel\Audit();
+            $empinst = new \PfomModel\Employee();
+            $audinst = new \PfomModel\Audit();
             $EmpId = $_POST['Natid'];
             //Check to see if the record already exists            
             //If it does execute delete

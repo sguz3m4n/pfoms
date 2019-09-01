@@ -51,8 +51,8 @@ class WorkflowCreateController extends PermissionController {
         if (isset($_POST['btn-create'])) {
 //variables for data input 
             $conn = conn();
-            $compinst = new \BarcomModel\Workflow();
-            $audinst = new \BarcomModel\Audit();
+            $compinst = new \PfomModel\Workflow();
+            $audinst = new \PfomModel\Audit();
             $this->WorkflowId = $compid = $compinst->WorkflowId = $_POST['WorkflowId'];
 
             $this->Name = $compname = $compinst->Name = $_POST['Name'];
@@ -92,7 +92,7 @@ class WorkflowCreateController extends PermissionController {
                 }
             } else {
                 //if validation fails do postback with values already entered
-                $model = new \BarcomModel\Workflow();
+                $model = new \PfomModel\Workflow();
                 $template = new MasterTemplate();
                 $template->load("Views/Workflow/workflow.html");
                 $template->replace("WorkflowId", $this->WorkflowId);
@@ -101,7 +101,7 @@ class WorkflowCreateController extends PermissionController {
             }
         } else
         if (isset($_GET)) {
-            $model = new \BarcomModel\Workflow();
+            $model = new \PfomModel\Workflow();
 
             $template = new MasterTemplate();
             $template->load("Views/Workflow/workflow.html");

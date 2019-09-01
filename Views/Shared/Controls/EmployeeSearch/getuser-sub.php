@@ -4,6 +4,7 @@ include '../../../../dbconfig.php';
 include '../../../../Classes/Employee.php';
 include '../../../../Classes/Payment.php';
 
+
 $q = $_GET['q'][0];
 $StartDate = $_GET['InspectionDateStart'][0];
 $conn = conn();
@@ -13,8 +14,11 @@ $stmt = $conn->prepare($sql);
 $stmt->execute();
 $result = $stmt->fetchAll();
 
-$empinst = new BarcomModel\Employee();
+$empinst = new PfomModel\Employee();
+
 $PayRate;
+
+$roles = $empinst->GetRoles();
 if (!empty($result)) {
     foreach ($result as $value) {
         /* $buffer_data['Natregno'] = $_GET["Natregno"] = $empinst->Natregno = $value['Natregno'];
@@ -27,7 +31,7 @@ if (!empty($result)) {
         $empinst->ForceNumber = $value['ForceNumber'];
         $Employeename = $value['FirstName'] . ' ' . $value['LastName'];
         //$EndDate = $_GET['InspectionDateEnd'];
-        $test = new \BarcomModel\PayScale();
+        $test = new \PfomModel\PayScale();
         //$test->IsRange($StartDate, $EndDate);
         //If date selected isnt a range
         // if (!$test->IsRange($StartDate, $EndDate)) {
@@ -73,7 +77,8 @@ $conn = NULL;
                         <span data-value="2" id="submitteremployee" style="font-size:medium"    data-counter="counterup" ></span>
                     </div>
                     <div class="desc" id="submitteremployeename"><span class="glyphicon glyphicon-barcode"></span></div>
-                    <div class="desc" id=""><?php echo $empinst->RoleName; ?></div>
+                    <div class="desc" id="submitterforcenumber"><?php echo $empinst->ForceNumber; ?></div>
+                    <div class="desc" id="submitterrolename"><?php echo $empinst->RoleName; ?></div>
                 </div>
             </div>
         </div> 
@@ -96,21 +101,40 @@ $conn = NULL;
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-info" id="empinfo">
-                <div class="panel-heading"><h4>Police Officer</h4></div>
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input type="number" id="hours" name="hours" class="form-control"  placeholder="Hours" >
+                        </div>
+                        <div class="col-md-4">
+                            <label >Acting ?</label>
+                        </div>
+                        <div class="col-md-4"> 
+                            <label class="switch" >
+                                <input class="checkbox"  type="checkbox" id="acting" name="acting" >
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
                 <div class="panel-body">
                     <div class="form-group" id="employee">
                         <div class="row">
-                            <div class="col-md-6">
-                                <label> Hours</label> 
-                                <input type="number" id="hours" name="hours" class="form-control" autocomplete="off" placeholder="Enter overtime hours" required>
-                            </div> 
-                            <div class="col-md-6">
-                                <label >Acting ?</label>
-                                <label class="switch" >
-                                    <input class="checkbox"  type="checkbox" id="acting" name="acting" >
-                                    <span class="slider round"></span>
-                                </label>                                                
-                            </div> 
+                            <div class="col-md-12">
+                                <label id="lblPost" name="lblPost">Post</label>
+                                <select name="RoleName" class="form-control" id="RoleName" onchange="myFunction()">
+                                    <option></option>
+                                    <?php echo $empinst->GetRoles(); ?>
+                                </select>
+                                <input type="hidden" name="RateCode" id="RateCode"   />
+                                <script>
+                                    function myFunction() {
+                                        //alert("Hello! I am an alert box!!");
+                                        var mylist = document.getElementById("RoleName");
+                                        document.getElementById("RateCode").value = mylist.options[mylist.selectedIndex].id;
+                                    }
+                                </script>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
@@ -123,7 +147,7 @@ $conn = NULL;
                                 <input type="hidden" class="form-control" id="Natregno"  name="Natregno" value="<?php echo $empinst->Natregno; ?>">
                             </div>
                             <div class="col-xs-3">
-                                <input type="hidden" class="form-control" id="PayRate"  name="PayRate" value="<?php echo BarcomModel\PayScale::$PayRate; ?>">
+                                <input type="hidden" class="form-control" id="PayRate"  name="PayRate" value="<?php echo PfomModel\PayScale::$PayRate; ?>">
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" class="form-control" id="RateCode"  name="RateCode" value="<?php echo $empinst->RateCode; ?>">

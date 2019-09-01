@@ -11,7 +11,7 @@ $sql = 'SELECT * FROM equipment WHERE ItemName = "' . $q . '" AND DelFlg="N"';
 $result = $conn->prepare($sql);
 $result->execute();
 
-$compinst = new BarcomModel\Equipment();
+$compinst = new PfomModel\Equipment();
 
 foreach ($result as $value) {
     $compinst->EquipmentId = $value['EquipmentId'];

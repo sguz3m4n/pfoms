@@ -3,58 +3,80 @@
     <head>
         { head }
         <style>
-            .sidenav {
-                height: 100%;
-                width: 0;
-                position: fixed;
-                z-index: 1;
-                top: 50px;
-                left: 0;
-                background-color: #111;
-                overflow-x: hidden;
-                overflow-y: hidden;
-                transition: 0.5s;
-                padding-top: 60px;
+            .modal-header, h4.mdl, .close {
+                background-color: #5cb85c;
+                color:white !important;
+                text-align: center;
+                font-size: 30px;
+            }
+            .modal-footer {
+                background-color: #f9f9f9;
+            }
+            /* The switch - the box around the slider */
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 80px;
+                height: 55px;
             }
 
-            .sidenav a {
-                padding: 8px 8px 8px 20px;
-                text-decoration: none;
-                font-size: 18px;
-                color: #818181;
-                display: block;
-                transition: 0.3s;
-            }
+            /* Hide default HTML checkbox */
+            .switch input {display:none;}
 
-            .sidenav a:hover {
-                color: #f1f1f1;
-            }
-            .sidenav tr:hover {
-                color: #f1f1f1;
-            }
-
-            .sidenav .closebtn {
+            /* The slider */
+            .slider {
                 position: absolute;
-                top: 50px;
-                right: 25px;
-                font-size: 25px;
-                margin-left: 50px;
+                cursor: pointer;
+                top: 0;
+                left: 10px;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                -webkit-transition: .4s;
+                transition: .4s;
             }
 
-            #main {
-                transition: margin-left .5s;
-                padding: 16px;
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
             }
 
-            @media screen and (max-height: 450px) {
-                .sidenav {padding-top: 15px;}
-                .sidenav a {font-size: 18px;}
+            input:checked + .slider {
+                background-color: #2196F3;
             }
+
+            input:focus + .slider {
+                box-shadow: 0 0 1px #2196F3;
+            }
+
+            input:checked + .slider:before {
+                -webkit-transform: translateX(26px);
+                -ms-transform: translateX(26px);
+                transform: translateX(26px);
+            }
+
+            /* Rounded sliders */
+            .slider.round {
+                border-radius: 34px;
+            }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }  
+
         </style>
-
         <script type="text/javascript">
             $(document).ready(function () {
+                $('#submitpaymenttable').hide();
                 var PreAccountTotal = 0;
+                var selectedkey;
 
                 var preaccountOS = 0;
                 var preaccountPS = 0;
@@ -66,7 +88,23 @@
                 var accountarr = [];
                 var acctid;
                 var dailyRate;
-
+                // Get all the inputs into an array...
+//                var $inputs = $('#proformaedit :input');
+//
+//                // An array of just the ids...
+//                var ids = {};
+//
+//                $inputs.each(function (index)
+//                {
+//                    // For debugging purposes...
+//                    alert(index + ': ' + $(this).attr('id'));
+//
+//                    ids[$(this).attr('name')] = $(this).attr('id');
+//                });
+                $('#update').on('click', function () {
+                    alert('hello');
+                });
+                
                 $('#Division').on('change', function () {
                     //alert($('#Division :selected').attr('id'));
                     var inputVal = $('#Division :selected').attr('id');
@@ -258,8 +296,12 @@
                         $('#ResourceAmount').text(0);
                     }
                 });
+                
+                $('#update').on('click', function () {
 
-
+                    alert('hello');
+                });
+                
                 $('#AddResource').on('click', function () {
                     //alert("hello");
                     var acctrec = [];
@@ -384,16 +426,16 @@
                                 xmlhttp.send();
                         }
                     $(this).parent(".result").empty();
+
                     //alert('test');
                 });
 
-
-
                 $(document).on("click", ".pillwrapper li", function () {
-     
+
                     var key = $(this).attr("class");
 
                     var EventId = $("." + key).find('#liEventId').text();
+                    selectedkey = EventId;
                     var EventName = $("." + key).find('#liEventName').text();
                     var EventCost = $("." + key).find('#liEventCost').text();
                     var OpSupport = $("." + key).find('#liOperationalSupport').text();
@@ -409,21 +451,25 @@
 
                     var CompanyName = document.getElementById("compName").innerHTML;
 
-                    document.getElementById("Division").value = Division;
-                    document.getElementById("Station").value = Station;
-                    document.getElementById("EventName").value = EventName;
-
-                    document.getElementById("EventDateStart").value = EventDateStart;
-                    document.getElementById("EventDateEnd").value = EventDateEnd;
-                    document.getElementById("lblEventRef").innerHTML = EventId;
-                    document.getElementById("CompanyId").value = CompanyId;
-                    document.getElementById("CompanyName").value = CompanyName;
+//                    document.getElementById("Division").value = Division;
+//                    document.getElementById("Station").value = Station;
+//                    document.getElementById("EventName").value = EventName;
+//
+//                    document.getElementById("EventDateStart").value = EventDateStart;
+//                    document.getElementById("EventDateEnd").value = EventDateEnd;
+//                    document.getElementById("lblEventRef").innerHTML = EventId;
+//                    document.getElementById("CompanyId").value = CompanyId;
+//                    document.getElementById("CompanyName").value = CompanyName;
                     //document.getElementById("eventcost").innerhtml = EventCost;
                     //$("#eventcost").text(EventCost);
                     //$("#opsupporttotal").text(OpSupport);
                     //$("#policeservicestotal").text(PoliceServ);
+                    $('#submitpaymenttable').show();
                 });
 
+                $(document).on("click", "#submitpaymenttable", function () {
+                    paymentTable();
+                });
 
                 $("#btnCreateEvent").click(function (e) {
 //need to add validation that all fields are there 
@@ -439,6 +485,41 @@
 
                 });
 
+                $(document).on("click", ".edit", function (e) {
+                    $.get("/Views/Shared/Controls/ComboSearch/proforma-modal.php?id=" + e.target.id).done(function (data) {
+                        $("#myModal").html(data).modal();
+
+                    });
+                });
+                function paymentTable() {
+//                    var startDate = ($('#inspection-start').val()).replace('Start Date', '');
+//                    var endDate = ($('#inspection-end').val()).replace('End Date', '');
+//                    var eventid = $("." + key).find('#liEventId').text();
+//                    var company = $('#searchcomp').val();
+//                    var isnum = /[0-9]/;
+//                    var isalpha = /[a-zA-Z]/;
+//
+                    var resultDiv = $('#paymenttable');
+//
+                    var payload = {};
+//                    if (endDate != '') {
+//                        payload['enddate'] = endDate;
+//                    }
+//                    if (employee != '') {
+                    payload['eventid'] = selectedkey;
+//                    }if (startDate != '') {
+//                        payload['startdate'] = startDate;
+//                    }
+//                    if (company != '') {
+//                        payload['compname'] = company;
+//                    }
+
+
+                    $.get("/proformatablepymt?", payload).done(function (data) {
+                        resultDiv.html(data);
+                    });
+                }
+         
                 function RemoveInfo(key, accountToDelete) {
                     var indextoremove;
 
@@ -482,15 +563,6 @@
                 }
 
             });
-        </script>
-        <script>
-            function ShowSummary() {
-                document.getElementById("mySidenav").style.width = "350px";
-            }
-
-            function closeNav() {
-                document.getElementById("mySidenav").style.width = "0";
-            }
         </script>
     </head>
     <body>
@@ -549,6 +621,10 @@
                                 <li>
                                     <a class="text-uppercase" href="/event/edit"><i class="glyphicon glyphicon-pencil"></i>View/Delete Event</a>
                                 </li>
+                                <li>
+                                    <a class="text-uppercase" href="/proforma/create"><i class="glyphicon glyphicon-eye-open"></i>Create ProForma</a>
+                                </li>
+
                             </ul>
                         </div>                      
                     </div>                
@@ -625,19 +701,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-12">
-                                    <div class="dashboard-stat dashboard-stat-v2 blue">
-                                        <div class="visual">
-                                            <i class="fa fa-comments"></i>
-                                        </div>
-                                        <div class="details">
-                                            <div class="number">
-                                                <span class="glyphicon glyphicon-usd"></span><span data-value="2" id="submitterbalance" style="font-size: xx-large"  data-counter="counterup"></span>
-                                            </div>
-                                            <div class="desc"> Company Balance </div>
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <center>
                                     <a class="btn btn-outline blue" href="../../index.php">back to main page</a>    
                                 </center>
@@ -654,113 +718,48 @@
                                 </div>
                                 <div class="portlet box blue">
                                     <div class="portlet-title">
-                                        <div class="caption"><em class="fa fa-group"></em><h4>Create ProForma</h4></div>
-                                        <div class="tools">
-                                            <a title="" class="collapse" href="javascript:;" data-original-title=""> </a>
-                                        </div>
+                                        <div class="caption"><em class="fa fa-group"></em><h4>Edit ProForma</h4></div>
                                     </div>
                                     <div class="portlet-body form">
-                                        <form  method="post"  action="" id="paymentform" > 
-                                            <div class="container-fluid">
-                                                <div class="row center-block">
-                                                    <div class="col-md-2" ></div>
-                                                    <div class="col-md-8" >
-                                                        <?php
-                                                        include 'Views/Shared/Controls/CompanySearch/search-form.php';
-                                                        ?>                                                            
-                                                    </div>
-                                                    <div class="col-md-2" >
-                                                        <br>
-                                                        <a href="/company/create" id="" class="btn btn-default blue">Create Company</a>
+                                        <div class="container-fluid">
+                                            <div class="row center-block">
+                                                <div class="col-md-2" ></div>
+                                                <div class="col-md-8" >
+                                                    <?php
+                                                    include 'Views/Shared/Controls/CompanySearch/search-form.php';
+                                                    ?>                                                            
+                                                </div>
+                                                <div class="col-md-2" >
+                                                    <br>
+                                                    <a href="/company/create" id="" class="btn btn-default blue">Create Company</a>
+                                                </div>
+                                                <div class="col-xs-12 row text-center">
+                                                    <div id="submitpaymenttable" class="btn btn-info btn-md">Show Results</div>
+                                                </div>
+                                                <div class="col-xs-12 row">
+                                                    <div class="table-responsive">
+                                                        <table class="table" id="paymenttable">
+
+                                                        </table>
                                                     </div>
                                                 </div>
-                                                <div class="row center-block"> 
-                                                    <div class="col-md-3" >                                                 
-                                                        <div class="row">
-                                                            <div class="col-xs-4" style="font-size: large">
-                                                                <a id="addrank" class="btn btn-default green" data-toggle="modal" data-target="#myModal">Police Services <i class="glyphicon glyphicon-plus"></i>
-                                                                </a>
-                                                            </div>  
-                                                        </div>
-                                                        <br>
-                                                        <div class="row">
-                                                            <div class="col-xs-4" style="font-size: large">
-                                                                <a id="addopsupport" class="btn btn-default green" data-toggle="modal" data-target="#myModal2">Operational Support <i class="glyphicon glyphicon-plus"></i>
-                                                                </a>
-                                                            </div>  
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-5" >
-                                                        <br>
+                                            </div>
+                                            <div class="col-md-3" >
 
-                                                        <div class="pillwrappersupport" id="pillcontainersupport">
-                                                            <ul class="nav nav-pills nav-stacked" id="pillwrappersupport">                                   
-                                                            </ul>   
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4" >
-                                                        <br>
-                                                        <label>Division</label>
-                                                        <input type="text"  class="form-control" id="Division" name="Division" placeholder="Select Event" readonly="">  
-
-                                                        <label>Station</label>
-                                                        <input type="text"  class="form-control" id="Station" name="Station" placeholder="Select Event" readonly="">  
-
-                                                        <label>Event Name</label>
-                                                        <input type="text"  class="form-control" id="EventName" name="EventName" value=" " placeholder="Select Event" readonly="">  
-
-                                                        <label>Event Start Date</label>
-                                                        <input type="text" class="form-control" id="EventDateStart" name="EventDateStart" placeholder="YYYY-MM-DD" readonly="">
-                                                        <label>Event End Date</label>
-                                                        <input type="text" class="form-control" id="EventDateEnd" name="EventDateEnd" placeholder="YYYY-MM-DD" readonly="">
-
-                                                        <div><input id="paylist" name="paylist" class="form-control" type="hidden" ></div>
-
-                                                        <!--                                                        <input type="hidden"  class="form-control" id="EventCost" name="EventCost"  required value="{ EventCost }" >  -->
-
-                                                    </div> 
-                                                </div>
-                                                <div>
-
-                                                    <center>
-                                                        <br>
-                                                        <i class="glyphicon glyphicon-comment"></i><label> Comments</label>
-                                                    </center>
-                                                    <div class="col-md-4"></div>
-                                                    <div class="col-md-4">
-                                                        <textarea  class="form-control" id="Comments" name="Comments" rows="4" cols="12"></textarea>
-                                                    </div>
-                                                    <div class="col-md-4"></div>
-                                                </div>
-                                                <div class="col-md-3" >
-
-                                                    <input type="hidden" class="form-control" id="EventId" name="EventId"  >
-
-                                                    <input type="hidden" class="form-control" id="CompanyName" name="CompanyName"  >
-                                                    <input type="hidden" class="form-control" id="CompanyId" name="CompanyId"  >
-                                                    <input type="hidden" class="form-control" id="hdnDivisionId" name="hdnDivisionId"  >
-                                                    <input type="hidden" class="form-control" id="hdnEventCost" name="hdnEventCost"  >
-                                                    <input type="hidden" class="form-control" id="hdnOperationalSupport" name="hdnOperationalSupport"  >
-                                                    <input type="hidden" class="form-control" id="hdnPoliceServices" name="hdnPoliceServices"  >
-                                                    <input type="hidden" class="form-control" id="hdnVATPoliceServices" name="hdnVATPoliceServices"  >
-                                                    <input type="hidden" class="form-control" id="hdnAsset" name="hdnAsset" value="" >
-                                                    <input type="hidden" class="form-control" id="VATDBval" name="VATDBval" value="{ VATDBval }" >
-
-                                                </div>
-                                            </div>  
-                                            <br>
-                                            <center>
-                                                <button type="submit" name="btn-create" class="btn btn-default blue" id="btnCreateEvent">Create Pro Forma</button>    
-                                            </center>
-                                            <br>
-                                        </form> 
-                                        <div class="modal" id="myModal">
+                                            </div>
+                                        </div>  
+                                        <br>
+                                        <br>            
+                                        <div class="modal fade" id="myModal" role="dialog"></div>
+                                        <div class="modal fade" id="myModalAmend" role="dialog"></div>
+                                        <div class="modal" id="officermodal">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
                                                         <h4 class="modal-title">Select Police Service Resource</h4>
+
                                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                     </div>
 
@@ -786,7 +785,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="modal" id="myModal2">
+                                        <div class="modal" id="supportmodal">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
 
@@ -820,26 +819,14 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div> 
-            </div>            
-        </div>
-        { foot }
+                </div>
+            </div> 
+        </div>           
     </body>
 </html>
-<!--  <br>
-                                                                                                             <i class="glyphicon glyphicon-usd"></i><label> Police Services</label>
-                                                                                                             <input type="text"  class="form-control" id="PoliceServices" name="PoliceServices" autocomplete="off"  value="{ PoliceServices }" placeholder="0.00">  
-                                                     
-                                                                                          <i class="glyphicon glyphicon-usd"></i><label> VAT</label>
-                                                                                                             <input type="text"  class="form-control" id="VATPoliceServices" name="VATPoliceServices" autocomplete="off"  value="{ VATPoliceServices }" placeholder="0.00" readonly>  
-                                                     
-                                                                                          <i class="glyphicon glyphicon-usd"></i><label> Operational Support</label>
-                                                                                                             <input type="text"  class="form-control" id="OperationalSupport" name="OperationalSupport" autocomplete="off"  value="{ OperationalSupport }" placeholder="0.00">  
--->

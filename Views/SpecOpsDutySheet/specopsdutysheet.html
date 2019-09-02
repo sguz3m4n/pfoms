@@ -61,7 +61,9 @@
             var equipcount = 0;
             var equiparr = [];
             var CreatedutySheet = false;
-            var isacting = 'off';
+             var isacting = 'N';
+            var dayoff = 'N';
+            var offduty = 'N';
 
             $(document).ready(function () {
 
@@ -107,16 +109,16 @@
                 addcontainer.appendChild(addequipment);
 
                 //Update array info with panel info
-                $(document).on("mouseleave", "#empinfo", function () {
-                    if (offcrarr.length > 0)
-                    {
-                        var key = $("#Natregno").val();
-                        ToggleControl();
-                        UpdateInfo(key);
-                    } else
-                    {
-                    }
-                });
+//                $(document).on("mouseleave", "#empinfo", function () {
+//                    if (offcrarr.length > 0)
+//                    {
+//                        var key = $("#Natregno").val();
+//                        ToggleControl();
+//                        UpdateInfo(key);
+//                    } else
+//                    {
+//                    }
+//                });
 
                 $(document).on("click", "#addofficer", function () {
                     var pillcontainer = document.getElementById('offcrpillcontainer');
@@ -135,13 +137,27 @@
                     pillanchor.setAttribute("class", "btn-default blue");
                     pillanchor.appendChild(removeicon);
                     var offcrrec = new Array();
-                    offcrrec.push(document.getElementById("EmpName").value);
+                    
+                   offcrrec.push(document.getElementById("EmpName").value);
                     offcrrec.push(document.getElementById("Natregno").value);
-                    offcrrec.push(document.getElementById("hours").value);
+                   // offcrrec.push(document.getElementById("hours").value);
                     offcrrec.push(document.getElementById("PayRate").value);
                     offcrrec.push(document.getElementById("RateCode").value);
                     offcrrec.push(document.getElementById("ForceNumber").value);
                     offcrrec.push(isacting);
+                    offcrrec.push(dayoff);
+                    offcrrec.push(offduty);
+                    
+                    if (isacting === "Y"){
+                        offcrrec.push(document.getElementById("RoleName").value);
+                    offcrrec.push(document.getElementById("actingRateCode").value);
+                    offcrrec.push(document.getElementById("Comments").value); 
+                    }
+                    else{
+                        offcrrec.push("");
+                    offcrrec.push("");
+                    offcrrec.push(""); 
+                    }
 
                     offcrarr.push(offcrrec);
 
@@ -149,11 +165,11 @@
                     pillwrapper.appendChild(pill);
                     pillcontainer.appendChild(pillwrapper);
 
-                    $(".offcrpillwrapper li").on("click", function () {
-                        //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
-                        var key = this.id.toString().trim();
-                        PopulatePanelInfo(key);
-                    });
+//                    $(".offcrpillwrapper li").on("click", function () {
+//                        //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
+//                        var key = this.id.toString().trim();
+//                        PopulatePanelInfo(key);
+//                    });
 
                     $(".offcrpillwrapper li").on("dblclick", function () {
                         //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
@@ -168,73 +184,16 @@
 
                 });
 
-                $(document).on("click", "#addequipment", function () {
-                    var pillcontainer = document.getElementById('equippillcontainer');
-                    var pillwrapper = document.getElementById('equippillwrapper');
-
-                    //create instance of list elements
-                    var pill = document.createElement("li");
-                    var removeicon = document.createElement("span");
-                    removeicon.setAttribute("class", "glyphicon glyphicon-minus");
-                    //pill.setAttribute("id", "officerpill" + offcrcount);
-                    pill.setAttribute("id", $("#ItemId").val());
-
-                    //dynamically create functions
-                    var pillanchor = document.createElement("a");
-                    pillanchor.appendChild(document.createTextNode($("#ItemName").text().toUpperCase()));
-
-                    pillanchor.appendChild(removeicon);
-                    var equiprec = new Array();
-                    equiprec.push(document.getElementById("ItemName").value);
-                    equiprec.push(document.getElementById("hours").value);
-                    equiprec.push(document.getElementById("UnitCost").value);
-//                    equiprec.push(document.getElementById("PayRate").value);
-//                    equiprec.push(document.getElementById("RateCode").value);
-//                    equiprec.push(document.getElementById("ForceNumber").value);
-//                    equiprec.push(isacting);
-
-                    equiparr.push(equiprec);
-
-                    pill.appendChild(pillanchor);
-                    pillwrapper.appendChild(pill);
-                    pillcontainer.appendChild(pillwrapper);
-
-                    $(".equippillwrapper li").on("click", function () {
-                        //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
-                        var key = this.id.toString().trim();
-                        PopulatePanelInfo(key);
-                    });
-
-                    $(".equippillwrapper li").on("dblclick", function () {
-                        //var index = this.id.toString().substring(this.id.toString().length - 1, this.id.toString().length);
-
-                        var key = this.id.toString().trim();
-
-                        var elem = document.getElementById(this.id.toString());
-                        elem.parentNode.removeChild(elem);
-                        RemoveInfo(key);
-
-                    });
-
-                });
-
-                $(document).on("click", "#btnShowEvents", function () {
-                    var btnshowevents = document.getElementById("btnShowEvents").innerHTML;
-
-                    if (btnshowevents == "Show Events") {
-                        document.getElementById("btnShowEvents").innerHTML = "Hide Events";
-                    } else {
-                        document.getElementById("btnShowEvents").innerHTML = "Show Events";
-                    }
-                    //document.getElementById("btnShowEvents").innerHTML = "Show Events";
-
-                });
-
+              
                 // Set search input value on click of result item Employee ONLY
                 $(document).on("click", ".result p", function () {
                     $(this).parents(".search-boxemp1").find('input[type="text"]').val($(this).text());
                     $test = document.getElementById('searchemp1').value;
 
+isacting = 'N';
+                     dayoff = 'N';
+                     offduty = 'N';
+                     
                     if ($test == "")
                     {
                                 document.getElementById("txtHint").innerHTML = "";
@@ -259,72 +218,127 @@
                                 $("#submitterrates").text($("#PayRate").val());
                                 $("#btn-create").show();
                                 $("#addofficer").show();
-                                $("#Comments").hide();
-                                $("#lblComments").hide();
-                                document.getElementById('hours').value = document.getElementById('HoursEngaged').value;
+                                //$("#Comments").hide();
+                                //$("#lblComments").hide();
+                                 $("#showlblPost").hide();
+                                 $("#showlblComments").hide();
+                               // document.getElementById('hours').value = document.getElementById('HoursEngaged').value;
+                                
                                         }
                                 };
-                                xmlhttp.open("GET", "/Views/Shared/Controls/EmployeeSearch/getuser-sub.php?q[]=" + $test + "&InspectionDateStart[]=" + $("#InspectionDateStart").val(), true);
+                                xmlhttp.open("GET", "/Views/Shared/Controls/EmployeeSearch/getuser-extraduties.php?q[]=" + $test + "&InspectionDateStart[]=" + $("#InspectionDateStart").val(), true);
                                 xmlhttp.send();
                         }
                     $(this).parent(".result").empty();
                 });
 
                 // Set search input value on click of result item Employee ONLY
-                $(document).on("click", ".resultequip p", function () {
-                    //alert('hello');
-                    $(this).parents(".search-boxequip").find('input[type="text"]').val($(this).text());
-                    $test = document.getElementById('searchequip').value;
-
-                    if ($test == "")
-                    {
-                                document.getElementById("txtHintops").innerHTML = "";
-                                return;
-                        } else
-                    {
-                                if (window.XMLHttpRequest)
-                        {
-                                        // code for IE7+, Firefox, Chrome, Opera, Safari
-                                        xmlhttp = new XMLHttpRequest();
-                                } else {
-                                        // code for IE6, IE5
-                                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                                }
-                                xmlhttp.onreadystatechange = function () {
-                                        if (this.readyState == 4 && this.status == 200)
-                            {
-
-                                 document.getElementById("txtHintops").innerHTML = this.responseText;
-//                                $("#submitteremployee").text($("#Natregno").val());
-//                                $("#submitteremployeename").text($("#EmpName").val());
-//                                $("#submitterrates").text($("#PayRate").val());
-//                                $("#btn-create").show();
-                                $("#addequipment").show();
-//                                $("#Comments").hide();
-//                                $("#lblComments").hide();
-//                                document.getElementById('hours').value = document.getElementById('HoursEngaged').value;
-                                        }
-                                };
-                                xmlhttp.open("GET", "/Views/Shared/Controls/OpSupportSearch/getopsupp-sub.php?q=" + $test, true);
-                                xmlhttp.send();
-                        }
-                    $(this).parent(".resultequip").empty();
-                });
+//                $(document).on("click", ".resultequip p", function () {
+//                    //alert('hello');
+//                    $(this).parents(".search-boxequip").find('input[type="text"]').val($(this).text());
+//                    $test = document.getElementById('searchequip').value;
+//
+//                    if ($test == "")
+//                    {
+//                                document.getElementById("txtHintops").innerHTML = "";
+//                                return;
+//                        } else
+//                    {
+//                                if (window.XMLHttpRequest)
+//                        {
+//                                        // code for IE7+, Firefox, Chrome, Opera, Safari
+//                                        xmlhttp = new XMLHttpRequest();
+//                                } else {
+//                                        // code for IE6, IE5
+//                                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+//                                }
+//                                xmlhttp.onreadystatechange = function () {
+//                                        if (this.readyState == 4 && this.status == 200)
+//                            {
+//
+//                                 document.getElementById("txtHintops").innerHTML = this.responseText;
+////                                $("#submitteremployee").text($("#Natregno").val());
+////                                $("#submitteremployeename").text($("#EmpName").val());
+////                                $("#submitterrates").text($("#PayRate").val());
+////                                $("#btn-create").show();
+//                                $("#addequipment").show();
+////                                $("#Comments").hide();
+////                                $("#lblComments").hide();
+////                                document.getElementById('hours').value = document.getElementById('HoursEngaged').value;
+//                                        }
+//                                };
+//                                xmlhttp.open("GET", "/Views/Shared/Controls/OpSupportSearch/getopsupp-sub.php?q=" + $test, true);
+//                                xmlhttp.send();
+//                        }
+//                    $(this).parent(".resultequip").empty();
+//                });
                 //Toggle on and off Passenger option
                 $(document).on("click", "#acting", function () {
                     if ($("#acting").is(":checked"))
                     {
-                        isacting = 'on';
-                        $("#Comments").show();
+                        isacting = 'Y';
+                        $("#showlblComments").show();
+                          $("#showlblPost").show();
                     } else
                     if (!$("#acting").is(":checked"))
                     {
-                        isacting = 'off';
+                        isacting = 'N';
                         $("#Comments").val("");
-                        $("#Comments").hide();
+                        $("#showlblComments").hide();
+                          $("#showlblPost").hide();
                     }
                 });
                 
+                 $(document).on("click", "#DayOff, #OffDuty", function () {
+                     if ($("#DayOff").is(":checked")){
+                         dayoff = 'Y';
+                     }
+                     if ($("#OffDuty").is(":checked")){
+                         offduty = 'Y';
+                     }
+                      if (!$("#DayOff").is(":checked")){
+                         dayoff = 'N';
+                     }
+                     if (!$("#OffDuty").is(":checked")){
+                         offduty = 'N';
+                     }
+                 });
+                 
+                  $(document).on("click", "#Surveillance", function () {
+                     if ($("#Surveillance").is(":checked")){
+                         $("#hdnSurveillance").val("Y");
+                     }
+                     if (!$("#Surveillance").is(":checked")){
+                         $("#hdnSurveillance").val("N");
+                     }
+                   });
+                   
+                    $(document).on("click", "#CrimePreventionOps", function () {
+                     if ($("#CrimePreventionOps").is(":checked")){
+                         $("#hdnCrimePreventionOps").val("Y");
+                     }
+                     if (!$("#CrimePreventionOps").is(":checked")){
+                         $("#hdnCrimePreventionOps").val("N");
+                     }
+                   });
+                   
+                    $(document).on("click", "#PAIIPBDC", function () {
+                     if ($("#PAIIPBDC").is(":checked")){
+                         $("#hdnPAIIPBDC").val("Y");
+                     }
+                     if (!$("#PAIIPBDC").is(":checked")){
+                         $("#hdnPAIIPBDC").val("N");
+                     }
+                   });
+                   
+                    $(document).on("click", "#SAECC", function () {
+                     if ($("#SAECC").is(":checked")){
+                         $("#hdnSAECC").val("Y");
+                     }
+                     if (!$("#SAECC").is(":checked")){
+                         $("#hdnSAECC").val("N");
+                     }
+                   });
                 
                 //Add the information capture panel to the form
                 $(document).on("click", "#adddetails", function () {
@@ -353,7 +367,7 @@
                    // divhint2.setAttribute("id", "txtHintops");
                    divsearch.setAttribute("class", "search-boxemp" + count)
                    // divsearch2.setAttribute("class", "search-boxequip")
-                    divmid.setAttribute("class", "col-xs-12");
+                    divmid.setAttribute("class", "col-xs-6");
                    // divmid2.setAttribute("class", "col-xs-12");
                     //create officer text control
                     var offcrinput = document.createElement("input");
@@ -364,14 +378,6 @@
                     offcrinput.setAttribute("autocomplete", "off");
                     offcrinput.setAttribute("placeholder", "Search employee name or force number...");
 
-                    //create officer text control
-//                    var equipinput = document.createElement("input");
-//                    equipinput.name = "equipid";
-//                    equipinput.setAttribute("class", "form-control");
-//                    equipinput.setAttribute("id", "searchequip");
-//                    equipinput.setAttribute("type", "text");
-//                    equipinput.setAttribute("autocomplete", "off");
-//                    equipinput.setAttribute("placeholder", "Search equipment name..");
 
                     offcrinput.onkeyup = function () {
                         /* Get input value on change */
@@ -437,113 +443,6 @@
                  //   container2.appendChild(divmid2);
                 });
 
-//                $('.search-boxcomp input[type="text"]').on("keyup input", function () {
-//                    /* Get input value on change */
-//                    var inputVal = $(this).val();
-//                    var resultDropdown = $(this).siblings(".resultcomp");
-//                    var isnum = /[0-9]/;
-//                    var isalpha = /[a-zA-Z]/;
-//
-//                    if (inputVal.length) {
-//                        if (isalpha.test(inputVal))
-//                        {
-//                            $.get("../Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "name", {term: inputVal}).done(function (data) {
-//                                // Display the returned data in browser
-//                                resultDropdown.html(data);
-//                            });
-//                        } else
-//                        if (isnum.test(inputVal))
-//                        {
-//                            $.get("../Views/Shared/Controls/CompanySearch/backend-search.php?type=" + "companyid", {term: inputVal}).done(function (data) {
-//                                // Display the returned data in browser
-//                                resultDropdown.html(data);
-//                            });
-//                        }
-//
-//                    } else {
-//                        resultDropdown.empty();
-//                    }
-//                });
-
-                // Set search input value on click of result item
-//                $(document).on("click", ".resultcomp p", function () {
-//                    $(this).parents(".search-boxcomp").find('input[type="text"]').val($(this).text());
-//                    $test = document.getElementById('searchcomp').value;
-//                    if ($test == "") {
-//                                document.getElementById("txtHintcomp").innerHTML = "";
-//                                return;
-//                        } else {
-//                                if (window.XMLHttpRequest) {
-//                                        // code for IE7+, Firefox, Chrome, Opera, Safari
-//                                        xmlhttp = new XMLHttpRequest();
-//                                } else {
-//                                        // code for IE6, IE5
-//                                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-//                                }
-//                                xmlhttp.onreadystatechange = function () {
-//                                        if (this.readyState == 4 && this.status == 200) {
-//                                                document.getElementById("txtHintcomp").innerHTML = this.responseText;
-//                                           $('input#EventDate').datepicker({dateFormat: 'yy-mm-dd'});
-//                                        }
-//                                };
-//                        $('input#DateOfBirth').datepicker({dateFormat: 'yy-mm-dd'});
-//                                xmlhttp.open("GET", "../Views/Shared/Controls/EventSearch/listapprovedevents.php?q=" + $test, true);
-//                                xmlhttp.send();
-//                        }
-//                    $(this).parent(".result").empty();
-//                    //alert('test');
-//                });
-
-
-                $(document).on("click", ".pillwrapper li", function () {
-
-                    var key = $(this).attr("class");
-
-                    if (CreatedutySheet === false) {
-                        $("#adddetails").show();
-                        CreatedutySheet = true;
-                    }
-                    //$("#dutySheet").show();
-
-
-                    var EventId = $("." + key).find('#liEventId').text();
-                    var EventName = $("." + key).find('#liEventName').text();
-                    var EventCost = $("." + key).find('#liEventCost').text();
-
-                    var EventDateStart = $("." + key).find('#liEventDateStart').text();
-                    var EventDateEnd = $("." + key).find('#liEventDateEnd').text();
-
-                    var PoliceServices = $("." + key).find('#liPoliceServices').text();
-                    var VATPoliceServices = $("." + key).find('#liVATPoliceServices').text();
-                    var OperationalSupport = $("." + key).find('#liOperationalSupport').text();
-                    var CompID = $("." + key).find('#liCompanyId').text();
-
-                    // $(".modal-body #VATPoliceServices").val($("."+key).find('#liVATPoliceServices').text());
-                    if (EventDateEnd !== "")
-                    {
-                        document.getElementById("DetailsEventDateEnd").innerHTML = EventDateEnd;
-                    }
-                    document.getElementById("DetailsEventName").innerHTML = EventName;
-                    document.getElementById("DetailsEventDateStart").innerHTML = EventDateStart;
-                    document.getElementById("DetailsEventCost").innerHTML = "$" + EventCost;
-                    document.getElementById("DetailsPoliceServices").innerHTML = "$" + PoliceServices;
-                    document.getElementById("DetailsVATPoliceServices").innerHTML = "$" + VATPoliceServices;
-                    document.getElementById("DetailsOperationalSupport").innerHTML = "$" + OperationalSupport;
-
-                    document.getElementById("hdnEventId").value = EventId;
-                    document.getElementById("hdnEventName").value = EventName;
-
-                    document.getElementById("lblEventRef").innerHTML = EventId;
-
-                    document.getElementById("hdnCompID").value = CompID;
-                    //document.getElementById("adddetails").style.display = "show";
-                    document.getElementById("divEventDetails").style.display = "";
-                    // document.getElementById("formDeleteEvent").style.display = "";
-                    document.getElementById("DateOfDuty").value = EventDateStart;
-
-
-
-                });
 
                 $('#commencedhrs, #commencedmins').on('change click input', function () {
                     var commencedhrs = $('#commencedhrs').val();
@@ -642,32 +541,20 @@
                     document.getElementById("hdnTimeDutyCeasedDiaryNo").value = $('#DDceasedhrs').val() + ':' + $('#DDceasedmins').val();
 
                 });
+                
+                $(document).on("change", "#RoleName", function () {
+                                        //alert("Hello! I am an alert box!!");
+                                        var mylist = document.getElementById("RoleName");
+                                        document.getElementById("actingRateCode").value = mylist.options[mylist.selectedIndex].id;
+                                    });
+                      
 
-$('#Division').on('change', function () {
-                    //alert($('#Division :selected').attr('id'));
-                    var inputVal = $('#Division :selected').attr('id');
-                    // alert(inputVal);
-                    var station = document.getElementById("Station");
-                    for (i = 0; i < station.options.length; i++) {
-
-                        if (inputVal === station.options[i].id)
-                        {
-
-                           station.options[i].style.display = "inline";
-                           station.options[i].selected = true;
-//Add operations here
-                        } else
-                        {
-                            station.options[i].style.display = "none";
-                        }
-                    }
-                    });
                     
-                $("#Flexiform").submit(function () {
+                $("#SpecOpsform").submit(function () {
 
- var stationName = document.getElementById("Station").value;
-                    $('#hdnDivisionId').val(divid.substring(0, 4));
-                    $('#hdnStation').val(stationName);
+// var stationName = document.getElementById("Station").value;
+//                    $('#hdnDivisionId').val(divid.substring(0, 4));
+//                    $('#hdnStation').val(stationName);
                     
                     var key = this.id.toString().trim();
                     PopulatePanelInfo(key);
@@ -678,26 +565,31 @@ $('#Division').on('change', function () {
                 {
                     var EmpName = document.getElementById("EmpName");
                     var Natregno = document.getElementById("Natregno");
-                    var hours = document.getElementById("hours");
+                   // var hours = document.getElementById("hours");
 
                     var PayRate = document.getElementById("PayRate");
                     var RateCode = document.getElementById("RateCode");
                     var ForceNumber = document.getElementById("ForceNumber");
+                    
                     for (i = 0; i < offcrarr.length; i++) {
 
                         if (offcrarr[i][1] === key)
                         {
                             EmpName.value = offcrarr[i][0].toString();
                             Natregno.value = offcrarr[i][1].toString();
-                            hours.value = offcrarr[i][2].toString();
-                            PayRate.value = offcrarr[i][3].toString();
-                            RateCode.value = offcrarr[i][4].toString();
-                            ForceNumber.value = offcrarr[i][5].toString();
-                            isacting = offcrarr[i][6].toString();
+                           // hours.value = offcrarr[i][2].toString();
+                            PayRate.value = offcrarr[i][2].toString();
+                            RateCode.value = offcrarr[i][3].toString();
+                            ForceNumber.value = offcrarr[i][4].toString();
+                            isacting = offcrarr[i][5].toString();
+                            dayoff = offcrarr[i][6].toString();
+                            offduty = offcrarr[i][7].toString();
+                            
                         }
                     }
-                    ToggleControl();
+                    //ToggleControl();
                 }
+                
                 function RemoveInfo(key)
                 {
                     var indextoremove;
@@ -710,49 +602,49 @@ $('#Division').on('change', function () {
                     }
                     offcrarr.splice(indextoremove, 1);
                 }
-                function ToggleControl()
-                {
-                    if (isacting == "on")
-                    {
-                        $("#acting").prop("checked", true);
-                        $("#Comments").show();
-                        $("#lblComments").show();
-                    } else
-                    if (isacting == "off")
-                    {
-                        $("#acting").prop("checked", false);
-                        $("#Comments").val("");
-                        $("#Comments").hide();
-                        $("#lblComments").hide();
-                    }
-                }
-                function UpdateInfo(key)
-                {
-
-                    for (i = 0; i < offcrarr.length; i++) {
-
-                        if (offcrarr[i][1] === key)
-                        {
-                            var EmpName = document.getElementById("EmpName");
-                            var Natregno = document.getElementById("Natregno");
-                            var hours = document.getElementById("hours");
-                            var PayRate = document.getElementById("PayRate");
-                            var RateCode = document.getElementById("RateCode");
-                            var ForceNumber = document.getElementById("ForceNumber");
-//                            var IsActing = document.getElementById("acting");
-
-                            offcrarr[i][0] = EmpName.value;
-                            offcrarr[i][1] = Natregno.value;
-                            offcrarr[i][2] = hours.value;
-                            offcrarr[i][3] = PayRate.value;
-                            offcrarr[i][4] = RateCode.value;
-                            offcrarr[i][5] = ForceNumber.value;
-                            offcrarr[i][6] = isacting;
-
-                            ToggleControl();
-                        }
-                    }
-                }
+//                function ToggleControl()
+//                {
+//                    if (isacting == "on")
+//                    {
+//                        $("#acting").prop("checked", true);
+//                        $("#Comments").show();
+//                        $("#lblComments").show();
+//                    } else
+//                    if (isacting == "off")
+//                    {
+//                        $("#acting").prop("checked", false);
+//                        $("#Comments").val("");
+//                        $("#Comments").hide();
+//                        $("#lblComments").hide();
+//                    }
+//                }
+//                function UpdateInfo(key)
+//                {
+//
+//                    for (i = 0; i < offcrarr.length; i++) {
+//
+//                        if (offcrarr[i][1] === key)
+//                        {
+//                            var EmpName = document.getElementById("EmpName");
+//                            var Natregno = document.getElementById("Natregno");
+//                            var hours = document.getElementById("hours");
+//                            var PayRate = document.getElementById("PayRate");
+//                            var RateCode = document.getElementById("RateCode");
+//                            var ForceNumber = document.getElementById("ForceNumber");
+////                            var IsActing = document.getElementById("acting");
+//
+//                            offcrarr[i][0] = EmpName.value;
+//                            offcrarr[i][1] = Natregno.value;
+//                            offcrarr[i][2] = hours.value;
+//                            offcrarr[i][3] = PayRate.value;
+//                            offcrarr[i][4] = RateCode.value;
+//                            offcrarr[i][5] = ForceNumber.value;
+//                            offcrarr[i][6] = isacting;
+//
+//                            ToggleControl();
+//                        }
+//                    }
+//                }
                 
                 $("#btn-create").show();
                // $("#addofficer").show();
@@ -853,7 +745,7 @@ $('#Division').on('change', function () {
                                         </div>
                                     </div>
                                     <div class="portlet-body form">
-                                        <form method="post" action="" id="Flexiform"  >
+                                        <form method="post" action="" id="SpecOpsform"  >
                                             <div class="form-body">
                                                 <div class="row center-block">  
 <!--                                                    <div class="col-xs-12">                                                        
@@ -879,7 +771,7 @@ $('#Division').on('change', function () {
     </div>
     <div class="col-md-6 panel-info">
                                                         <label>Place of Duty</label>
-                                                            <input type="text" class="form-control" name="Shift" id="Shift">  
+                                                            <input type="text" class="form-control" name="PlaceOfDuty" id="PlaceOfDuty">  
                                                         <label><i class="glyphicon glyphicon-time"></i>Hours Engaged</label>
                                                                 <input type="number" class="form-control" name="HoursEngaged" id="HoursEngaged" required="" min="1" max="24">
     </div>
@@ -958,10 +850,10 @@ $('#Division').on('change', function () {
                                                <label>All claims must satisfy one or more of the following criteria; check appropriate box</label>
     <br>
   
-    1. <input type="checkbox"  id="Surveillance" value="Y">   Surveillance<br>
-    2. <input type="checkbox"  id="CrimePreventionOps" value="Y">   Crime Prevention Operations<br>
-    3. <input type="checkbox" id="PAIIPBDC" value="Y">   Protracted and intensive investigations prescribed by Divisional Commander<br>
-    4. <input type="checkbox"  id="EOWOOSD" value="Y">   Special and extraordinary crowd control (over and above the course of normal <br> duties, that
+    1. <input type="checkbox"  id="Surveillance">   Surveillance<br>
+    2. <input type="checkbox"  id="CrimePreventionOps">   Crime Prevention Operations<br>
+    3. <input type="checkbox" id="PAIIPBDC">   Protracted and intensive investigations prescribed by Divisional Commander<br>
+    4. <input type="checkbox"  id="SAECC">   Special and extraordinary crowd control (over and above the course of normal <br> duties, that
     could not have been carried out during the normal course of duty for that day.)<br></center>
     
      <div>
@@ -970,17 +862,17 @@ $('#Division').on('change', function () {
                                                         <br>
                                                         <label><strong>Indicate the times and places of inspections conducted and by whom</strong></label>
                                                     </center>
-       <center>   1. <input type="text"  style="display: inline-block;width:90%;" id="Line1" value=""><br>
-         2. <input type="text"  style="display: inline-block;width:90%;" id="Line2" value=""><br>
-         3. <input type="text"  style="display: inline-block;width:90%;" id="Line3" value=""><br>
-         4. <input type="text"  style="display: inline-block;width:90%;" id="Line4" value=""><br> </center>
+       <center>   1. <input type="text"  style="display: inline-block;width:90%;"name="Line1" id="Line1" value=""><br>
+         2. <input type="text"  style="display: inline-block;width:90%;" name="Line2" id="Line2" value=""><br>
+         3. <input type="text"  style="display: inline-block;width:90%;" name="Line3" id="Line3" value=""><br>
+         4. <input type="text"  style="display: inline-block;width:90%;" name="Line4" id="Line4" value=""><br> </center>
          <center>
                                                         <br>
                                                         <label><strong>Comment briefly on the outcome of duties performed</strong></label>
                                                     </center>
 <!--                                                    <div class="col-md-3"></div>-->
                                                     <div class="col-md-12">
-                                                        <textarea  class="form-control" id="Comments" name="Comments" rows="3" cols="12"></textarea>
+                                                        <textarea  class="form-control" id="Details" name="Details" rows="3" cols="12"></textarea>
                                                     </div>
 <!--                                                    <div class="col-md-3"></div>-->
                                                 </div>
@@ -1006,23 +898,21 @@ $('#Division').on('change', function () {
 
                                                 </div>
                                             
-                                            </div>
+                                            
                                             <input type="hidden" name="EventName" id="hdnEventName" value="">
                                             <input type="hidden" name="TimeDutyCommenced" id="hdnTimeDutyCommenced" value="">
                                             <input type="hidden" name="TimeDutyCeased" id="hdnTimeDutyCeased" value="">
                                             <input type="hidden" name="TimeDutyCommencedDiaryNo" id="hdnTimeDutyCommencedDiaryNo" value="">
                                             <input type="hidden" name="TimeDutyCeasedDiaryNo" id="hdnTimeDutyCeasedDiaryNo" value="">
                                             <input type="hidden" name="offarr" id="hdnoffarr" value="">
-                                            <input type="hidden" class="form-control" id="hdnDivisionId" name="hdnDivisionId"  >
-                                                    <input type="hidden" class="form-control" id="hdnStation" name="hdnStation"  >
-<!--                                            <input type="hidden" name="EOSDE" id="hdnEOSDE" value="">
-                                            <input type="hidden" name="EOSDNE" id="hdnEOSDNE" value="">
-                                            <input type="hidden" name="EHTPI" id="hdnEHTPI" value="">
-                                            <input type="hidden" name="EOWOOSD" id="hdnEOWOOSD" value="">
-                                            <input type="hidden" name="CAOD" id="hdnCAOD" value="">
-                                            <input type="hidden" name="CADO" id="hdnCADO" value="">-->
+                                             <input type="hidden" name="hdnSurveillance" id="hdnSurveillance" value="N">
+                                            <input type="hidden" name="hdnCrimePreventionOps" id="hdnCrimePreventionOps" value="N">
+                                            <input type="hidden" name="hdnPAIIPBDC" id="hdnPAIIPBDC" value="N">
+                                            <input type="hidden" name="hdnSAECC" id="hdnSAECC" value="N">
+
 
                                         </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

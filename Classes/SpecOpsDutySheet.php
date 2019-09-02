@@ -1,6 +1,6 @@
 <?php
 
-namespace BarcomModel;
+namespace PfomModel;
 
 /*
   Developed by Kitji Studios
@@ -72,6 +72,12 @@ class SpecOpsDutySheet {
         $earnings = number_format($earnings, 2, '.', '');
         return $earnings;
     }
+    
+     function TotalOTEarned($total, $runningTotal) {
+        $Totalearnings = $total + $runningTotal;
+        $Totalearnings = number_format($Totalearnings, 2, '.', '');
+        return $Totalearnings;
+    }
 
     
  function GetSelectedDutySheet($companyId) {
@@ -104,17 +110,17 @@ $result_DutySheet = $stmtDutySheet->fetchAll();
     function CreateSpecOpsDutySheet($DutySheetId, $TypeOfDuty, $PlaceOfDuty, $DateOfDuty, $HoursEngaged,
             $TimeDutyCommenced, $TimeDutyCeased,$TimeDutyCommencedDiaryNo,$TimeDutyCeasedDiaryNo,
             $Surveillance,$CrimePreventionOps,$PAIIPBDC,$SAECC,
-            $Line1,$Line2,$Line3,$Line4,$Comments,$RecEnteredBy) {
+            $Line1,$Line2,$Line3,$Line4,$Comments,$OvertimeAmount,$RecEnteredBy) {
 
         $conn = conn();
         $sql = "INSERT INTO `specopsdutysheet` (`DutySheetId`, `TypeOfDuty`, `PlaceOfDuty`, `DateOfDuty`, 
             `HoursEngaged`,`TimeDutyCommenced`,`TimeDutyCeased`,`TimeDutyCommencedDiaryNo`,`TimeDutyCeasedDiaryNo`,
-            `Surveillance`,`CrimePreventionOps`,`PAIIPBDC`,`SAECC`,`Line1`,`Line2`, `Line3`,`Line4`,`Comments`, `RecEnteredBy`,
+            `Surveillance`,`CrimePreventionOps`,`PAIIPBDC`,`SAECC`,`Line1`,`Line2`, `Line3`,`Line4`,`Comments`, `TotalOTAmount`,`RecEnteredBy`,
              `RecEntered`, `Status`, DelFlag) VALUES 
         ('$DutySheetId', '$TypeOfDuty', '$PlaceOfDuty','$DateOfDuty', '$HoursEngaged',"
                 . " '$TimeDutyCommenced', '$TimeDutyCeased', '$TimeDutyCommencedDiaryNo','$TimeDutyCeasedDiaryNo', "
         ." '$Surveillance','$CrimePreventionOps','$PAIIPBDC','$SAECC','$Line1','$Line2',"
-                . " '$Line3','$Line4','$Comments', '$RecEnteredBy', NOW(),'Active','N') ";
+                . " '$Line3','$Line4','$Comments','$OvertimeAmount', '$RecEnteredBy', NOW(),'Active','N') ";
 
             if ($conn->exec($sql)) {
                 $this->auditok = 1;
@@ -127,13 +133,17 @@ $result_DutySheet = $stmtDutySheet->fetchAll();
     
      //Method to create Special Ops Duty Sheet preaccounts records in database
     function CreateSDSPA($DutySheetId, $ForceNumber, $Natregno, $OfficerName,
-             $HoursEngaged, $RateCode,$PayRate, $DayOff,$OffDuty,$OvertimeAmount) {
+             $HoursEngaged, $RateCode,$PayRate, $DayOff,$OffDuty,$Acting,$ActingPosition,$ActingPayRateCode,$Comments,$OvertimeAmount) {
 
         $conn = conn();
         $sql = "INSERT INTO `specopsdutysheetpreaccount` (`DutySheetId`, `ForceNumber`, `Natregno`, `OfficerName`, 
-          `Hours`, `RateCode`, `PayRate`,`DayOff`,`OffDuty`,`OvertimeAmount`, `Status`, `DelFlag`) VALUES 
+          `Hours`, `RateCode`, `PayRate`,`DayOff`,`OffDuty`,
+          `Acting`,`ActingRateCode`,`ActingPayRate`,`Comments`,
+          `OvertimeAmount`, `Status`, `DelFlag`) VALUES 
         ('$DutySheetId', '$ForceNumber', '$Natregno', '$OfficerName',"
-                . " '$HoursEngaged','$RateCode','$PayRate','$DayOff',$OffDuty','$OvertimeAmount', 'Active','N') ";
+                . " '$HoursEngaged','$RateCode','$PayRate','$DayOff','$OffDuty'"
+                . ",'$Acting','$ActingPosition','$ActingPayRateCode','$Comments'"
+                . ",'$OvertimeAmount', 'Active','N') ";
 
             if ($conn->exec($sql)) {
                 $this->auditok = 1;
@@ -143,7 +153,7 @@ $result_DutySheet = $stmtDutySheet->fetchAll();
         $conn = NULL;
     }
 
-    
+     
 
   
     function GetPayRate($transid) {
@@ -172,6 +182,20 @@ $result_DutySheet = $stmtDutySheet->fetchAll();
         return $varschema . $vardatestamp;
     }
 
+     function GetActingPayRate($rateCode) {
+       $result = "";
+        $conn = conn();
+        $stmt = $conn->prepare("SELECT RateAmount FROM `paymentrates` "
+                . "WHERE RateCode='$rateCode';");
+        $stmt->execute();
+        $result = $stmt->fetch();
+        if (isset($result['RateAmount'])) {
+            return $result['RateAmount'];
+        } else {
+            return NULL;
+        }
+        $conn = NULL;
+    }
    
 }
 

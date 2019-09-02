@@ -11,14 +11,13 @@
 namespace Controllers;
 
 
-require 'Classes/DutySheet.php';
+require 'Classes/CourtForm.php';
+require 'Classes/Division.php';
 
 require 'Classes/Audit.php';
 //require 'Classes/PreAccount.php';
 require 'Controller/base_template.php';
 
-static $eventnameerr = "";
-static $eventnamewrapper = "";
 
 class CourtCreateController extends PermissionController {
 
@@ -26,28 +25,44 @@ class CourtCreateController extends PermissionController {
         $this->setRoles(['Manager', 'Administrator', 'Super User']);
     }
 
-  public $DutySheetId;
-    public $EventId;
-    public $EventName;
-    public $CompanyId;
-    public $Natregno;
+ public $DutySheetId;
+    public $Division;
+    public $Station;
+    public $Shift;
+    public $DateOfDuty;
+    public $HoursEngaged;
+    public $TypeOfDuty;
+    
+    public $TimeDutyCommenced;
+    public $TimeDutyCeased;
+    
+      public $TimeDutyCommencedDiaryNo;
+    public $TimeDutyCeasedDiaryNo;
+    
     public $ForceNumber;
     public $RateCode;
     public $OfficerName;
-    
     public $PayRate;
+    public $ActingPosition;
+    public $ActingPayRateCode;
+    public $Comments;
     
+    public $DayOff;
+    public $OffDuty;
+    
+    public $Details;
+    
+    Public $EOSDE; //extension of shift duty emergency
+    Public $EOSDNE; //extension of shift duty non emergency
+    Public $EHTPI; //extra hours to pursue investigations
+    Public $EOWOOSD; //execution of warrant outside of shift duty
+    Public $CAOD; //court attendance off duty
+    Public $CADO; //court attendance day off
+
     public $OvertimeAmount;
-    public $DateOfDuty;
-    public $DispatchTime;
-    public $ArrivalTime;
-    public $DismissalTime;
-    public $ReturnTime;
-    public $TotalHoursWorked;
     public $RecEnteredBy;
-    public $Hours;
-   public $RecModifiedBy;
-   public $OfficerArray;
+    public $auditok;
+
  
  
     function show($params) {
@@ -56,80 +71,115 @@ class CourtCreateController extends PermissionController {
 
         
         if (isset($_POST['btn-create'])) {
-            $dutysheetinst = new \BarcomModel\DutySheet();
-            $audinst = new \BarcomModel\Audit();
+            $flexidutysheetinst = new \PfomModel\FlexiDutySheet();
+            $audinst = new \PfomModel\Audit();
 
             //Get Id from browser interface
-            $dutysheetinst->EventId = $EventId = $_POST["EventId"];
-            $dutysheetinst->EventName = $EventName = $_POST["EventName"];
+            $flexidutysheetinst->Division = $Division = $_POST["hdnDivisionId"];
+            $flexidutysheetinst->Station = $Station = $_POST["hdnStation"];
             
-            $dutysheetinst->CompanyId = $CompanyId = $_POST["CompID"];
+            $flexidutysheetinst->Shift = $Shift = $_POST["Shift"];
             
-            $dutysheetinst->DateOfDuty = $DateOfDuty = $_POST["DateOfDuty"];
-            $dutysheetinst->DispatchTime = $DispatchTime = $_POST["DispatchTime"];
-            $dutysheetinst->ArrivalTime = $ArrivalTime = $_POST["ArrivalTime"];
-            $dutysheetinst->DismissalTime = $DismissalTime = $_POST["DismissalTime"];
-            $dutysheetinst->ReturnTime = $ReturnTime = $_POST["ReturnTime"];
+            $flexidutysheetinst->DateOfDuty = $DateOfDuty = $_POST["DateOfDuty"];
+            $flexidutysheetinst->HoursEngaged = $HoursEngaged = $_POST["HoursEngaged"];
+            
+            $flexidutysheetinst->TypeOfDuty = $TypeOfDuty = $_POST["TypeOfDuty"];
+            
+            $flexidutysheetinst->TimeDutyCommenced = $TimeDutyCommenced = $_POST["TimeDutyCommenced"];
+            $flexidutysheetinst->TimeDutyCeased = $TimeDutyCeased = $_POST["TimeDutyCeased"];
+            $flexidutysheetinst->TimeDutyCommencedDiaryNo = $TimeDutyCommencedDiaryNo = $_POST["TimeDutyCommencedDiaryNo"];
+            $flexidutysheetinst->TimeDutyCeasedDiaryNo = $TimeDutyCeasedDiaryNo = $_POST["TimeDutyCeasedDiaryNo"];
            
-              $dutysheetinst->HoursEngaged = $HoursEngaged = $_POST["HoursEngaged"];
-            
+              
+             $flexidutysheetinst->EOSDE = $EOSDE = $_POST["hdnEOSDE"];
+             $flexidutysheetinst->EOSDNE = $EOSDNE = $_POST["hdnEOSDNE"];
+             $flexidutysheetinst->EHTPI = $EHTPI = $_POST["hdnEHTPI"];
+             $flexidutysheetinst->EOWOOSD = $EOWOOSD = $_POST["hdnEOWOOSD"];
+             $flexidutysheetinst->CAOD = $CAOD = $_POST["hdnCAOD"];
+              $flexidutysheetinst->CADO = $CADO = $_POST["hdnCADO"];
+              
+              $flexidutysheetinst->Details = $Details = $_POST["Details"];
          
             
             
                         
-            $dutysheetinst->RecEnteredBy = $RecEnteredBy = $username;
+            $flexidutysheetinst->RecEnteredBy = $RecEnteredBy = $username;
             
-            $DutySheetId = $audinst->GenerateTimestamp('DYST');
+            $DutySheetId = $audinst->GenerateTimestamp('FLEXI');
             
             //Duty sheet preaccount 
                $OfficerArray = json_decode($_POST['offarr'], TRUE);
                foreach($OfficerArray as $officer)
   {
+           $flexidutysheetinst->Comments = $Comments = $officer[10];
+                   $flexidutysheetinst->ActingPayRateCode = $ActingPayRateCode = $officer[9];
+           $flexidutysheetinst->ActingPosition = $ActingPosition = $officer[8];
+           
+           $flexidutysheetinst->OffDuty = $OffDuty = $officer[7];
+           $flexidutysheetinst->DayOff = $DayOff = $officer[6];
+           $flexidutysheetinst->Acting = $Acting = $officer[5];
+             $flexidutysheetinst->ForceNumber = $ForceNumber = $officer[4];
+              $flexidutysheetinst->RateCode = $RateCode = $officer[3];
+              $flexidutysheetinst->PayRate = $PayRate = $officer[2];
+             // $flexidutysheetinst->Hours = $Hours = $officer[2];
+              $flexidutysheetinst->Natregno = $Natregno = $officer[1];
+            $flexidutysheetinst->OfficerName = $OfficerName = $officer[0];
+            
+            
+            if($Acting == "Y"){
+               $ActingPayRate = $flexidutysheetinst->GetActingPayRate($ActingPayRateCode);
+               
+               $OTEarned = $flexidutysheetinst->OTEarned($HoursEngaged, $ActingPayRate);
+               $flexidutysheetinst->OvertimeAmount = $OvertimeAmount = $flexidutysheetinst->TotalOTEarned($OTEarned, $OvertimeAmount);
+            }
+            else{
+               $OTEarned = $flexidutysheetinst->OTEarned($HoursEngaged, $PayRate);
+               $flexidutysheetinst->OvertimeAmount = $OvertimeAmount = $flexidutysheetinst->TotalOTEarned($OTEarned, $OvertimeAmount);
+               $ActingPosition = null;
+               $ActingPayRateCode = null;
+               $Comments = null;
+            }
            
             
-            $dutysheetinst->OfficerName = $OfficerName = $officer[0];
-            $dutysheetinst->Natregno = $Natregno = $officer[1];
             
-            $dutysheetinst->Hours = $Hours = $officer[2];
-           
-            $dutysheetinst->PayRate = $PayRate = $officer[3];
-             $dutysheetinst->RateCode = $RateCode = $officer[4];
-              $dutysheetinst->ForceNumber = $ForceNumber = $officer[5];
              
-              $dutysheetinst->CreateDSPA($DutySheetId, $EventId, $CompanyId, $ForceNumber, $Natregno, $OfficerName,
-             $Hours, $RateCode,$PayRate);
+             
+              $flexidutysheetinst->CreateFDSPA($DutySheetId, $ForceNumber, $Natregno, $OfficerName,
+             $HoursEngaged, $RateCode,$PayRate,$DayOff,$OffDuty,$Acting,$ActingPayRateCode,$ActingPayRate,$Comments,$OTEarned);
               
                
-   $dutysheetinst->OvertimeAmount = $OvertimeAmount = ($Hours * $PayRate) + $OvertimeAmount;
+   
               
   }
 
   
    
-               $dutysheetinst->CreateDutySheet($DutySheetId, $EventId, $EventName, $CompanyId, $OvertimeAmount, $DateOfDuty,
-            $DispatchTime, $ArrivalTime, $DismissalTime,$ReturnTime,$HoursEngaged,$RecEnteredBy);
+               $flexidutysheetinst->CreateFlexiDutySheet($DutySheetId, $Division, $Station, $Shift, $DateOfDuty, $HoursEngaged,
+            $TypeOfDuty, $TimeDutyCommenced, $TimeDutyCeased,$TimeDutyCommencedDiaryNo,$TimeDutyCeasedDiaryNo,
+            $Details,$EOSDE,$EOSDNE,$EHTPI,$EOWOOSD,$CAOD,$CADO,$OvertimeAmount,$RecEnteredBy);
                 //if validation succeeds then commit info to database
-                  if ($dutysheetinst->auditok == 1) {
+                  if ($flexidutysheetinst->auditok == 1) {
                 $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');
-                $TranDesc = 'Duty Sheet created: ' . $DutySheetId . ' Event ID: ' . $EventId;
+                $TranDesc = 'Flexi Duty Sheet created: ' . $DutySheetId;
                 $User = $username;
                 $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
-                $token = '<br><br><span class="label label-success">Duty Sheet ID</span> ' . '<span class="label label-info"> ' . $DutySheetId . '</span><br><br><br>' .
-                        '<span class="label label-success">Event Id</span> ' . '<span class="label label-info">' . $EventId . '</span><br>';
-                
-                $token1 = 'Duty Sheet Successfully Created';
+                $token = '<br><br><span class="label label-success">Flexi Duty Sheet ID</span> ' . '<span class="label label-info"> ' . $DutySheetId . '</span><br><br><br>' .
+//                        '<span class="label label-success">Event Id</span> ' . '<span class="label label-info">' . $EventId . '</span><br>';
+//                
+                $token1 = 'Flexi Duty Sheet Successfully Created';
                 header("Location:" . "/success?result=$token&header=$token1&args=");
             }
         } 
         else
         if (isset($_GET)) {
-            //$model = new \BarcomModel\Company();
-            //$parishes = $model->GetParishes();
+             $divmodel = new \PfomModel\Division();
+$divisions = $divmodel->GetDivisions();
+$stations = $divmodel->GetListOfStations();
+
             $template = new MasterTemplate();
-            $template->load("Views/DutySHeet/dutysheet.html");
-//            $template->replace("parishes", $parishes);
-  //          $template->replace("title", " Create New Company ");
-            //$template->replace("val_CompanyName", "");
+            $template->load("Views/FlexiDutySheet/flexidutysheet.html");
+$template->replace("Divisions", $divisions);
+$template->replace("Stations", $stations);
             $template->publish();
         }
     }

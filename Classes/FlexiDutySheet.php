@@ -1,6 +1,6 @@
 <?php
 
-namespace BarcomModel;
+namespace PfomModel;
 
 /*
   Developed by Kitji Studios
@@ -37,6 +37,10 @@ class FlexiDutySheet {
     
     public $DayOff;
     public $OffDuty;
+    public $Acting;
+    public $ActingPosition;
+    public $ActingPayRateCode;
+    public $Comments;
     
     public $Details;
     
@@ -59,6 +63,12 @@ class FlexiDutySheet {
         $earnings = $rate * $hours;
         $earnings = number_format($earnings, 2, '.', '');
         return $earnings;
+    }
+    
+     function TotalOTEarned($total, $runningTotal) {
+        $Totalearnings = $total + $runningTotal;
+        $Totalearnings = number_format($Totalearnings, 2, '.', '');
+        return $Totalearnings;
     }
 
     
@@ -91,17 +101,17 @@ $result_DutySheet = $stmtDutySheet->fetchAll();
   
     function CreateFlexiDutySheet($DutySheetId, $Division, $Station, $Shift, $DateOfDuty, $HoursEngaged,
             $TypeOfDuty, $TimeDutyCommenced, $TimeDutyCeased,$TimeDutyCommencedDiaryNo,$TimeDutyCeasedDiaryNo,
-            $Details,$EOSDE,$EOSDNE,$EHTPI,$EOWOOSD,$CAOD,$CADO,$RecEnteredBy) {
+            $Details,$EOSDE,$EOSDNE,$EHTPI,$EOWOOSD,$CAOD,$CADO,$OvertimeAmount,$RecEnteredBy) {
 
         $conn = conn();
         $sql = "INSERT INTO `flexidutysheet` (`DutySheetId`, `Division`, `Station`, `Shift`, `DateOfDuty`, `HoursEngaged`, 
             `TypeOfDuty`,`TimeDutyCommenced`,`TimeDutyCeased`,`TimeDutyCommencedDiaryNo`,`TimeDutyCeasedDiaryNo`,
-            `Details`,`EOSDE`,`EOSDNE`,`EHTPI`,`EOWOOSD`,`CAOD`, `CADO`, `RecEnteredBy`,
+            `Details`,`EOSDE`,`EOSDNE`,`EHTPI`,`EOWOOSD`,`CAOD`, `CADO`,`TotalOTAmount`, `RecEnteredBy`,
              `RecEntered`, `Status`, DelFlag) VALUES 
         ('$DutySheetId', '$Division','$Station', '$Shift', '$DateOfDuty', '$HoursEngaged',"
                 . " '$TypeOfDuty', '$TimeDutyCommenced', '$TimeDutyCeased', '$TimeDutyCommencedDiaryNo','$TimeDutyCeasedDiaryNo', "
         ." '$Details','$EOSDE','$EOSDNE','$EHTPI','$EOWOOSD','$CAOD',"
-                . " '$CADO', '$RecEnteredBy', NOW(),'Active','N') ";
+                . " '$CADO','$OvertimeAmount', '$RecEnteredBy', NOW(),'Active','N') ";
 
             if ($conn->exec($sql)) {
                 $this->auditok = 1;
@@ -114,13 +124,17 @@ $result_DutySheet = $stmtDutySheet->fetchAll();
     
      //Method to create Flexi Duty Sheet preaccounts records in database
     function CreateFDSPA($DutySheetId, $ForceNumber, $Natregno, $OfficerName,
-             $HoursEngaged, $RateCode,$PayRate, $DayOff,$OffDuty,$OvertimeAmount) {
+             $HoursEngaged, $RateCode,$PayRate, $DayOff,$OffDuty,$Acting,$ActingPosition,$ActingPayRateCode,$Comments,$OvertimeAmount) {
 
         $conn = conn();
         $sql = "INSERT INTO `flexidutysheetpreaccount` (`DutySheetId`, `ForceNumber`, `Natregno`, `OfficerName`, 
-          `Hours`, `RateCode`, `PayRate`,`DayOff`,`OffDuty`,`OvertimeAmount`, `Status`, `DelFlag`) VALUES 
+          `Hours`, `RateCode`, `PayRate`,`DayOff`,`OffDuty`,
+          `Acting`,`ActingRateCode`,`ActingPayRate`,`Comments`,
+          `OvertimeAmount`, `Status`, `DelFlag`) VALUES 
         ('$DutySheetId', '$ForceNumber', '$Natregno', '$OfficerName',"
-                . " '$HoursEngaged','$RateCode','$PayRate','$DayOff',$OffDuty',$OvertimeAmount', 'Active','N') ";
+                . " '$HoursEngaged','$RateCode','$PayRate','$DayOff','$OffDuty'"
+                . ",'$Acting','$ActingPosition','$ActingPayRateCode','$Comments'"
+                . ",'$OvertimeAmount', 'Active','N') ";
 
             if ($conn->exec($sql)) {
                 $this->auditok = 1;
@@ -171,6 +185,21 @@ $result_DutySheet = $stmtDutySheet->fetchAll();
         $vardatestamp = date("ymdGis", time());
 
         return $varschema . $vardatestamp;
+    }
+    
+     function GetActingPayRate($rateCode) {
+       $result = "";
+        $conn = conn();
+        $stmt = $conn->prepare("SELECT RateAmount FROM `paymentrates` "
+                . "WHERE RateCode='$rateCode';");
+        $stmt->execute();
+        $result = $stmt->fetch();
+        if (isset($result['RateAmount'])) {
+            return $result['RateAmount'];
+        } else {
+            return NULL;
+        }
+        $conn = NULL;
     }
 
    

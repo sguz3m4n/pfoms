@@ -47,10 +47,13 @@ class SpecOpsCreateController extends PermissionController {
       public $TimeDutyCommencedDiaryNo;
     public $TimeDutyCeasedDiaryNo;
     
-    public $ForceNumber;
+     public $ForceNumber;
     public $RateCode;
     public $OfficerName;
     public $PayRate;
+    public $ActingPosition;
+    public $ActingPayRateCode;
+    public $Comments;
     
     public $DayOff;
     public $OffDuty;
@@ -67,7 +70,7 @@ class SpecOpsCreateController extends PermissionController {
      Public $Line3;
       Public $Line4;
       
-      public $Comments;
+      public $Details; //comment briefly on the outcome of duties performed
 
     public $OvertimeAmount;
     public $RecEnteredBy;
@@ -78,71 +81,85 @@ class SpecOpsCreateController extends PermissionController {
     function show($params) {
 
         $username = $_SESSION["login_user"];
-
-        
-        if (isset($_POST['btn-create'])) {
-            $dutysheetinst = new \BarcomModel\DutySheet();
-            $audinst = new \BarcomModel\Audit();
+       if (isset($_POST['btn-create'])) {
+            $specopsdutysheetinst = new \PfomModel\SpecOpsDutySheet();
+            $audinst = new \PfomModel\Audit();
 
             //Get Id from browser interface
-            $dutysheetinst->EventId = $EventId = $_POST["EventId"];
-            $dutysheetinst->EventName = $EventName = $_POST["EventName"];
-            
-            $dutysheetinst->CompanyId = $CompanyId = $_POST["CompID"];
-            
-            $dutysheetinst->DateOfDuty = $DateOfDuty = $_POST["DateOfDuty"];
-            $dutysheetinst->DispatchTime = $DispatchTime = $_POST["DispatchTime"];
-            $dutysheetinst->ArrivalTime = $ArrivalTime = $_POST["ArrivalTime"];
-            $dutysheetinst->DismissalTime = $DismissalTime = $_POST["DismissalTime"];
-            $dutysheetinst->ReturnTime = $ReturnTime = $_POST["ReturnTime"];
+            $specopsdutysheetinst->TypeOfDuty = $TypeOfDuty = $_POST["TypeOfDuty"];
+             $specopsdutysheetinst->PlaceOfDuty = $PlaceOfDuty = $_POST["PlaceOfDuty"];
+          $specopsdutysheetinst->DateOfDuty = $DateOfDuty = $_POST["DateOfDuty"]; 
+          $specopsdutysheetinst->HoursEngaged = $HoursEngaged = $_POST["HoursEngaged"];
+            $specopsdutysheetinst->TimeDutyCommenced = $TimeDutyCommenced = $_POST["TimeDutyCommenced"];
+            $specopsdutysheetinst->TimeDutyCeased = $TimeDutyCeased = $_POST["TimeDutyCeased"];
+            $specopsdutysheetinst->TimeDutyCommencedDiaryNo = $TimeDutyCommencedDiaryNo = $_POST["TimeDutyCommencedDiaryNo"];
+            $specopsdutysheetinst->TimeDutyCeasedDiaryNo = $TimeDutyCeasedDiaryNo = $_POST["TimeDutyCeasedDiaryNo"];
            
-              $dutysheetinst->HoursEngaged = $HoursEngaged = $_POST["HoursEngaged"];
-            
-         
-            
-            
-                        
-            $dutysheetinst->RecEnteredBy = $RecEnteredBy = $username;
-            
-            $DutySheetId = $audinst->GenerateTimestamp('DYST');
+           
+            $specopsdutysheetinst->Surveillance = $Surveillance = $_POST["hdnSurveillance"];
+            $specopsdutysheetinst->CrimePreventionOps = $CrimePreventionOps = $_POST["hdnCrimePreventionOps"];
+            $specopsdutysheetinst->PAIIPBDC = $PAIIPBDC = $_POST["hdnPAIIPBDC"];
+            $specopsdutysheetinst->SAECC = $SAECC = $_POST["hdnSAECC"];
+            $specopsdutysheetinst->Line1 = $Line1 = $_POST["Line1"];
+            $specopsdutysheetinst->Line2 = $Line2 = $_POST["Line2"];
+            $specopsdutysheetinst->Line3 = $Line3 = $_POST["Line3"];
+            $specopsdutysheetinst->Line4 = $Line4 = $_POST["Line4"];
+            $specopsdutysheetinst->Details = $Details = $_POST["Details"];
+            $specopsdutysheetinst->RecEnteredBy = $RecEnteredBy = $username;
+            $DutySheetId = $audinst->GenerateTimestamp('SPECOPS');
             
             //Duty sheet preaccount 
-               $OfficerArray = json_decode($_POST['offarr'], TRUE);
+              $OfficerArray = json_decode($_POST['offarr'], TRUE);
                foreach($OfficerArray as $officer)
   {
+           $specopsdutysheetinst->Comments = $Comments = $officer[10];
+                   $specopsdutysheetinst->ActingPayRateCode = $ActingPayRateCode = $officer[9];
+           $specopsdutysheetinst->ActingPosition = $ActingPosition = $officer[8];
            
+           $specopsdutysheetinst->OffDuty = $OffDuty = $officer[7];
+           $specopsdutysheetinst->DayOff = $DayOff = $officer[6];
+           $specopsdutysheetinst->Acting = $Acting = $officer[5];
+             $specopsdutysheetinst->ForceNumber = $ForceNumber = $officer[4];
+              $specopsdutysheetinst->RateCode = $RateCode = $officer[3];
+              $specopsdutysheetinst->PayRate = $PayRate = $officer[2];
+             // $specopsdutysheetinst->Hours = $Hours = $officer[2];
+              $specopsdutysheetinst->Natregno = $Natregno = $officer[1];
+            $specopsdutysheetinst->OfficerName = $OfficerName = $officer[0];
             
-            $dutysheetinst->OfficerName = $OfficerName = $officer[0];
-            $dutysheetinst->Natregno = $Natregno = $officer[1];
             
-            $dutysheetinst->Hours = $Hours = $officer[2];
-           
-            $dutysheetinst->PayRate = $PayRate = $officer[3];
-             $dutysheetinst->RateCode = $RateCode = $officer[4];
-              $dutysheetinst->ForceNumber = $ForceNumber = $officer[5];
-             
-              $dutysheetinst->CreateDSPA($DutySheetId, $EventId, $CompanyId, $ForceNumber, $Natregno, $OfficerName,
-             $Hours, $RateCode,$PayRate);
-              
+            if($Acting == "Y"){
+               $ActingPayRate = $specopsdutysheetinst->GetActingPayRate($ActingPayRateCode);
                
-   $dutysheetinst->OvertimeAmount = $OvertimeAmount = ($Hours * $PayRate) + $OvertimeAmount;
+               $OTEarned = $specopsdutysheetinst->OTEarned($HoursEngaged, $ActingPayRate);
+               $specopsdutysheetinst->OvertimeAmount = $OvertimeAmount = $specopsdutysheetinst->TotalOTEarned($OTEarned, $OvertimeAmount);
+            }
+            else{
+               $OTEarned = $specopsdutysheetinst->OTEarned($HoursEngaged, $PayRate);
+               $specopsdutysheetinst->OvertimeAmount = $OvertimeAmount = $specopsdutysheetinst->TotalOTEarned($OTEarned, $OvertimeAmount);
+               $ActingPosition = null;
+               $ActingPayRateCode = null;
+               $Comments = null;
+            }
+             
+             $specopsdutysheetinst->CreateSDSPA($DutySheetId, $ForceNumber, $Natregno, $OfficerName,
+             $HoursEngaged, $RateCode,$PayRate,$DayOff,$OffDuty,$Acting,$ActingPayRateCode,$ActingPayRate,$Comments,$OTEarned);
               
   }
 
-  
-   
-               $dutysheetinst->CreateDutySheet($DutySheetId, $EventId, $EventName, $CompanyId, $OvertimeAmount, $DateOfDuty,
-            $DispatchTime, $ArrivalTime, $DismissalTime,$ReturnTime,$HoursEngaged,$RecEnteredBy);
+              $specopsdutysheetinst->CreateSpecOpsDutySheet($DutySheetId, $TypeOfDuty, $PlaceOfDuty, $DateOfDuty, $HoursEngaged,
+            $TimeDutyCommenced, $TimeDutyCeased,$TimeDutyCommencedDiaryNo,$TimeDutyCeasedDiaryNo,
+            $Surveillance,$CrimePreventionOps,$PAIIPBDC,$SAECC,
+            $Line1,$Line2,$Line3,$Line4,$Comments,$OvertimeAmount,$RecEnteredBy);
                 //if validation succeeds then commit info to database
-                  if ($dutysheetinst->auditok == 1) {
+                  if ($specopsdutysheetinst->auditok == 1) {
                 $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');
-                $TranDesc = 'Duty Sheet created: ' . $DutySheetId . ' Event ID: ' . $EventId;
+                 $TranDesc = 'Special Operations Duty Sheet created: ' . $DutySheetId;
                 $User = $username;
                 $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
-                $token = '<br><br><span class="label label-success">Duty Sheet ID</span> ' . '<span class="label label-info"> ' . $DutySheetId . '</span><br><br><br>' .
-                        '<span class="label label-success">Event Id</span> ' . '<span class="label label-info">' . $EventId . '</span><br>';
-                
-                $token1 = 'Duty Sheet Successfully Created';
+                $token = '<br><br><span class="label label-success">Flexi Duty Sheet ID</span> ' . '<span class="label label-info"> ' . $DutySheetId . '</span><br><br><br>' .
+//                        '<span class="label label-success">Event Id</span> ' . '<span class="label label-info">' . $EventId . '</span><br>';
+//                
+                $token1 = 'Special Operations Duty Sheet Successfully Created';
                 header("Location:" . "/success?result=$token&header=$token1&args=");
             }
         } 

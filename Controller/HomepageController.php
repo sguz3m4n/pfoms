@@ -21,6 +21,7 @@ class Homepage extends LoggedInController {
     private $eventmenu;
     private $employeemenu;
     private $adminmenu;
+
 //    private $fleximenu;
 //    private $specopsmenu;
 //    private $courtmenu;
@@ -82,8 +83,8 @@ class Homepage extends LoggedInController {
 
         $DataManager = array('Human Resource Clerk', 'Manager', 'Administrator', 'Super User', 'Admin');
 
-         $ExtraDuties = array('Payment Clerk', 'Manager', 'Super User', 'Administrator');
-         
+        $ExtraDuties = array('Payment Clerk', 'Manager', 'Super User', 'Administrator');
+
         $inherited = new BaseTemplate();
         $inherited->load("Views/content.html");
         $content = $inherited->template;
@@ -127,6 +128,15 @@ class Homepage extends LoggedInController {
             ;
             $this->menu = $this->menu . $event;
         }
+
+//        if (in_array($role, $Reporting)) {
+//            $event = ' <li>
+//                                  
+//                                    <a class="text-uppercase" href="/event/create">Extra Duties</a>
+//                                </li>'
+//            ;
+//            $this->menu = $this->menu . $event;
+//        }
 
         if (in_array($role, $CreateCompany)) {
             $createitem = '<li><a href="/company/create">Create Company</a></li>';
@@ -202,22 +212,21 @@ class Homepage extends LoggedInController {
             ;
             $this->menu = $this->menu . $approve;
         }
-        
+
         if (in_array($role, $ExtraDuties)) {
-           $flexiDS = '<li><a class="text-uppercase" href="/flexi/create">Create Flexi Duty Sheet</a></li>';
+            $flexiDS = '<li><a class="text-uppercase" href="/flexi/create">Create Flexi Duty Sheet</a></li>';
             $this->menu = $this->menu . $flexiDS;
         }
-        
+
         if (in_array($role, $ExtraDuties)) {
             $SpecOpsDS = '<li><a class="text-uppercase" href="/specops/create">Create Special Ops Duty Sheet</a></li>';
             $this->menu = $this->menu . $SpecOpsDS;
-       }
-            if (in_array($role, $ExtraDuties)) {
-            $court = '<li><a class="text-uppercase" href="/court/edit">Create Court Form</a></li>';
-          $this->menu = $this->menu . $court;
-      
         }
-        
+        if (in_array($role, $ExtraDuties)) {
+            $court = '<li><a class="text-uppercase" href="/court/edit">Create Court Form</a></li>';
+            $this->menu = $this->menu . $court;
+        }
+
         ////
 //         if (in_array($role, $ExtraDuties)) {
 //            $createitem = '<li><a href="/flexi/create">Create Duty Sheet</a></li>';

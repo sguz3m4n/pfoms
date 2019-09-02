@@ -43,6 +43,9 @@ class FlexiCreateController extends PermissionController {
     public $RateCode;
     public $OfficerName;
     public $PayRate;
+    public $ActingPosition;
+    public $ActingPayRateCode;
+    public $Comments;
     
     public $DayOff;
     public $OffDuty;
@@ -68,12 +71,12 @@ class FlexiCreateController extends PermissionController {
 
         
         if (isset($_POST['btn-create'])) {
-            $flexidutysheetinst = new \BarcomModel\FlexiDutySheet();
-            $audinst = new \BarcomModel\Audit();
+            $flexidutysheetinst = new \PfomModel\FlexiDutySheet();
+            $audinst = new \PfomModel\Audit();
 
             //Get Id from browser interface
-            $flexidutysheetinst->Division = $Division = $_POST["Division"];
-            $flexidutysheetinst->Station = $Station = $_POST["Station"];
+            $flexidutysheetinst->Division = $Division = $_POST["hdnDivisionId"];
+            $flexidutysheetinst->Station = $Station = $_POST["hdnStation"];
             
             $flexidutysheetinst->Shift = $Shift = $_POST["Shift"];
             
@@ -88,7 +91,14 @@ class FlexiCreateController extends PermissionController {
             $flexidutysheetinst->TimeDutyCeasedDiaryNo = $TimeDutyCeasedDiaryNo = $_POST["TimeDutyCeasedDiaryNo"];
            
               
-            
+             $flexidutysheetinst->EOSDE = $EOSDE = $_POST["hdnEOSDE"];
+             $flexidutysheetinst->EOSDNE = $EOSDNE = $_POST["hdnEOSDNE"];
+             $flexidutysheetinst->EHTPI = $EHTPI = $_POST["hdnEHTPI"];
+             $flexidutysheetinst->EOWOOSD = $EOWOOSD = $_POST["hdnEOWOOSD"];
+             $flexidutysheetinst->CAOD = $CAOD = $_POST["hdnCAOD"];
+              $flexidutysheetinst->CADO = $CADO = $_POST["hdnCADO"];
+              
+              $flexidutysheetinst->Details = $Details = $_POST["Details"];
          
             
             
@@ -102,12 +112,12 @@ class FlexiCreateController extends PermissionController {
                foreach($OfficerArray as $officer)
   {
            $flexidutysheetinst->Comments = $Comments = $officer[10];
-                   $flexidutysheetinst->ActingPayRate = $ActingPayRate = $officer[9];
-           $flexidutysheetinst->ActingRateCode = $ActingRateCode = $officer[8];
-           $flexidutysheetinst->Acting = $Acting = $officer[7];
-           $flexidutysheetinst->OffDuty = $OffDuty = $officer[6];
-           $flexidutysheetinst->DayOff = $DayOff = $officer[5];
+                   $flexidutysheetinst->ActingPayRateCode = $ActingPayRateCode = $officer[9];
+           $flexidutysheetinst->ActingPosition = $ActingPosition = $officer[8];
            
+           $flexidutysheetinst->OffDuty = $OffDuty = $officer[7];
+           $flexidutysheetinst->DayOff = $DayOff = $officer[6];
+           $flexidutysheetinst->Acting = $Acting = $officer[5];
              $flexidutysheetinst->ForceNumber = $ForceNumber = $officer[4];
               $flexidutysheetinst->RateCode = $RateCode = $officer[3];
               $flexidutysheetinst->PayRate = $PayRate = $officer[2];
@@ -117,10 +127,17 @@ class FlexiCreateController extends PermissionController {
             
             
             if($Acting == "Y"){
-               $flexidutysheetinst->OvertimeAmount = $OvertimeAmount = ($HoursEngaged * $ActingPayRate) + $OvertimeAmount; 
+               $ActingPayRate = $flexidutysheetinst->GetActingPayRate($ActingPayRateCode);
+               
+               $OTEarned = $flexidutysheetinst->OTEarned($HoursEngaged, $ActingPayRate);
+               $flexidutysheetinst->OvertimeAmount = $OvertimeAmount = $flexidutysheetinst->TotalOTEarned($OTEarned, $OvertimeAmount);
             }
             else{
-               $flexidutysheetinst->OvertimeAmount = $OvertimeAmount = ($HoursEngaged * $PayRate) + $OvertimeAmount; 
+               $OTEarned = $flexidutysheetinst->OTEarned($HoursEngaged, $PayRate);
+               $flexidutysheetinst->OvertimeAmount = $OvertimeAmount = $flexidutysheetinst->TotalOTEarned($OTEarned, $OvertimeAmount);
+               $ActingPosition = null;
+               $ActingPayRateCode = null;
+               $Comments = null;
             }
            
             
@@ -128,7 +145,7 @@ class FlexiCreateController extends PermissionController {
              
              
               $flexidutysheetinst->CreateFDSPA($DutySheetId, $ForceNumber, $Natregno, $OfficerName,
-             $HoursEngaged, $RateCode,$PayRate,$DayOff,$OffDuty,$Acting,$ActingRateCode,$ActingPayRate,$Comments);
+             $HoursEngaged, $RateCode,$PayRate,$DayOff,$OffDuty,$Acting,$ActingPayRateCode,$ActingPayRate,$Comments,$OTEarned);
               
                
    
@@ -137,24 +154,25 @@ class FlexiCreateController extends PermissionController {
 
   
    
-               $flexidutysheetinst->CreateDutySheet($DutySheetId, $EventId, $EventName, $CompanyId, $OvertimeAmount, $DateOfDuty,
-            $DispatchTime, $ArrivalTime, $DismissalTime,$ReturnTime,$HoursEngaged,$RecEnteredBy);
+               $flexidutysheetinst->CreateFlexiDutySheet($DutySheetId, $Division, $Station, $Shift, $DateOfDuty, $HoursEngaged,
+            $TypeOfDuty, $TimeDutyCommenced, $TimeDutyCeased,$TimeDutyCommencedDiaryNo,$TimeDutyCeasedDiaryNo,
+            $Details,$EOSDE,$EOSDNE,$EHTPI,$EOWOOSD,$CAOD,$CADO,$OvertimeAmount,$RecEnteredBy);
                 //if validation succeeds then commit info to database
                   if ($flexidutysheetinst->auditok == 1) {
                 $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CEMP');
-                $TranDesc = 'Duty Sheet created: ' . $DutySheetId . ' Event ID: ' . $EventId;
+                $TranDesc = 'Flexi Duty Sheet created: ' . $DutySheetId;
                 $User = $username;
                 $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
-                $token = '<br><br><span class="label label-success">Duty Sheet ID</span> ' . '<span class="label label-info"> ' . $DutySheetId . '</span><br><br><br>' .
-                        '<span class="label label-success">Event Id</span> ' . '<span class="label label-info">' . $EventId . '</span><br>';
-                
-                $token1 = 'Duty Sheet Successfully Created';
+                $token = '<br><br><span class="label label-success">Flexi Duty Sheet ID</span> ' . '<span class="label label-info"> ' . $DutySheetId . '</span><br><br><br>' .
+//                        '<span class="label label-success">Event Id</span> ' . '<span class="label label-info">' . $EventId . '</span><br>';
+//                
+                $token1 = 'Flexi Duty Sheet Successfully Created';
                 header("Location:" . "/success?result=$token&header=$token1&args=");
             }
         } 
         else
         if (isset($_GET)) {
-             $divmodel = new \BarcomModel\Division();
+             $divmodel = new \PfomModel\Division();
 $divisions = $divmodel->GetDivisions();
 $stations = $divmodel->GetListOfStations();
 

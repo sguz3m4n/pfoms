@@ -122,7 +122,7 @@ class ProformaTableController extends MakeProformaController {
 //        $unlock = $canUnlock == 1 ? "<th>Unlock</th>" : "";
         $table = "";
 
-//        $pymtinst = new \BarcomModel\Payment();
+//        $pymtinst = new \PfomModel\Payment();
 //        $filterBy = array();
 
         if (isset($_REQUEST['eventid'])) {

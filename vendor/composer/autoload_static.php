@@ -94,12 +94,9 @@ class ComposerStaticInitdbfd59ea50047003c0635f21387c380a
         'Controllers\\CreateAdminUserController' => __DIR__ . '/../..' . '/Controller/Admin/CreateUser.php',
         'Controllers\\CreateDutySheetController' => __DIR__ . '/../..' . '/Controller/DutySheet/Create.php',
         'Controllers\\DisburseController' => __DIR__ . '/../..' . '/Controller/PRNGen/PRNGenerate.php',
-
         'Controllers\\DutySheetTableController' => __DIR__ . '/../..' . '/Controller/DutySheet/Edit.php',
-
         'Controllers\\EditAdminUserController' => __DIR__ . '/../..' . '/Controller/Admin/EditUser.php',
-        'Controllers\\EditDutySheetController' => __DIR__ . '/../..' . '/Controller/Court/Edit.php',
-        'Controllers\\EditFlexiDutySheetController' => __DIR__ . '/../..' . '/Controller/Flexi/Edit.php',
+        'Controllers\\EditDutySheetController' => __DIR__ . '/../..' . '/Controller/DutySheet/Edit.php',
         'Controllers\\EditPRNController' => __DIR__ . '/../..' . '/Controller/PRNGen/PRNGenerate.php',
         'Controllers\\EditPaymentController' => __DIR__ . '/../..' . '/Controller/Payment/Edit.php',
         'Controllers\\EditProformaController' => __DIR__ . '/../..' . '/Controller/Proforma/Edit.php',
@@ -114,7 +111,6 @@ class ComposerStaticInitdbfd59ea50047003c0635f21387c380a
         'Controllers\\EventDeactivateController' => __DIR__ . '/../..' . '/Controller/Event/Delete.php',
         'Controllers\\EventEditController' => __DIR__ . '/../..' . '/Controller/Event/Edit.php',
         'Controllers\\FlexiCreateController' => __DIR__ . '/../..' . '/Controller/Flexi/Create.php',
-        'Controllers\\FlexiDutySheetTableController' => __DIR__ . '/../..' . '/Controller/Flexi/dutysheettable.php',
         'Controllers\\Homepage' => __DIR__ . '/../..' . '/Controller/HomepageController.php',
         'Controllers\\LoggedInController' => __DIR__ . '/../..' . '/Controller/base_template.php',
         'Controllers\\Login' => __DIR__ . '/../..' . '/Controller/LoginController.php',

@@ -17,6 +17,10 @@ class Homepage extends LoggedInController {
     //public static $Menu;
     private $menu;
     private $datamanager;
+    private $extradutiesmanager;
+    private $fleximenu;
+    private $specmenu;
+    private $courtmenu;
     private $companymenu;
     private $eventmenu;
     private $employeemenu;
@@ -58,6 +62,9 @@ class Homepage extends LoggedInController {
         $CreateUser = $ManageTravel = $ManageOT = $ManageOther = array('Administrator', 'Super User', 'Manager');
         //CRUD Company Module Permissions
         $CreateCompany = $ViewCompany = $EditCompany = $DeleteCompany = array('Manager', 'Administrator', 'Super User');
+        $CreateFlexi = array('Manager', 'Administrator', 'Super User');
+        $CreateSpecOps = array('Manager', 'Administrator', 'Super User');
+        $CreateCourt = array('Manager', 'Administrator', 'Super User');
         $CreateEvent = $ViewEvent = $EditEvent = $MakeProforma = $DeleteEvent = array('Manager', 'Administrator', 'Super User');
         //CRUD Company Module Permissions
         //CRU Employee Module Permissions
@@ -104,14 +111,13 @@ class Homepage extends LoggedInController {
                                                 { companymenu }
                                             </ul>
                                         </li>
-                                         <li class="dropdown more-dropdown-sub ">
+                                        <li class="dropdown more-dropdown-sub ">
                                             <a href="javascript:;"> Officer Manager </a>
                                             <ul class="dropdown-menu">
                                                 { employeemenu }
                                             </ul>
                                         </li>
-                                     
-                                                                               <li class="dropdown">
+                                        <li class="dropdown">
                                             <a href="/adminconsole"> Admin Console </a>                                          
                                         </li>
                                     </ul>
@@ -120,23 +126,53 @@ class Homepage extends LoggedInController {
             $this->datamanager = $datamanager;
         }
 
+        if (in_array($role, $ExtraDuties)) {
+            $dutiesmanager = '<li class="dropdown dropdown-fw dropdown-fw-disabled">
+                                    <a class="text-uppercase" href="javascript:;">
+                                       <i class="glyphicon glyphicon-open-file" style="font-size: 15px"></i>Duties Management </a>
+                                    <ul class="dropdown-menu dropdown-menu-fw">
+                                        <li class="dropdown more-dropdown-sub ">
+                                            <a href="javascript:;"> Flexi Manager </a>
+                                            <ul class="dropdown-menu">
+                                                { fleximenu }
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown more-dropdown-sub">
+                                            <a href="javascript:;"> Special Ops Manager </a>
+                                            <ul class="dropdown-menu">
+                                                { specmenu }
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown more-dropdown-sub">
+                                            <a href="javascript:;"> Court Manager </a>
+                                            <ul class="dropdown-menu">
+                                                { courtmenu }
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>';
+            $this->extradutiesmanager = $dutiesmanager;
+        }
+
         if (in_array($role, $Reporting)) {
-            $event = ' <li>
-                                  
-                                    <a class="text-uppercase" href="/event/create">Event Manager</a>
-                                </li>'
-            ;
+            $event = ' <li><a class="text-uppercase" href="/event/create">Event Manager</a></li>';
             $this->menu = $this->menu . $event;
         }
 
-//        if (in_array($role, $Reporting)) {
-//            $event = ' <li>
-//                                  
-//                                    <a class="text-uppercase" href="/event/create">Extra Duties</a>
-//                                </li>'
-//            ;
-//            $this->menu = $this->menu . $event;
-//        }
+        if (in_array($role, $CreateFlexi)) {
+            $createflexi = '<li><a href="/flexi/create">Create Flexi</a></li>';
+            $this->fleximenu = $this->fleximenu . $createflexi;
+        }
+
+        if (in_array($role, $CreateSpecOps)) {
+            $createspecops = '<li><a href="/specops/create">Create Spec Ops</a></li>';
+            $this->specmenu = $this->specmenu . $createspecops;
+        }
+        
+         if (in_array($role, $CreateCourt)) {
+            $createcourt= '<li><a href="/court/create">Create Court</a></li>';
+            $this->courtmenu = $this->courtmenu . $createcourt;
+        }        
 
         if (in_array($role, $CreateCompany)) {
             $createitem = '<li><a href="/company/create">Create Company</a></li>';
@@ -213,19 +249,19 @@ class Homepage extends LoggedInController {
             $this->menu = $this->menu . $approve;
         }
 
-        if (in_array($role, $ExtraDuties)) {
-            $flexiDS = '<li><a class="text-uppercase" href="/flexi/create">Create Flexi Duty Sheet</a></li>';
-            $this->menu = $this->menu . $flexiDS;
-        }
+//        if (in_array($role, $ExtraDuties)) {
+//            $flexiDS = '<li><a class="text-uppercase" href="/flexi/create">Create Flexi Duty Sheet</a></li>';
+//            $this->menu = $this->menu . $flexiDS;
+//        }
 
-        if (in_array($role, $ExtraDuties)) {
-            $SpecOpsDS = '<li><a class="text-uppercase" href="/specops/create">Create Special Ops Duty Sheet</a></li>';
-            $this->menu = $this->menu . $SpecOpsDS;
-        }
-        if (in_array($role, $ExtraDuties)) {
-            $court = '<li><a class="text-uppercase" href="/court/edit">Create Court Form</a></li>';
-            $this->menu = $this->menu . $court;
-        }
+//        if (in_array($role, $ExtraDuties)) {
+//            $SpecOpsDS = '<li><a class="text-uppercase" href="/specops/create">Create Special Ops Duty Sheet</a></li>';
+//            $this->menu = $this->menu . $SpecOpsDS;
+//        }
+//        if (in_array($role, $ExtraDuties)) {
+//            $court = '<li><a class="text-uppercase" href="/court/edit">Create Court Form</a></li>';
+//            $this->menu = $this->menu . $court;
+//        }
 
         ////
 //         if (in_array($role, $ExtraDuties)) {
@@ -295,6 +331,10 @@ class Homepage extends LoggedInController {
 //        $template->replace('specopsmenu', $this->specopsmenu);
 //        $template->replace('courtmenu', $this->courtmenu);
         $template->replace('datamanager', $this->datamanager);
+        $template->replace('extramanager', $this->extradutiesmanager);
+        $template->replace('fleximenu', $this->fleximenu);
+        $template->replace('specmenu', $this->specmenu);
+        $template->replace('courtmenu', $this->courtmenu);
         $template->replace('companymenu', $this->companymenu);
         $template->replace('employeemenu', $this->employeemenu);
         $template->replace('eventmenu', $this->eventmenu);

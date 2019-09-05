@@ -16,14 +16,29 @@ require 'Controller/base_template.php';
 
 class ApproveCreateController extends PermissionController {
 
+    private $approvals;
+
     function show($params) {
         $username = $_SESSION["login_user"];
 
-        if (isset($_POST['btn-approve'])) {
-            $approveinst= new \PfomModel\Approve();
-            
-            $EventId = $_POST['EventId'];
-            $approveinst->ApproveIt($EventId);
+        if (isset($_POST['btnCreateApproval'])) {
+            $approveinst = new \PfomModel\Approve();
+ $audinst = new \PfomModel\Audit();
+            $this->approvals = $approvalrecs = json_decode($_POST['approvalarr'], TRUE);
+            foreach ($approvalrecs as $value) {
+                $EventId = $value;
+                $approveinst->ApproveIt($EventId);
+            }
+            if ($approveinst->auditok == 1) {
+                $tranid = $audinst->TranId = $audinst->GenerateTimestamp('CCMP');
+                $TranDesc = 'Create Approval for ';
+                $User = $username;
+                $audinst->CreateUserAuditRecord($tranid, $User, $TranDesc);
+                $token = '<br><br><span class="label label-success">Company Name</span> ' . '<span class="label label-info"> COmpany here</span><br><br><br>' .
+                        '<span class="label label-success">Company Id</span> ' . '<span class="label label-info">ID here</span><br>';
+                $token1 = 'Record Successfully Approved';
+                header("Location:" . "/success?result=$token&header=$token1&args=");
+            }
         } else
         if (isset($_GET)) {
             $model = new \PfomModel\Approve();

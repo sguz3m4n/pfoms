@@ -50,17 +50,66 @@
                 .sidenav {padding-top: 15px;}
                 .sidenav a {font-size: 18px;}
             }
+            /* The switch - the box around the slider */
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 80px;
+                height: 55px;
+            }
+            /* Hide default HTML checkbox */
+            .switch input {display:none;}
+            /* The slider */
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: -5px;
+                left: 10px;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+            input:checked + .slider {
+                background-color: #2196F3;
+            }
+            input:focus + .slider {
+                box-shadow: 0 0 1px #2196F3;
+            }
+            input:checked + .slider:before {
+                -webkit-transform: translateX(26px);
+                -ms-transform: translateX(26px);
+                transform: translateX(26px);
+            }
+            /* Rounded sliders */
+            .slider.round {
+                border-radius: 34px;
+            }
+            .slider.round:before {
+                border-radius: 50%;
+            } 
         </style>
 
         <script type="text/javascript">
             $(document).ready(function () {
 
-//                alert('hello');
+                var approvalist = [];
                 $(document).on("dblclick", ".pillwrapper li", function (event) {
 
                     var key = this.id.toString();
                     var elem = document.getElementById(this.id.toString());
-
                     var preAccountValToDelete = 'OS';
                     var accountType = elem.innerText;
                     accountType = accountType.substring(0, 4);
@@ -70,9 +119,7 @@
                     }
                     elem.parentNode.removeChild(elem);
                     RemoveInfo(key, preAccountValToDelete);
-
                 });
-
                 $('.search-boxcomp input[type="text"]').on("keyup input", function () {
                     /* Get input value on change */
                     var inputVal = $(this).val();
@@ -94,10 +141,71 @@
                                 resultDropdown.html(data);
                             });
                         }
-
                     } else {
                         resultDropdown.empty();
                     }
+                });
+
+                $('.tiles').on('click', function () {
+
+                    if ($(this).hasClass('yellow'))
+                    {
+                        var dataId = $(this).attr("data-id");
+//                        alert(dataId);
+                        $(this).removeClass('yellow').addClass('blue');
+                        approvalist.push(dataId);
+                        $("#hdnapparr").val(approvalist);
+                        $('#btnCreateApproval').text('Approve Selected');
+                    } else
+                    {
+                        $(this).removeClass('blue').addClass('yellow');
+                        var key = $(this).attr("data-id");
+                        var indextoremove;
+                        for (i = 0; i < approvalist.length; i++) {
+
+                            if (approvalist[i] === key)
+                            {
+                                indextoremove = i;
+                            }
+
+                        }
+                        approvalist.splice(indextoremove);
+                        $("#hdnapparr").val(approvalist);
+                    }
+                }
+
+                );
+
+                $("#approveall").change(function () {
+                    var checkBoxes = $("input[name=approveall\\[\\]]");
+                    checkBoxes.prop("checked", !checkBoxes.prop("checked"));
+                    if ($("#approveall").is(":checked"))
+                    {
+                        approvalist = [];
+                        $('.tiles').each(function () {
+                            var dataId = $(this).attr("data-id");
+                            $(this).removeClass('yellow').addClass('blue');
+                            approvalist.push(dataId);
+                            $('#btnCreateApproval').text('Approve All');
+                        });
+                        $("#hdnapparr").val(approvalist);
+
+                    } else
+                    {
+                        $('.tiles').each(function () {
+                            $(this).removeClass('blue').addClass('yellow');
+                        });
+                        approvalist = [];
+                        $("#hdnapparr").val(approvalist);
+                        $('#btnCreateApproval').text('Approve');
+                    }
+
+                });
+
+
+                $("#approvalform").submit(function () {
+
+                    $("#hdnapparr").val(JSON.stringify(approvalist));
                 });
 
             });
@@ -208,7 +316,7 @@
                         <div class="col-md-9">
                             <div class="page-content-col-8">
                                 <div class="panel panel-info" >
-                                 
+
                                 </div>
                                 <div class="portlet box blue">
                                     <div class="portlet-title">
@@ -218,26 +326,33 @@
                                         </div>
                                     </div>
                                     <div class="portlet-body form">
-                                        <form  method="post"  action="" id="paymentform" > 
+                                        <form  method="post"  action="" id="approvalform" > 
                                             <div class="container-fluid">
                                                 <div class="row center-block">
                                                     <div class="col-md-2" ></div>
                                                     <div class="col-md-3" >
+                                                        <br>
                                                         <?php
                                                         include 'Views/Shared/Controls/Approvals/backend-search.php';
                                                         ?>                                                            
                                                     </div>
                                                     <div class="col-md-2" >
-                                                        <br>
-                                                      
+                                                        <div class="col-md-8"> 
+                                                            <label class="switch">
+                                                                <input class="checkbox" type="checkbox" id="approveall" name="approveall">
+                                                                <span class="slider round"></span>
+                                                            </label>
+                                                        </div>
+
                                                     </div>
                                                 </div>
                                             </div>  
                                             <br>
                                             <center>
-                                                <button type="submit" name="btn-create" class="btn btn-default blue" id="btnCreateEvent">Approve</button>    
+                                                <button type="submit" name="btnCreateApproval" class="btn btn-default blue" id="btnCreateApproval">Approve</button>    
                                             </center>
                                             <br>
+                                            <input type="text" name="approvalarr" id="hdnapparr" value="">
                                         </form> 
                                     </div>
 

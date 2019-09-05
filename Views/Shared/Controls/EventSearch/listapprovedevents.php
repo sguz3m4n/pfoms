@@ -35,7 +35,7 @@ $conn = conn();
 $Id = "Id";
 
 //$sql = 'SELECT EventId, EventName, CompanyName, EventDateStart, EventDateEnd, Comments, CompanyId, Division, Station, OperationalSupport, PoliceServices, VATPoliceServices FROM event WHERE CompanyName = "' . $q . '" AND  DelFlg="N" AND Status="Approved"';
-$sql = 'SELECT e.EventId, EventName, CompanyName, EventDateStart, EventDateEnd, Comments, CompanyId, Division, Station,p.* FROM event e,proforma p WHERE e.eventid=p.eventid AND CompanyName = "' . $q . '" AND  DelFlg="N" AND e.Status="Approved"';
+$sql = 'SELECT e.EventId, EventName, CompanyName, EventDateStart, EventDateEnd, Comments, CompanyId, Division, Station,p.* FROM event e,proforma p WHERE e.eventid=p.eventid AND CompanyName = "' . $q . '" AND  e.DelFlg="N" AND e.Status="Approved"';
 //$sql = 'SELECT * FROM `event` a LEFT JOIN preaccounttransactions b ON a.EventId = b.EventId';
 
 

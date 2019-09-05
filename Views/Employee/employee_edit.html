@@ -26,7 +26,7 @@
                         if (isnum.test(inputVal))
                         {
                             //alert('isnumeric');
-                            $.get("../Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "natregno", {term: inputVal}).done(function (data) {
+                            $.get("../Views/Shared/Controls/EmployeeSearch/backend-search.php?type=" + "forcenumber", {term: inputVal}).done(function (data) {
                                 // Display the returned data in browser
                                 resultDropdown.html(data);
                             });

@@ -10,7 +10,7 @@ namespace PfomModel;
 class Approve {
 
     public $Approve;
-
+   public $auditok;
     function ApproveIt($EventId) {
 
         $conn = conn();

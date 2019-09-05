@@ -23,15 +23,15 @@ if ($stmt = $conn->prepare($sql)) {
         if (!empty($result)) {
             // Fetch result rows as an associative array
             foreach ($result as $value) {
-                echo '<div class="dashboard-stat dashboard-stat-v2 green">
+                echo '<div class="dashboard-stat dashboard-stat-v2 yellow tiles" data-id="' . $value["EventId"] . '" id="' . $value["EventId"] . '">
                                         <div class="visual">
                                             <i class="fa fa-comments"></i>
                                         </div>
                                         <div class="details">
                                             <div class="number">
-                                                <span data-value="2" id="submittercompany" style="font-size: xx-large" data-counter="counterup"></span>
+                                                <span  style="font-size: xx-large" data-counter="counterup"></span>
                                             </div>
-                                            <div class="desc"> '.$value["EventName"].' </div>
+                                            <div class="desc"> ' . $value["EventName"] . ' </div>
                                         </div>
                                     </div>';
             }

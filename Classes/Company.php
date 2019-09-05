@@ -64,7 +64,7 @@ class Company {
     //Update Company Method
     function EditCompany($compid) {
         $conn = conn();
-        $sql = "UPDATE `company` SET `CompanyId`='$this->CompanyId',`CaipoId`='$this->CaipoId',`TIN`='$this->TIN',"
+        $sql = "UPDATE `company` SET `CaipoId`='$this->CaipoId',`TIN`='$this->TIN',"
                 . "`CompanyName`='$this->CompanyName',`AddressLine1`='$this->AddressLine1',`AddressLine2`='$this->AddressLine2',"
                 . "`AddressLine3`='$this->AddressLine3',`Parish`='$this->Parish',`PostalCode`='$this->PostalCode',`ContactName`='$this->ContactName',"
                 . "`PhoneNumber`='$this->PhoneNumber',`FaxNumber`='$this->FaxNumber',`Email`='$this->Email',`Notes`='$this->Notes',"

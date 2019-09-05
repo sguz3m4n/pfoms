@@ -46,17 +46,13 @@ return [
     [['GET', 'POST'], '/editproforma', ['Controllers\EditProformaController', 'display']],
     [['GET', 'POST'], '/amendpayment', ['Controllers\AmendPaymentController', 'display']],
     [['GET', 'POST'], '/createdutysheet', ['Controllers\CreateDutySheetController', 'display']],
-    [['GET', 'POST'], '/approve', ['Controllers\ApproveCreateController', 'display']],
-    
+    [['GET', 'POST'], '/approve', ['Controllers\ApproveCreateController', 'display']],   
     [['GET', 'POST'], '/flexi/create', ['Controllers\FlexiCreateController', 'display']],
-    [['GET', 'POST'], '/flexi/edit', ['Controllers\EditFlexiController', 'display']],
-    
+    [['GET', 'POST'], '/flexi/edit', ['Controllers\EditFlexiController', 'display']],    
     [['GET', 'POST'], '/specops/create', ['Controllers\SpecOpsCreateController', 'display']],
-    [['GET', 'POST'], '/specops/edit', ['Controllers\EditSpecopsController', 'display']],
-    
+    [['GET', 'POST'], '/specops/edit', ['Controllers\EditSpecopsController', 'display']],    
     [['GET', 'POST'], '/court/create', ['Controllers\CourtCreateController', 'display']],
-    [['GET', 'POST'], '/court/edit', ['Controllers\EditCourtController', 'display']],
-   
+    [['GET', 'POST'], '/court/edit', ['Controllers\EditCourtController', 'display']],   
     [['GET', 'POST'], '/dutysheet/edit', ['Controllers\EditDutySheetController', 'display']],
     [['GET', 'POST'], '/admin/processpayroll', ['Controllers\PayrollController', 'display']],
     [['GET', 'POST'], '/proformatablepymt', ['Controllers\ProformaTableController', 'display']],

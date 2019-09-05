@@ -14,10 +14,10 @@ if (isset($_REQUEST['term'])) {
     if ($type == 'name') {
         $sql = "SELECT * FROM employee WHERE FirstName LIKE ? AND DelFlg='N'";
     } else
-    if ($type == 'natregno') {
-        $sql = "SELECT * FROM employee WHERE Natregno LIKE ? AND DelFlg='N'";
-    }
-if ($type == 'forcenumber') {
+//    if ($type == 'natregno') {
+//        $sql = "SELECT * FROM employee WHERE Natregno LIKE ? AND DelFlg='N'";
+//    }
+    if ($type == 'forcenumber') {
         $sql = "SELECT * FROM employee WHERE ForceNumber LIKE ? AND DelFlg='N'";
     }
 

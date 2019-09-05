@@ -115,9 +115,9 @@ class EmployeeCreateController extends PermissionController {
             $this->TIN = $TIN = $empinst->TIN = $_POST['TIN'];
             $this->NISNo = $NISNo = $empinst->NISNo = $_POST['NISNo'];
             $this->ForceNumber = $ForceNumber = $empinst->ForceNumber = $_POST['ForceNumber'];
-            $this->Lastname = $empinst->LastName = $_POST['LastName'];
-            $this->FirstName = $empinst->FirstName = $_POST['FirstName'];
-            $this->MiddleName = $empinst->MiddleName = $_POST['MiddleName'];
+            $this->Lastname = $empinst->LastName = strtoupper($_POST['LastName']);
+            $this->FirstName = $empinst->FirstName = strtoupper($_POST['FirstName']);
+            $this->MiddleName = $empinst->MiddleName = strtoupper($_POST['MiddleName']);
             $this->Title = $empinst->Title = $_POST['Title'];
             $this->AddressLine1 = $empinst->AddressLine1 = $_POST['AddressLine1'];
             $this->AddressLine2 = $empinst->AddressLine2 = $_POST['AddressLine2'];
